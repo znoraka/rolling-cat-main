@@ -55,7 +55,7 @@ public class GameScreen implements Screen{
         updateCamPos();
         mc.addTrackingPoint(delta);
         if(cat.isDone()){
-        	patient.addTrack(new Track(mc.getMap()));
+        	patient.addTrack(new Track(mc.getMap(), Track.GAME));
         	game.setScreen(new TrackingRecapScreen(game, patient));
         }
 	}

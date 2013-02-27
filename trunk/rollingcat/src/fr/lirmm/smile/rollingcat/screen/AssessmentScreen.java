@@ -24,6 +24,7 @@ import fr.lirmm.smile.rollingcat.controller.MouseCursorAssessment;
 import fr.lirmm.smile.rollingcat.manager.VectorManager;
 import fr.lirmm.smile.rollingcat.model.assessment.Triangle;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
+import fr.lirmm.smile.rollingcat.model.patient.Track;
 
 public class AssessmentScreen implements Screen {
 	
@@ -50,6 +51,9 @@ public class AssessmentScreen implements Screen {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		if(canStart())
+			mc.start();
+		
 		for (Triangle triangle : triangles) {
 			triangle.render(sr, this);
 			triangle.setProgression(mc.getX(), mc.getY(), this);
@@ -73,6 +77,7 @@ public class AssessmentScreen implements Screen {
 		sr.filledCircle(GameConstants.DISPLAY_WIDTH / 2, 0, 100 - timeout);
 		sr.end();
 		stage.draw();
+        mc.addTrackingPoint(delta);
 	}
 
 	@Override
@@ -104,6 +109,7 @@ public class AssessmentScreen implements Screen {
 		back = new TextButton("Back", style);
 		back.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
+	        	patient.addTrack(new Track(mc.getMap(), Track.ASSESSEMENT));
 				game.setScreen(new PatientScreen(game, patient)); // TODO changer le screen
 			}
 		});
@@ -147,6 +153,10 @@ public class AssessmentScreen implements Screen {
 	
 	public int getSelected(){
 		return this.selected;
+	}
+	
+	public boolean canStart(){
+		return (Math.sqrt((mc.getX() - 400)*(mc.getX() - 400) + mc.getY()*mc.getY()) < 100);
 	}
 
 }

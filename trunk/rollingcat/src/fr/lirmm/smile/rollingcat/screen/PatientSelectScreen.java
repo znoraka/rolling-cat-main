@@ -6,12 +6,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.PatientsManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
@@ -39,11 +40,11 @@ public class PatientSelectScreen implements Screen{
 	private TextButton b, selectPatient;
 	private ArrayList<TextButton> buttons;
 	private ScrollPane sp;
-	private Table t, tprofile;
+	private Table tableLeft, tableRight;
 	private ArrayList<Patient> patients;
 	private Patient p;
 	private Label nom, prenom, date, hemiplegia, dominantMember;
-	private Image face;
+	private Texture face;
 	private LabelStyle labelStyle;
 	
 	
@@ -53,26 +54,14 @@ public class PatientSelectScreen implements Screen{
 	
 	@Override
 	public void render(float delta) {
-		if(p != null){
-			
-			selectPatient.addListener(new ClickListener() {
-				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new PatientScreen(game, p));
-				}
-			});
-			
-			selectPatient.setVisible(true);
-			nom.setText(p.getLastName());
-			prenom.setText(p.getFirstName());
-			date.setText(p.getStrokeDate());
-			hemiplegia.setText(p.getHemiplegia());
-			dominantMember.setText(p.getDominantMember());
-//			face = p.getFace();
-		}
-		
-		
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	
+		batch.begin();
+		batch.draw(skin.getRegion("backgroundtrack"), 0, 0, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, 1, 1, 0);
+		batch.draw(skin.getRegion("background_base"), GameConstants.DISPLAY_WIDTH * 0.315f, GameConstants.DISPLAY_HEIGHT * 0.65f, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_HEIGHT * 0.32f);
+		batch.draw(face, GameConstants.DISPLAY_WIDTH * 0.32f, GameConstants.DISPLAY_HEIGHT * 0.66f, GameConstants.DISPLAY_WIDTH * 0.2f, GameConstants.DISPLAY_HEIGHT * 0.30f);
+		batch.end();
 
 		stage.act(delta);
 
@@ -83,26 +72,7 @@ public class PatientSelectScreen implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		stage = new Stage(width, height, true);
-		stage.clear();
-		
-		Gdx.input.setInputProcessor(stage);
-		
-		ScrollPaneStyle spstyle = new ScrollPaneStyle();
-		spstyle.background = skin.getDrawable("button_patient");
-		spstyle.corner = skin.getDrawable("button_up");
-		spstyle.vScroll = skin.getDrawable("button_up");
-		spstyle.vScrollKnob = skin.getDrawable("button_up");
-		
-		sp = new ScrollPane(null, spstyle);
-		sp.setX(10);
-		sp.setWidth(200);
-		sp.setHeight(Gdx.graphics.getHeight());
-		sp.setWidget(t);
-		
-		stage.addActor(sp);
-		stage.addActor(tprofile);
-			
+
 	}
 		
 
@@ -111,8 +81,8 @@ public class PatientSelectScreen implements Screen{
 			b = new TextButton(patients.get(i).getFirstName() + " " + patients.get(i).getLastName(), style);
 			b.setName(""+i);
 			buttons.add(b);
-			t.add(b).align(Align.right).width(100).height(50).pad(10);
-			t.row();
+			tableLeft.add(b).align(Align.right).width(sp.getWidth()*0.85f).height(65).pad(5);
+			tableLeft.row();
 		}
 		addListeners();
 	}
@@ -122,7 +92,7 @@ public class PatientSelectScreen implements Screen{
 			b = buttons.get(i);
 			b.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					p = patients.get(Integer.valueOf(event.getListenerActor().getName()));
+					setPatient(patients.get(Integer.valueOf(event.getListenerActor().getName())));
 				}
 			});
 		}
@@ -130,18 +100,50 @@ public class PatientSelectScreen implements Screen{
 
 	@Override
 	public void show() {
-		patients = PatientsManager.getPatients();
-		this.nbpatients = patients.size();
-		
-		t = new Table();
-		tprofile = new Table();
+		tableLeft = new Table();
+		tableRight = new Table();
 		buttons = new ArrayList<TextButton>();
 		batch = new SpriteBatch();
-		atlas = new TextureAtlas("data/atlas.atlas");
+		atlas = new TextureAtlas("data/patientAtlas.atlas");
 		skin = new Skin();
 		skin.addRegions(atlas);
 		black = new BitmapFont(Gdx.files.internal("data/font.fnt"), false);
 		
+		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
+		stage.clear();
+		
+		Gdx.input.setInputProcessor(stage);
+		
+		ScrollPaneStyle scrollPanelStyle = new ScrollPaneStyle();
+		scrollPanelStyle.corner = skin.getDrawable("button_up");
+		scrollPanelStyle.vScroll = skin.getDrawable("button_up");
+		scrollPanelStyle.vScrollKnob = skin.getDrawable("background_base");
+		scrollPanelStyle.vScrollKnob.setRightWidth(20);
+		scrollPanelStyle.vScrollKnob.setMinWidth(20);
+		scrollPanelStyle.vScrollKnob.setLeftWidth(20);
+		scrollPanelStyle.vScroll.setRightWidth(20);
+		scrollPanelStyle.vScroll.setMinWidth(20);
+		scrollPanelStyle.vScroll.setLeftWidth(20);		
+		
+		sp = new ScrollPane(tableLeft, scrollPanelStyle);
+		sp.setX(GameConstants.DISPLAY_WIDTH*0.025f);
+		sp.setY(GameConstants.DISPLAY_HEIGHT * 0.038f);
+		sp.setHeight(GameConstants.DISPLAY_HEIGHT * 0.930f);
+		sp.setWidth(GameConstants.DISPLAY_WIDTH * 0.262f);
+		sp.setFadeScrollBars(false);
+		sp.scrollTo(0, 0, 0, 0);
+		sp.setFadeScrollBars(false);
+		
+		tableRight.setY(GameConstants.DISPLAY_HEIGHT * 0.038f);
+		tableRight.setHeight(GameConstants.DISPLAY_HEIGHT * 0.600f);
+		tableRight.setX(GameConstants.DISPLAY_WIDTH*0.315f);
+		tableRight.setWidth(GameConstants.DISPLAY_WIDTH * 0.658f);
+		stage.addActor(sp);
+		stage.addActor(tableRight);
+		patients = PatientsManager.getPatients();
+		this.nbpatients = patients.size();
+		
+		p = patients.get(0);
 		
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("button_up");
@@ -152,32 +154,34 @@ public class PatientSelectScreen implements Screen{
 		createButtons(style);
 
 		labelStyle = new LabelStyle(black, Color.BLACK);
-		nom = new Label("", labelStyle);
-		prenom = new Label("", labelStyle);
-		date = new Label("", labelStyle);
-		hemiplegia = new Label("", labelStyle);
-		dominantMember = new Label("", labelStyle);
+		labelStyle.background = skin.getDrawable("button_up");
+		nom = new Label(p.getLastName(), labelStyle);
+		prenom = new Label(p.getFirstName(), labelStyle);
+		date = new Label(p.getStrokeDate(), labelStyle);
+		hemiplegia = new Label(p.getHemiplegia(), labelStyle);
+		dominantMember = new Label(p.getDominantMember(), labelStyle);
 		selectPatient = new TextButton("Select", style);
-		selectPatient.setVisible(false);
-		face = new Image();
+		face = p.getFace();
 		
-		tprofile.add(face);
-		tprofile.row();
-		tprofile .add(nom);
-		tprofile.row();
-		tprofile.add(prenom);
-		tprofile.row();
-		tprofile.add(date);
-		tprofile.row();
-		tprofile.add(hemiplegia);
-		tprofile.row();
-		tprofile.add(dominantMember);
-		tprofile.row();
-		tprofile.add(selectPatient);
+		selectPatient.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				game.setScreen(new PatientScreen(game, p));
+			}
+		});
 		
-		tprofile.setX(Gdx.graphics.getWidth() / 3);
-		tprofile.setY(500);
+		tableRight.add(prenom).fill().expand();
+		tableRight.add(nom).fill().expand();
+		tableRight.row();
+		tableRight.add(date).fill().expand();
+		tableRight.row();
+		tableRight.add(hemiplegia).fill().expand();
+		tableRight.row();
+		tableRight.add(dominantMember).fill().expand();
+		tableRight.row();
 		
+		selectPatient.setX(GameConstants.DISPLAY_WIDTH * 0.7f);
+		selectPatient.setY(GameConstants.DISPLAY_HEIGHT * 0.7f);
+		stage.addActor(selectPatient);
 	}
 
 	@Override
@@ -207,4 +211,13 @@ public class PatientSelectScreen implements Screen{
 		batch.dispose();
 	}
 
+	private void setPatient(Patient patient) {
+		p = patient;
+		nom.setText(patient.getLastName());
+		prenom.setText(patient.getFirstName());
+		date.setText(patient.getStrokeDate());
+		hemiplegia.setText(patient.getHemiplegia());
+		dominantMember.setText(patient.getDominantMember());
+		face = patient.getFace();
+	}
 }
