@@ -176,8 +176,6 @@ public class MouseCursorGame implements InputProcessor{
 		
 		if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
 			map.put(map.size(), new float[] {x, y});
-			Gdx.app.log(RollingCat.LOG, "new point added");
-			System.out.println(elapsedTime);
 			elapsedTime = 0;
 		}
 	}
