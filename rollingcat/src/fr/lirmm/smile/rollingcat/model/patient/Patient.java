@@ -69,7 +69,8 @@ public class Patient {
 	}
 	
 	public void addTrack(Track track){
-		this.listOfTracks.add(track);
+		if(track.getTrack().size() > 0)
+			this.listOfTracks.add(track);
 	}
 	
 	public ArrayList<Track> getListOfTracks() {

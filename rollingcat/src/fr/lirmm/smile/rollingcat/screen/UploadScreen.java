@@ -147,9 +147,10 @@ public class UploadScreen implements Screen {
 		tableLeftBottom.row();
 		tableLeftBottom.add(back).pad(5).fill().expand();
 		
-		tableRightBottom.add(prev);
-		tableRightBottom.add(next).padLeft(100);
-		
+		if(track.getType() == Track.GAME){
+			tableRightBottom.add(prev).fill().expand();
+			tableRightBottom.add(next).padLeft(100).fill().expand();
+		}
 		stage.addActor(tableLeftBottom);
 		stage.addActor(tableRightBottom);
 		stage.addActor(tableRightTop);

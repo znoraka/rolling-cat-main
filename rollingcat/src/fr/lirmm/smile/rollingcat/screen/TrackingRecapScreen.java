@@ -184,10 +184,10 @@ public class TrackingRecapScreen implements Screen{
 	
 	private void createButtons(TextButtonStyle style) {
 		for (int i = 0; i < patient.getListOfTracks().size(); i++) {
-			b = new TextButton("Track " + patient.getListOfTracks().get(i).getId(), style);
+			b = new TextButton(patient.getListOfTracks().get(i).getType() + " " + patient.getListOfTracks().get(i).getId(), style);
 			b.setName(""+i);
 			buttons.add(b);
-			tableLeft.add(b).align(Align.right).width(scrollPane.getWidth()*0.85f).height(50).pad(5);
+			tableLeft.add(b).align(Align.right).width(scrollPane.getWidth()*0.85f).height(65).pad(5);
 			tableLeft.row();
 		}
 		addListeners();
