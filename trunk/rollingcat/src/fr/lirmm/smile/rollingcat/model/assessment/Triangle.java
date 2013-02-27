@@ -1,0 +1,95 @@
+package fr.lirmm.smile.rollingcat.model.assessment;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
+
+import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.screen.AssessmentScreen;
+
+public class Triangle {
+	private Vector2 direct;
+	private Vector2 progression;
+	private float degree;
+	private int id;
+	private int color;
+	
+	/**
+	 * peut être changer le viewport est-il plus simple que de retrancher la moitié de la largeur de l'écran à chaque fois
+	 * @param angle l'angle du vecteur par rapport à l'horizontale
+	 * @param degree l'angle entre chaque vecteur
+	 */
+	public Triangle (float angle, float degree, int id){
+		direct = new Vector2(0, 100000);
+		progression = new Vector2(0, 1);
+		direct.setAngle(angle);
+		progression.rotate(angle);
+		this.degree = degree;
+		this.id = id;
+	}
+	
+	/**
+	 * dessine la zone en rouge avec ses limites en noir et son avancement en vert
+	 * @param sr le shaperender utilisé dans le screen
+	 */
+	public void render(ShapeRenderer sr, AssessmentScreen as){
+	
+		if(as.getSelected() == id)
+			sr.setColor(0, 100, 255, 1);
+		else
+			sr.setColor(0, color, 255, 1);
+		
+		sr.begin(ShapeType.FilledTriangle);
+		sr.filledTriangle(
+				GameConstants.DISPLAY_WIDTH / 2, 0,
+				GameConstants.DISPLAY_WIDTH / 2 + direct.tmp().rotate(degree / 2).x, direct.tmp().rotate(degree / 2).y,
+				GameConstants.DISPLAY_WIDTH / 2 + direct.tmp().rotate(-degree / 2).x, direct.tmp().rotate(-degree / 2).y);
+		
+		sr.setColor(Color.GREEN);
+		sr.filledTriangle(
+				GameConstants.DISPLAY_WIDTH / 2, 0,
+				GameConstants.DISPLAY_WIDTH / 2 + progression.tmp().rotate(degree / 2).x, progression.tmp().rotate(degree / 2).y,
+				GameConstants.DISPLAY_WIDTH / 2 + progression.tmp().rotate(-degree / 2).x, progression.tmp().rotate(-degree / 2).y);
+		
+		sr.end();
+		
+		sr.setColor(Color.BLACK);
+		sr.begin(ShapeType.Triangle);
+		sr.triangle(
+				GameConstants.DISPLAY_WIDTH / 2, 0,
+				GameConstants.DISPLAY_WIDTH / 2 + direct.tmp().rotate(degree / 2).x, direct.tmp().rotate(degree / 2).y,
+				GameConstants.DISPLAY_WIDTH / 2 + direct.tmp().rotate(-degree / 2).x, direct.tmp().rotate(-degree / 2).y);
+		sr.end();
+		
+	}
+	
+	/**
+	 * met à jour la progression du patient sur une zone
+	 * @param x la position du curseur en x
+	 * @param y la position du curseur en y
+	 */
+	public void setProgression(float x, float y, AssessmentScreen as){
+		Vector2 a = new Vector2(x - GameConstants.DISPLAY_WIDTH / 2, y);
+		
+		if(a.len() < 100)
+			as.setSelected(-1);
+	
+		if(a.angle() <= direct.tmp().rotate(degree / 2).angle() & (a.angle() >= direct.tmp().rotate(-degree / 2).angle() | direct.angle() < degree)){
+			
+			color = 150;
+			
+			if(as.getSelected() == -1 && a.len() > 100)
+				as.setSelected(this.id);
+			
+			if(a.len() > progression.len() && as.getSelected() == id){
+				progression.set(a);
+				progression.setAngle(direct.angle());
+			}
+		}
+		else
+			color = 255;
+	
+	}
+		
+}
