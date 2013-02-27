@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -30,8 +32,10 @@ public class UploadScreen implements Screen {
 	private TextButton back, upload, delete, prev, next;
 	private BitmapFont font;
 	private SpriteBatch batch;
-	private Table tableLeftBottom, tableLeftTop, tableRight;
+	private Table tableLeftBottom, tableLeftTop, tableRightBottom, tableRightTop;
 	private int segment;
+	private Rectangle drawArea;
+	private ShapeRenderer sr;
 	
 	public UploadScreen(RollingCat game, Patient patient, Track track){
 		this.game = game;
@@ -46,9 +50,11 @@ public class UploadScreen implements Screen {
 		
 		batch.begin();
 		batch.draw(skin.getRegion("backgroundupload"), 0, 0, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, 1, 1, 0);
+		font.draw(batch, "fps : " + Gdx.graphics.getFramesPerSecond(), 10, GameConstants.DISPLAY_HEIGHT - 50);
 		batch.end();
 		
 		stage.draw();
+		track.render(sr, drawArea);
 	}
 
 	@Override
@@ -64,6 +70,7 @@ public class UploadScreen implements Screen {
 		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
 		stage.clear();
 		skin = new Skin(new TextureAtlas("data/patientAtlas.atlas"));
+		sr = new ShapeRenderer();
 		
 		tableLeftBottom = new Table();
 		tableLeftBottom.setHeight(GameConstants.DISPLAY_HEIGHT * 0.28f);
@@ -71,11 +78,18 @@ public class UploadScreen implements Screen {
 		tableLeftBottom.setX(GameConstants.DISPLAY_WIDTH * 0.055f);
 		tableLeftBottom.setY(GameConstants.DISPLAY_HEIGHT * 0.08f);
 		
-		tableRight = new Table();
-		tableRight.setHeight(GameConstants.DISPLAY_HEIGHT * 0.10f);
-		tableRight.setWidth(GameConstants.DISPLAY_WIDTH * 0.60f);
-		tableRight.setX(GameConstants.DISPLAY_WIDTH * 0.325f);
-		tableRight.setY(GameConstants.DISPLAY_HEIGHT * 0.08f);
+		tableRightBottom = new Table();
+		tableRightBottom.setHeight(GameConstants.DISPLAY_HEIGHT * 0.10f);
+		tableRightBottom.setWidth(GameConstants.DISPLAY_WIDTH * 0.60f);
+		tableRightBottom.setX(GameConstants.DISPLAY_WIDTH * 0.337f);
+		tableRightBottom.setY(GameConstants.DISPLAY_HEIGHT * 0.08f);
+		
+		tableRightTop = new Table();
+		tableRightTop.setBackground(skin.getDrawable("background_base"));
+		tableRightTop.setHeight(GameConstants.DISPLAY_HEIGHT * 0.750f);
+		tableRightTop.setWidth(GameConstants.DISPLAY_WIDTH * 0.65f);
+		tableRightTop.setX(GameConstants.DISPLAY_WIDTH * 0.312f);
+		tableRightTop.setY(GameConstants.DISPLAY_HEIGHT * 0.2f);
 		
 		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
 		
@@ -88,6 +102,7 @@ public class UploadScreen implements Screen {
 		back = new TextButton("Back", style);
 		back.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
+				track.reset();
 				game.setScreen(new TrackingRecapScreen(game, patient));
 			}
 		});
@@ -111,15 +126,14 @@ public class UploadScreen implements Screen {
 		prev = new TextButton("Previous", style);
 		prev.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				if(segment > GameConstants.DISPLAY_WIDTH)
-					segment -= GameConstants.DISPLAY_WIDTH;
+				track.prev();
 			}
 		});
 		
 		next = new TextButton("Next", style);
 		next.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				segment += GameConstants.DISPLAY_WIDTH;
+				track.next();
 			}
 		});
 		
@@ -133,11 +147,14 @@ public class UploadScreen implements Screen {
 		tableLeftBottom.row();
 		tableLeftBottom.add(back).pad(5).fill().expand();
 		
-		tableRight.add(prev);
-		tableRight.add(next).padLeft(100);
+		tableRightBottom.add(prev);
+		tableRightBottom.add(next).padLeft(100);
 		
 		stage.addActor(tableLeftBottom);
-		stage.addActor(tableRight);
+		stage.addActor(tableRightBottom);
+		stage.addActor(tableRightTop);
+		
+		drawArea = new Rectangle(tableRightTop.getX(), tableRightTop.getY(), tableRightTop.getWidth(), tableRightTop.getHeight());
 
 	}
 

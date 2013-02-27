@@ -56,36 +56,6 @@ public class GameScreen implements Screen{
         mc.addTrackingPoint(delta);
         if(cat.isDone()){
         	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-        	patient.addTrack(new Track(mc.getMap()));
-
         	game.setScreen(new TrackingRecapScreen(game, patient));
         }
 	}
@@ -116,27 +86,6 @@ public class GameScreen implements Screen{
 		cat = (Cat) stage.getActors().get(0);
 		box = new Box(8, 0);
 		stage.addActor(box);
-//		stage.addActor(new Coin(4, 4));
-//		stage.addActor(new Coin(5, 4));
-//		stage.addActor(new Coin(0, 4));
-//		stage.addActor(new Wasp(5, 5));
-//		stage.addActor(new Mouse(7,7));
-//		stage.addActor(new Dog(9, 1));
-//		stage.addActor(new GroundBlock(0, 3));
-//		stage.addActor(new GroundBlock(1, 3));
-//		stage.addActor(new GroundBlock(2, 3));
-//		stage.addActor(new GroundBlock(3, 3));
-//		stage.addActor(new GroundBlock(4, 3));
-//		stage.addActor(new GroundBlock(5, 3));
-//		stage.addActor(new GroundBlock(6, 3));
-//		stage.addActor(new GroundBlock(7, 3));
-//		stage.addActor(new GroundBlock(8, 3));
-//		stage.addActor(new StopBlock(8, 3));
-//		stage.addActor(new GroundBlock(11, 3));
-//		stage.addActor(new GroundBlock(12, 3));
-//		stage.addActor(new GroundBlock(13, 3));
-//		stage.addActor(new GroundBlock(14, 3));
-//		stage.addActor(new GroundBlock(15, 3));
 		sr = new ShapeRenderer();
 		mc = new MouseCursorGame(stage, cat, box);
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), false);

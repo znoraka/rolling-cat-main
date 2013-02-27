@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -40,6 +41,7 @@ public class TrackingRecapScreen implements Screen{
 	private SpriteBatch batch;
 	private ShapeRenderer sr;
 	private Track track;
+	private Rectangle drawArea;
 
 	
 	public TrackingRecapScreen(RollingCat game, Patient patient){
@@ -57,7 +59,7 @@ public class TrackingRecapScreen implements Screen{
 		batch.end();
 		
 		if(track != null)
-			track.render(sr);
+			track.render(sr, drawArea);
 		
 		stage.act(delta);
 		stage.draw();
@@ -149,6 +151,8 @@ public class TrackingRecapScreen implements Screen{
 		stage.addActor(back);
 		
 		sr = new ShapeRenderer();
+		
+		drawArea = new Rectangle(tableRight.getX(), tableRight.getY(), tableRight.getWidth(), tableRight.getHeight());
 	}
 
 	@Override
