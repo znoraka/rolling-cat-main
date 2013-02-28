@@ -31,14 +31,15 @@ public class MouseCursorGame implements InputProcessor{
 	private int oldBlockX;
 	private int oldBlockY;
 	private Entity actor;
-	Stage stage;
-	Cat cat;
-	Box box;
-	int item;
-	TextureAtlas atlas;
-	SpriteBatch batch;
-	Map<Integer, float []> map;
-	float elapsedTime;
+	private Stage stage;
+	private Cat cat;
+	private Box box;
+	private int item;
+	private TextureAtlas atlas;
+	private SpriteBatch batch;
+	private Map<Integer, float []> map;
+	private float elapsedTime;
+	private boolean started;
 
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
 		hoverTimer = 0;
@@ -52,6 +53,7 @@ public class MouseCursorGame implements InputProcessor{
 		batch = new SpriteBatch();
 		map = new HashMap<Integer, float []>();
 		elapsedTime = 0;
+		started = false;
 	}
 	
 	/**
@@ -84,6 +86,7 @@ public class MouseCursorGame implements InputProcessor{
 			}
 			else if(actor instanceof Box){
 				item = box.empty();
+				this.start();
 			}
 			else if(actor instanceof Dog && item == Box.BONE){
 				this.trigger();
@@ -97,6 +100,20 @@ public class MouseCursorGame implements InputProcessor{
 		}
 	}
 	
+	/**
+	 * démarre l'enregistrement de la trace
+	 */
+	private void start() {
+		started = true;
+	}
+	
+	/**
+	 * stop l'enregistrement de la trace
+	 */
+	public void stop(){
+		started = false;
+	}
+
 	/**
 	 * appelé lorsque l'item et l'entity correspondent
 	 * ajoute l'action à l'acteur
@@ -172,11 +189,14 @@ public class MouseCursorGame implements InputProcessor{
 	}
 	
 	public void addTrackingPoint(float delta){
-		elapsedTime += delta;
-		
-		if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
-			map.put(map.size(), new float[] {x, y});
-			elapsedTime = 0;
+		if(started){
+			elapsedTime += delta;
+			
+			if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
+				System.out.println("adding new point");
+				map.put(map.size(), new float[] {x, y});
+				elapsedTime = 0;
+			}
 		}
 	}
 	

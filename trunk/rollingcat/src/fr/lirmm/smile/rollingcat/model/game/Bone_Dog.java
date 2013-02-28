@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 
-public class Bone extends Entity{
+public class Bone_Dog extends Entity{
 
 	/**
 	 * Touchable disabled
@@ -13,7 +13,7 @@ public class Bone extends Entity{
 	 * @param x
 	 * @param y
 	 */
-	public Bone(float x, float y) {
+	public Bone_Dog(float x, float y) {
 		super(x, y, GameConstants.TEXTURE_BONE);
 		this.setTouchable(Touchable.disabled);
 	}

@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -33,9 +35,10 @@ public class UploadScreen implements Screen {
 	private BitmapFont font;
 	private SpriteBatch batch;
 	private Table tableLeftBottom, tableLeftTop, tableRightBottom, tableRightTop;
-	private int segment;
 	private Rectangle drawArea;
 	private ShapeRenderer sr;
+	private Label date, duration, dateValue, durationValue;
+
 	
 	public UploadScreen(RollingCat game, Patient patient, Track track){
 		this.game = game;
@@ -50,7 +53,6 @@ public class UploadScreen implements Screen {
 		
 		batch.begin();
 		batch.draw(skin.getRegion("backgroundupload"), 0, 0, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, 1, 1, 0);
-		font.draw(batch, "fps : " + Gdx.graphics.getFramesPerSecond(), 10, GameConstants.DISPLAY_HEIGHT - 50);
 		batch.end();
 		
 		stage.draw();
@@ -65,7 +67,6 @@ public class UploadScreen implements Screen {
 
 	@Override
 	public void show() {
-		segment = 0;
 		batch = new SpriteBatch();
 		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
 		stage.clear();
@@ -91,6 +92,13 @@ public class UploadScreen implements Screen {
 		tableRightTop.setX(GameConstants.DISPLAY_WIDTH * 0.312f);
 		tableRightTop.setY(GameConstants.DISPLAY_HEIGHT * 0.2f);
 		
+		tableLeftTop = new Table();
+		tableLeftTop.setBackground(skin.getDrawable("background_base"));
+		tableLeftTop.setWidth(GameConstants.DISPLAY_WIDTH * 0.265f);
+		tableLeftTop.setX(GameConstants.DISPLAY_WIDTH * 0.035f);
+		tableLeftTop.setHeight(GameConstants.DISPLAY_HEIGHT * 0.555f);
+		tableLeftTop.setY(GameConstants.DISPLAY_HEIGHT * 0.395f);
+		
 		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
 		
 		TextButtonStyle style = new TextButtonStyle();
@@ -98,6 +106,25 @@ public class UploadScreen implements Screen {
 		style.down = skin.getDrawable("button_down");
 		style.font = font;
 		style.fontColor = Color.BLACK;
+		
+		LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
+		labelStyle.background = skin.getDrawable("top_orange");
+		
+		LabelStyle labelStyle2 = new LabelStyle(font, Color.BLACK);
+		labelStyle2.background = skin.getDrawable("bottom_green");
+		
+		date = new Label(" Date", labelStyle);
+		duration = new Label(" Duration", labelStyle);
+		dateValue = new Label(track.getDate(), labelStyle2);
+		durationValue = new Label(""+track.getDuration() + " s", labelStyle2);
+		
+		tableLeftTop.add(date).fill().width(tableLeftTop.getWidth() * 0.95f);
+		tableLeftTop.row();
+		tableLeftTop.add(dateValue).fill().width(tableLeftTop.getWidth() * 0.95f);
+		tableLeftTop.row();
+		tableLeftTop.add(duration).fill().width(tableLeftTop.getWidth() * 0.95f).padTop(20);
+		tableLeftTop.row();
+		tableLeftTop.add(durationValue).fill().width(tableLeftTop.getWidth() * 0.95f);
 		
 		back = new TextButton("Back", style);
 		back.addListener(new ClickListener() {
@@ -152,11 +179,11 @@ public class UploadScreen implements Screen {
 			tableRightBottom.add(next).padLeft(100).fill().expand();
 		}
 		stage.addActor(tableLeftBottom);
+		stage.addActor(tableLeftTop);
 		stage.addActor(tableRightBottom);
 		stage.addActor(tableRightTop);
 		
 		drawArea = new Rectangle(tableRightTop.getX(), tableRightTop.getY(), tableRightTop.getWidth(), tableRightTop.getHeight());
-
 	}
 
 	@Override

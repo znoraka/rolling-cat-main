@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
-import fr.lirmm.smile.rollingcat.model.game.Bone;
+import fr.lirmm.smile.rollingcat.model.game.Bone_Dog;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.game.Coin;
@@ -31,18 +31,18 @@ public class LevelBuilder {
 	 * sauvegarde les entity du stage
 	 * @param stage
 	 */
-	@Deprecated
-	public static void writeLevel(Stage stage){
-	   FileHandle file = new FileHandle("data/foo.txt");
-	   String s;
-	   for (Actor a : stage.getActors()) {
-		   if(a instanceof Entity){
-			   s = a.getName() + ";" + (a.getX()/GameConstants.BLOCK_WIDTH) + ";" + (a.getY()/GameConstants.BLOCK_HEIGHT) + "\n";
-			   System.out.print(s);
-			   file.writeString(s, true);
-		   }
-	   }
-	}
+//	@Deprecated
+//	public static void writeLevel(Stage stage){
+//	   FileHandle file = new FileHandle("data/foo.txt");
+//	   String s;
+//	   for (Actor a : stage.getActors()) {
+//		   if(a instanceof Entity){
+//			   s = a.getName() + ";" + (a.getX()/GameConstants.BLOCK_WIDTH) + ";" + (a.getY()/GameConstants.BLOCK_HEIGHT) + "\n";
+//			   System.out.print(s);
+//			   file.writeString(s, true);
+//		   }
+//	   }
+//	}
 	
 	/**
 	 * lit un fichier pour constuire le stage - Entity;x;y\n
@@ -50,7 +50,7 @@ public class LevelBuilder {
 	 */
 	public static Stage readLevel(){
 		Gdx.app.log(RollingCat.LOG, "retriving level file...");
-		FileHandle file = Gdx.files.local("data/file.txt");
+		FileHandle file = Gdx.files.internal("data/file.txt");
 		Gdx.app.log(RollingCat.LOG, "done.");
 		Stage stage = new Stage(GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT, true);
 		Gdx.app.log(RollingCat.LOG, "parsing level file...");
@@ -99,7 +99,7 @@ public class LevelBuilder {
 			else if(subtab[0].equals("empty"))
 				stage.addActor(new StopBlock(x, y));
 			else if(subtab[0].equals("bone"))
-				stage.addActor(new Bone(x, y));
+				stage.addActor(new Bone_Dog(x, y));
 			else if(subtab[0].equals("spring")){
 				stage.addActor(new Spring(x, y));
 				items.add(Box.SPRING);
