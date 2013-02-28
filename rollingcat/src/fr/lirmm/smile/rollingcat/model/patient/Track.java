@@ -1,5 +1,7 @@
 package fr.lirmm.smile.rollingcat.model.patient;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -16,32 +18,41 @@ public class Track {
 	public static final String ASSESSEMENT = "assessment";
 	public static final String GAME = "game";
 	
-	Map<Integer, float []> track;
-	private String date;
+	private Map<Integer, float []> track;
+	private java.util.Date date = new java.util.Date();
 	private float duration;
 	private int id;
 	private ArrayList<Integer> indNextSegment;
 	private int currentSegment;
 	private String type;
+	private DateFormat dateFormat;
+
+	
+
 	
 	/**
 	 * ajout plus tard de la date et de la durée et de plein d'autres informations
 	 * @param track
 	 */
-	public Track(Map<Integer, float []> track, String type){
+	public Track(Map<Integer, float []> track, String type, float duration){
 		this.track = track;
+		this.duration = (float) Math.floor(duration);
 		this.id = TrackingPointsManager.getId();
 		if(type == GAME){
 			this.indNextSegment = new ArrayList<Integer>();
 			findSegments();
 			currentSegment = 0;
 		}
+		this.date = new java.util.Date(date.getTime());
 		this.type = type;
+		dateFormat = new SimpleDateFormat("dd'/'-MM'/'-yy HH'h'mm");
+
 	}
 	
 	/**
 	 * trouve les différends segment dans la map de points
 	 * lorsque l'abscisse d'un point est supérieur à la taille de l'écran on ajoute un marqueur
+	 * met l'abscisse des points dans des coordonnées interprétables (0 - GameConstants.DISPLAY_WIDTH)
 	 */
 	private void findSegments() {
 		indNextSegment.add(0);
@@ -49,6 +60,7 @@ public class Track {
 			if((int)(track.get(i)[0] / GameConstants.DISPLAY_WIDTH) == indNextSegment.size()){
 				indNextSegment.add(i);
 			}
+			track.get(i)[0] = track.get(i)[0] - GameConstants.DISPLAY_WIDTH * (indNextSegment.size() - 1);
 		}
 		indNextSegment.add(track.size() - 1);
 	}
@@ -61,18 +73,18 @@ public class Track {
 	public void render(ShapeRenderer sr, Rectangle bounds) {
 		sr.setColor(Color.WHITE);
 		if(type == GAME){
-			for (int i = indNextSegment.get(currentSegment) + 1; i < indNextSegment.get(currentSegment + 1) - 1; i++) {
+			for (int i = indNextSegment.get(currentSegment); i < indNextSegment.get(currentSegment + 1) - 1; i++) {
 				sr.begin(ShapeType.Line);
 				sr.line(
-						track.get(i)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX() - GameConstants.DISPLAY_WIDTH * currentSegment * (bounds.width / GameConstants.DISPLAY_WIDTH),
+						track.get(i)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-						track.get(i+1)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX() - GameConstants.DISPLAY_WIDTH * currentSegment * (bounds.width / GameConstants.DISPLAY_WIDTH),
+						track.get(i+1)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 						track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
 						);
 				sr.end();
 				sr.begin(ShapeType.FilledCircle);
 				sr.filledCircle(
-						track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX() - GameConstants.DISPLAY_WIDTH * currentSegment * (bounds.width / GameConstants.DISPLAY_WIDTH),
+						track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 						3);
 				sr.end();
@@ -80,11 +92,11 @@ public class Track {
 			sr.setColor(Color.RED);
 			sr.begin(ShapeType.FilledCircle);
 			sr.filledCircle(
-					track.get(indNextSegment.get(currentSegment) + 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX() - GameConstants.DISPLAY_WIDTH * currentSegment * (bounds.width / GameConstants.DISPLAY_WIDTH),
-					track.get(indNextSegment.get(currentSegment) + 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+					track.get(indNextSegment.get(currentSegment))[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+					track.get(indNextSegment.get(currentSegment))[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 					3);
 			sr.filledCircle(
-					track.get(indNextSegment.get(currentSegment + 1) - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX() - GameConstants.DISPLAY_WIDTH * currentSegment * (bounds.width / GameConstants.DISPLAY_WIDTH),
+					track.get(indNextSegment.get(currentSegment + 1) - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 					track.get(indNextSegment.get(currentSegment + 1) - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 					3);
 			sr.end();
@@ -93,19 +105,30 @@ public class Track {
 			for (int i = 0; i < track.size() - 1; i++) {
 				sr.begin(ShapeType.Line);
 				sr.line(
-						track.get(i)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX() - GameConstants.DISPLAY_WIDTH * currentSegment * (bounds.width / GameConstants.DISPLAY_WIDTH),
+						track.get(i)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-						track.get(i+1)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX() - GameConstants.DISPLAY_WIDTH * currentSegment * (bounds.width / GameConstants.DISPLAY_WIDTH),
+						track.get(i+1)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 						track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
 						);
 				sr.end();
 				sr.begin(ShapeType.FilledCircle);
 				sr.filledCircle(
-						track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX() - GameConstants.DISPLAY_WIDTH * currentSegment * (bounds.width / GameConstants.DISPLAY_WIDTH),
+						track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 						3);
 				sr.end();
 			}
+			sr.setColor(Color.RED);
+			sr.begin(ShapeType.FilledCircle);
+			sr.filledCircle(
+					track.get(0)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+					track.get(0)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+					3);
+			sr.filledCircle(
+					track.get(track.size() - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+					track.get(track.size() - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+					3);
+			sr.end();
 		}
 		
 	}
@@ -115,7 +138,7 @@ public class Track {
 	 * @return the date
 	 */
 	public String getDate(){
-		return this.date;
+		return dateFormat.format(date);
 	}
 	
 	/**
@@ -164,5 +187,6 @@ public class Track {
 	public Map<Integer, float []> getTrack(){
 		return this.track;
 	}
+	
 	
 }

@@ -30,6 +30,7 @@ public class GameScreen implements Screen{
 	private Box box;
 	private BitmapFont font;
 	private Patient patient;
+	private float duration;
 	
 
 	public GameScreen(RollingCat game, Patient patient){
@@ -39,6 +40,7 @@ public class GameScreen implements Screen{
 	
 	@Override
 	public void render(float delta) {
+		duration += delta;
 		mc.updateHoverTimer(stage);
 		mc.updateHitTimer(stage);
 		cat.move(stage);
@@ -55,7 +57,7 @@ public class GameScreen implements Screen{
         updateCamPos();
         mc.addTrackingPoint(delta);
         if(cat.isDone()){
-        	patient.addTrack(new Track(mc.getMap(), Track.GAME));
+        	patient.addTrack(new Track(mc.getMap(), Track.GAME, duration));
         	game.setScreen(new TrackingRecapScreen(game, patient));
         }
 	}
@@ -67,6 +69,7 @@ public class GameScreen implements Screen{
 		if(stage.getCamera().position.x + GameConstants.DISPLAY_WIDTH / 2 < cat.getX()){
 			stage.getCamera().translate(GameConstants.DISPLAY_WIDTH, 0, 0);
 			box.setX(box.getX() + GameConstants.DISPLAY_WIDTH);
+			mc.stop();
 		}
 		
 	}
@@ -90,6 +93,7 @@ public class GameScreen implements Screen{
 		mc = new MouseCursorGame(stage, cat, box);
 		font = new BitmapFont(Gdx.files.internal("data/font.fnt"), false);
 		Gdx.input.setInputProcessor(mc);
+		duration = 0;
 	}
 
 	@Override

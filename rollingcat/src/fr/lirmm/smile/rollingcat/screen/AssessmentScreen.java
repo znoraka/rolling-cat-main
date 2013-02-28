@@ -1,6 +1,8 @@
 package fr.lirmm.smile.rollingcat.screen;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -40,6 +42,8 @@ public class AssessmentScreen implements Screen {
 	private InputMultiplexer inputMultiplexer;
 	private Patient patient;
 	private float timeout;
+	private TextureAtlas atlas;
+	private float duration;
 	
 	public AssessmentScreen(RollingCat game, Patient patient){
 		this.game = game;
@@ -50,6 +54,7 @@ public class AssessmentScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		duration += delta;
 		
 		if(canStart())
 			mc.start();
@@ -86,8 +91,11 @@ public class AssessmentScreen implements Screen {
 
 	@Override
 	public void show() {
+		duration = 0;
 		sr = new ShapeRenderer();
-		skin = new Skin(new TextureAtlas("data/patientAtlas.atlas"));
+		atlas = new TextureAtlas("data/patientAtlas.atlas");
+		skin = new Skin();
+		skin.addRegions(atlas);
 		
 		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
 		
@@ -109,7 +117,7 @@ public class AssessmentScreen implements Screen {
 		back = new TextButton("Back", style);
 		back.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-	        	patient.addTrack(new Track(mc.getMap(), Track.ASSESSEMENT));
+	        	patient.addTrack(new Track(mc.getMap(), Track.ASSESSEMENT, duration));
 				game.setScreen(new PatientScreen(game, patient)); // TODO changer le screen
 			}
 		});
@@ -145,6 +153,7 @@ public class AssessmentScreen implements Screen {
 		skin.dispose();
 		stage.dispose();
 		font.dispose();
+		atlas.dispose();
 	}
 	
 	public void setSelected(int selected){
