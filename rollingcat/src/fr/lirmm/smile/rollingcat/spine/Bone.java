@@ -1,5 +1,5 @@
 
-package com.esotericsoftware.spine;
+package fr.lirmm.smile.rollingcat.spine;
 
 import static com.badlogic.gdx.math.Matrix3.*;
 
@@ -7,17 +7,16 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix3;
 
 public class Bone {
-	public final BoneData data;
-	public final Bone parent;
-	public float x, y;
-	public float rotation;
-	public float scaleX = 1;
-	public float scaleY = 1;
+	final BoneData data;
+	final Bone parent;
+	float x, y;
+	float rotation;
+	float scaleX = 1, scaleY = 1;
 
-	public float m00, m01, worldX; // a b x
-	public float m10, m11, worldY; // c d y
-	public float worldRotation;
-	public float worldScaleX, worldScaleY;
+	float m00, m01, worldX; // a b x
+	float m10, m11, worldY; // c d y
+	float worldRotation;
+	float worldScaleX, worldScaleY;
 
 	/** @param parent May be null. */
 	public Bone (BoneData data, Bone parent) {

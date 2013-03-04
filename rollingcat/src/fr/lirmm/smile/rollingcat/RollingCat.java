@@ -17,7 +17,7 @@ public class RollingCat extends Game {
 	
 	@Override
 	public void create() {		
-		this.setScreen(new PatientSelectScreen(this));
+		this.setScreen(new LoginScreen(this));
 		fps = new FPSLogger();
 	}
 

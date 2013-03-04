@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.PatientsManager;
+import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 
 public class PatientSelectScreen implements Screen{
@@ -46,10 +47,12 @@ public class PatientSelectScreen implements Screen{
 	private Label nom, prenom, date, hemiplegia, dominantMember;
 	private Texture face;
 	private LabelStyle labelStyle;
+	private Doctor doctor;
 	
 	
-	public PatientSelectScreen(RollingCat game){
+	public PatientSelectScreen(RollingCat game, Doctor doctor){
 		this.game = game;
+		this.doctor = doctor;
 	}
 	
 	@Override
@@ -140,7 +143,7 @@ public class PatientSelectScreen implements Screen{
 		tableRight.setWidth(GameConstants.DISPLAY_WIDTH * 0.658f);
 		stage.addActor(sp);
 		stage.addActor(tableRight);
-		patients = PatientsManager.getPatients();
+		patients = doctor.getPatients();
 		this.nbpatients = patients.size();
 		
 		p = patients.get(0);

@@ -42,6 +42,7 @@ public class TrackingRecapScreen implements Screen{
 	private ShapeRenderer sr;
 	private Track track;
 	private Rectangle drawArea;
+	private TextureAtlas atlas;
 
 	
 	public TrackingRecapScreen(RollingCat game, Patient patient){
@@ -78,8 +79,10 @@ public class TrackingRecapScreen implements Screen{
 		tableRight = new Table();
 		
 		batch = new SpriteBatch();
+		atlas = new TextureAtlas("data/patientAtlas.atlas");
 		
-		skin = new Skin(new TextureAtlas("data/patientAtlas.atlas"));
+		skin = new Skin();
+		skin.addRegions(atlas);
 		
 		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
 		
@@ -180,6 +183,7 @@ public class TrackingRecapScreen implements Screen{
 		font.dispose();
 		batch.dispose();
 		sr.dispose();
+		atlas.dispose();
 	}
 	
 	private void createButtons(TextButtonStyle style) {

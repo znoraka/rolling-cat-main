@@ -1,14 +1,11 @@
 
-package com.esotericsoftware.spine;
-
-import com.esotericsoftware.spine.Skin.Key;
+package fr.lirmm.smile.rollingcat.spine;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap.Entry;
 
 public class Skeleton {
 	final SkeletonData data;
@@ -24,14 +21,14 @@ public class Skeleton {
 		if (data == null) throw new IllegalArgumentException("data cannot be null.");
 		this.data = data;
 
-		bones = new Array(data.bones.size);
+		bones = new Array<Bone>(data.bones.size);
 		for (BoneData boneData : data.bones) {
 			Bone parent = boneData.parent == null ? null : bones.get(data.bones.indexOf(boneData.parent, true));
 			bones.add(new Bone(boneData, parent));
 		}
 
-		slots = new Array(data.slots.size);
-		drawOrder = new Array(data.slots.size);
+		slots = new Array<Slot>(data.slots.size);
+		drawOrder = new Array<Slot>(data.slots.size);
 		for (SlotData slotData : data.slots) {
 			Bone bone = bones.get(data.bones.indexOf(slotData.boneData, true));
 			Slot slot = new Slot(slotData, this, bone);
@@ -47,20 +44,20 @@ public class Skeleton {
 		if (skeleton == null) throw new IllegalArgumentException("skeleton cannot be null.");
 		data = skeleton.data;
 
-		bones = new Array(skeleton.bones.size);
+		bones = new Array<Bone>(skeleton.bones.size);
 		for (Bone bone : skeleton.bones) {
 			Bone parent = bones.get(skeleton.bones.indexOf(bone.parent, true));
 			bones.add(new Bone(bone, parent));
 		}
 
-		slots = new Array(skeleton.slots.size);
+		slots = new Array<Slot>(skeleton.slots.size);
 		for (Slot slot : skeleton.slots) {
 			Bone bone = bones.get(skeleton.bones.indexOf(slot.bone, true));
 			Slot newSlot = new Slot(slot, this, bone);
 			slots.add(newSlot);
 		}
 
-		drawOrder = new Array(slots.size);
+		drawOrder = new Array<Slot>(slots.size);
 		for (Slot slot : skeleton.drawOrder)
 			drawOrder.add(slots.get(skeleton.slots.indexOf(slot, true)));
 
@@ -109,27 +106,27 @@ public class Skeleton {
 		}
 	}
 
-//	public void drawDebug (ShapeRenderer renderer) {
-//		renderer.setColor(Color.RED);
-//		renderer.begin(ShapeType.Line);
-//		for (int i = 0, n = bones.size; i < n; i++) {
-//			Bone bone = bones.get(i);
-//			if (bone.parent == null) continue;
-//			float x = bone.data.length * bone.m00 + bone.worldX;
-//			float y = bone.data.length * bone.m10 + bone.worldY;
-//			renderer.line(bone.worldX, bone.worldY, x, y);
-//		}
-//		renderer.end();
-//
-//		renderer.setColor(Color.GREEN);
-//		renderer.begin(ShapeType.Filled);
-//		for (int i = 0, n = bones.size; i < n; i++) {
-//			Bone bone = bones.get(i);
-//			renderer.setColor(Color.GREEN);
-//			renderer.circle(bone.worldX, bone.worldY, 3);
-//		}
-//		renderer.end();
-//	}
+	public void drawDebug (ShapeRenderer renderer) {
+		renderer.setColor(Color.RED);
+		renderer.begin(ShapeType.Line);
+		for (int i = 0, n = bones.size; i < n; i++) {
+			Bone bone = bones.get(i);
+			if (bone.parent == null) continue;
+			float x = bone.data.length * bone.m00 + bone.worldX;
+			float y = bone.data.length * bone.m10 + bone.worldY;
+			renderer.line(bone.worldX, bone.worldY, x, y);
+		}
+		renderer.end();
+
+		renderer.setColor(Color.GREEN);
+		renderer.begin(ShapeType.FilledCircle);
+		for (int i = 0, n = bones.size; i < n; i++) {
+			Bone bone = bones.get(i);
+			renderer.setColor(Color.GREEN);
+			renderer.circle(bone.worldX, bone.worldY, 3);
+		}
+		renderer.end();
+	}
 
 	public SkeletonData getData () {
 		return data;

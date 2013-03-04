@@ -1,16 +1,16 @@
 package fr.lirmm.smile.rollingcat.model.patient;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.TrackingPointsManager;
 
 public class Track {
@@ -25,7 +25,7 @@ public class Track {
 	private ArrayList<Integer> indNextSegment;
 	private int currentSegment;
 	private String type;
-	private DateFormat dateFormat;
+//	private DateFormat dateFormat;
 
 	
 
@@ -35,6 +35,7 @@ public class Track {
 	 * @param track
 	 */
 	public Track(Map<Integer, float []> track, String type, float duration){
+		Gdx.app.log(RollingCat.LOG, track.size() + " points added");
 		this.track = track;
 		this.duration = (float) Math.floor(duration);
 		this.id = TrackingPointsManager.getId();
@@ -43,9 +44,9 @@ public class Track {
 			findSegments();
 			currentSegment = 0;
 		}
-		this.date = new java.util.Date(date.getTime());
+//		this.date = new java.util.Date(date.getTime());
 		this.type = type;
-		dateFormat = new SimpleDateFormat("dd'/'-MM'/'-yy HH'h'mm");
+//		dateFormat = new SimpleDateFormat("dd'/'-MM'/'-yy HH'h'mm");
 
 	}
 	
@@ -138,7 +139,8 @@ public class Track {
 	 * @return the date
 	 */
 	public String getDate(){
-		return dateFormat.format(date);
+//		return dateFormat.format(date);
+		return "123456789";
 	}
 	
 	/**
@@ -159,18 +161,27 @@ public class Track {
 	
 	/**
 	 * passe au segment suivant
+	 * @return true s'il y a un segment apres celui là
 	 */
-	public void next(){
-		if(currentSegment < indNextSegment.size() - 2)
-			currentSegment ++; 
+	public boolean next(){
+		currentSegment++;
+		if(currentSegment == indNextSegment.size() - 2)
+			return false;
+		else{
+			return true;
+		}
 	}
 	
 	/**
 	 * passe au segment précédent
 	 */
-	public void prev(){
-		if(currentSegment > 0)
-			currentSegment--;
+	public boolean prev(){
+		currentSegment--;
+		if(currentSegment == 0)
+			return false;
+		else {
+			return true;
+		}
 	}
 	
 	/**

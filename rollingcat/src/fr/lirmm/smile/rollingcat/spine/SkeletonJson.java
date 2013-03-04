@@ -1,17 +1,5 @@
 
-package com.esotericsoftware.spine;
-
-import com.esotericsoftware.spine.Animation.AttachmentTimeline;
-import com.esotericsoftware.spine.Animation.ColorTimeline;
-import com.esotericsoftware.spine.Animation.CurveTimeline;
-import com.esotericsoftware.spine.Animation.RotateTimeline;
-import com.esotericsoftware.spine.Animation.ScaleTimeline;
-import com.esotericsoftware.spine.Animation.Timeline;
-import com.esotericsoftware.spine.Animation.TranslateTimeline;
-import com.esotericsoftware.spine.attachments.RegionSequenceAttachment;
-import com.esotericsoftware.spine.attachments.RegionSequenceAttachment.Mode;
-import com.esotericsoftware.spine.attachments.RegionAttachment;
-import com.esotericsoftware.spine.attachments.TextureAtlasAttachmentResolver;
+package fr.lirmm.smile.rollingcat.spine;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -21,6 +9,18 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.SerializationException;
+
+import fr.lirmm.smile.rollingcat.spine.Animation.AttachmentTimeline;
+import fr.lirmm.smile.rollingcat.spine.Animation.ColorTimeline;
+import fr.lirmm.smile.rollingcat.spine.Animation.CurveTimeline;
+import fr.lirmm.smile.rollingcat.spine.Animation.RotateTimeline;
+import fr.lirmm.smile.rollingcat.spine.Animation.ScaleTimeline;
+import fr.lirmm.smile.rollingcat.spine.Animation.Timeline;
+import fr.lirmm.smile.rollingcat.spine.Animation.TranslateTimeline;
+import fr.lirmm.smile.rollingcat.spine.attachments.RegionAttachment;
+import fr.lirmm.smile.rollingcat.spine.attachments.RegionSequenceAttachment;
+import fr.lirmm.smile.rollingcat.spine.attachments.RegionSequenceAttachment.Mode;
+import fr.lirmm.smile.rollingcat.spine.attachments.TextureAtlasAttachmentResolver;
 
 public class SkeletonJson {
 	static public final String TIMELINE_SCALE = "scale";

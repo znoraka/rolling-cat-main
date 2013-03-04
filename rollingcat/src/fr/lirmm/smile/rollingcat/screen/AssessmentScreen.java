@@ -1,24 +1,13 @@
 package fr.lirmm.smile.rollingcat.screen;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -32,17 +21,11 @@ public class AssessmentScreen implements Screen {
 	
 	private RollingCat game;
 	private ShapeRenderer sr;
-	private Skin skin;
-	private Stage stage;
 	private ArrayList<Triangle> triangles;
 	private MouseCursorAssessment mc;
 	private int selected;
-	private TextButton back;
-	private BitmapFont font;
-	private InputMultiplexer inputMultiplexer;
 	private Patient patient;
 	private float timeout;
-	private TextureAtlas atlas;
 	private float duration;
 	
 	public AssessmentScreen(RollingCat game, Patient patient){
@@ -81,8 +64,12 @@ public class AssessmentScreen implements Screen {
 		sr.setColor(Color.GRAY);
 		sr.filledCircle(GameConstants.DISPLAY_WIDTH / 2, 0, 100 - timeout);
 		sr.end();
-		stage.draw();
         mc.addTrackingPoint(delta);
+        
+        if(mc.isDone()){
+	        patient.addTrack(new Track(mc.getMap(), Track.ASSESSEMENT, duration));
+			game.setScreen(new TrackingRecapScreen(game, patient));
+        }
 	}
 
 	@Override
@@ -93,40 +80,12 @@ public class AssessmentScreen implements Screen {
 	public void show() {
 		duration = 0;
 		sr = new ShapeRenderer();
-		atlas = new TextureAtlas("data/patientAtlas.atlas");
-		skin = new Skin();
-		skin.addRegions(atlas);
-		
-		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
-		
-		TextButtonStyle style = new TextButtonStyle();
-		style.up = skin.getDrawable("button_up");
-		style.down = skin.getDrawable("button_down");
-		style.font = font;
-		style.fontColor = Color.BLACK;
-		
-		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
-		triangles = VectorManager.getVectorsFromAreas(9);
+		triangles = VectorManager.getVectorsFromAreas(5);
 		mc = new MouseCursorAssessment();
-		inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(mc);
-		inputMultiplexer.addProcessor(stage);
-		Gdx.input.setInputProcessor(inputMultiplexer);
+		Gdx.input.setInputProcessor(mc);
 		selected = -10;
-		
-		back = new TextButton("Back", style);
-		back.addListener(new ClickListener() {
-			public void clicked (InputEvent event, float x, float y) {
-	        	patient.addTrack(new Track(mc.getMap(), Track.ASSESSEMENT, duration));
-				game.setScreen(new PatientScreen(game, patient)); // TODO changer le screen
-			}
-		});
-		
-		back.setY(GameConstants.DISPLAY_HEIGHT - 50);
-		back.setX(10);
-		
-		stage.addActor(back);
 		timeout = 0;
+		
 	}
 
 	@Override
@@ -150,10 +109,6 @@ public class AssessmentScreen implements Screen {
 	@Override
 	public void dispose() {
 		sr.dispose();
-		skin.dispose();
-		stage.dispose();
-		font.dispose();
-		atlas.dispose();
 	}
 	
 	public void setSelected(int selected){
@@ -167,5 +122,5 @@ public class AssessmentScreen implements Screen {
 	public boolean canStart(){
 		return (Math.sqrt((mc.getX() - 400)*(mc.getX() - 400) + mc.getY()*mc.getY()) < 100);
 	}
-
+	
 }

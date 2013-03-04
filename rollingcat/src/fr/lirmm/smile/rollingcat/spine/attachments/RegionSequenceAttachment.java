@@ -1,11 +1,11 @@
 
-package com.esotericsoftware.spine.attachments;
-
-import com.esotericsoftware.spine.Slot;
+package fr.lirmm.smile.rollingcat.spine.attachments;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+
+import fr.lirmm.smile.rollingcat.spine.Slot;
 
 /** Attachment that displays various texture regions over time. */
 public class RegionSequenceAttachment extends RegionAttachment {

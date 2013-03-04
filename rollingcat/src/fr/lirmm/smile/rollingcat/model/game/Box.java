@@ -14,6 +14,7 @@ public class Box extends Entity{
 	public static int SPRING = 2;
 	public static int SWATTER = 3;
 	public static int FEATHER = 4;
+	public static int EMPTY = 0;
 		
 	private int item;
 	private TextureAtlas atlas;

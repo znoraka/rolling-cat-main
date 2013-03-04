@@ -1,41 +1,30 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.esotericsoftware.spine.Animation;
-import com.esotericsoftware.spine.Bone;
-import com.esotericsoftware.spine.Skeleton;
-import com.esotericsoftware.spine.SkeletonBinary;
-import com.esotericsoftware.spine.SkeletonData;
-import com.esotericsoftware.spine.SkeletonJson;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
-import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.spine.Animation;
+import fr.lirmm.smile.rollingcat.spine.Bone;
+import fr.lirmm.smile.rollingcat.spine.Skeleton;
+import fr.lirmm.smile.rollingcat.spine.SkeletonData;
+import fr.lirmm.smile.rollingcat.spine.SkeletonJson;
 
 public class Cat extends Entity {
 	
 	private boolean jumping;
 	private int nbcoin;
-	private boolean holdingBone;
 	private boolean done;
 	
-	SkeletonData skeletonData;
-	Skeleton skeleton;
-	Animation animation;
+//	SkeletonData skeletonData;
+//	Skeleton skeleton;
+//	Animation animation;
 	float time;
 	
 	/**
@@ -47,36 +36,26 @@ public class Cat extends Entity {
 		super(x,y, GameConstants.TEXTURE_CAT);
 		jumping = false;
 		nbcoin = 0;
-		holdingBone = false;
 		done = false;
 //		this.setTouchable(Touchable.disabled);
 		
 		final String name = "goblins";
 
-		// A regular texture atlas would normally usually be used. This returns a white image for images not found in the atlas.
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/" + name + ".atlas"));
-
-
-		if (true) {
-			SkeletonJson json = new SkeletonJson(atlas);
-			// json.setScale(2);
-			skeletonData = json.readSkeletonData(Gdx.files.internal("data/" + name + "-skeleton.json"));
-			animation = json.readAnimation(Gdx.files.internal("data/" + name + "-walk.json"), skeletonData);
-		} else {
-			SkeletonBinary binary = new SkeletonBinary(atlas);
-			// binary.setScale(2);
-			skeletonData = binary.readSkeletonData(Gdx.files.internal("data/" + name + ".skel"));
-			animation = binary.readAnimation(Gdx.files.internal("data/" + name + "-walk.anim"), skeletonData);
-		}
-
-		skeleton = new Skeleton(skeletonData);
-		if (name.equals("goblins")) skeleton.setSkin("goblin");
-		skeleton.setToBindPose();
-
-		Bone root = skeleton.getRootBone();
-		root.scaleX = 0.2f;
-		root.scaleY = 0.2f;
-		skeleton.updateWorldTransform();
+//
+//		SkeletonJson json = new SkeletonJson(atlas);
+//		// json.setScale(2);
+//		skeletonData = json.readSkeletonData(Gdx.files.internal("data/" + name + "-skeleton.json"));
+//		animation = json.readAnimation(Gdx.files.internal("data/" + name + "-walk.json"), skeletonData);
+//
+//		skeleton = new Skeleton(skeletonData);
+//		if (name.equals("goblins")) skeleton.setSkin("goblin");
+//		skeleton.setToBindPose();
+//
+//		Bone root = skeleton.getRootBone();
+//		root.setScaleX(0.2f);
+//		root.setScaleY(0.2f);
+//		skeleton.updateWorldTransform();
 	}
 	
 	/**
@@ -90,16 +69,16 @@ public class Cat extends Entity {
         hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY()+ 5f, false));
         hitElementTop(stage.hit(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, false));
         
-        Bone root = skeleton.getRootBone();
-		root.setX(getX() + 16);
-		root.setY(getY());
+//        Bone root = skeleton.getRootBone();
+//		root.setX(getX() + 16);
+//		root.setY(getY());
 	}
 	
 	
 	private void falling(Actor hit) {
 		//si le chat n'a rien en dessous de lui
 		if(!(hit instanceof Block) && this.getActions().size == 0){
-			this.getActions().removeAll(this.getActions(), true);
+			this.getActions().clear();
 			this.addAction(Actions.moveBy(0, - GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
 		}
 
@@ -111,7 +90,7 @@ public class Cat extends Entity {
 	 */
 	private void hitElementRight(Actor hit) {
 		if(hit instanceof Dog){
-			this.getActions().removeAll(this.getActions(), true);
+			this.getActions().clear();
 		}
 		
 		if(hit instanceof Target){
@@ -125,7 +104,7 @@ public class Cat extends Entity {
 	 */
 	private void hitElementTop(Actor hit) {
 		if(hit instanceof Wasp){
-			this.getActions().removeAll(this.getActions(), true);
+			this.getActions().clear();
 			this.addAction(((Wasp) hit).getActionOnCat());
 		}
 	}
@@ -139,13 +118,6 @@ public class Cat extends Entity {
 		{
 			hit.setVisible(false);
 			nbcoin++;
-			Gdx.app.log(RollingCat.LOG, "coin picked up");
-		}
-		else if(hit instanceof Bone_Dog)
-		{
-			hit.setVisible(false);
-			holdingBone = true;
-			Gdx.app.log(RollingCat.LOG, "bone picked up");
 		}
 		else if (hit instanceof Mouse){
 			hit.setVisible(false);
@@ -181,10 +153,8 @@ public class Cat extends Entity {
 	 * initialise un saut
 	 */
 	public void jump(float xDest, float yDest){
-		System.out.println("trying to jump...");
 		if(!jumping)
 		{	
-			System.out.println("jumping !");
 			jumping = true;
 			this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, 0.5f)));
 			this.addAction(Actions.parallel(Actions.sequence(
@@ -208,23 +178,12 @@ public class Cat extends Entity {
 //						}}
 //					));
 		}
-		else
-			System.out.println("already jumping");
 	}
 
 	public int getNbCoin() {
 		return this.nbcoin;
 	}
 
-	public boolean isHoldingBone() {
-		return holdingBone;
-	}
-	
-	public void dropBone(){
-		holdingBone = false;
-		Gdx.app.log(RollingCat.LOG, "bone dropped");
-	}
-	
 	/**
 	 * 
 	 * @return true if the cat hit the target
@@ -233,19 +192,19 @@ public class Cat extends Entity {
 		return this.done;
 	}
 	
-	@Override
-	public void draw(SpriteBatch batch, float deltaParent){
-		if(this.getActions().size == 0)
-			time = 0;
-		else
-			time += Gdx.graphics.getDeltaTime() * 5;
-		
-		animation.apply(skeleton, time, true);
-		skeleton.updateWorldTransform();
-		skeleton.update(Gdx.graphics.getDeltaTime());
-		skeleton.draw(batch);
-
-
-
-	}
+//	@Override
+//	public void draw(SpriteBatch batch, float deltaParent){
+//		if(this.getActions().size == 0)
+//			time = 0;
+//		else
+//			time += Gdx.graphics.getDeltaTime() * 5;
+//		
+//		animation.apply(skeleton, time, true);
+//		skeleton.updateWorldTransform();
+//		skeleton.update(Gdx.graphics.getDeltaTime());
+//		skeleton.draw(batch);
+//
+//
+//
+//	}
 }

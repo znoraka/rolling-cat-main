@@ -1,5 +1,5 @@
 
-package com.esotericsoftware.spine;
+package fr.lirmm.smile.rollingcat.spine;
 
 import com.badlogic.gdx.utils.Array;
 
