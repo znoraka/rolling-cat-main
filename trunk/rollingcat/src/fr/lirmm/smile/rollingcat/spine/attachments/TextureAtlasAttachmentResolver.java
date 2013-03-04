@@ -1,11 +1,11 @@
 
-package com.esotericsoftware.spine.attachments;
-
-import com.esotericsoftware.spine.Attachment;
-import com.esotericsoftware.spine.AttachmentResolver;
+package fr.lirmm.smile.rollingcat.spine.attachments;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+
+import fr.lirmm.smile.rollingcat.spine.Attachment;
+import fr.lirmm.smile.rollingcat.spine.AttachmentResolver;
 
 public class TextureAtlasAttachmentResolver implements AttachmentResolver {
 	private TextureAtlas atlas;

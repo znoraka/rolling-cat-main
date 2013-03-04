@@ -38,6 +38,7 @@ public class UploadScreen implements Screen {
 	private Rectangle drawArea;
 	private ShapeRenderer sr;
 	private Label date, duration, dateValue, durationValue;
+	private TextureAtlas atlas;
 
 	
 	public UploadScreen(RollingCat game, Patient patient, Track track){
@@ -70,7 +71,9 @@ public class UploadScreen implements Screen {
 		batch = new SpriteBatch();
 		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
 		stage.clear();
-		skin = new Skin(new TextureAtlas("data/patientAtlas.atlas"));
+		atlas = new TextureAtlas("data/patientAtlas.atlas");
+		skin = new Skin();
+		skin.addRegions(atlas);
 		sr = new ShapeRenderer();
 		
 		tableLeftBottom = new Table();
@@ -153,14 +156,18 @@ public class UploadScreen implements Screen {
 		prev = new TextButton("Previous", style);
 		prev.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				track.prev();
+				if(!track.prev())
+					prev.setVisible(false);
+				next.setVisible(true);
 			}
 		});
 		
 		next = new TextButton("Next", style);
 		next.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				track.next();
+				if(!track.next())
+					next.setVisible(false);
+				prev.setVisible(true);
 			}
 		});
 		
@@ -182,6 +189,8 @@ public class UploadScreen implements Screen {
 		stage.addActor(tableLeftTop);
 		stage.addActor(tableRightBottom);
 		stage.addActor(tableRightTop);
+		
+		prev.setVisible(false);
 		
 		drawArea = new Rectangle(tableRightTop.getX(), tableRightTop.getY(), tableRightTop.getWidth(), tableRightTop.getHeight());
 	}

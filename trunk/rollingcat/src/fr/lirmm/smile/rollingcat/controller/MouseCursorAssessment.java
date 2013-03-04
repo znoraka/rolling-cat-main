@@ -3,6 +3,7 @@ package fr.lirmm.smile.rollingcat.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
@@ -14,6 +15,7 @@ public class MouseCursorAssessment implements InputProcessor{
 	private Map<Integer, float []> map;
 	private float elapsedTime;
 	private boolean start;
+	private boolean isDone;
 	
 	public MouseCursorAssessment(){
 		x = GameConstants.DISPLAY_WIDTH / 2;
@@ -21,18 +23,20 @@ public class MouseCursorAssessment implements InputProcessor{
 		map = new HashMap<Integer, float []>();
 		elapsedTime = 0;
 		start = false;
+		isDone = false;
 	}
 	
 	@Override
 	public boolean keyDown(int keycode) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
+		if(keycode == Keys.ENTER)
+			isDone = true;
+		return true;
 	}
 
 	@Override
@@ -118,6 +122,10 @@ public class MouseCursorAssessment implements InputProcessor{
 	
 	public Map<Integer, float[]> getMap(){
 		return this.map;
+	}
+	
+	public boolean isDone(){
+		return isDone;
 	}
 
 }

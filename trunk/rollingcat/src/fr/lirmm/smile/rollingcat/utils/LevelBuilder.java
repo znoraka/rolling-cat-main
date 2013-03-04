@@ -27,6 +27,7 @@ import fr.lirmm.smile.rollingcat.model.game.Wasp;
 public class LevelBuilder {
 	
 	private static ArrayList<Integer> items;
+	private static int segment = 0;
 	/**
 	 * sauvegarde les entity du stage
 	 * @param stage
@@ -38,7 +39,6 @@ public class LevelBuilder {
 //	   for (Actor a : stage.getActors()) {
 //		   if(a instanceof Entity){
 //			   s = a.getName() + ";" + (a.getX()/GameConstants.BLOCK_WIDTH) + ";" + (a.getY()/GameConstants.BLOCK_HEIGHT) + "\n";
-//			   System.out.print(s);
 //			   file.writeString(s, true);
 //		   }
 //	   }
@@ -49,13 +49,13 @@ public class LevelBuilder {
 	 * @return le stage créé
 	 */
 	public static Stage readLevel(){
+		segment = 0;
 		Gdx.app.log(RollingCat.LOG, "retriving level file...");
 		FileHandle file = Gdx.files.internal("data/file.txt");
 		Gdx.app.log(RollingCat.LOG, "done.");
 		Stage stage = new Stage(GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT, true);
 		Gdx.app.log(RollingCat.LOG, "parsing level file...");
 		String s = file.readString();
-		System.out.println(s);
 		Gdx.app.log(RollingCat.LOG, "done.");
 		Gdx.app.log(RollingCat.LOG, "Adding Cat...");
 		Gdx.app.log(RollingCat.LOG, "done.");
@@ -79,19 +79,23 @@ public class LevelBuilder {
 			subtab = tab[i].split(";");
 			x = Float.valueOf(subtab[1]);
 			y = Float.valueOf(subtab[2]);
-		
+			
 			if(subtab[0].equals("cat"))
 				stage.addActor(new Cat(x, y));
 			else if(subtab[0].equals("coin"))
 				stage.addActor(new Coin(x, y));
 			else if(subtab[0].equals("wasp")){
 				stage.addActor(new Wasp(x, y));
+				if(isFirstOfScreen(x))
+					items.add(Box.EMPTY);
 				items.add(Box.SWATTER);
 			}
 			else if(subtab[0].equals("mouse"))
 				stage.addActor(new Mouse(x, y));
 			else if(subtab[0].equals("dog")){
 				stage.addActor(new Dog(x, y));
+				if(isFirstOfScreen(x))
+					items.add(Box.EMPTY);
 				items.add(Box.BONE);
 			}
 			else if(subtab[0].equals("groundBlock"))
@@ -102,13 +106,18 @@ public class LevelBuilder {
 				stage.addActor(new Bone_Dog(x, y));
 			else if(subtab[0].equals("spring")){
 				stage.addActor(new Spring(x, y));
+				if(isFirstOfScreen(x))
+					items.add(Box.EMPTY);
 				items.add(Box.SPRING);
 			}
 			else if(subtab[0].equals("fan")){
 				stage.addActor(new Fan(x,y));
 			}
-			else if(subtab[0].equals("gap"))
+			else if(subtab[0].equals("gap")){
+				if(isFirstOfScreen(x))
+					items.add(Box.EMPTY);
 				items.add(Box.FEATHER);
+			}
 			else if(subtab[0].equals("target"))
 				stage.addActor(new Target(x, y));
 			
@@ -120,6 +129,15 @@ public class LevelBuilder {
 	
 	public static ArrayList<Integer> getItems(){
 		return items;
+	}
+	
+	private static boolean isFirstOfScreen(float x){
+		if(Math.floor(x / GameConstants.COLS) > segment){
+			segment ++;
+			return true;
+		}
+		else
+			return false;
 	}
 	
 }

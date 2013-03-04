@@ -1,5 +1,5 @@
 
-package com.esotericsoftware.spine;
+package fr.lirmm.smile.rollingcat.spine;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
@@ -412,10 +412,10 @@ public class Animation {
 			float g = lastFrameG + (frames[frameIndex + FRAME_G] - lastFrameG) * percent;
 			float b = lastFrameB + (frames[frameIndex + FRAME_B] - lastFrameB) * percent;
 			float a = lastFrameA + (frames[frameIndex + FRAME_A] - lastFrameA) * percent;
-//			if (alpha < 1)
-//				color.add((r - color.r) * alpha, (g - color.g) * alpha, (b - color.b) * alpha, (a - color.a) * alpha);
-//			else
-//				color.set(r, g, b, a);
+			if (alpha < 1)
+				color.add(new Color((r - color.r) * alpha, (g - color.g) * alpha, (b - color.b) * alpha, (a - color.a) * alpha));
+			else
+				color.set(r, g, b, a);
 		}
 	}
 

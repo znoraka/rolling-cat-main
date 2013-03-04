@@ -61,7 +61,7 @@ public class MouseCursorGame implements InputProcessor{
 	 * et déclenche les actions si le timer est terminé
 	 * @param stage le stage du jeu
 	 */
-	public void updateHoverTimer(Stage stage){
+	public void updateHoverTimer(){
 		actor = (Entity) stage.hit(x, y, true);
 		if(actor != null){
 			if(actor instanceof Box && ((Box) actor).isEmpty())
@@ -131,7 +131,7 @@ public class MouseCursorGame implements InputProcessor{
 	 * update le timer qui gere l'immobilité du patient
 	 * @param stage
 	 */
-	public void updateHitTimer(Stage stage){
+	public void updateHitTimer(){
 		if(x % GameConstants.BLOCK_WIDTH != oldBlockX & y % GameConstants.BLOCK_HEIGHT != oldBlockY){
 			oldBlockX = (int) (x % GameConstants.BLOCK_WIDTH);
 			oldBlockY = (int) (y % GameConstants.BLOCK_HEIGHT);
@@ -193,7 +193,6 @@ public class MouseCursorGame implements InputProcessor{
 			elapsedTime += delta;
 			
 			if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
-				System.out.println("adding new point");
 				map.put(map.size(), new float[] {x, y});
 				elapsedTime = 0;
 			}
