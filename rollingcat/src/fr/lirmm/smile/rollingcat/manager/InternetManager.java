@@ -42,7 +42,7 @@ public class InternetManager{
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 		httpGet.setTimeOut(0);
-		httpGet.setUrl("http://json-time.appspot.com/time.json?tz=Europe/Paris");
+		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/getDate.php");
 		Gdx.app.log(RollingCat.LOG, "sending request...");
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
 			
@@ -67,7 +67,7 @@ public class InternetManager{
 		
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 		//httpGet.setTimeOut(0);
-		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/index.php?patient=1");
+		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/getLevel.php?patient=1");
 		
 		Gdx.app.log(RollingCat.LOG, "sending request...");
 

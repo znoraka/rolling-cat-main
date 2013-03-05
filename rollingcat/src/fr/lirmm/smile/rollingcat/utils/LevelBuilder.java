@@ -72,6 +72,7 @@ public class LevelBuilder {
 	 */
 	private static void build(String s, Stage stage) {
 		items = new ArrayList<Integer>();
+		segment = 0;
 		String tab [] = s.split("/");
 		String[] subtab;
 		float x;

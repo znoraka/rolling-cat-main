@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonReader;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -202,19 +200,21 @@ public class Track {
 
 	public void setDate(String date) {
 		this.date = date;
-		if(!(this.date.equals("error"))){
-			Json json = new Json();
-			JsonReader j = new JsonReader();
-	//		int hour, minute, second;
-	//		hour = json.readValue("hour", Integer.class, j.parse(track.getDate()));
-	//		minute = json.readValue("minute", Integer.class, j.parse(track.getDate()));
-	//		second = json.readValue("second", Integer.class, j.parse(track.getDate()));
-			this.date = json.readValue("datetime", String.class, j.parse(this.date));
-		}
-		else if(this.date == null){
-			this.date = "error";
+		Gdx.app.log(RollingCat.LOG, date);
+//		if(!(this.date.equals("error"))){
+//			Json json = new Json();
+//			JsonReader j = new JsonReader();
+//	//		int hour, minute, second;
+//	//		hour = json.readValue("hour", Integer.class, j.parse(track.getDate()));
+//	//		minute = json.readValue("minute", Integer.class, j.parse(track.getDate()));
+//	//		second = json.readValue("second", Integer.class, j.parse(track.getDate()));
+//			this.date = json.readValue("datetime", String.class, j.parse(this.date));
+//		}
+		if(this.date == null){
+			this.date = "error retrieving date";
 		}
 	}
+
 
 	
 }
