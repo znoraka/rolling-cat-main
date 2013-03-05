@@ -8,9 +8,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.TrackingPointsManager;
 
 public class Track {
@@ -19,7 +22,7 @@ public class Track {
 	public static final String GAME = "game";
 	
 	private Map<Integer, float []> track;
-	private java.util.Date date = new java.util.Date();
+	private String date;
 	private float duration;
 	private int id;
 	private ArrayList<Integer> indNextSegment;
@@ -44,9 +47,8 @@ public class Track {
 			findSegments();
 			currentSegment = 0;
 		}
-//		this.date = new java.util.Date(date.getTime());
 		this.type = type;
-//		dateFormat = new SimpleDateFormat("dd'/'-MM'/'-yy HH'h'mm");
+		InternetManager.getDate(this);
 
 	}
 	
@@ -139,8 +141,7 @@ public class Track {
 	 * @return the date
 	 */
 	public String getDate(){
-//		return dateFormat.format(date);
-		return "123456789";
+		return date;
 	}
 	
 	/**
@@ -198,6 +199,22 @@ public class Track {
 	public Map<Integer, float []> getTrack(){
 		return this.track;
 	}
-	
+
+	public void setDate(String date) {
+		this.date = date;
+		if(!(this.date.equals("error"))){
+			Json json = new Json();
+			JsonReader j = new JsonReader();
+	//		int hour, minute, second;
+	//		hour = json.readValue("hour", Integer.class, j.parse(track.getDate()));
+	//		minute = json.readValue("minute", Integer.class, j.parse(track.getDate()));
+	//		second = json.readValue("second", Integer.class, j.parse(track.getDate()));
+			this.date = json.readValue("datetime", String.class, j.parse(this.date));
+		}
+		else if(this.date == null){
+			this.date = "error";
+		}
+	}
+
 	
 }

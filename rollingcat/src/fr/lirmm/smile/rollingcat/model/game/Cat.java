@@ -1,8 +1,5 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -10,11 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
-import fr.lirmm.smile.rollingcat.spine.Animation;
-import fr.lirmm.smile.rollingcat.spine.Bone;
-import fr.lirmm.smile.rollingcat.spine.Skeleton;
-import fr.lirmm.smile.rollingcat.spine.SkeletonData;
-import fr.lirmm.smile.rollingcat.spine.SkeletonJson;
 
 public class Cat extends Entity {
 	
@@ -39,9 +31,9 @@ public class Cat extends Entity {
 		done = false;
 //		this.setTouchable(Touchable.disabled);
 		
-		final String name = "goblins";
-
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/" + name + ".atlas"));
+//		final String name = "goblins";
+//
+//		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/" + name + ".atlas"));
 //
 //		SkeletonJson json = new SkeletonJson(atlas);
 //		// json.setScale(2);

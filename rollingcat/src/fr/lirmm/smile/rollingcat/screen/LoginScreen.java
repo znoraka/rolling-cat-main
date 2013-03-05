@@ -1,10 +1,10 @@
 package fr.lirmm.smile.rollingcat.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -81,7 +81,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		skin.addRegions(atlas);
 		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
 		table = new Table();
-		doctor = new Doctor();
+		doctor = Doctor.getDoctor();
 		batch = new SpriteBatch();
 		wrong = false;
 		region = skin.getRegion("textfield");
@@ -186,7 +186,7 @@ public class LoginScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean keyUp(int keycode) {
-		if(keycode == Keys.ENTER){
+		if(keycode == Keys.ENTER){			
 			if(doctor.login(loginTextField.getText(), passwordTextField.getText()))
 				game.setScreen(new PatientSelectScreen(game, doctor));
 			else

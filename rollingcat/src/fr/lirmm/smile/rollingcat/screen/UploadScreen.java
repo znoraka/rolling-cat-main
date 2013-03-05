@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -118,6 +120,7 @@ public class UploadScreen implements Screen {
 		
 		date = new Label(" Date", labelStyle);
 		duration = new Label(" Duration", labelStyle);
+		
 		dateValue = new Label(track.getDate(), labelStyle2);
 		durationValue = new Label(""+track.getDuration() + " s", labelStyle2);
 		
