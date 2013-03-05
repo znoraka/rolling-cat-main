@@ -15,7 +15,6 @@ import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
-import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
 public class GameScreen implements Screen{
 
@@ -31,9 +30,10 @@ public class GameScreen implements Screen{
 	private float duration;
 	
 
-	public GameScreen(RollingCat game, Patient patient){
+	public GameScreen(RollingCat game, Patient patient, Stage stage){
 		this.game = game;
 		this.patient = patient;
+		this.stage = stage;
 	}
 	
 	@Override
@@ -82,7 +82,6 @@ public class GameScreen implements Screen{
 		backgroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND);
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		batch = new SpriteBatch();
-		this.stage = LevelBuilder.readLevel();
 		cat = (Cat) stage.getActors().get(0);
 		box = new Box(GameConstants.COLS / 2, 0);
 		stage.addActor(box);

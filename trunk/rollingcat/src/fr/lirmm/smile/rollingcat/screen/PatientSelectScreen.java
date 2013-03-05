@@ -25,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
-import fr.lirmm.smile.rollingcat.manager.PatientsManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 
@@ -38,7 +37,7 @@ public class PatientSelectScreen implements Screen{
 	private TextureAtlas atlas;
 	private Skin skin;
 	private SpriteBatch batch;
-	private TextButton b, selectPatient;
+	private TextButton b, selectPatient, back;
 	private ArrayList<TextButton> buttons;
 	private ScrollPane sp;
 	private Table tableLeft, tableRight;
@@ -166,6 +165,14 @@ public class PatientSelectScreen implements Screen{
 		selectPatient = new TextButton("Select", style);
 		face = p.getFace();
 		
+		back = new TextButton("Back", style);
+		
+		back.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				game.setScreen(new LoginScreen(game));
+			}
+		});
+		
 		selectPatient.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				game.setScreen(new PatientScreen(game, p));
@@ -183,8 +190,13 @@ public class PatientSelectScreen implements Screen{
 		tableRight.row();
 		
 		selectPatient.setX(GameConstants.DISPLAY_WIDTH * 0.7f);
-		selectPatient.setY(GameConstants.DISPLAY_HEIGHT * 0.7f);
+		selectPatient.setY(GameConstants.DISPLAY_HEIGHT * 0.77f);
+		
+		back.setX(GameConstants.DISPLAY_WIDTH * 0.70f);
+		back.setY(GameConstants.DISPLAY_HEIGHT * 0.70f);
+		
 		stage.addActor(selectPatient);
+		stage.addActor(back);
 	}
 
 	@Override

@@ -4,17 +4,16 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.game.Bone_Dog;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.game.Coin;
 import fr.lirmm.smile.rollingcat.model.game.Dog;
-import fr.lirmm.smile.rollingcat.model.game.Entity;
 import fr.lirmm.smile.rollingcat.model.game.Fan;
 import fr.lirmm.smile.rollingcat.model.game.GroundBlock;
 import fr.lirmm.smile.rollingcat.model.game.Mouse;
@@ -27,6 +26,7 @@ import fr.lirmm.smile.rollingcat.model.game.Wasp;
 public class LevelBuilder {
 	
 	private static ArrayList<Integer> items;
+	private static String level;
 	private static int segment = 0;
 	/**
 	 * sauvegarde les entity du stage
@@ -49,17 +49,19 @@ public class LevelBuilder {
 	 * @return le stage créé
 	 */
 	public static Stage readLevel(){
-		segment = 0;
-		Gdx.app.log(RollingCat.LOG, "retriving level file...");
-		FileHandle file = Gdx.files.internal("data/file.txt");
-		Gdx.app.log(RollingCat.LOG, "done.");
 		Stage stage = new Stage(GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT, true);
-		Gdx.app.log(RollingCat.LOG, "parsing level file...");
-		String s = file.readString();
-		Gdx.app.log(RollingCat.LOG, "done.");
-		Gdx.app.log(RollingCat.LOG, "Adding Cat...");
-		Gdx.app.log(RollingCat.LOG, "done.");
-		LevelBuilder.build(s, stage);
+
+//		Gdx.app.log(RollingCat.LOG, "retriving level file...");
+//		
+//		FileHandle file = Gdx.files.internal("data/file.txt");
+//		
+//		Gdx.app.log(RollingCat.LOG, "done.");
+//		Gdx.app.log(RollingCat.LOG, "parsing level file...");
+//		
+//		String s = file.readString();
+//		
+		//level = InternetManager.getLevelOnServer(1);
+		LevelBuilder.build(level, stage);
 		return stage;
 	}
 	
@@ -70,7 +72,7 @@ public class LevelBuilder {
 	 */
 	private static void build(String s, Stage stage) {
 		items = new ArrayList<Integer>();
-		String tab [] = s.split("\n");
+		String tab [] = s.split("/");
 		String[] subtab;
 		float x;
 		float y;
@@ -138,6 +140,10 @@ public class LevelBuilder {
 		}
 		else
 			return false;
+	}
+
+	public static void setLevel(String s) {
+		level = s;
 	}
 	
 }
