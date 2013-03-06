@@ -3,12 +3,10 @@ package fr.lirmm.smile.rollingcat.utils;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
-import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.game.Bone_Dog;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
@@ -26,7 +24,7 @@ import fr.lirmm.smile.rollingcat.model.game.Wasp;
 public class LevelBuilder {
 	
 	private static ArrayList<Integer> items;
-	private static String level;
+	//private static String level;
 	private static int segment = 0;
 	/**
 	 * sauvegarde les entity du stage
@@ -48,29 +46,27 @@ public class LevelBuilder {
 	 * lit un fichier pour constuire le stage - Entity;x;y\n
 	 * @return le stage créé
 	 */
-	public static Stage readLevel(){
-		Stage stage = new Stage(GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT, true);
-
-//		Gdx.app.log(RollingCat.LOG, "retriving level file...");
-//		
-//		FileHandle file = Gdx.files.internal("data/file.txt");
-//		
-//		Gdx.app.log(RollingCat.LOG, "done.");
-//		Gdx.app.log(RollingCat.LOG, "parsing level file...");
-//		
-//		String s = file.readString();
-//		
-		//level = InternetManager.getLevelOnServer(1);
-		LevelBuilder.build(level, stage);
-		return stage;
-	}
-	
+//	public static Stage readLevel(String level){
+//
+////		Gdx.app.log(RollingCat.LOG, "retriving level file...");
+////		
+////		FileHandle file = Gdx.files.internal("data/file.txt");
+////		
+////		Gdx.app.log(RollingCat.LOG, "done.");
+////		Gdx.app.log(RollingCat.LOG, "parsing level file...");
+////		
+////		String s = file.readString();
+////		
+//		//level = InternetManager.getLevelOnServer(1);
+//		LevelBuilder.build(level, stage);
+//	}
+//	
 	/**
 	 * ajoute les acteurs au stage
-	 * @param s la string du fichier lu
-	 * @param stage le stage à créer
+	 * @param s la string du niveau
 	 */
-	private static void build(String s, Stage stage) {
+	public static Stage build(String s) {
+		Stage stage = new Stage(GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT, true);
 		items = new ArrayList<Integer>();
 		segment = 0;
 		String tab [] = s.split("/");
@@ -128,6 +124,7 @@ public class LevelBuilder {
 		}
 		Gdx.app.log(RollingCat.LOG, "building done " + tab.length + " elements added");
 		items.add(0);
+		return stage;
 	}
 	
 	public static ArrayList<Integer> getItems(){
@@ -143,8 +140,18 @@ public class LevelBuilder {
 			return false;
 	}
 
-	public static void setLevel(String s) {
-		level = s;
-	}
+//	public static void setLevel(String s) {
+//		level = s;
+//	}
+//	
+//	public static boolean isDone(){
+//		return level != null;
+//	}
+//	
+//	public static void clearLevel(){
+//		level = null;
+//	}
+//	
+//	
 	
 }

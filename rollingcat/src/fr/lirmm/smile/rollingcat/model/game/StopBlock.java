@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -42,28 +43,27 @@ public class StopBlock extends Block {
 	 * dessine l'avancement du timer lors d'un contact avec le chat
 	 * @param sr
 	 */
-	@Override
-	public void draw(SpriteBatch batch, float deltaParent){
-		if(timer > 0 & draw == true)
-		{	
-			super.draw(batch, deltaParent);
-			batch.end();
-			sr.setProjectionMatrix(batch.getProjectionMatrix());
-			sr.begin(ShapeType.FilledRectangle);
-			sr.setColor(Color.WHITE);
-			sr.filledRect(getX(), getY(), 30, 10);
-			sr.setColor(Color.BLUE);
-			sr.filledRect(getX(), getY(), 30 * timer / GameConstants.HOLD_POSITION, 10);
-			sr.end();
-			batch.begin();
-			draw = false;
-		}
-	}
+//	@Override
+//	public void draw(SpriteBatch batch, float deltaParent){
+//		if(timer > 0 & draw == true)
+//		{	
+//			super.draw(batch, deltaParent);
+//			batch.end();
+//			sr.setProjectionMatrix(batch.getProjectionMatrix());
+//			sr.begin(ShapeType.FilledRectangle);
+//			sr.setColor(Color.WHITE);
+//			sr.filledRect(getX(), getY(), 30, 10);
+//			sr.setColor(Color.BLUE);
+//			sr.filledRect(getX(), getY(), 30 * timer / GameConstants.HOLD_POSITION, 10);
+//			sr.end();
+//			batch.begin();
+//			draw = false;
+//		}
+//	}
 	
 	@Override
 	public Action getActionOnCat(){
-		this.setVisible(false);
-		return super.getActionOnCat();
+		return Actions.sequence(Actions.moveBy(velocityModifier.x * GameConstants.BLOCK_WIDTH, velocityModifier.y * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED), Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
 		
 	}
 }

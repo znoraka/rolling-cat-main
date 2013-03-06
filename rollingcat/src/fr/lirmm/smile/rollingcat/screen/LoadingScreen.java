@@ -1,11 +1,11 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
@@ -15,11 +15,10 @@ public class LoadingScreen implements Screen {
 	
 	private RollingCat game;
 	private Patient patient;
-	private float wait;
-	private ShapeRenderer sr;
 	private Stage stage;
-	private boolean building;
-	
+	private Texture texture;
+	private SpriteBatch batch;
+	private String level;
 
 	public LoadingScreen(RollingCat game, Patient patient){
 		this.game = game;
@@ -28,18 +27,17 @@ public class LoadingScreen implements Screen {
 	
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 0);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		batch.draw(texture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+		batch.end();
 		
-		if(wait > 1f & !building){
-			building = true;
-			this.stage = LevelBuilder.readLevel();
-		}
-		
-		if(wait > 2)
+		level = InternetManager.getLevel();
+
+		if(level != null)
+		{
+			this.stage = LevelBuilder.build(level);
 			game.setScreen(new GameScreen(game, patient, stage));
-		
-		wait += delta;
+		}
 	}
 
 	@Override
@@ -50,11 +48,9 @@ public class LoadingScreen implements Screen {
 
 	@Override
 	public void show() {
-		wait = 0;
-		sr = new ShapeRenderer();
-		building = false;
-		InternetManager.getLevelOnServer(1);
-
+		InternetManager.fetchLevel(patient.getID());
+		texture = new Texture("data/loading.png");
+		batch = new SpriteBatch();
 	}
 
 	@Override
@@ -77,8 +73,9 @@ public class LoadingScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		batch.dispose();
+		texture.dispose();
+		stage.dispose();
 	}
 
 }

@@ -5,7 +5,7 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 public class Target extends Entity {
 
 	public Target(float x, float y) {
-		super(x, y, GameConstants.TEXTURE_COIN);
+		super(x, y, GameConstants.TEXTURE_MOUSE);
 	}
 
 }
