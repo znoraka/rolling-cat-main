@@ -20,10 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
-import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
-import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
 public class PatientScreen implements Screen {
 	

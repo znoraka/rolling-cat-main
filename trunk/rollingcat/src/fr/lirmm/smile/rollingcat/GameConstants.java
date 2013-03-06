@@ -16,6 +16,7 @@ public interface GameConstants {
 	public static final String TEXTURE_SHIT = "shit";
 	public static final String TEXTURE_SPRING = "spring";
 	public static final String TEXTURE_BOX = "box";
+	public static final String TEXTURE_TARGET = "target";
 	
 	public static final String FONT_LOGIN = "data/font.fnt";
 	

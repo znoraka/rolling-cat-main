@@ -12,10 +12,11 @@ public class Patient {
 	private String strokeDate;
 	private boolean rightHemiplegia;
 	private boolean rightDominantMember;
-	private Texture face;
+	private Texture face; 
 	private ArrayList<Track> listOfTracks;
+	private int id;
 	
-	public Patient(String nom, String prenom, int age, String strokeDate, boolean rightHemiplegia,	boolean rightDominantMember, Texture face) {
+	public Patient(String nom, String prenom, int age, String strokeDate, boolean rightHemiplegia,	boolean rightDominantMember, int id, Texture face) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.age = age;
@@ -23,6 +24,7 @@ public class Patient {
 		this.rightHemiplegia = rightHemiplegia;
 		this.rightDominantMember = rightDominantMember;
 		this.face = face;
+		this.id = id;
 		listOfTracks = new ArrayList<Track>();
 	}
 
@@ -75,6 +77,10 @@ public class Patient {
 	
 	public ArrayList<Track> getListOfTracks() {
 		return this.listOfTracks;
+	}
+
+	public int getID() {
+		return this.id;
 	}
 
 }

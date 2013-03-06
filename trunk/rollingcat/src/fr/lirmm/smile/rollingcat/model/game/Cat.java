@@ -13,6 +13,7 @@ public class Cat extends Entity {
 	private boolean jumping;
 	private int nbcoin;
 	private boolean done;
+	private boolean falling;
 	
 //	SkeletonData skeletonData;
 //	Skeleton skeleton;
@@ -29,6 +30,7 @@ public class Cat extends Entity {
 		jumping = false;
 		nbcoin = 0;
 		done = false;
+		falling = false;
 //		this.setTouchable(Touchable.disabled);
 		
 //		final String name = "goblins";
@@ -70,6 +72,7 @@ public class Cat extends Entity {
 	private void falling(Actor hit) {
 		//si le chat n'a rien en dessous de lui
 		if(!(hit instanceof Block) && this.getActions().size == 0){
+			falling = true;
 			this.getActions().clear();
 			this.addAction(Actions.moveBy(0, - GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
 		}
@@ -81,12 +84,14 @@ public class Cat extends Entity {
 	 * @param hit
 	 */
 	private void hitElementRight(Actor hit) {
-		if(hit instanceof Dog){
-			this.getActions().clear();
-		}
-		
-		if(hit instanceof Target){
-			done = true;
+		if(!falling){
+			if(hit instanceof Dog){
+				this.getActions().clear();
+			}
+			
+			if(hit instanceof Target){
+				done = true;
+			}
 		}
 	}
 	
@@ -126,16 +131,19 @@ public class Cat extends Entity {
 			((StopBlock) hit).updateTimer();
 		
 		if(hit instanceof Block){
+			falling = false;
 			if(this.getActions().size == 0)
 				this.addAction(((Block) hit).getActionOnCat());
 		}
 		
 		else if(hit instanceof Spring){
+			falling = false;
 			if(this.getActions().size == 0)
 				this.addAction(((Spring) hit).getActionOnCat());
 		}
 		
 		else if(hit instanceof Fan){
+			falling = false;
 			if(this.getActions().size == 0)
 				this.addAction(((Fan) hit).getActionOnCat());
 		}

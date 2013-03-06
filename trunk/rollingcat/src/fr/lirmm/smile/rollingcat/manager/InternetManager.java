@@ -1,8 +1,11 @@
 package fr.lirmm.smile.rollingcat.manager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.HttpParametersUtils;
 import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
@@ -11,7 +14,6 @@ import com.badlogic.gdx.Net.HttpResponseListener;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
-import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
 public class InternetManager{
 	
@@ -21,17 +23,36 @@ public class InternetManager{
 	private static String level;
 	
 	public static ArrayList<Patient> login(String username, String password) {
-		if(username.equals("admin") & password.equals("admin"))
-			return PatientsManager.getPatients();
 		
-		else if(username.equals("a") & password.equals("a")){
-			ArrayList<Patient> p = PatientsManager.getPatients();
-			p.remove(0);
-			return p;
-		}
+		Gdx.app.log(RollingCat.LOG, "preparing request...");
+		
+		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
+//		Map<String, String> parameters = new HashMap<String, String>();
+//		
+//		parameters.put("username", username);
+//		parameters.put("password", password);
+//		
+//		httpGet.setContent(HttpParametersUtils.convertHttpParameters(parameters));
+		
+		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/login.php");
+		
+		Gdx.app.log(RollingCat.LOG, "sending request...");
+		
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
 			
-		else
-			return null;
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				String s = httpResponse.getResultAsString();
+				Gdx.app.log(RollingCat.LOG, s);
+	           	Gdx.app.log(RollingCat.LOG, "success");
+		    }
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, "something went wrong");
+			}});
+		
+		return PatientsManager.getPatients();
 	}
 	
 	/**
@@ -62,12 +83,11 @@ public class InternetManager{
 		}
 	
 	
-	public static String getLevelOnServer(int IDpatient){
+	public static void fetchLevel(int IDpatient){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		//httpGet.setTimeOut(0);
-		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/getLevel.php?patient=1");
+		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/getLevel.php?patient="+IDpatient);
 		
 		Gdx.app.log(RollingCat.LOG, "sending request...");
 
@@ -75,7 +95,7 @@ public class InternetManager{
 			
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				LevelBuilder.setLevel(httpResponse.getResultAsString());
+				setLevel(httpResponse.getResultAsString());
 	           	Gdx.app.log(RollingCat.LOG, "success");
 		    }
 
@@ -84,7 +104,15 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}
 		});
-		
+
+	}
+	
+	private static void setLevel(String resultAsString) {
+		level = resultAsString;
+	}
+
+	
+	public static String getLevel(){
 		return level;
 	}
 
