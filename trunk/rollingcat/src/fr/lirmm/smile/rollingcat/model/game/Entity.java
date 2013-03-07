@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.utils.TextureFetcher;
 
 public class Entity extends Image {
 	protected Animation anim;
@@ -24,28 +25,17 @@ public class Entity extends Image {
 	 * @param name le nom de l'entity pour trouver sa texture dans le texture atlas
 	 */
 	public Entity(float x, float y, String name){
-		super(getRegions(getTexture(), name).get(0)	);
+		super(TextureFetcher.getRegions(name).get(0));
 		this.setX(x * GameConstants.BLOCK_WIDTH);
 		this.setY(y * GameConstants.BLOCK_HEIGHT);
 		this.setBounds(x * GameConstants.BLOCK_WIDTH, y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 		this.setWidth(GameConstants.BLOCK_WIDTH);
 		this.setHeight(GameConstants.BLOCK_HEIGHT);
-        this.anim = new Animation(0.25f, getRegions(getTexture(), name));
+        this.anim = new Animation(0.25f, TextureFetcher.getRegions(name));
         this.name = name;
 	}
 	
-	/**
-	 * 
-	 * @param texture le textureAtlas
-	 * @param name le nom de la texture de l'élément
-	 * @return un array d'AtlasRegion
-	 */
-	private static Array<AtlasRegion> getRegions(TextureAtlas texture, String name) {
-		texture.findRegion(name).getTexture().bind();
-		Gdx.gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
-		Gdx.gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-		return texture.findRegions(name) ;
-	}
+	
 	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
@@ -53,15 +43,6 @@ public class Entity extends Image {
 		batch.draw(anim.getKeyFrame(d, true), this.getX(), this.getY(), this.getWidth(), this.getHeight());
 	}
 	
-	/**
-	 * 
-	 * @return le texture atlas utilisé
-	 */
-	private static TextureAtlas getTexture()
-	{
-		TextureAtlas t = new TextureAtlas(GameConstants.ATLAS);
-		return t;
-	}
 	
 	/**
 	 * @return le nom de l'entity (nom utilisé pour trouver la texture dans l'atlas)
@@ -101,4 +82,5 @@ public class Entity extends Image {
 	public Action getActionOnCat(){
 		return null;
 	}
+
 }

@@ -184,7 +184,7 @@ public class PatientScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		dispose();
 
 	}
 
@@ -202,6 +202,7 @@ public class PatientScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		Gdx.app.log(RollingCat.LOG, "disposing...");
 		stage.dispose();
 		font.dispose();
 		skin.dispose();

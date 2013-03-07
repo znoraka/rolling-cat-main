@@ -5,6 +5,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -64,7 +65,7 @@ public class SplashScreen implements Screen{
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		dispose();
 		
 	}
 
@@ -82,6 +83,7 @@ public class SplashScreen implements Screen{
 
 	@Override
 	public void dispose() {
+		Gdx.app.log(RollingCat.LOG, "disposing...");
 		stage.dispose();
 		splashTexture.dispose();
 	}
