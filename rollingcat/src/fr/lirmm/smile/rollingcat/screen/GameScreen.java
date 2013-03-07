@@ -90,11 +90,12 @@ public class GameScreen implements Screen{
 		mc = new MouseCursorGame(stage, cat, box);
 		Gdx.input.setInputProcessor(mc);
 		duration = 0;
+
 	}
 
 	@Override
 	public void hide() {
-		
+		dispose();
 	}
 
 	@Override
@@ -110,6 +111,7 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void dispose() {
+		Gdx.app.log(RollingCat.LOG, "disposing...");
 		stage.dispose();
 		backgroundTexture.dispose();
 		sr.dispose();

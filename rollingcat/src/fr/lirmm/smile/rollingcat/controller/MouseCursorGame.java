@@ -254,7 +254,6 @@ public class MouseCursorGame implements InputProcessor{
 	}
 
 	public void dispose() {
-		stage.dispose();
 		atlas.dispose();
 		batch.dispose();
 	}

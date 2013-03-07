@@ -200,7 +200,7 @@ public class UploadScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		dispose();
 
 	}
 
@@ -218,6 +218,7 @@ public class UploadScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		
 		skin.dispose();
 		stage.dispose();
 		font.dispose();

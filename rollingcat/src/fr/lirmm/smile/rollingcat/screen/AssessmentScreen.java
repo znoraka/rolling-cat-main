@@ -90,7 +90,7 @@ public class AssessmentScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		dispose();
 		
 	}
 
@@ -108,6 +108,7 @@ public class AssessmentScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		Gdx.app.log(RollingCat.LOG, "disposing...");
 		sr.dispose();
 	}
 	

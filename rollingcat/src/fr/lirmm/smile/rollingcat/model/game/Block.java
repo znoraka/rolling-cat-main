@@ -38,5 +38,5 @@ public class Block extends Entity {
 	public Action getActionOnCat(){
 		return Actions.moveBy(velocityModifier.x * GameConstants.BLOCK_WIDTH, velocityModifier.y * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED);
 	}
-
+	
 }

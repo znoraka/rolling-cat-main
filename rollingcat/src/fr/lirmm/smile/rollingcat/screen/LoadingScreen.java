@@ -1,5 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -55,8 +56,7 @@ public class LoadingScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		dispose();
 	}
 
 	@Override
@@ -73,9 +73,9 @@ public class LoadingScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		Gdx.app.log(RollingCat.LOG, "disposing...");
 		batch.dispose();
 		texture.dispose();
-		stage.dispose();
 	}
 
 }

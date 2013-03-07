@@ -156,7 +156,7 @@ public class LoginScreen implements Screen, InputProcessor{
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		dispose();
 
 	}
 
@@ -174,7 +174,12 @@ public class LoginScreen implements Screen, InputProcessor{
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		Gdx.app.log(RollingCat.LOG, "disposing...");
+		stage.dispose();
+		atlas.dispose();
+		skin.dispose();
+		font.dispose();
+		batch.dispose();
 
 	}
 
