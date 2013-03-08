@@ -1,12 +1,13 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.utils.TextureFetcher.getSkin;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -18,8 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonReader;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -40,7 +39,6 @@ public class UploadScreen implements Screen {
 	private Rectangle drawArea;
 	private ShapeRenderer sr;
 	private Label date, duration, dateValue, durationValue;
-	private TextureAtlas atlas;
 
 	
 	public UploadScreen(RollingCat game, Patient patient, Track track){
@@ -73,9 +71,7 @@ public class UploadScreen implements Screen {
 		batch = new SpriteBatch();
 		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
 		stage.clear();
-		atlas = new TextureAtlas("data/patientAtlas.atlas");
-		skin = new Skin();
-		skin.addRegions(atlas);
+		skin = getSkin();
 		sr = new ShapeRenderer();
 		
 		tableLeftBottom = new Table();
@@ -218,8 +214,6 @@ public class UploadScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		
-		skin.dispose();
 		stage.dispose();
 		font.dispose();
 	}

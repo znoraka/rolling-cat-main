@@ -235,6 +235,18 @@ public class MouseCursorGame implements InputProcessor{
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		if(screenX > GameConstants.DISPLAY_WIDTH)
+			screenX = GameConstants.DISPLAY_WIDTH - 1;
+		
+		if(screenX < 0)
+			screenX = 0;
+		
+		if(screenY > GameConstants.DISPLAY_HEIGHT)
+			screenY = GameConstants.DISPLAY_HEIGHT - 1;
+		
+		if(screenY < 0)
+			screenY = 0;
+		
 		x = screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2;
 		y = Gdx.graphics.getHeight() - screenY;
 		return true;
@@ -242,6 +254,18 @@ public class MouseCursorGame implements InputProcessor{
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
+		if(screenX > GameConstants.DISPLAY_WIDTH)
+			screenX = GameConstants.DISPLAY_WIDTH - 1;
+		
+		if(screenX < 0)
+			screenX = 0;
+		
+		if(screenY > GameConstants.DISPLAY_HEIGHT)
+			screenY = GameConstants.DISPLAY_HEIGHT - 1;
+		
+		if(screenY < 0)
+			screenY = 0;
+		
 		x = screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2;
 		y = Gdx.graphics.getHeight() - screenY;
 		return true;

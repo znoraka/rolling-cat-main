@@ -1,5 +1,7 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.utils.TextureFetcher.getSkin;
+
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
@@ -8,7 +10,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -42,7 +43,6 @@ public class TrackingRecapScreen implements Screen{
 	private ShapeRenderer sr;
 	private Track track;
 	private Rectangle drawArea;
-	private TextureAtlas atlas;
 
 	
 	public TrackingRecapScreen(RollingCat game, Patient patient){
@@ -79,10 +79,8 @@ public class TrackingRecapScreen implements Screen{
 		tableRight = new Table();
 		
 		batch = new SpriteBatch();
-		atlas = new TextureAtlas("data/patientAtlas.atlas");
 		
-		skin = new Skin();
-		skin.addRegions(atlas);
+		skin = getSkin();
 		
 		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
 		
@@ -179,12 +177,10 @@ public class TrackingRecapScreen implements Screen{
 	@Override
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
-		skin.dispose();
 		stage.dispose();
 		font.dispose();
 		batch.dispose();
 		sr.dispose();
-		atlas.dispose();
 	}
 	
 	private void createButtons(TextButtonStyle style) {

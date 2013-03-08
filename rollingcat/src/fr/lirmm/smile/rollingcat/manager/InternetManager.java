@@ -27,12 +27,8 @@ public class InternetManager{
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-//		Map<String, String> parameters = new HashMap<String, String>();
-//		
-//		parameters.put("username", username);
-//		parameters.put("password", password);
-//		
-//		httpGet.setContent(HttpParametersUtils.convertHttpParameters(parameters));
+		
+		httpGet.setContent("username="+username+"&password="+password);
 		
 		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/login.php");
 		
