@@ -1,12 +1,13 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.utils.TextureFetcher.getSkin;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -76,9 +77,7 @@ public class PatientScreen implements Screen {
 		tableRight.setX(GameConstants.DISPLAY_WIDTH * 0.325f);
 		tableRight.setY(GameConstants.DISPLAY_HEIGHT * 0.1f);
 		
-		TextureAtlas atlas = new TextureAtlas("data/patientAtlas.atlas");
-		skin = new Skin();
-		skin.addRegions(atlas);
+		skin = getSkin();
 		
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
@@ -205,7 +204,6 @@ public class PatientScreen implements Screen {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
 		stage.dispose();
 		font.dispose();
-		skin.dispose();
 		batch.dispose();
 	}
 

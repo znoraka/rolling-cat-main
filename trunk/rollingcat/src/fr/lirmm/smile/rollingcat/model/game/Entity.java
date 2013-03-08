@@ -1,14 +1,10 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Array;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.utils.TextureFetcher;
@@ -25,7 +21,7 @@ public class Entity extends Image {
 	 * @param name le nom de l'entity pour trouver sa texture dans le texture atlas
 	 */
 	public Entity(float x, float y, String name){
-		super(TextureFetcher.getRegions(name).get(0));
+//		super(TextureFetcher.getRegions(name).get(0));
 		this.setX(x * GameConstants.BLOCK_WIDTH);
 		this.setY(y * GameConstants.BLOCK_HEIGHT);
 		this.setBounds(x * GameConstants.BLOCK_WIDTH, y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);

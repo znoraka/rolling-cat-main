@@ -20,8 +20,10 @@ public interface GameConstants {
 	
 	public static final String FONT_LOGIN = "data/font.fnt";
 	
-	public static final int DISPLAY_WIDTH = 800;
-	public static final int DISPLAY_HEIGHT = 600;
+	public static final float SCALE = 1.5f;
+	
+	public static final int DISPLAY_WIDTH = (int) (800 * SCALE);
+	public static final int DISPLAY_HEIGHT = (int) (600 * SCALE);
 	
 	public static final int COLS = 16;
 	public static final int ROWS = 12;

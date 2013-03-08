@@ -1,5 +1,7 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.utils.TextureFetcher.getSkin;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
@@ -9,7 +11,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -29,7 +30,6 @@ public class LoginScreen implements Screen, InputProcessor{
 	
 	private RollingCat game;
 	private Stage stage;
-	private TextureAtlas atlas;
 	private Skin skin;
 	private TextButton button;
 	private TextField loginTextField, passwordTextField;
@@ -76,9 +76,7 @@ public class LoginScreen implements Screen, InputProcessor{
 
 	@Override
 	public void show() {
-		atlas = new TextureAtlas("data/patientAtlas.atlas");
-		skin = new Skin();
-		skin.addRegions(atlas);
+		skin = getSkin();
 		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
 		table = new Table();
 		doctor = Doctor.getDoctor();
@@ -176,8 +174,6 @@ public class LoginScreen implements Screen, InputProcessor{
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
 		stage.dispose();
-		atlas.dispose();
-		skin.dispose();
 		font.dispose();
 		batch.dispose();
 

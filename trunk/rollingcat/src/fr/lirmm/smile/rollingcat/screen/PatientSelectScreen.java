@@ -1,5 +1,7 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.utils.TextureFetcher.getSkin;
+
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
@@ -9,7 +11,6 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -34,7 +35,6 @@ public class PatientSelectScreen implements Screen{
 	private int nbpatients;
 	private Stage stage;
 	private BitmapFont black;
-	private TextureAtlas atlas;
 	private Skin skin;
 	private SpriteBatch batch;
 	private TextButton b, selectPatient, back;
@@ -106,9 +106,7 @@ public class PatientSelectScreen implements Screen{
 		tableRight = new Table();
 		buttons = new ArrayList<TextButton>();
 		batch = new SpriteBatch();
-		atlas = new TextureAtlas("data/patientAtlas.atlas");
-		skin = new Skin();
-		skin.addRegions(atlas);
+		skin = getSkin();
 		black = new BitmapFont(Gdx.files.internal("data/font.fnt"), false);
 		
 		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
@@ -125,7 +123,7 @@ public class PatientSelectScreen implements Screen{
 		scrollPanelStyle.vScrollKnob.setLeftWidth(20);
 		scrollPanelStyle.vScroll.setRightWidth(20);
 		scrollPanelStyle.vScroll.setMinWidth(20);
-		scrollPanelStyle.vScroll.setLeftWidth(20);		
+		scrollPanelStyle.vScroll.setLeftWidth(20);	
 		
 		sp = new ScrollPane(tableLeft, scrollPanelStyle);
 		sp.setX(GameConstants.DISPLAY_WIDTH*0.025f);
@@ -222,8 +220,6 @@ public class PatientSelectScreen implements Screen{
 		Gdx.app.log(RollingCat.LOG, "disposing...");
 		stage.dispose();
 		black.dispose();
-		atlas.dispose();
-		skin.dispose();
 		batch.dispose();
 	}
 
