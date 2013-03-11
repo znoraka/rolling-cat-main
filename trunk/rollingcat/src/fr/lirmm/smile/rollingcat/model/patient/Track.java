@@ -83,20 +83,20 @@ public class Track {
 						track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
 						);
 				sr.end();
-				sr.begin(ShapeType.FilledCircle);
-				sr.filledCircle(
+				sr.begin(ShapeType.Filled);
+				sr.circle(
 						track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 						3);
 				sr.end();
 			}
 			sr.setColor(Color.RED);
-			sr.begin(ShapeType.FilledCircle);
-			sr.filledCircle(
+			sr.begin(ShapeType.Filled);
+			sr.circle(
 					track.get(indNextSegment.get(currentSegment))[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 					track.get(indNextSegment.get(currentSegment))[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 					3);
-			sr.filledCircle(
+			sr.circle(
 					track.get(indNextSegment.get(currentSegment + 1) - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 					track.get(indNextSegment.get(currentSegment + 1) - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 					3);
@@ -112,20 +112,20 @@ public class Track {
 						track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
 						);
 				sr.end();
-				sr.begin(ShapeType.FilledCircle);
-				sr.filledCircle(
+				sr.begin(ShapeType.Filled);
+				sr.circle(
 						track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 						3);
 				sr.end();
 			}
 			sr.setColor(Color.RED);
-			sr.begin(ShapeType.FilledCircle);
-			sr.filledCircle(
+			sr.begin(ShapeType.Filled);
+			sr.circle(
 					track.get(0)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 					track.get(0)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 					3);
-			sr.filledCircle(
+			sr.circle(
 					track.get(track.size() - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 					track.get(track.size() - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 					3);

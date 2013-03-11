@@ -1,4 +1,3 @@
-
 package fr.lirmm.smile.rollingcat.spine;
 
 import com.badlogic.gdx.graphics.Color;
@@ -413,7 +412,7 @@ public class Animation {
 			float b = lastFrameB + (frames[frameIndex + FRAME_B] - lastFrameB) * percent;
 			float a = lastFrameA + (frames[frameIndex + FRAME_A] - lastFrameA) * percent;
 			if (alpha < 1)
-				color.add(new Color((r - color.r) * alpha, (g - color.g) * alpha, (b - color.b) * alpha, (a - color.a) * alpha));
+				color.add((r - color.r) * alpha, (g - color.g) * alpha, (b - color.b) * alpha, (a - color.a) * alpha);
 			else
 				color.set(r, g, b, a);
 		}

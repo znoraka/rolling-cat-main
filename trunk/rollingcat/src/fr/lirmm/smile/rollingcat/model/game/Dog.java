@@ -12,8 +12,8 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
+import fr.lirmm.smile.rollingcat.spine.SkeletonBinary;
 import fr.lirmm.smile.rollingcat.spine.SkeletonData;
-import fr.lirmm.smile.rollingcat.spine.SkeletonJson;
 
 public class Dog extends Entity {
 	
@@ -31,18 +31,14 @@ public class Dog extends Entity {
 	 */
 	public Dog(float x, float y){
 		super(x, y, GameConstants.TEXTURE_DOG);
-		
-		final String name = "skeleton";
+//		final String name = "skeleton"; //skeleton
 		
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/dog-atlas.atlas"));
-
-		SkeletonJson json = new SkeletonJson(atlas);
-		// json.setScale(2);
-		skeletonData = json.readSkeletonData(Gdx.files.internal("data/" + name + "-skeleton.json"));
-		animation = json.readAnimation(Gdx.files.internal("data/" + name + "-stand.json"), skeletonData);
+		SkeletonBinary binary = new SkeletonBinary(atlas);
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/skeleton.skel"));
+		animation = binary.readAnimation(Gdx.files.internal("data/skeleton-stand.anim"), skeletonData);
 
 		skeleton = new Skeleton(skeletonData);
-//		if (name.equals("skeleton")) skeleton.setSkin("skeleton");
 		skeleton.setToBindPose();
 
 		Bone root = skeleton.getRootBone();
