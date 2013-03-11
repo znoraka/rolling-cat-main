@@ -21,14 +21,14 @@ public class Skeleton {
 		if (data == null) throw new IllegalArgumentException("data cannot be null.");
 		this.data = data;
 
-		bones = new Array<Bone>(data.bones.size);
+		bones = new Array(data.bones.size);
 		for (BoneData boneData : data.bones) {
 			Bone parent = boneData.parent == null ? null : bones.get(data.bones.indexOf(boneData.parent, true));
 			bones.add(new Bone(boneData, parent));
 		}
 
-		slots = new Array<Slot>(data.slots.size);
-		drawOrder = new Array<Slot>(data.slots.size);
+		slots = new Array(data.slots.size);
+		drawOrder = new Array(data.slots.size);
 		for (SlotData slotData : data.slots) {
 			Bone bone = bones.get(data.bones.indexOf(slotData.boneData, true));
 			Slot slot = new Slot(slotData, this, bone);
@@ -44,20 +44,20 @@ public class Skeleton {
 		if (skeleton == null) throw new IllegalArgumentException("skeleton cannot be null.");
 		data = skeleton.data;
 
-		bones = new Array<Bone>(skeleton.bones.size);
+		bones = new Array(skeleton.bones.size);
 		for (Bone bone : skeleton.bones) {
 			Bone parent = bones.get(skeleton.bones.indexOf(bone.parent, true));
 			bones.add(new Bone(bone, parent));
 		}
 
-		slots = new Array<Slot>(skeleton.slots.size);
+		slots = new Array(skeleton.slots.size);
 		for (Slot slot : skeleton.slots) {
 			Bone bone = bones.get(skeleton.bones.indexOf(slot.bone, true));
 			Slot newSlot = new Slot(slot, this, bone);
 			slots.add(newSlot);
 		}
 
-		drawOrder = new Array<Slot>(slots.size);
+		drawOrder = new Array(slots.size);
 		for (Slot slot : skeleton.drawOrder)
 			drawOrder.add(slots.get(skeleton.slots.indexOf(slot, true)));
 
@@ -119,7 +119,7 @@ public class Skeleton {
 		renderer.end();
 
 		renderer.setColor(Color.GREEN);
-		renderer.begin(ShapeType.FilledCircle);
+		renderer.begin(ShapeType.Filled);
 		for (int i = 0, n = bones.size; i < n; i++) {
 			Bone bone = bones.get(i);
 			renderer.setColor(Color.GREEN);

@@ -153,14 +153,14 @@ public class MouseCursorGame implements InputProcessor{
 	 * @param sr
 	 */
 	public void render(ShapeRenderer sr){
-        sr.begin(ShapeType.FilledRectangle);
-		sr.filledRect(x, y, 10, 10);
+        sr.begin(ShapeType.Filled);
+		sr.rect(x, y, 10, 10);
 		if(hoverTimer > 0)
 		{	
 			sr.setColor(Color.RED);
-			sr.filledRect(x, y, 70, 20);
+			sr.rect(x, y, 70, 20);
 			sr.setColor(Color.BLUE);
-			sr.filledRect(x, y, 70*hoverTimer, 20);
+			sr.rect(x, y, 70*hoverTimer, 20);
 		}
 		sr.end();
 //		sr.begin(ShapeType.FilledRectangle);

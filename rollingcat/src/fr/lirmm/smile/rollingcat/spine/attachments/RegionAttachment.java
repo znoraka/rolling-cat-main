@@ -1,7 +1,6 @@
 
 package fr.lirmm.smile.rollingcat.spine.attachments;
 
-
 import static com.badlogic.gdx.graphics.g2d.SpriteBatch.C1;
 import static com.badlogic.gdx.graphics.g2d.SpriteBatch.C2;
 import static com.badlogic.gdx.graphics.g2d.SpriteBatch.C3;

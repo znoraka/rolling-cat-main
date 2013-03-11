@@ -1,11 +1,8 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -14,8 +11,8 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
+import fr.lirmm.smile.rollingcat.spine.SkeletonBinary;
 import fr.lirmm.smile.rollingcat.spine.SkeletonData;
-import fr.lirmm.smile.rollingcat.spine.SkeletonJson;
 
 public class Cat extends Entity {
 	
@@ -50,28 +47,24 @@ public class Cat extends Entity {
 		final String name = "cat";
 
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/" + name + ".atlas"));
-
-		SkeletonJson json = new SkeletonJson(atlas);
-		// json.setScale(2);
-		FileHandle file = Gdx.files.internal("data/" + name + "-skeleton.json");
-		skeletonData = json.readSkeletonData(file);
-		
-		walkAnimation = json.readAnimation(Gdx.files.internal("data/" + name + "-running.json"), skeletonData);
-		jumpAnimation = json.readAnimation(Gdx.files.internal("data/" + name + "-jump.json"), skeletonData);
-		endAnimation = json.readAnimation(Gdx.files.internal("data/" + name + "-levelend.json"), skeletonData);
-		fanAnimation = json.readAnimation(Gdx.files.internal("data/" + name + "-upstreamwinp.json"), skeletonData);
-		contactAnimation = json.readAnimation(Gdx.files.internal("data/" + name + "-contact.json"), skeletonData);
-		
-		
-
-		skeleton = new Skeleton(skeletonData);
-		if (name.equals("goblins")) skeleton.setSkin("goblin");
-		skeleton.setToBindPose();
-
-		root = skeleton.getRootBone();
-		root.setScaleX(0.10f * GameConstants.SCALE);
-		root.setScaleY(0.10f * GameConstants.SCALE);
-		skeleton.updateWorldTransform();
+		SkeletonBinary binary = new SkeletonBinary(atlas);
+//		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/" + name + ".skel"));
+//		
+//		walkAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-running.anim"), skeletonData);
+//		jumpAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-jump.anim"), skeletonData);
+//		endAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-levelend.anim"), skeletonData);
+//		fanAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-upstreamwinp.anim"), skeletonData);
+//		contactAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-contact.anim"), skeletonData);
+//		
+//		
+//
+//		skeleton = new Skeleton(skeletonData);
+//		skeleton.setToBindPose();
+//
+//		root = skeleton.getRootBone();
+//		root.setScaleX(0.10f * GameConstants.SCALE);
+//		root.setScaleY(0.10f * GameConstants.SCALE);
+//		skeleton.updateWorldTransform();
 	}
 	
 	/**
@@ -79,17 +72,17 @@ public class Cat extends Entity {
 	 * @param stage
 	 */
 	public void move(Stage stage){
-        setVelocity(stage.hit(this.getX() + 5 + GameConstants.BLOCK_WIDTH, this.getY() - 5, false));
-        falling(stage.hit(this.getX() + 5, this.getY() - 5, false));
-        pickUp(stage.hit(this.getX(), this.getY()+ 5f, false));
-        hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY()+ 5f, false));
+        setVelocity(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH * 1.5f, this.getY() - 5, false));
+        falling(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() - 5, false));
+        pickUp(stage.hit(this.getX(), this.getY()+ GameConstants.BLOCK_HEIGHT / 2, false));
+        hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, false));
         hitElementTop(stage.hit(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, false));
         
         if(this.getActions().size == 0)
         	state = HITTING;
         
-		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.6f);
-		root.setY(getY());
+//		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.6f);
+//		root.setY(getY());
 	}
 	
 	
@@ -219,26 +212,26 @@ public class Cat extends Entity {
 		return this.done;
 	}
 	
-	@Override
-	public void draw(SpriteBatch batch, float deltaParent){
-//		if(state == JUMPING)
-//			jumpAnimation.apply(skeleton, time, true);
-		
-		 if(state == FLYING)
-			fanAnimation.apply(skeleton, time, true);
-		
-		else if(state == HITTING)
-			contactAnimation.apply(skeleton, time, true);
-		
-		else if(state == WALKING)
-			walkAnimation.apply(skeleton, time, true);
-	
-		time += Gdx.graphics.getDeltaTime();
-		skeleton.updateWorldTransform();
-//		skeleton.update(time);
-		skeleton.draw(batch);
-
-
-
-	}
+//	@Override
+//	public void draw(SpriteBatch batch, float deltaParent){
+////		if(state == JUMPING)
+////			jumpAnimation.apply(skeleton, time, true);
+//		
+//		 if(state == FLYING)
+//			fanAnimation.apply(skeleton, time, true);
+//		
+//		else if(state == HITTING)
+//			contactAnimation.apply(skeleton, time, true);
+//		
+//		else if(state == WALKING)
+//			walkAnimation.apply(skeleton, time, true);
+//		 
+//		else if(state == FALLING)
+//			fanAnimation.apply(skeleton, time, true);
+//	
+//		time += Gdx.graphics.getDeltaTime();
+//		skeleton.updateWorldTransform();
+////		skeleton.update(time);
+//		skeleton.draw(batch);
+//	}
 }

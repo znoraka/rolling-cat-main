@@ -123,6 +123,8 @@ public class LevelBuilder {
 			Gdx.app.log(RollingCat.LOG, "new "+subtab[0]+ " added in " + x + ", " + y + " !");
 		}
 		Gdx.app.log(RollingCat.LOG, "building done " + tab.length + " elements added");
+//		stage.addActor(new Cat(10, 10));
+//		stage.addActor(new Dog(5, 5));
 		items.add(0);
 		return stage;
 	}
