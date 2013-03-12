@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 
 public class LoginScreen implements Screen, InputProcessor{
@@ -65,6 +66,9 @@ public class LoginScreen implements Screen, InputProcessor{
 			batch.end();
 		}
 		
+		if(InternetManager.isReady())
+			game.setScreen(new PatientSelectLoadingScreen(game));
+		
 		stage.draw();
 
 	}
@@ -103,10 +107,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		button = new TextButton("OK", style);
 		button.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				if(doctor.login(loginTextField.getText(), passwordTextField.getText()))
-					game.setScreen(new PatientSelectScreen(game, doctor));
-				else
-					wrong = true;
+				doctor.login(loginTextField.getText(), passwordTextField.getText());
 			}
 		});
 		
@@ -188,10 +189,7 @@ public class LoginScreen implements Screen, InputProcessor{
 	@Override
 	public boolean keyUp(int keycode) {
 		if(keycode == Keys.ENTER){			
-			if(doctor.login(loginTextField.getText(), passwordTextField.getText()))
-				game.setScreen(new PatientSelectScreen(game, doctor));
-			else
-				wrong = true;
+			doctor.login(loginTextField.getText(), passwordTextField.getText());
 		}
 		return true;
 	}

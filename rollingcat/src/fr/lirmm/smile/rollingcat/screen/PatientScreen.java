@@ -136,7 +136,7 @@ public class PatientScreen implements Screen {
 		strokeDate = new Label("", labelStyle);
 		
 		name.setText(patient.getFirstName() + " " + patient.getLastName());
-		age.setText(""+patient.getAge());
+		age.setText(""+patient.getBirthDate());
 		strokeDate.setText(patient.getStrokeDate());
 		hemiplegia.setText(patient.getHemiplegia());
 		dominantMember.setText(patient.getDominantMember());

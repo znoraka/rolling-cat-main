@@ -1,36 +1,41 @@
 package fr.lirmm.smile.rollingcat.manager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.HttpParametersUtils;
 import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
 
 import fr.lirmm.smile.rollingcat.RollingCat;
-import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 
 public class InternetManager{
-	
-//	{  \"tz\": \"Europe\\/Paris\",   \"hour\": 14,   \"datetime\": \"Tue, 05 Mar 2013 14:16:00 +0100\",   \"second\": 0,   \"error\": false,   \"minute\": 16}
-//	http://json-time.appspot.com/time.json?tz=Europe/Paris	
-	
+
 	private static String level;
+	private static String patients;
+	private static String hostName = "localhost";
+	private static int port = 9000;
+	private static String key = "PLAY_SESSION";
+	private static String value;
 	
-	public static ArrayList<Patient> login(String username, String password) {
+	
+	/**
+	 * envoie la requete pour récupérer une clé de connexion
+	 * @param username
+	 * @param password
+	 * @return true si tout s'est bien passé
+	 */
+	public static boolean login(String username, String password) {
 		
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		
-		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
+		final HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		
-		httpGet.setContent("username="+username+"&password="+password);
+		httpGet.setContent("email="+username+"&password="+password);
 		
-		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/login.php");
+		httpGet.setUrl("http://" + hostName + ":" + port + "/login.json");
 		
 		Gdx.app.log(RollingCat.LOG, "sending request...");
 		
@@ -38,9 +43,12 @@ public class InternetManager{
 			
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
+				Json json = new Json();
 				String s = httpResponse.getResultAsString();
-				Gdx.app.log(RollingCat.LOG, s);
+				value = json.readValue(key, String.class, new JsonReader().parse(s));
+				Gdx.app.log(RollingCat.LOG, value);
 	           	Gdx.app.log(RollingCat.LOG, "success");
+
 		    }
 
 			@Override
@@ -48,7 +56,35 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}});
 		
-		return PatientsManager.getPatients();
+		return true;
+	}
+	
+	/**
+	 * envoie une requete pour récupérer la liste de patients depuis le serveur
+	 */
+	public static void retrievePatients(){
+		Gdx.app.log(RollingCat.LOG, "preparing request...");
+		
+		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
+		
+		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/all");
+		httpGet.setHeader(key, value);
+		Gdx.app.log(RollingCat.LOG, "sending request...");
+		
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+			
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				patients = httpResponse.getResultAsString();
+				Gdx.app.log(RollingCat.LOG, patients);
+	           	Gdx.app.log(RollingCat.LOG, "success");
+
+		    }
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, "something went wrong");
+			}});
 	}
 	
 	/**
@@ -78,7 +114,10 @@ public class InternetManager{
 			}});
 		}
 	
-	
+	/**
+	 * récupère le level sur le serveur
+	 * @param IDpatient
+	 */
 	public static void fetchLevel(int IDpatient){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		
@@ -91,7 +130,7 @@ public class InternetManager{
 			
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				setLevel(httpResponse.getResultAsString());
+				level = httpResponse.getResultAsString();
 	           	Gdx.app.log(RollingCat.LOG, "success");
 		    }
 
@@ -102,14 +141,38 @@ public class InternetManager{
 		});
 
 	}
-	
-	private static void setLevel(String resultAsString) {
-		level = resultAsString;
-	}
 
-	
+	/**
+	 * retourne la string du level récupérée par le serveur
+	 * @return le level
+	 */
 	public static String getLevel(){
 		return level;
+	}
+	
+	/**
+	 * retourne la liste des patients sous forme de string formatée en json
+	 * @return les patients
+	 */
+	public static String getPatients() {
+		return patients;
+	}
+
+	/**
+	 * retourne true quand le serveur a récupéré la clé d'idendification sur le serveur
+	 * @return true si value != null
+	 */
+	public static boolean isReady() {
+		return value != null;
+	}
+	
+	/**
+	 * resets the values
+	 */
+	public static void reset(){
+		level = null;
+		patients = null;
+		value = null;
 	}
 
 }
