@@ -3,6 +3,7 @@ package fr.lirmm.smile.rollingcat.model.doctor;
 import java.util.ArrayList;
 
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
+import fr.lirmm.smile.rollingcat.manager.PatientsManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 
 public class Doctor {
@@ -28,9 +29,11 @@ public class Doctor {
 	 * @return true si la connexion s'est bien passée
 	 */
 	public boolean login(String username, String password){
-		listOfPatients = InternetManager.login(username, password);
-		
-		return listOfPatients != null;
+		InternetManager.login(username, password);
+//		InternetManager.retrievePatients();
+////		listOfPatients = PatientsManager.getPatients();
+//		listOfPatients = PatientsManager.getPatientsFromJson();
+		return true;
 	}
 
 	/**
@@ -46,6 +49,11 @@ public class Doctor {
 	 */
 	public void logOut(){
 		doctor = null;
+		listOfPatients = null;
+	}
+
+	public void setPatients(ArrayList<Patient> patientsFromJson) {
+		listOfPatients = patientsFromJson;
 	}
 
 }

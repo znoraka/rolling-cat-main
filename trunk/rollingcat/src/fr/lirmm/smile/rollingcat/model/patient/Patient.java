@@ -8,7 +8,7 @@ public class Patient {
 	
 	private String nom;
 	private String prenom;
-	private int age;
+	private String birthDate;
 	private String strokeDate;
 	private boolean rightHemiplegia;
 	private boolean rightDominantMember;
@@ -16,10 +16,10 @@ public class Patient {
 	private ArrayList<Track> listOfTracks;
 	private int id;
 	
-	public Patient(String nom, String prenom, int age, String strokeDate, boolean rightHemiplegia,	boolean rightDominantMember, int id, Texture face) {
+	public Patient(String nom, String prenom, String birthDate, String strokeDate, boolean rightHemiplegia,	boolean rightDominantMember, int id, Texture face) {
 		this.nom = nom;
 		this.prenom = prenom;
-		this.age = age;
+		this.birthDate = birthDate;
 		this.strokeDate = strokeDate;
 		this.rightHemiplegia = rightHemiplegia;
 		this.rightDominantMember = rightDominantMember;
@@ -40,8 +40,8 @@ public class Patient {
 		return prenom;
 	}
 	
-	public int getAge() {
-		return age;
+	public String getBirthDate() {
+		return birthDate;
 	}
 	
 	public String getStrokeDate() {
