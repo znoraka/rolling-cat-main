@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.utils.TextureFetcher.getSkin;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -68,11 +68,11 @@ public class UploadScreen implements Screen {
 
 	@Override
 	public void show() {
-		batch = new SpriteBatch();
-		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
-		stage.clear();
+		batch = getSpriteBatch();
 		skin = getSkin();
-		sr = new ShapeRenderer();
+		font = getBigFont();
+		stage = getStage();
+		sr = getShapeRenderer();
 		
 		tableLeftBottom = new Table();
 		tableLeftBottom.setHeight(GameConstants.DISPLAY_HEIGHT * 0.28f);
@@ -99,8 +99,6 @@ public class UploadScreen implements Screen {
 		tableLeftTop.setX(GameConstants.DISPLAY_WIDTH * 0.035f);
 		tableLeftTop.setHeight(GameConstants.DISPLAY_HEIGHT * 0.555f);
 		tableLeftTop.setY(GameConstants.DISPLAY_HEIGHT * 0.395f);
-		
-		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
 		
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("button_up");
@@ -196,8 +194,6 @@ public class UploadScreen implements Screen {
 
 	@Override
 	public void hide() {
-		dispose();
-
 	}
 
 	@Override
@@ -214,8 +210,6 @@ public class UploadScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		stage.dispose();
-		font.dispose();
 	}
 
 }

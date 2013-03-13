@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.utils.TextureFetcher.getSkin;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import java.util.ArrayList;
 
@@ -103,16 +103,15 @@ public class PatientSelectScreen implements Screen{
 
 	@Override
 	public void show() {
+		batch = getSpriteBatch();
+		skin = getSkin();
+		black = getSmallFont();
+		stage = getStage();
+
 		tableLeft = new Table();
 		tableRight = new Table();
 		buttons = new ArrayList<TextButton>();
-		batch = new SpriteBatch();
-		skin = getSkin();
-		black = new BitmapFont(Gdx.files.internal("data/font.fnt"), false);
-		
-		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
-		stage.clear();
-		
+
 		Gdx.input.setInputProcessor(stage);
 		
 		ScrollPaneStyle scrollPanelStyle = new ScrollPaneStyle();
@@ -201,8 +200,6 @@ public class PatientSelectScreen implements Screen{
 
 	@Override
 	public void hide() {
-		dispose();
-		
 	}
 
 	@Override
@@ -220,9 +217,6 @@ public class PatientSelectScreen implements Screen{
 	@Override
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
-		stage.dispose();
-		black.dispose();
-		batch.dispose();
 	}
 
 	private void setPatient(Patient patient) {

@@ -11,6 +11,7 @@ import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 
 public class LoadingScreen implements Screen {
 	
@@ -51,12 +52,11 @@ public class LoadingScreen implements Screen {
 	public void show() {
 		InternetManager.fetchLevel(patient.getID());
 		texture = new Texture("data/loading.png");
-		batch = new SpriteBatch();
+		batch = getSpriteBatch();
 	}
 
 	@Override
 	public void hide() {
-		dispose();
 	}
 
 	@Override
@@ -74,7 +74,6 @@ public class LoadingScreen implements Screen {
 	@Override
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
-		batch.dispose();
 		texture.dispose();
 	}
 

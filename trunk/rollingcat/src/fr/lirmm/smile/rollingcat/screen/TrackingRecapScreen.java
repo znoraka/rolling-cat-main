@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.utils.TextureFetcher.getSkin;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import java.util.ArrayList;
 
@@ -74,16 +74,16 @@ public class TrackingRecapScreen implements Screen{
 
 	@Override
 	public void show() {
+		batch = getSpriteBatch();
+		skin = getSkin();
+		font = getBigFont();
+		stage = getStage();
+		sr = getShapeRenderer();
+		
 		buttons = new ArrayList<TextButton>();
 		tableLeft = new Table();
 		tableRight = new Table();
-		
-		batch = new SpriteBatch();
-		
-		skin = getSkin();
-		
-		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
-		
+
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("button_up");
 		style.down = skin.getDrawable("button_down");
@@ -107,8 +107,7 @@ public class TrackingRecapScreen implements Screen{
 		scrollPanelStyle.vScroll.setRightWidth(20);
 		scrollPanelStyle.vScroll.setMinWidth(20);
 		scrollPanelStyle.vScroll.setLeftWidth(20);		
-		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
-		stage.clear();
+
 		Gdx.input.setInputProcessor(stage);
 		
 		back = new TextButton("Back", style);
@@ -151,15 +150,11 @@ public class TrackingRecapScreen implements Screen{
 		stage.addActor(tableRight);
 		stage.addActor(back);
 		
-		sr = new ShapeRenderer();
-		
 		drawArea = new Rectangle(tableRight.getX(), tableRight.getY(), tableRight.getWidth(), tableRight.getHeight());
 	}
 
 	@Override
 	public void hide() {
-		dispose();
-		
 	}
 
 	@Override
@@ -176,11 +171,6 @@ public class TrackingRecapScreen implements Screen{
 
 	@Override
 	public void dispose() {
-		Gdx.app.log(RollingCat.LOG, "disposing...");
-		stage.dispose();
-		font.dispose();
-		batch.dispose();
-		sr.dispose();
 	}
 	
 	private void createButtons(TextButtonStyle style) {

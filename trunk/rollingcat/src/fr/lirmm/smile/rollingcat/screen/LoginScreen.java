@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.utils.TextureFetcher.getSkin;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -81,17 +81,15 @@ public class LoginScreen implements Screen, InputProcessor{
 	@Override
 	public void show() {
 		skin = getSkin();
-		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
+		batch = getSpriteBatch();
+		font = getBigFont();
+		stage = getStage();
 		table = new Table();
 		doctor = Doctor.getDoctor();
-		batch = new SpriteBatch();
 		wrong = false;
 		region = skin.getRegion("textfield");
 		background = skin.getRegion("background_base");
 		multiplexer = new InputMultiplexer();
-		
-		stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
-		stage.clear();
 		
 		multiplexer.addProcessor(this);
 		multiplexer.addProcessor(stage);
@@ -155,8 +153,6 @@ public class LoginScreen implements Screen, InputProcessor{
 
 	@Override
 	public void hide() {
-		dispose();
-
 	}
 
 	@Override
@@ -173,11 +169,6 @@ public class LoginScreen implements Screen, InputProcessor{
 
 	@Override
 	public void dispose() {
-		Gdx.app.log(RollingCat.LOG, "disposing...");
-		stage.dispose();
-		font.dispose();
-		batch.dispose();
-
 	}
 
 	@Override

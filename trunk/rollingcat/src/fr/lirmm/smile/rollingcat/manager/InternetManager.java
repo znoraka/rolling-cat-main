@@ -1,6 +1,10 @@
 package fr.lirmm.smile.rollingcat.manager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.HttpParametersUtils;
 import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
@@ -29,15 +33,20 @@ public class InternetManager{
 	 */
 	public static boolean login(String username, String password) {
 		
-		Gdx.app.log(RollingCat.LOG, "preparing request...");
+		Gdx.app.log(RollingCat.LOG, "preparing login request...");
 		
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		
+//		
+//		Map parameters = new HashMap();
+//		parameters.put("email", username);
+//		parameters.put("password", password);
+//		httpGet.setContent(HttpParametersUtils.convertHttpParameters(parameters));
+//
+//		
 		httpGet.setContent("email="+username+"&password="+password);
-		
 		httpGet.setUrl("http://" + hostName + ":" + port + "/login.json");
 		
-		Gdx.app.log(RollingCat.LOG, "sending request...");
+		Gdx.app.log(RollingCat.LOG, "sending login request...");
 		
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
 			
@@ -47,13 +56,13 @@ public class InternetManager{
 				String s = httpResponse.getResultAsString();
 				value = json.readValue(key, String.class, new JsonReader().parse(s));
 				Gdx.app.log(RollingCat.LOG, value);
-	           	Gdx.app.log(RollingCat.LOG, "success");
+	           	Gdx.app.log(RollingCat.LOG, "login ok");
 
 		    }
 
 			@Override
 			public void failed(Throwable t) {	
-				Gdx.app.log(RollingCat.LOG, "something went wrong");
+				Gdx.app.log(RollingCat.LOG, "something went wrong, could not login");
 			}});
 		
 		return true;
@@ -63,13 +72,13 @@ public class InternetManager{
 	 * envoie une requete pour récupérer la liste de patients depuis le serveur
 	 */
 	public static void retrievePatients(){
-		Gdx.app.log(RollingCat.LOG, "preparing request...");
+		Gdx.app.log(RollingCat.LOG, "preparing patient retrieve request...");
 		
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 		
 		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/all");
 		httpGet.setHeader(key, value);
-		Gdx.app.log(RollingCat.LOG, "sending request...");
+		Gdx.app.log(RollingCat.LOG, "sending patient retrieve request...");
 		
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
 			
@@ -77,13 +86,13 @@ public class InternetManager{
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				patients = httpResponse.getResultAsString();
 				Gdx.app.log(RollingCat.LOG, patients);
-	           	Gdx.app.log(RollingCat.LOG, "success");
+	           	Gdx.app.log(RollingCat.LOG, "retrieving complete");
 
 		    }
 
 			@Override
 			public void failed(Throwable t) {	
-				Gdx.app.log(RollingCat.LOG, "something went wrong");
+				Gdx.app.log(RollingCat.LOG, "something went wrong, could not retrieve patient");
 			}});
 	}
 	
@@ -139,7 +148,7 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}
 		});
-
+//		level = "cat;0.0;7.0/groundBlock;0.0;2.0/groundBlock;1.0;2.0/spring;2.0;2.0;/groundBlock;3.0;4.0/groundBlock;4.0;4.0/groundBlock;5.0;4.0/groundBlock;6.0;4.0/groundBlock;7.0;4.0/groundBlock;8.0;4.0/groundBlock;9.0;4.0/dog;9.0;5.0/fan;10.0;4.0/groundBlock;10.0;9.0/groundBlock;11.0;9.0/gap;12.0;10.0/groundBlock;13.0;9.0/empty;14.0;9.0/groundBlock;14.0;2.0/fan;15.0;2.0/wasp;15.0;7.0/wasp;15.0;10.0/groundBlock;15.0;11.0/groundBlock;16.0;11.0/groundBlock;17.0;11.0/groundBlock;18.0;11.0/groundBlock;19.0;11.0/groundBlock;20.0;11.0/empty;21.0;11.0/groundBlock;21.0;10.0/groundBlock;22.0;10.0/groundBlock;23.0;10.0/dog;23.0;11.0/empty;24.0;10.0/groundBlock;24.0;5.0/groundBlock;25.0;5.0/fan;26.0;5.0/dog;25.0;6.0/wasp;26.0;11.0/groundBlock;26.0;12.0/empty;27.0;12.0;groundBlock;27.0;5.0/groundBlock;27.0;5.0/fan;28.0;5.0/groundBlock;28.0;12.0/empty;29.0;12.0/empty;26.0;12.0/groundBlock;29.0;3.0/groundBlock;31.0;3.0/wasp;28.0;9.0/gap;30.0;3.0/groundBlock;32.0;3.0/groundBlock;33.0;3.0/groundBlock;34.0;3.0/groundBlock;35.0;3.0/target;35.0;4.0";
 	}
 
 	/**
@@ -155,6 +164,7 @@ public class InternetManager{
 	 * @return les patients
 	 */
 	public static String getPatients() {
+		Gdx.app.log(RollingCat.LOG, "trying to get patients string");
 		return patients;
 	}
 

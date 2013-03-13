@@ -11,6 +11,8 @@ import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.PatientsManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
+
 public class PatientSelectLoadingScreen implements Screen {
 
 	private RollingCat game;
@@ -44,15 +46,14 @@ public class PatientSelectLoadingScreen implements Screen {
 
 	@Override
 	public void show() {
-		texture = new Texture("data/loading.png");
-		batch = new SpriteBatch();
-		doctor = Doctor.getDoctor();
 		InternetManager.retrievePatients();
+		texture = new Texture("data/loading.png");
+		batch = getSpriteBatch();
+		doctor = Doctor.getDoctor();
 	}
 
 	@Override
 	public void hide() {
-		dispose();
 	}
 
 	@Override
@@ -70,7 +71,6 @@ public class PatientSelectLoadingScreen implements Screen {
 	@Override
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
-		batch.dispose();
 		texture.dispose();
 	}
 
