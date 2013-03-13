@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
-import fr.lirmm.smile.rollingcat.utils.TextureFetcher;
+import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
 public class Entity extends Image {
 	protected Animation anim;
@@ -27,7 +27,7 @@ public class Entity extends Image {
 		this.setBounds(x * GameConstants.BLOCK_WIDTH, y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 		this.setWidth(GameConstants.BLOCK_WIDTH);
 		this.setHeight(GameConstants.BLOCK_HEIGHT);
-        this.anim = new Animation(0.25f, TextureFetcher.getRegions(name));
+        this.anim = new Animation(0.25f, GdxRessourcesGetter.getRegions(name));
         this.name = name;
 	}
 	

@@ -5,6 +5,8 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -60,13 +62,11 @@ public class SplashScreen implements Screen{
 		splashTexture = new Texture(GameConstants.TEXTURE_SPLASHSCREEN);
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
-		stage = new Stage();
+		stage = getStage();
 	}
 
 	@Override
 	public void hide() {
-		dispose();
-		
 	}
 
 	@Override
@@ -84,7 +84,6 @@ public class SplashScreen implements Screen{
 	@Override
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
-		stage.dispose();
 		splashTexture.dispose();
 	}
 

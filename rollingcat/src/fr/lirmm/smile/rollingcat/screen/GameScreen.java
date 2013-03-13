@@ -15,6 +15,7 @@ import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 public class GameScreen implements Screen{
 
@@ -79,13 +80,13 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void show() {
+		batch = getSpriteBatch();
+		sr = getShapeRenderer();
 		backgroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND);
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		batch = new SpriteBatch();
 		cat = (Cat) stage.getActors().get(0);
 		box = new Box(GameConstants.COLS / 2, 0);
 		stage.addActor(box);
-		sr = new ShapeRenderer();
 		mc = new MouseCursorGame(stage, cat, box);
 		Gdx.input.setInputProcessor(mc);
 		duration = 0;
@@ -94,7 +95,6 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void hide() {
-		dispose();
 	}
 
 	@Override
@@ -111,10 +111,8 @@ public class GameScreen implements Screen{
 	@Override
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
-		stage.dispose();
 		backgroundTexture.dispose();
 		sr.dispose();
-		batch.dispose();
 		mc.dispose();
 	}
 

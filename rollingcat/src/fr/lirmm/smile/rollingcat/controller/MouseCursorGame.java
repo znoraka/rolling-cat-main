@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.game.Box;
@@ -42,6 +44,7 @@ public class MouseCursorGame implements InputProcessor{
 	private boolean started;
 
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
+		batch = getSpriteBatch();
 		hoverTimer = 0;
 		x = GameConstants.DISPLAY_WIDTH / 2;
 		y = GameConstants.DISPLAY_HEIGHT / 2;
@@ -50,7 +53,6 @@ public class MouseCursorGame implements InputProcessor{
 		this.box = box;
 		item = 0;
 		atlas = new TextureAtlas(GameConstants.ATLAS);
-		batch = new SpriteBatch();
 		map = new HashMap<Integer, float []>();
 		elapsedTime = 0;
 		started = false;
@@ -279,7 +281,6 @@ public class MouseCursorGame implements InputProcessor{
 
 	public void dispose() {
 		atlas.dispose();
-		batch.dispose();
 	}
 	
 }

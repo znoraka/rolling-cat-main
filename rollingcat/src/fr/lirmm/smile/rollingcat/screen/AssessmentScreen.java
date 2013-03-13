@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorAssessment;
@@ -78,8 +80,8 @@ public class AssessmentScreen implements Screen {
 
 	@Override
 	public void show() {
+		sr = getShapeRenderer();
 		duration = 0;
-		sr = new ShapeRenderer();
 		triangles = VectorManager.getVectorsFromAreas(5);
 		mc = new MouseCursorAssessment();
 		Gdx.input.setInputProcessor(mc);
@@ -90,8 +92,6 @@ public class AssessmentScreen implements Screen {
 
 	@Override
 	public void hide() {
-		dispose();
-		
 	}
 
 	@Override
@@ -109,7 +109,6 @@ public class AssessmentScreen implements Screen {
 	@Override
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
-		sr.dispose();
 	}
 	
 	public void setSelected(int selected){

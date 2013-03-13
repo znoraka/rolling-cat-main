@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.utils.TextureFetcher.getSkin;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -30,7 +29,7 @@ public class PatientScreen implements Screen {
 	private RollingCat game;
 	private Patient patient;
 	private Table tableLeft, tableRight;
-	private Label cellName, name, cellAge, age, cellStrokeDate, strokeDate, cellHemiplegia, hemiplegia, cellDominantMember, dominantMember;
+	private Label cellName, name, cellBirthDate, birthDate, cellStrokeDate, strokeDate, cellHemiplegia, hemiplegia, cellDominantMember, dominantMember;
 	private BitmapFont font;
 	private Stage stage;
 	private Skin skin;
@@ -63,8 +62,11 @@ public class PatientScreen implements Screen {
 
 	@Override
 	public void show() {
-		batch = new SpriteBatch();
-
+		batch = getSpriteBatch();
+		skin = getSkin();
+		font = getBigFont();
+		stage = getStage();
+		
 		tableLeft = new Table();
 		tableRight = new Table();
 		
@@ -77,13 +79,8 @@ public class PatientScreen implements Screen {
 		tableRight.setWidth(GameConstants.DISPLAY_WIDTH * 0.60f);
 		tableRight.setX(GameConstants.DISPLAY_WIDTH * 0.325f);
 		tableRight.setY(GameConstants.DISPLAY_HEIGHT * 0.1f);
-		
-		skin = getSkin();
-		
-		stage = new Stage();
+
 		Gdx.input.setInputProcessor(stage);
-		
-		font = new BitmapFont(Gdx.files.internal("data/font_24px.fnt"), false);
 		
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("button_up");
@@ -126,8 +123,8 @@ public class PatientScreen implements Screen {
 		
 		cellName = new Label("Name", labelStyle);
 		name = new Label("", labelStyle);
-		cellAge = new Label("Age", labelStyle);
-		age = new Label("", labelStyle);
+		cellBirthDate = new Label("Birth Date", labelStyle);
+		birthDate = new Label("", labelStyle);
 		cellDominantMember = new Label("Dominant Member", labelStyle);
 		dominantMember = new Label("", labelStyle);
 		cellHemiplegia = new Label("Hemiplegia", labelStyle);
@@ -136,18 +133,18 @@ public class PatientScreen implements Screen {
 		strokeDate = new Label("", labelStyle);
 		
 		name.setText(patient.getFirstName() + " " + patient.getLastName());
-		age.setText(""+patient.getBirthDate());
+		birthDate.setText(""+patient.getBirthDate());
 		strokeDate.setText(patient.getStrokeDate());
 		hemiplegia.setText(patient.getHemiplegia());
 		dominantMember.setText(patient.getDominantMember());
 		
 		cellName.setAlignment(Align.center);
-		cellAge.setAlignment(Align.center);
+		cellBirthDate.setAlignment(Align.center);
 		cellDominantMember.setAlignment(Align.center);
 		cellStrokeDate.setAlignment(Align.center);
 		cellHemiplegia.setAlignment(Align.center);
 		name.setAlignment(Align.center);
-		age.setAlignment(Align.center);
+		birthDate.setAlignment(Align.center);
 		dominantMember.setAlignment(Align.center);
 		hemiplegia.setAlignment(Align.center);
 		strokeDate.setAlignment(Align.center);
@@ -165,8 +162,8 @@ public class PatientScreen implements Screen {
 		tableRight.add(cellName).fill().expand();
 		tableRight.add(name).fill().expand();
 		tableRight.row();
-		tableRight.add(cellAge).fill().expand();
-		tableRight.add(age).fill().expand();
+		tableRight.add(cellBirthDate).fill().expand();
+		tableRight.add(birthDate).fill().expand();
 		tableRight.row();
 		tableRight.add(cellStrokeDate).fill().expand();
 		tableRight.add(strokeDate).fill().expand();
@@ -184,8 +181,6 @@ public class PatientScreen implements Screen {
 
 	@Override
 	public void hide() {
-		dispose();
-
 	}
 
 	@Override
@@ -203,9 +198,6 @@ public class PatientScreen implements Screen {
 	@Override
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
-		stage.dispose();
-		font.dispose();
-		batch.dispose();
 	}
 
 }

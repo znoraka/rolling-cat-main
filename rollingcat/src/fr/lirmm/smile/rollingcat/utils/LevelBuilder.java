@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.game.Bone_Dog;
@@ -66,7 +68,7 @@ public class LevelBuilder {
 	 * @param s la string du niveau
 	 */
 	public static Stage build(String s) {
-		Stage stage = new Stage(GameConstants.VIEWPORT_WIDTH, GameConstants.VIEWPORT_HEIGHT, true);
+		Stage stage = getStage();
 		items = new ArrayList<Integer>();
 		segment = 0;
 		String tab [] = s.split("/");
