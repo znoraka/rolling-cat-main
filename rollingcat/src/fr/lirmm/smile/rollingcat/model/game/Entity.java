@@ -7,9 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.utils.EntityModel;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
-public class Entity extends Image {
+public class Entity extends Image implements EntityModel {
 	protected Animation anim;
 	private float d;
 	private String name;
