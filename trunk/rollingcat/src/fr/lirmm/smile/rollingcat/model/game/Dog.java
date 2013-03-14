@@ -5,6 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
@@ -57,7 +58,7 @@ public class Dog extends Entity {
 	
 	@Override
 	public Action getActionOnCat(){
-		return Actions.moveTo(this.getX() - GameConstants.BLOCK_WIDTH, this.getY());
+		return Actions.moveTo(this.getX() - GameConstants.BLOCK_WIDTH, this.getY(), 0.2f, Interpolation.pow2Out);
 		
 	}
 	

@@ -1,10 +1,6 @@
 package fr.lirmm.smile.rollingcat.manager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.HttpParametersUtils;
 import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
@@ -14,6 +10,7 @@ import com.badlogic.gdx.utils.JsonReader;
 
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
+import fr.lirmm.smile.rollingcat.screen.LoginScreen;
 
 public class InternetManager{
 
@@ -36,14 +33,8 @@ public class InternetManager{
 		Gdx.app.log(RollingCat.LOG, "preparing login request...");
 		
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-//		
-//		Map parameters = new HashMap();
-//		parameters.put("email", username);
-//		parameters.put("password", password);
-//		httpGet.setContent(HttpParametersUtils.convertHttpParameters(parameters));
-//
-//		
 		httpGet.setContent("email="+username+"&password="+password);
+		httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded");
 		httpGet.setUrl("http://" + hostName + ":" + port + "/login.json");
 		
 		Gdx.app.log(RollingCat.LOG, "sending login request...");
@@ -61,7 +52,8 @@ public class InternetManager{
 		    }
 
 			@Override
-			public void failed(Throwable t) {	
+			public void failed(Throwable t) {
+				LoginScreen.setWrong();
 				Gdx.app.log(RollingCat.LOG, "something went wrong, could not login");
 			}});
 		

@@ -10,19 +10,19 @@ public class Patient {
 	private String prenom;
 	private String birthDate;
 	private String strokeDate;
-	private boolean rightHemiplegia;
-	private boolean rightDominantMember;
+	private String hemiplegia;
+	private String dominantMember;
 	private Texture face; 
 	private ArrayList<Track> listOfTracks;
 	private int id;
 	
-	public Patient(String nom, String prenom, String birthDate, String strokeDate, boolean rightHemiplegia,	boolean rightDominantMember, int id, Texture face) {
+	public Patient(String nom, String prenom, String birthDate, String strokeDate, String hemiplegia, String dominantMember, int id, Texture face) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.birthDate = birthDate;
 		this.strokeDate = strokeDate;
-		this.rightHemiplegia = rightHemiplegia;
-		this.rightDominantMember = rightDominantMember;
+		this.hemiplegia = hemiplegia;
+		this.dominantMember = dominantMember;
 		this.face = face;
 		this.id = id;
 		listOfTracks = new ArrayList<Track>();
@@ -48,27 +48,27 @@ public class Patient {
 		return strokeDate;
 	}
 	
-	public boolean isRightHemiplegia() {
-		return rightHemiplegia;
+	public String getHemiplegia() {
+		return hemiplegia;
 	}
 	
-	public boolean isRightDominantMember() {
-		return rightDominantMember;
+	public String getDominantMember() {
+		return dominantMember;
 	}
-	
-	public String getDominantMember(){
-		if(rightDominantMember)
-			return "Right";
-		else
-			return "Left";
-	}
-	
-	public String getHemiplegia(){
-		if(rightHemiplegia)
-			return "Right";
-		else
-			return "Left";
-	}
+//	
+//	public String getDominantMember(){
+//		if(dominantMember)
+//			return "Right";
+//		else
+//			return "Left";
+//	}
+//	
+//	public String getHemiplegia(){
+//		if(hemiplegia)
+//			return "Right";
+//		else
+//			return "Left";
+//	}
 	
 	public void addTrack(Track track){
 		if(track.getTrack().size() > 0)
