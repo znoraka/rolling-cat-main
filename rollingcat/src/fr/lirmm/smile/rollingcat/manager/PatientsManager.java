@@ -42,14 +42,16 @@ public class PatientsManager {
 	/**
 	 * crée une liste de patients à partir d'un objet json
 	 * @param jsonString
-	 * @return
+	 * @return une arraylist de patients
 	 */
+	@SuppressWarnings("unchecked")
 	public static ArrayList<Patient> getPatientsFromJson(String jsonString){
 		ArrayList<Patient> patients = new ArrayList<Patient>();
-		
-		Array<Object> arrayOfPatients = (Array<Object>) new JsonReader().parse(jsonString);
-		for (int i = 0; i < arrayOfPatients.size; i++) {
-			patients.add(patientFactory(arrayOfPatients.get(i), i+1));
+		if(jsonString.length() > 10){
+			Array<Object> arrayOfPatients = (Array<Object>) new JsonReader().parse(jsonString);
+			for (int i = 0; i < arrayOfPatients.size; i++) {
+				patients.add(patientFactory(arrayOfPatients.get(i), i+1));
+			}
 		}
 		return patients;
 	}
@@ -62,24 +64,28 @@ public class PatientsManager {
 	 */
 	private static Patient patientFactory(Object jsonData, int id) {
 		Json json = new Json();
-		String firstName, lastName, birthDate, strokeDate;
-		boolean rightHemiplegia, rightDominantMember;
+		String firstName, lastName, birthDate, strokeDate, hemiplegia = "unknown", dominantMember = "unknown", s;
 		
-		firstName = json.readValue("firstname", String.class, jsonData);
-		lastName = json.readValue("lastname", String.class, jsonData);
-		birthDate = json.readValue("birthdate", String.class, jsonData);
-		strokeDate = json.readValue("strokedate", String.class, jsonData);
+		s = json.readValue("firstname", String.class, jsonData);
+		firstName = (s != null)?s:"unkown";
 		
-		if(json.readValue("handed", String.class, jsonData).equals("R"))
-			rightDominantMember = true;
-		else
-			rightDominantMember = false;
+		s = json.readValue("lastname", String.class, jsonData);
+		lastName = (s != null)?s:"unkown";
 		
-		if(json.readValue("side", String.class, jsonData).equals("R"))
-			rightHemiplegia = true;
-		else
-			rightHemiplegia = false;
+		s = json.readValue("birthdate", String.class, jsonData);
+		birthDate = (s != null)?s:"unkown";
 		
-		return new Patient(lastName, firstName, birthDate, strokeDate, rightHemiplegia, rightDominantMember, id, new Texture("data/oldwoman.jpg"));
+		s = json.readValue("strokedate", String.class, jsonData);
+		strokeDate = (s != null)?s:"unkown";
+		
+		s = json.readValue("handed", String.class, jsonData);
+		if(s != null)
+			dominantMember = (s.equals("R"))?"Right":"Left";
+		
+		s = json.readValue("side", String.class, jsonData);
+		if(s != null)
+			hemiplegia = (s.equals("R"))?"Right":"Left";
+
+		return new Patient(lastName, firstName, birthDate, strokeDate, hemiplegia, dominantMember, id, new Texture("data/oldwoman.jpg"));
 	}
 }

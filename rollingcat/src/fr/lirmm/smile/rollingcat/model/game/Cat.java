@@ -1,7 +1,5 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,7 +9,6 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
-import fr.lirmm.smile.rollingcat.spine.SkeletonBinary;
 import fr.lirmm.smile.rollingcat.spine.SkeletonData;
 
 public class Cat extends Entity {
@@ -44,10 +41,10 @@ public class Cat extends Entity {
 		done = false;
 //		this.setTouchable(Touchable.disabled);
 		
-		final String name = "cat";
+//		final String name = "cat";
 
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/" + name + ".atlas"));
-		SkeletonBinary binary = new SkeletonBinary(atlas);
+//		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/" + name + ".atlas"));
+//		SkeletonBinary binary = new SkeletonBinary(atlas);
 //		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/" + name + ".skel"));
 //		
 //		walkAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-running.anim"), skeletonData);
@@ -72,9 +69,9 @@ public class Cat extends Entity {
 	 * @param stage
 	 */
 	public void move(Stage stage){
-        setVelocity(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH * 1.5f, this.getY() - 5, false));
-        falling(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() - 5, false));
-        pickUp(stage.hit(this.getX(), this.getY()+ GameConstants.BLOCK_HEIGHT / 2, false));
+        setVelocity(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH * 1.5f, this.getY() - GameConstants.BLOCK_HEIGHT / 2, false));
+        falling(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + 1 - GameConstants.BLOCK_HEIGHT/* / 2*/, false));
+        pickUp(stage.hit(this.getX(), this.getY()/*+ GameConstants.BLOCK_HEIGHT / 2*/, false));
         hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, false));
         hitElementTop(stage.hit(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, false));
         
@@ -104,6 +101,7 @@ public class Cat extends Entity {
 		if(state != FALLING){
 			if(hit instanceof Dog){
 				this.getActions().clear();
+				this.addAction(((Dog) hit).getActionOnCat());
 				state = HITTING;
 			}
 			
@@ -206,7 +204,7 @@ public class Cat extends Entity {
 
 	/**
 	 * 
-	 * @return true if the cat hit the target
+	 * @return true if the cat hits the target
 	 */
 	public boolean isDone(){
 		return this.done;

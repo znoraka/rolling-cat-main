@@ -45,7 +45,7 @@ public class LevelBuilder {
 //	}
 	
 	/**
-	 * lit un fichier pour constuire le stage - Entity;x;y\n
+	 * lit un fichier pour constuire le stage - Entity;x;y/
 	 * @return le stage créé
 	 */
 //	public static Stage readLevel(String level){
@@ -142,20 +142,6 @@ public class LevelBuilder {
 		}
 		else
 			return false;
-	}
-
-//	public static void setLevel(String s) {
-//		level = s;
-//	}
-//	
-//	public static boolean isDone(){
-//		return level != null;
-//	}
-//	
-//	public static void clearLevel(){
-//		level = null;
-//	}
-//	
-//	
+	}	
 	
 }

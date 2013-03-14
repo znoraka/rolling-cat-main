@@ -3,7 +3,6 @@ package fr.lirmm.smile.rollingcat.model.doctor;
 import java.util.ArrayList;
 
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
-import fr.lirmm.smile.rollingcat.manager.PatientsManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 
 public class Doctor {

@@ -38,7 +38,7 @@ public class LoginScreen implements Screen, InputProcessor{
 	private Doctor doctor;
 	private BitmapFont font;
 	private SpriteBatch batch;
-	private boolean wrong;
+	private static boolean wrong;
 	private TextureRegion region, background;
 	private InputMultiplexer multiplexer;
 	
@@ -105,6 +105,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		button = new TextButton("OK", style);
 		button.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
+				wrong = false;
 				doctor.login(loginTextField.getText(), passwordTextField.getText());
 			}
 		});
@@ -142,13 +143,9 @@ public class LoginScreen implements Screen, InputProcessor{
 		
 		table.add(button).padTop(GameConstants.DISPLAY_HEIGHT * 0.3f);
 		
-		
 		stage.addActor(loginTextField);
 		stage.addActor(passwordTextField);
 		stage.addActor(table);
-	
-
-
 	}
 
 	@Override
@@ -180,6 +177,7 @@ public class LoginScreen implements Screen, InputProcessor{
 	@Override
 	public boolean keyUp(int keycode) {
 		if(keycode == Keys.ENTER){			
+			wrong = false;
 			doctor.login(loginTextField.getText(), passwordTextField.getText());
 		}
 		return true;
@@ -219,6 +217,10 @@ public class LoginScreen implements Screen, InputProcessor{
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public static void setWrong(){
+		wrong = true;
 	}
 
 }

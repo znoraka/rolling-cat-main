@@ -1,7 +1,6 @@
 package fr.lirmm.smile.rollingcat;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 
 import fr.lirmm.smile.rollingcat.screen.LoginScreen;
