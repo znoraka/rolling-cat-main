@@ -119,11 +119,15 @@ public class InternetManager{
 	 * récupère le level sur le serveur
 	 * @param IDpatient
 	 */
-	public static void fetchLevel(int IDpatient){
+	public static void fetchLevel(int IDpatient, int IDgame){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/getLevel.php?patient="+IDpatient);
+//		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/getLevel.php?patient="+IDpatient);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/level?playerid="+IDpatient+"&gameid="+IDgame);
+		httpGet.setHeader(key, value);
+		httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded");
+
 		
 		Gdx.app.log(RollingCat.LOG, "sending request...");
 
@@ -140,7 +144,7 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}
 		});
-//		level = "cat;0.0;7.0/groundBlock;0.0;2.0/groundBlock;1.0;2.0/spring;2.0;2.0;/groundBlock;3.0;4.0/groundBlock;4.0;4.0/groundBlock;5.0;4.0/groundBlock;6.0;4.0/groundBlock;7.0;4.0/groundBlock;8.0;4.0/groundBlock;9.0;4.0/dog;9.0;5.0/fan;10.0;4.0/groundBlock;10.0;9.0/groundBlock;11.0;9.0/gap;12.0;10.0/groundBlock;13.0;9.0/empty;14.0;9.0/groundBlock;14.0;2.0/fan;15.0;2.0/wasp;15.0;7.0/wasp;15.0;10.0/groundBlock;15.0;11.0/groundBlock;16.0;11.0/groundBlock;17.0;11.0/groundBlock;18.0;11.0/groundBlock;19.0;11.0/groundBlock;20.0;11.0/empty;21.0;11.0/groundBlock;21.0;10.0/groundBlock;22.0;10.0/groundBlock;23.0;10.0/dog;23.0;11.0/empty;24.0;10.0/groundBlock;24.0;5.0/groundBlock;25.0;5.0/fan;26.0;5.0/dog;25.0;6.0/wasp;26.0;11.0/groundBlock;26.0;12.0/empty;27.0;12.0;groundBlock;27.0;5.0/groundBlock;27.0;5.0/fan;28.0;5.0/groundBlock;28.0;12.0/empty;29.0;12.0/empty;26.0;12.0/groundBlock;29.0;3.0/groundBlock;31.0;3.0/wasp;28.0;9.0/gap;30.0;3.0/groundBlock;32.0;3.0/groundBlock;33.0;3.0/groundBlock;34.0;3.0/groundBlock;35.0;3.0/target;35.0;4.0";
+//		level = "cat;0.0;12.0/carpet;0.0;5.0/groundBlock;0.0;2.0/groundBlock;1.0;2.0/spring;2.0;2.0;/groundBlock;3.0;4.0/groundBlock;4.0;4.0/groundBlock;5.0;4.0/groundBlock;6.0;4.0/groundBlock;7.0;4.0/groundBlock;8.0;4.0/groundBlock;9.0;4.0/dog;9.0;5.0/fan;10.0;4.0/groundBlock;10.0;9.0/groundBlock;11.0;9.0/gap;12.0;10.0/groundBlock;13.0;9.0/empty;14.0;9.0/groundBlock;14.0;2.0/fan;15.0;2.0/wasp;15.0;7.0/wasp;15.0;10.0/groundBlock;15.0;11.0/groundBlock;16.0;11.0/groundBlock;17.0;11.0/groundBlock;18.0;11.0/groundBlock;19.0;11.0/groundBlock;20.0;11.0/empty;21.0;11.0/groundBlock;21.0;10.0/groundBlock;22.0;10.0/groundBlock;23.0;10.0/dog;23.0;11.0/empty;24.0;10.0/groundBlock;24.0;5.0/groundBlock;25.0;5.0/fan;26.0;5.0/dog;25.0;6.0/wasp;26.0;11.0/groundBlock;26.0;12.0/empty;27.0;12.0;groundBlock;27.0;5.0/groundBlock;27.0;5.0/fan;28.0;5.0/groundBlock;28.0;12.0/empty;29.0;12.0/empty;26.0;12.0/groundBlock;29.0;3.0/groundBlock;31.0;3.0/wasp;28.0;9.0/gap;30.0;3.0/groundBlock;32.0;3.0/groundBlock;33.0;3.0/groundBlock;34.0;3.0/groundBlock;35.0;3.0/target;35.0;4.0";
 	}
 
 	/**

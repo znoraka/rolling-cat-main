@@ -1,20 +1,15 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 
-public class Wasp extends Entity {
-	
-	/**
-	 * Touchable enabled
-	 * bloque le passage du chat
-	 * @param x
-	 * @param y
-	 */
-	public Wasp(float x, float y) {
-		super(x, y, GameConstants.TEXTURE_WASP);
+public class Carpet extends Entity {
+
+	public Carpet(float x, float y) {
+		super(x, y, GameConstants.TEXTURE_CARPET);
 	}
 	
 	@Override
@@ -24,7 +19,7 @@ public class Wasp extends Entity {
 	
 	@Override
 	public Action getActionOnCat(){
-		return Actions.moveTo(this.getX(), this.getY() - GameConstants.BLOCK_HEIGHT*2, 0.25f);
+		return Actions.moveTo(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, 0.25f, Interpolation.pow2Out);
 	}
-	
+
 }

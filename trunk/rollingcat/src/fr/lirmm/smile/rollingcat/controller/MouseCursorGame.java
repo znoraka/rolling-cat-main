@@ -18,6 +18,7 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.game.Box;
+import fr.lirmm.smile.rollingcat.model.game.Carpet;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.game.Dog;
 import fr.lirmm.smile.rollingcat.model.game.Entity;
@@ -52,7 +53,7 @@ public class MouseCursorGame implements InputProcessor{
 		this.cat = cat;
 		this.box = box;
 		item = 0;
-		atlas = new TextureAtlas(GameConstants.ATLAS);
+		atlas = getAtlas();
 		map = new HashMap<Integer, float []>();
 		elapsedTime = 0;
 		started = false;
@@ -98,6 +99,9 @@ public class MouseCursorGame implements InputProcessor{
 				this.trigger();
 			
 			else if(actor instanceof Spring && item == Box.SPRING)
+				this.trigger();
+			
+			else if(actor instanceof Carpet && item == Box.SCISSORS)
 				this.trigger();
 		}
 	}
@@ -185,7 +189,8 @@ public class MouseCursorGame implements InputProcessor{
 			batch.draw(atlas.findRegion("spring"), x, y, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
 		else if(item == Box.SWATTER)
 			batch.draw(atlas.findRegion("swatter"), x, y, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
-		
+		else if(item == Box.SCISSORS)
+			batch.draw(atlas.findRegion("scissors"), x, y, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
 		batch.end();
 		
 	}
@@ -277,10 +282,6 @@ public class MouseCursorGame implements InputProcessor{
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	public void dispose() {
-		atlas.dispose();
 	}
 	
 }

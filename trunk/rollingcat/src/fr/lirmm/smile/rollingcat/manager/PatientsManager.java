@@ -64,7 +64,7 @@ public class PatientsManager {
 	 */
 	private static Patient patientFactory(Object jsonData, int id) {
 		Json json = new Json();
-		String firstName, lastName, birthDate, strokeDate, hemiplegia = "unknown", dominantMember = "unknown", s;
+		String firstName, lastName, birthDate, strokeDate, hemiplegia, dominantMember, s;
 		
 		s = json.readValue("firstname", String.class, jsonData);
 		firstName = (s != null)?s:"unkown";
@@ -81,11 +81,19 @@ public class PatientsManager {
 		s = json.readValue("handed", String.class, jsonData);
 		if(s != null)
 			dominantMember = (s.equals("R"))?"Right":"Left";
+		else
+			dominantMember = "unknown";
 		
 		s = json.readValue("side", String.class, jsonData);
 		if(s != null)
 			hemiplegia = (s.equals("R"))?"Right":"Left";
+		else
+			hemiplegia = "unkown";
 
 		return new Patient(lastName, firstName, birthDate, strokeDate, hemiplegia, dominantMember, id, new Texture("data/oldwoman.jpg"));
+	}
+	
+	public static Patient getFakePatient(){
+		return new Patient("Martin", "Marianne", ""+75, "06/04/2010", "R", "F", 1, new Texture("data/oldwoman.jpg"));
 	}
 }

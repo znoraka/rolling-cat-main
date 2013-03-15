@@ -70,8 +70,8 @@ public class Cat extends Entity {
 	 */
 	public void move(Stage stage){
         setVelocity(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH * 1.5f, this.getY() - GameConstants.BLOCK_HEIGHT / 2, false));
-        falling(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + 1 - GameConstants.BLOCK_HEIGHT/* / 2*/, false));
-        pickUp(stage.hit(this.getX(), this.getY()/*+ GameConstants.BLOCK_HEIGHT / 2*/, false));
+        falling(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + 1 - GameConstants.BLOCK_HEIGHT, false));
+        pickUp(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY()/*+ GameConstants.BLOCK_HEIGHT / 2*/, false));
         hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, false));
         hitElementTop(stage.hit(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, false));
         
@@ -127,6 +127,11 @@ public class Cat extends Entity {
 	 * @param hit
 	 */
 	private void pickUp(Actor hit) {
+		if(hit instanceof Carpet){
+			this.getActions().clear();
+			this.addAction(((Carpet) hit).getActionOnCat());
+			state = HITTING;
+		}
 		if(hit instanceof Coin)
 		{
 			hit.setVisible(false);
@@ -176,7 +181,7 @@ public class Cat extends Entity {
 			this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, 0.5f)));
 			this.addAction(Actions.parallel(Actions.sequence(
 					Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, 0.25f, Interpolation.pow2Out),
-					Actions.moveBy(0, - GameConstants.BLOCK_HEIGHT, 0.25f, Interpolation.pow2Out)
+					Actions.moveBy(0, - GameConstants.BLOCK_HEIGHT, 0.25f, Interpolation.pow2In)
 //					new Action() {
 //						
 //						@Override
