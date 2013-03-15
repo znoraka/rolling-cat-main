@@ -50,7 +50,7 @@ public class LoadingScreen implements Screen {
 
 	@Override
 	public void show() {
-		InternetManager.fetchLevel(patient.getID());
+		InternetManager.fetchLevel(patient.getID(), 0);
 		texture = new Texture("data/loading.png");
 		batch = getSpriteBatch();
 	}

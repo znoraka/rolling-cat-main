@@ -1,7 +1,6 @@
 package fr.lirmm.smile.rollingcat;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.FPSLogger;
 
 import fr.lirmm.smile.rollingcat.screen.LoginScreen;
 
@@ -10,12 +9,11 @@ public class RollingCat extends Game {
 	
 	public static final boolean DEBUG = false;
 	public static final String LOG = "RollingCat";
-	FPSLogger fps;
+	public static final String VERSION = "0.1.22e";
 	
 	@Override
 	public void create() {		
 		this.setScreen(new LoginScreen(this));
-		fps = new FPSLogger();
 	}
 
 	@Override
@@ -26,7 +24,6 @@ public class RollingCat extends Game {
 	@Override
 	public void render() {		
 		super.render();
-//		fps.log();
 	}
 
 	@Override

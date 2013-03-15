@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
@@ -14,6 +16,7 @@ public class Box extends Entity{
 	public static int SPRING = 2;
 	public static int SWATTER = 3;
 	public static int FEATHER = 4;
+	public static int SCISSORS = 5;
 	public static int EMPTY = 0;
 		
 	private int item;
@@ -22,7 +25,7 @@ public class Box extends Entity{
 	
 	public Box(float x, float y) {
 		super(x, y, GameConstants.TEXTURE_BOX);
-		atlas = new TextureAtlas(GameConstants.ATLAS);
+		atlas = getAtlas();
 		this.setHeight(2 * this.getHeight());
 		this.setWidth(2 * this.getWidth());
 		this.items = LevelBuilder.getItems();
@@ -39,6 +42,8 @@ public class Box extends Entity{
 			batch.draw(atlas.findRegion("box_swatter"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
 		else if(item == FEATHER)
 			batch.draw(atlas.findRegion("box_feather"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
+		else if(item == SCISSORS)
+			batch.draw(atlas.findRegion("box_scissors"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
 		else
 			batch.draw(atlas.findRegion("box"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
 	}

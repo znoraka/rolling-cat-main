@@ -19,7 +19,7 @@ public class GdxRessourcesGetter {
 	private static TextureAtlas atlasGame = new TextureAtlas(GameConstants.ATLAS);
 	private static TextureAtlas atlasPatient = new TextureAtlas("data/patientAtlas.atlas");
 	private static Skin skin;
-	private static SpriteBatch batch;
+	private static SpriteBatch batch = new SpriteBatch();
 	private static BitmapFont bigFont, smallFont;
 	private static Stage stage;
 	private static ShapeRenderer sr;
@@ -58,14 +58,16 @@ public class GdxRessourcesGetter {
 	 * @return le batch utilisé par les différents screens
 	 */
 	public static SpriteBatch getSpriteBatch(){
-		if(batch == null){
-			Gdx.app.log(RollingCat.LOG, "generating batch");
-			batch = new SpriteBatch();
-		}
-		else{
-			batch.dispose();
-			batch = new SpriteBatch();
-		}
+//		if(batch == null){
+//			Gdx.app.log(RollingCat.LOG, "generating batch");
+//			batch = new SpriteBatch();
+//		}
+//		else{
+//			batch.dispose();
+//			batch = new SpriteBatch();
+//		}
+		batch.dispose();
+		batch = new SpriteBatch();
 		return batch;
 	}
 

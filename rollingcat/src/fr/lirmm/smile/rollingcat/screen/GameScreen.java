@@ -80,8 +80,8 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void show() {
-		batch = getSpriteBatch();
-		sr = getShapeRenderer();
+		batch = new SpriteBatch();
+		sr = new ShapeRenderer();
 		backgroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND);
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		cat = (Cat) stage.getActors().get(0);
@@ -113,7 +113,6 @@ public class GameScreen implements Screen{
 		Gdx.app.log(RollingCat.LOG, "disposing...");
 		backgroundTexture.dispose();
 		sr.dispose();
-		mc.dispose();
 	}
 
 }
