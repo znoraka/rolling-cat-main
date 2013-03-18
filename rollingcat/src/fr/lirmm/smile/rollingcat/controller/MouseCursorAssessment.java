@@ -5,8 +5,12 @@ import java.util.Map;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.manager.EventManager;
+import fr.lirmm.smile.rollingcat.model.event.Event;
+import fr.lirmm.smile.rollingcat.model.event.EventModel;
 
 public class MouseCursorAssessment implements InputProcessor{
 
@@ -16,6 +20,7 @@ public class MouseCursorAssessment implements InputProcessor{
 	private float elapsedTime;
 	private boolean start;
 	private boolean isDone;
+	private OrderedMap<String, String> parameters;
 	
 	public MouseCursorAssessment(){
 		x = GameConstants.DISPLAY_WIDTH / 2;
@@ -24,6 +29,7 @@ public class MouseCursorAssessment implements InputProcessor{
 		elapsedTime = 0;
 		start = false;
 		isDone = false;
+		parameters = new OrderedMap<String, String>();
 	}
 	
 	@Override
@@ -115,6 +121,10 @@ public class MouseCursorAssessment implements InputProcessor{
 			
 			if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
 				map.put(map.size(), new float[] {x, y});
+				parameters.put("x", ""+x);
+				parameters.put("y", ""+y);
+				parameters.put("z", ""+0);
+				EventManager.add(new Event(EventModel.player_cursor_event_type, parameters));
 				elapsedTime = 0;
 			}
 		}
@@ -126,6 +136,10 @@ public class MouseCursorAssessment implements InputProcessor{
 	
 	public boolean isDone(){
 		return isDone;
+	}
+
+	public float getElapsedTime() {
+		return this.elapsedTime;
 	}
 
 }

@@ -24,15 +24,13 @@ public class Track {
 	public static final String ASSESSEMENT = "assessment";
 	public static final String GAME = "game";
 	
-	private Map<Integer, float []> trackGame;
-	private Map<Integer, Integer> trackAssessment;
+	private Map<Integer, float []> track;
 	private String date;
 	private float duration;
 	private int id;
 	private ArrayList<Integer> indNextSegment;
 	private int currentSegment;
 	private String type;
-	private BitmapFont font;
 
 	
 	/**
@@ -41,12 +39,8 @@ public class Track {
 	 * @param type
 	 * @param duration
 	 */
-	@SuppressWarnings("unchecked")
-	public Track(Map<?, ?> track, String type, float duration){
-		if(type == GAME)
-			this.trackGame = (Map<Integer, float[]>) track;
-		else
-			this.trackAssessment = (Map<Integer, Integer>) track;
+	public Track(Map<Integer, float []> track, String type, float duration){
+		this.track = (Map<Integer, float[]>) track;
 		this.duration = (float) Math.floor(duration);
 		this.id = TrackingPointsManager.getId();
 		if(type == GAME){
@@ -56,7 +50,6 @@ public class Track {
 		}
 		this.type = type;
 		InternetManager.getDate(this);
-		font = getBigFont();
 	}
 
 	/**
@@ -66,13 +59,13 @@ public class Track {
 	 */
 	private void findSegments() {
 		indNextSegment.add(0);
-		for (int i = 0; i < trackGame.size(); i++) {
-			if((int)(trackGame.get(i)[0] / GameConstants.DISPLAY_WIDTH) == indNextSegment.size()){
+		for (int i = 0; i < track.size(); i++) {
+			if((int)(track.get(i)[0] / GameConstants.DISPLAY_WIDTH) == indNextSegment.size()){
 				indNextSegment.add(i);
 			}
-			trackGame.get(i)[0] = trackGame.get(i)[0] - GameConstants.DISPLAY_WIDTH * (indNextSegment.size() - 1);
+			track.get(i)[0] = track.get(i)[0] - GameConstants.DISPLAY_WIDTH * (indNextSegment.size() - 1);
 		}
-		indNextSegment.add(trackGame.size() - 1);
+		indNextSegment.add(track.size() - 1);
 	}
 
 	/**
@@ -86,42 +79,70 @@ public class Track {
 			for (int i = indNextSegment.get(currentSegment); i < indNextSegment.get(currentSegment + 1) - 1; i++) {
 				sr.begin(ShapeType.Line);
 				sr.line(
-						trackGame.get(i)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-						trackGame.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-						trackGame.get(i+1)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-						trackGame.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
+						track.get(i)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+						track.get(i+1)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+						track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
 						);
 				sr.end();
 				sr.begin(ShapeType.Filled);
 				sr.circle(
-						trackGame.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-						trackGame.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+						track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 						3);
 				sr.end();
 			}
 			sr.setColor(Color.RED);
 			sr.begin(ShapeType.Filled);
 			sr.circle(
-					trackGame.get(indNextSegment.get(currentSegment))[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-					trackGame.get(indNextSegment.get(currentSegment))[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+					track.get(indNextSegment.get(currentSegment))[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+					track.get(indNextSegment.get(currentSegment))[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 					3);
 			sr.circle(
-					trackGame.get(indNextSegment.get(currentSegment + 1) - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-					trackGame.get(indNextSegment.get(currentSegment + 1) - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+					track.get(indNextSegment.get(currentSegment + 1) - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+					track.get(indNextSegment.get(currentSegment + 1) - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 					3);
 			sr.end();
 		}
+//		else{
+//			batch.begin();
+//			font.setColor(Color.WHITE);
+//			int i = 0;
+//			for (Entry<Integer, Integer> map : trackAssessment.entrySet()) {
+//				i++;
+//				font.draw(batch, map.getKey() + " degrees : " + map.getValue() + " percents", (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(), i * 100 * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY());
+//			}
+//			batch.end();
+//		}
 		else{
-			batch.begin();
-			font.setColor(Color.WHITE);
-			int i = 0;
-			for (Entry<Integer, Integer> map : trackAssessment.entrySet()) {
-				i++;
-				font.draw(batch, map.getKey() + " degrees : " + map.getValue() + " percents", (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(), i * 100 * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY());
-			}
-			batch.end();
+            for (int i = 0; i < track.size() - 1; i++) {
+                    sr.begin(ShapeType.Line);
+                    sr.line(
+                                    track.get(i)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+                                    track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+                                    track.get(i+1)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+                                    track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
+                                    );
+                    sr.end();
+                    sr.begin(ShapeType.Filled);
+                    sr.circle(
+                                    track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+                                    track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+                                    3);
+                    sr.end();
+            }
+            sr.setColor(Color.RED);
+            sr.begin(ShapeType.Filled);
+            sr.circle(
+                            track.get(0)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+                            track.get(0)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+                            3);
+            sr.circle(
+                            track.get(track.size() - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+                            track.get(track.size() - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+                            3);
+            sr.end();
 		}
-		
 	}
 	
 	/**
@@ -184,8 +205,8 @@ public class Track {
 		return this.type;
 	}
 	
-	public Map<?, ?> getTrack(){
-		return (this.trackGame != null)?this.trackGame:this.trackAssessment;
+	public Map<Integer, float []> getTrack(){
+		return this.track;
 	}
 
 	public void setDate(String date) {

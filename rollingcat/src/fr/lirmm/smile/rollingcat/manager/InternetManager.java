@@ -19,7 +19,7 @@ public class InternetManager{
 	private static String hostName = "localhost";
 	private static int port = 9000;
 	private static String key = "PLAY_SESSION";
-	private static String value;
+	public static String value;
 	
 	
 	/**
