@@ -57,7 +57,7 @@ public class UploadScreen implements Screen {
 		batch.end();
 		
 		stage.draw();
-		track.render(sr, drawArea);
+		track.render(sr, drawArea, batch);
 	}
 
 	@Override

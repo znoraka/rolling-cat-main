@@ -60,7 +60,7 @@ public class TrackingRecapScreen implements Screen{
 		batch.end();
 		
 		if(track != null)
-			track.render(sr, drawArea);
+			track.render(sr, drawArea, batch);
 		
 		stage.act(delta);
 		stage.draw();

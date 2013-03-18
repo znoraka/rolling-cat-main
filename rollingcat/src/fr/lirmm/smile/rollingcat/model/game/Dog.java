@@ -32,7 +32,7 @@ public class Dog extends Entity {
 	 */
 	public Dog(float x, float y){
 		super(x, y, GameConstants.TEXTURE_DOG);
-//		final String name = "skeleton"; //skeleton
+		final String name = "skeleton"; //skeleton
 //		
 //		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/dog-atlas.atlas"));
 //		SkeletonBinary binary = new SkeletonBinary(atlas);
