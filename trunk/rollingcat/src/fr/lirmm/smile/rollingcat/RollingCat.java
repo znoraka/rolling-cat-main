@@ -9,7 +9,7 @@ public class RollingCat extends Game {
 	
 	public static final boolean DEBUG = false;
 	public static final String LOG = "RollingCat";
-	public static final String VERSION = "0.1.22e";
+	public static final String VERSION = "0.1.3a";
 	
 	@Override
 	public void create() {		

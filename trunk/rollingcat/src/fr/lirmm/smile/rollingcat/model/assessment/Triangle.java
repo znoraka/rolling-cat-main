@@ -14,6 +14,9 @@ public class Triangle {
 	private float degree;
 	private int id;
 	private float color;
+	private int percentage;
+	private double max;
+
 	
 	/**
 	 * peut être changer le viewport est-il plus simple que de retrancher la moitié de la largeur de l'écran à chaque fois
@@ -27,6 +30,9 @@ public class Triangle {
 		progression.rotate(angle);
 		this.degree = degree;
 		this.id = id;
+		this.percentage = 0;
+		this.max = (angle == 90)?GameConstants.DISPLAY_HEIGHT:(GameConstants.DISPLAY_WIDTH / 2) / Math.cos((double)(angle * 0.0174532925f));
+		System.out.println(max);
 	}
 	
 	/**
@@ -86,10 +92,24 @@ public class Triangle {
 				progression.set(a);
 				progression.setAngle(direct.angle());
 			}
+			percentage = (int) ((Math.abs(progression.len() / max) * 100 < 100f)?(Math.abs(progression.len()) / max) * 100:100);
+
 		}
 		else
 			color = 0.78f;
 	
+	}
+
+	public int getAngle() {
+		return (int) (this.degree * id + this.degree / 2);
+	}
+	
+	public int getID() {
+		return this.id;
+	}
+
+	public int getProgression() {
+		return ((percentage > 1)?percentage:0);
 	}
 		
 }

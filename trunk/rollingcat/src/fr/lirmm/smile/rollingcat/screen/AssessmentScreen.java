@@ -1,6 +1,10 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getShapeRenderer;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,8 +12,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -28,7 +30,7 @@ public class AssessmentScreen implements Screen {
 	private int selected;
 	private Patient patient;
 	private float timeout;
-	private float duration;
+	private float elapsedTime;
 	
 	public AssessmentScreen(RollingCat game, Patient patient){
 		this.game = game;
@@ -39,10 +41,7 @@ public class AssessmentScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		duration += delta;
-		
-		if(canStart())
-			mc.start();
+		elapsedTime += delta;
 		
 		for (Triangle triangle : triangles) {
 			triangle.render(sr, this);
@@ -66,12 +65,19 @@ public class AssessmentScreen implements Screen {
 		sr.setColor(Color.GRAY);
 		sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100 - timeout);
 		sr.end();
-        mc.addTrackingPoint(delta);
         
         if(mc.isDone()){
-	        patient.addTrack(new Track(mc.getMap(), Track.ASSESSEMENT, duration));
+	        patient.addTrack(new Track(buildTrack(), Track.ASSESSEMENT, elapsedTime));
 			game.setScreen(new TrackingRecapScreen(game, patient));
         }
+	}
+
+	private Map<Integer, Integer> buildTrack() {
+		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+		for (Triangle triangle : triangles) {
+			map.put(triangle.getAngle(), triangle.getProgression());
+		}
+		return map;
 	}
 
 	@Override
@@ -81,7 +87,6 @@ public class AssessmentScreen implements Screen {
 	@Override
 	public void show() {
 		sr = getShapeRenderer();
-		duration = 0;
 		triangles = VectorManager.getVectorsFromAreas(5);
 		mc = new MouseCursorAssessment();
 		Gdx.input.setInputProcessor(mc);

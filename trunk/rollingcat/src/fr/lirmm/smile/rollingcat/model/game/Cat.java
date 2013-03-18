@@ -151,7 +151,7 @@ public class Cat extends Entity {
 		if(hit instanceof StopBlock)
 			((StopBlock) hit).updateTimer();
 		
-		if(hit instanceof Block){
+		if(hit instanceof Block & state != FLYING){
 			state = WALKING;
 			if(this.getActions().size == 0)
 				this.addAction(((Block) hit).getActionOnCat());
@@ -164,9 +164,9 @@ public class Cat extends Entity {
 		}
 		
 		else if(hit instanceof Fan){
-			state = FLYING;
 			if(this.getActions().size == 0)
 				this.addAction(((Fan) hit).getActionOnCat());
+			state = FLYING;
 		}
 	}
 	
