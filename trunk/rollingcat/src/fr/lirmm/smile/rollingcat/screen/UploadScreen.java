@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.EventManager;
+import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 
@@ -138,6 +140,7 @@ public class UploadScreen implements Screen {
 		upload.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				Gdx.app.log(RollingCat.LOG, "uploading... just kidding, nothing happened");
+				InternetManager.sendEvents(EventManager.getListAsJsonString());
 			}
 		});
 		

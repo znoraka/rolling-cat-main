@@ -2,6 +2,10 @@ package fr.lirmm.smile.rollingcat.manager;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Json;
+
+import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.event.Event;
 
 public class EventManager {
@@ -17,5 +21,11 @@ public class EventManager {
 	
 	public static ArrayList<Event> getListOfEvents(){
 		return listOfEvents;
+	}
+	
+	public static String getListAsJsonString(){
+		Json json = new Json();
+		Gdx.app.log(RollingCat.LOG, json.prettyPrint(json.toJson(listOfEvents)));
+		return json.toJson(listOfEvents);
 	}
 }
