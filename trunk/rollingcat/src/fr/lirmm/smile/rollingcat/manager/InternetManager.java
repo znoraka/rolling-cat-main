@@ -119,6 +119,33 @@ public class InternetManager{
 		}
 	
 	/**
+	 * set la date dans la track
+	 * @param track
+	 */
+	public static void newGameSession(){
+		Gdx.app.log(RollingCat.LOG, "preparing request...");
+		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/gamesession/new ");
+		httpGet.setHeader(key, value);
+		httpGet.setHeader("Content-Type", "application/json");
+		Gdx.app.log(RollingCat.LOG, "sending new game session retrieve request...");
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+			
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				String s = httpResponse.getResultAsString();
+				Gdx.app.log(RollingCat.LOG, "game session " + s);
+	           	Gdx.app.log(RollingCat.LOG, "success");
+		    }
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
+				Gdx.app.log(RollingCat.LOG, "something went wrong");
+			}});
+		}
+	
+	/**
 	 * récupère le level sur le serveur
 	 * @param IDpatient
 	 */
@@ -160,7 +187,6 @@ public class InternetManager{
 		httpGet.setUrl("http://" + hostName + ":" + port + "/event/"+value+"/newList");
 //		httpGet.setContent("[{\"timestamp\": 1363707594642, \"event_type\": \"player_position\",\"parameters\": {\"x\": \"403.0\",\"y\": \"301.0\",\"z\": \"0\"}}]");
 		httpGet.setContent(events);
-		System.out.println(httpGet.getContent());
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "application/json");
 		
