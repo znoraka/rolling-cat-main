@@ -16,6 +16,7 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorAssessment;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
+import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.VectorManager;
 import fr.lirmm.smile.rollingcat.model.assessment.Triangle;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
@@ -102,7 +103,8 @@ public class AssessmentScreen implements Screen {
                 parameters.put("session_type", Track.ASSESSEMENT);
                 parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
                 parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
-                EventManager.create(EventManager.start_game_event_type, parameters);                
+                EventManager.create(EventManager.start_game_event_type, parameters); 
+                InternetManager.newGameSession();
         }
 
         @Override
