@@ -7,10 +7,12 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
+import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
@@ -29,6 +31,8 @@ public class GameScreen implements Screen{
 	private Box box;
 	private Patient patient;
 	private float duration;
+    private OrderedMap<String, String> parameters;
+
 	
 
 	public GameScreen(RollingCat game, Patient patient, Stage stage){
@@ -53,6 +57,9 @@ public class GameScreen implements Screen{
         updateCamPos();
         mc.addTrackingPoint(delta);
         if(cat.isDone()){
+        	parameters = new OrderedMap<String, String>();
+        	parameters.put("duration", ""+duration);
+        	EventManager.create(EventManager.end_game_event_type, parameters);
         	patient.addTrack(new Track(mc.getMap(), Track.GAME, duration));
         	game.setScreen(new TrackingRecapScreen(game, patient));
         }
@@ -82,6 +89,8 @@ public class GameScreen implements Screen{
 	public void show() {
 		batch = new SpriteBatch();
 		sr = new ShapeRenderer();
+		EventManager.clear();
+		parameters = new OrderedMap<String, String>();
 		backgroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND);
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		cat = (Cat) stage.getActors().get(0);
@@ -90,6 +99,15 @@ public class GameScreen implements Screen{
 		mc = new MouseCursorGame(stage, cat, box);
 		Gdx.input.setInputProcessor(mc);
 		duration = 0;
+		parameters = new OrderedMap<String, String>();
+		parameters.put("game", RollingCat.LOG);
+		parameters.put("version", RollingCat.VERSION);
+		EventManager.create(EventManager.game_info_event_type, parameters);
+		parameters = new OrderedMap<String, String>();
+		parameters.put("session_type", Track.GAME);
+		parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
+		parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
+     	EventManager.create(EventManager.start_game_event_type, parameters);               
 
 	}
 

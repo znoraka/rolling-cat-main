@@ -18,8 +18,6 @@ import fr.lirmm.smile.rollingcat.controller.MouseCursorAssessment;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.VectorManager;
 import fr.lirmm.smile.rollingcat.model.assessment.Triangle;
-import fr.lirmm.smile.rollingcat.model.event.Event;
-import fr.lirmm.smile.rollingcat.model.event.EventModel;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 
@@ -42,43 +40,43 @@ public class AssessmentScreen implements Screen {
         
         @Override
         public void render(float delta) {
-                Gdx.gl.glClearColor(1, 1, 1, 1);
-                Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-                duration += delta;
-                
-                if(canStart())
-                        mc.start();
-                
-                for (Triangle triangle : triangles) {
-                        triangle.render(sr, this);
-                        triangle.setProgression(mc.getX(), mc.getY(), this);
-                }
-                
-                if(selected >= 0){
-                        if(timeout < 97)
-                                timeout += delta * 3;
-                        else{
-                                selected = -100;
-                        }
-                }
-                
-                else{
-                        timeout = 0;
-                }
-                sr.begin(ShapeType.Filled);
-                sr.setColor(Color.DARK_GRAY);
-                sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100);
-                sr.setColor(Color.GRAY);
-                sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100 - timeout);
-                sr.end();
-        mc.addTrackingPoint(delta);
+            Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+            duration += delta;
+            
+            if(canStart() & !mc.isStarted())
+            	mc.start();
+            
+            for (Triangle triangle : triangles) {
+                    triangle.render(sr, this);
+                    triangle.setProgression(mc.getX(), mc.getY(), this);
+            }
+            
+            if(selected >= 0){
+                    if(timeout < 97)
+                            timeout += delta * 3;
+                    else{
+                            selected = -100;
+                    }
+            }
+            
+            else{
+                timeout = 0;
+            }
+            sr.begin(ShapeType.Filled);
+            sr.setColor(Color.DARK_GRAY);
+            sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100);
+            sr.setColor(Color.GRAY);
+            sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100 - timeout);
+            sr.end();
+            mc.addTrackingPoint(delta);
         
-        if(mc.isDone()){
-                patient.addTrack(new Track(mc.getMap(), Track.ASSESSEMENT, duration));
-                parameters.clear();
-                parameters.put("duration", ""+mc.getElapsedTime());
-                EventManager.add(new Event(EventModel.end_game_event_type, parameters));
-                game.setScreen(new TrackingRecapScreen(game, patient));
+	        if(mc.isDone()){
+	        	parameters = new OrderedMap<String, String>();
+	        	parameters.put("duration", ""+(int)duration);
+	        	EventManager.create(EventManager.end_game_event_type, parameters);
+	        	patient.addTrack(new Track(mc.getMap(), Track.ASSESSEMENT, duration));
+	        	game.setScreen(new TrackingRecapScreen(game, patient));
         	}
         }
 
@@ -89,19 +87,22 @@ public class AssessmentScreen implements Screen {
         @Override
         public void show() {
                 sr = getShapeRenderer();
-                parameters = new OrderedMap<String, String>();
+        		EventManager.clear();
                 duration = 0;
                 triangles = VectorManager.getVectorsFromAreas(5);
                 mc = new MouseCursorAssessment();
                 Gdx.input.setInputProcessor(mc);
                 selected = -10;
                 timeout = 0;
+                parameters = new OrderedMap<String, String>();
                 parameters.put("game", RollingCat.LOG);
                 parameters.put("version", RollingCat.VERSION);
-                EventManager.add(new Event(EventModel.game_info_event_type, parameters));
-                parameters.clear();
+                EventManager.create(EventManager.game_info_event_type, parameters);
+                parameters = new OrderedMap<String, String>();
                 parameters.put("session_type", Track.ASSESSEMENT);
-        		EventManager.add(new Event(EventModel.start_game_event_type, parameters));                
+                parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
+                parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
+                EventManager.create(EventManager.start_game_event_type, parameters);                
         }
 
         @Override
@@ -134,7 +135,7 @@ public class AssessmentScreen implements Screen {
         }
         
         public boolean canStart(){
-                return (Math.sqrt((mc.getX() - 400)*(mc.getX() - 400) + mc.getY()*mc.getY()) < 100);
+                return mc.isInArea();
         }
         
 }

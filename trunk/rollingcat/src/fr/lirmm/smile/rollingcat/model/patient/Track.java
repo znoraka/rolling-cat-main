@@ -2,20 +2,18 @@ package fr.lirmm.smile.rollingcat.model.patient;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
-
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+import com.badlogic.gdx.utils.Json;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.TrackingPointsManager;
 
@@ -31,6 +29,7 @@ public class Track {
 	private ArrayList<Integer> indNextSegment;
 	private int currentSegment;
 	private String type;
+	private String listOfEvents;
 
 	
 	/**
@@ -50,6 +49,7 @@ public class Track {
 		}
 		this.type = type;
 		InternetManager.getDate(this);
+		listOfEvents = EventManager.getListAsJsonString();
 	}
 
 	/**
@@ -207,6 +207,12 @@ public class Track {
 	
 	public Map<Integer, float []> getTrack(){
 		return this.track;
+	}
+	
+	public String getListOfEvents(){
+		Json json = new Json();
+		Gdx.app.log(RollingCat.LOG, json.prettyPrint(listOfEvents));
+		return listOfEvents;
 	}
 
 	public void setDate(String date) {
