@@ -9,18 +9,17 @@ import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
-import fr.lirmm.smile.rollingcat.model.event.Event;
-import fr.lirmm.smile.rollingcat.model.event.EventModel;
 
 public class MouseCursorAssessment implements InputProcessor{
 
-	private float x;
-	private float y;
+	private float x, oldX;
+	private float y, oldY;
 	private Map<Integer, float []> map;
 	private float elapsedTime;
 	private boolean start;
 	private boolean isDone;
 	private OrderedMap<String, String> parameters;
+	private boolean inArea;
 	
 	public MouseCursorAssessment(){
 		x = GameConstants.DISPLAY_WIDTH / 2;
@@ -30,6 +29,7 @@ public class MouseCursorAssessment implements InputProcessor{
 		start = false;
 		isDone = false;
 		parameters = new OrderedMap<String, String>();
+		inArea = false;
 	}
 	
 	@Override
@@ -118,13 +118,18 @@ public class MouseCursorAssessment implements InputProcessor{
 	public void addTrackingPoint(float delta){
 		if(start){
 			elapsedTime += delta;
-			
+			addEndTask();
 			if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
-				map.put(map.size(), new float[] {x, y});
-				parameters.put("x", ""+x);
-				parameters.put("y", ""+y);
-				parameters.put("z", ""+0);
-				EventManager.add(new Event(EventModel.player_cursor_event_type, parameters));
+				if(x != oldX & y != oldY){
+					parameters = new OrderedMap<String, String>();
+					oldX = x;
+					oldY = y;
+					map.put(map.size(), new float[] {x, y});
+					parameters.put("x", ""+x);
+					parameters.put("y", ""+y);
+					parameters.put("z", ""+0);
+					EventManager.create(EventManager.player_cursor_event_type, parameters);
+				}
 				elapsedTime = 0;
 			}
 		}
@@ -140,6 +145,35 @@ public class MouseCursorAssessment implements InputProcessor{
 
 	public float getElapsedTime() {
 		return this.elapsedTime;
+	}
+
+	public boolean isStarted() {
+		return start;
+	}
+	
+	private void addEndTask(){
+		if(enteringArea()){
+			parameters = new OrderedMap<String, String>();
+			parameters.put("x", ""+0);
+			parameters.put("y", ""+GameConstants.DISPLAY_WIDTH / 2);
+			parameters.put("z", ""+0);
+			EventManager.create(EventManager.pointing_task_end, parameters);
+		}
+	}
+
+	private boolean enteringArea() {
+		if(isInArea() & !inArea){
+			inArea = true;
+			return true;
+		}
+		else if(!isInArea())
+			inArea = false;
+		
+		return false;
+	}
+	
+	public boolean isInArea(){
+		return (Math.sqrt((x - GameConstants.DISPLAY_WIDTH / 2)*(x - GameConstants.DISPLAY_WIDTH / 2) + y*y) < 100);
 	}
 
 }

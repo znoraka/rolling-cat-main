@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;

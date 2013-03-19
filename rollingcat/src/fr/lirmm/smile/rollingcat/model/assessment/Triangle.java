@@ -32,7 +32,6 @@ public class Triangle {
 		this.id = id;
 		this.percentage = 0;
 		this.max = (angle == 90)?GameConstants.DISPLAY_HEIGHT:(GameConstants.DISPLAY_WIDTH / 2) / Math.cos((double)(angle * 0.0174532925f));
-		System.out.println(max);
 	}
 	
 	/**

@@ -54,6 +54,7 @@ public class InternetManager{
 			@Override
 			public void failed(Throwable t) {
 				LoginScreen.setWrong();
+				Gdx.app.log(RollingCat.LOG, t.toString());
 				Gdx.app.log(RollingCat.LOG, "something went wrong, could not login");
 			}});
 		
@@ -84,6 +85,7 @@ public class InternetManager{
 
 			@Override
 			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
 				Gdx.app.log(RollingCat.LOG, "something went wrong, could not retrieve patient");
 			}});
 	}
@@ -110,6 +112,7 @@ public class InternetManager{
 
 			@Override
 			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 				track.setDate("error");
 			}});
@@ -140,41 +143,42 @@ public class InternetManager{
 
 			@Override
 			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}
 		});
 //		level = "cat;0.0;12.0/carpet;0.0;5.0/groundBlock;0.0;2.0/groundBlock;1.0;2.0/spring;2.0;2.0;/groundBlock;3.0;4.0/groundBlock;4.0;4.0/groundBlock;5.0;4.0/groundBlock;6.0;4.0/groundBlock;7.0;4.0/groundBlock;8.0;4.0/groundBlock;9.0;4.0/dog;9.0;5.0/fan;10.0;4.0/groundBlock;10.0;9.0/groundBlock;11.0;9.0/gap;12.0;10.0/groundBlock;13.0;9.0/empty;14.0;9.0/groundBlock;14.0;2.0/fan;15.0;2.0/wasp;15.0;7.0/wasp;15.0;10.0/groundBlock;15.0;11.0/groundBlock;16.0;11.0/groundBlock;17.0;11.0/groundBlock;18.0;11.0/groundBlock;19.0;11.0/groundBlock;20.0;11.0/empty;21.0;11.0/groundBlock;21.0;10.0/groundBlock;22.0;10.0/groundBlock;23.0;10.0/dog;23.0;11.0/empty;24.0;10.0/groundBlock;24.0;5.0/groundBlock;25.0;5.0/fan;26.0;5.0/dog;25.0;6.0/wasp;26.0;11.0/groundBlock;26.0;12.0/empty;27.0;12.0;groundBlock;27.0;5.0/groundBlock;27.0;5.0/fan;28.0;5.0/groundBlock;28.0;12.0/empty;29.0;12.0/empty;26.0;12.0/groundBlock;29.0;3.0/groundBlock;31.0;3.0/wasp;28.0;9.0/gap;30.0;3.0/groundBlock;32.0;3.0/groundBlock;33.0;3.0/groundBlock;34.0;3.0/groundBlock;35.0;3.0/target;35.0;4.0";
 	}
 	
-	/**
+	/** 
 	 * récupère le level sur le serveur
 	 * @param IDpatient
 	 */
 	public static void sendEvents(String events){
-		Gdx.app.log(RollingCat.LOG, "preparing request...");
+		Gdx.app.log(RollingCat.LOG, "preparing send list event request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/"+value+"/newList");
+		httpGet.setUrl("http://" + hostName + ":" + port + "/event/"+value+"/newList");
+//		httpGet.setContent("[{\"timestamp\": 1363707594642, \"event_type\": \"player_position\",\"parameters\": {\"x\": \"403.0\",\"y\": \"301.0\",\"z\": \"0\"}}]");
 		httpGet.setContent(events);
+		System.out.println(httpGet.getContent());
 		httpGet.setHeader(key, value);
-		httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded");
-
+		httpGet.setHeader("Content-Type", "application/json");
 		
-		Gdx.app.log(RollingCat.LOG, "sending request...");
+		Gdx.app.log(RollingCat.LOG, "sending list event request...");
 
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
 			
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				level = httpResponse.getResultAsString();
-	           	Gdx.app.log(RollingCat.LOG, "success");
+	           	Gdx.app.log(RollingCat.LOG, "list event request success");
 		    }
 
 			@Override
 			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}
 		});
-//		level = "cat;0.0;12.0/carpet;0.0;5.0/groundBlock;0.0;2.0/groundBlock;1.0;2.0/spring;2.0;2.0;/groundBlock;3.0;4.0/groundBlock;4.0;4.0/groundBlock;5.0;4.0/groundBlock;6.0;4.0/groundBlock;7.0;4.0/groundBlock;8.0;4.0/groundBlock;9.0;4.0/dog;9.0;5.0/fan;10.0;4.0/groundBlock;10.0;9.0/groundBlock;11.0;9.0/gap;12.0;10.0/groundBlock;13.0;9.0/empty;14.0;9.0/groundBlock;14.0;2.0/fan;15.0;2.0/wasp;15.0;7.0/wasp;15.0;10.0/groundBlock;15.0;11.0/groundBlock;16.0;11.0/groundBlock;17.0;11.0/groundBlock;18.0;11.0/groundBlock;19.0;11.0/groundBlock;20.0;11.0/empty;21.0;11.0/groundBlock;21.0;10.0/groundBlock;22.0;10.0/groundBlock;23.0;10.0/dog;23.0;11.0/empty;24.0;10.0/groundBlock;24.0;5.0/groundBlock;25.0;5.0/fan;26.0;5.0/dog;25.0;6.0/wasp;26.0;11.0/groundBlock;26.0;12.0/empty;27.0;12.0;groundBlock;27.0;5.0/groundBlock;27.0;5.0/fan;28.0;5.0/groundBlock;28.0;12.0/empty;29.0;12.0/empty;26.0;12.0/groundBlock;29.0;3.0/groundBlock;31.0;3.0/wasp;28.0;9.0/gap;30.0;3.0/groundBlock;32.0;3.0/groundBlock;33.0;3.0/groundBlock;34.0;3.0/groundBlock;35.0;3.0/target;35.0;4.0";
 	}
 
 	/**

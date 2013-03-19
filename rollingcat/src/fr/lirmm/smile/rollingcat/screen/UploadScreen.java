@@ -140,7 +140,7 @@ public class UploadScreen implements Screen {
 		upload.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				Gdx.app.log(RollingCat.LOG, "uploading... just kidding, nothing happened");
-				InternetManager.sendEvents(EventManager.getListAsJsonString());
+				InternetManager.sendEvents(track.getListOfEvents());
 			}
 		});
 		

@@ -3,6 +3,8 @@ package fr.lirmm.smile.rollingcat.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.stream.EventFilter;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -12,11 +14,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.utils.OrderedMap;
 
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Carpet;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
@@ -29,8 +33,8 @@ import fr.lirmm.smile.rollingcat.model.game.Wasp;
 public class MouseCursorGame implements InputProcessor{
 	private float hoverTimer;
 	private float standTimer;
-	private float x;
-	private float y;
+	private float x, oldX;
+	private float y, oldY;
 	private int oldBlockX;
 	private int oldBlockY;
 	private Entity actor;
@@ -43,6 +47,7 @@ public class MouseCursorGame implements InputProcessor{
 	private Map<Integer, float []> map;
 	private float elapsedTime;
 	private boolean started;
+	private OrderedMap<String, String> parameters;
 
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
 		batch = getSpriteBatch();
@@ -57,6 +62,7 @@ public class MouseCursorGame implements InputProcessor{
 		map = new HashMap<Integer, float []>();
 		elapsedTime = 0;
 		started = false;
+		parameters = new OrderedMap<String, String>();
 	}
 	
 	/**
@@ -82,6 +88,7 @@ public class MouseCursorGame implements InputProcessor{
 				cat.jump(actor.getXOnGrid() + 2, actor.getYOnGrid());
 				box.fill();
 				item = 0;
+				addEvent();
 			}
 		
 			else if(actor instanceof Mouse){
@@ -90,6 +97,7 @@ public class MouseCursorGame implements InputProcessor{
 			else if(actor instanceof Box){
 				item = box.empty();
 				this.start();
+				addEvent();
 			}
 			else if(actor instanceof Dog && item == Box.BONE){
 				this.trigger();
@@ -131,6 +139,19 @@ public class MouseCursorGame implements InputProcessor{
 		box.fill();
 		item = 0;
 		actor.setTouchable(Touchable.disabled);
+		addEvent();
+	}
+	
+	/**
+	 * ajoute un event à la liste d'events
+	 * appelé lorsque le patient réussi une tache de pointage
+	 */
+	private void addEvent(){
+		parameters = new OrderedMap<String, String>();
+		parameters.put("x", ""+actor.getX()%GameConstants.DISPLAY_WIDTH);
+		parameters.put("y", ""+actor.getY());
+		parameters.put("z", ""+0);
+		EventManager.create(EventManager.pointing_task_end, parameters);
 	}
 	
 	/**
@@ -200,7 +221,16 @@ public class MouseCursorGame implements InputProcessor{
 			elapsedTime += delta;
 			
 			if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
-				map.put(map.size(), new float[] {x, y});
+				if(x != oldX & y != oldY){
+					parameters = new OrderedMap<String, String>();
+					oldX = x;
+					oldY = y;
+					map.put(map.size(), new float[] {x, y});
+					parameters.put("x", ""+x%GameConstants.DISPLAY_WIDTH);
+					parameters.put("y", ""+y);
+					parameters.put("z", ""+0);
+					EventManager.create(EventManager.player_cursor_event_type, parameters);
+				}
 				elapsedTime = 0;
 			}
 		}
