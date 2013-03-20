@@ -48,7 +48,7 @@ public class EventManager {
 	 */
 	public static void create(String event_type, Object parameters){
 		OrderedMap<String, Object> event = new OrderedMap<String, Object>();
-		String l = ""+System.currentTimeMillis();
+		long l = System.currentTimeMillis();
 		event.put(timestamp, l);
 		event.put(type, event_type);
 		event.put(data, parameters);

@@ -29,41 +29,8 @@ public class LevelBuilder {
 	private static ArrayList<Integer> items;
 	//private static String level;
 	private static int segment = 0;
-	/**
-	 * sauvegarde les entity du stage
-	 * @param stage
-	 */
-//	@Deprecated
-//	public static void writeLevel(Stage stage){
-//	   FileHandle file = new FileHandle("data/foo.txt");
-//	   String s;
-//	   for (Actor a : stage.getActors()) {
-//		   if(a instanceof Entity){
-//			   s = a.getName() + ";" + (a.getX()/GameConstants.BLOCK_WIDTH) + ";" + (a.getY()/GameConstants.BLOCK_HEIGHT) + "\n";
-//			   file.writeString(s, true);
-//		   }
-//	   }
-//	}
 	
-	/**
-	 * lit un fichier pour constuire le stage - Entity;x;y/
-	 * @return le stage créé
-	 */
-//	public static Stage readLevel(String level){
-//
-////		Gdx.app.log(RollingCat.LOG, "retriving level file...");
-////		
-////		FileHandle file = Gdx.files.internal("data/file.txt");
-////		
-////		Gdx.app.log(RollingCat.LOG, "done.");
-////		Gdx.app.log(RollingCat.LOG, "parsing level file...");
-////		
-////		String s = file.readString();
-////		
-//		//level = InternetManager.getLevelOnServer(1);
-//		LevelBuilder.build(level, stage);
-//	}
-//	
+	
 	/**
 	 * ajoute les acteurs au stage
 	 * @param s la string du niveau
@@ -144,8 +111,13 @@ public class LevelBuilder {
 		return items;
 	}
 	
+	/**
+	 * 
+	 * @param x abscisse de l'entité
+	 * @return true si l'entité est la première de l'écran
+	 */
 	private static boolean isFirstOfScreen(float x){
-		if(Math.floor(x / GameConstants.COLS) > segment){
+		if(Math.floor(x / (GameConstants.COLS + 1)) > segment){
 			segment ++;
 			return true;
 		}
