@@ -68,7 +68,7 @@ public class GameScreen implements Screen{
 	 * translate la camera si le chat est au bout de l'ecran
 	 */
 	private void updateCamPos() {
-		if(stage.getCamera().position.x + GameConstants.DISPLAY_WIDTH / 2 - GameConstants.BLOCK_WIDTH * 2 < cat.getX()){
+		if(stage.getCamera().position.x + GameConstants.DISPLAY_WIDTH / 2 - GameConstants.BLOCK_WIDTH * 3 < cat.getX()){
 			stage.getCamera().translate(GameConstants.VIEWPORT_WIDTH, 0, 0);
 			box.empty();
 			box.fill();
