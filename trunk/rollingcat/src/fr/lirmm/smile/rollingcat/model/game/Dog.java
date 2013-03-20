@@ -19,10 +19,10 @@ import fr.lirmm.smile.rollingcat.spine.SkeletonData;
 public class Dog extends Entity {
 	
 //	
-//	SkeletonData skeletonData;
-//	Skeleton skeleton;
-//	Animation animation;
-//	float time;
+	SkeletonData skeletonData;
+	Skeleton skeleton;
+	Animation animation;
+	float time;
 	
 	/**
 	 * Touchable enabled
@@ -34,21 +34,21 @@ public class Dog extends Entity {
 		super(x, y, GameConstants.TEXTURE_DOG);
 		final String name = "skeleton"; //skeleton
 //		
-//		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/dog-atlas.atlas"));
-//		SkeletonBinary binary = new SkeletonBinary(atlas);
-//		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/skeleton.skel"));
-//		animation = binary.readAnimation(Gdx.files.internal("data/skeleton-stand.anim"), skeletonData);
-//
-//		skeleton = new Skeleton(skeletonData);
-//		skeleton.setToBindPose();
-//
-//		Bone root = skeleton.getRootBone();
-//		root.setScaleX(0.35f * GameConstants.SCALE);
-//		root.setScaleY(0.35f * GameConstants.SCALE);
-//		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.4f);
-//		root.setY(getY());
-//		
-//		time = new Random().nextFloat();
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/dog-atlas.atlas"));
+		SkeletonBinary binary = new SkeletonBinary(atlas);
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/skeleton.skel"));
+		animation = binary.readAnimation(Gdx.files.internal("data/skeleton-stand.anim"), skeletonData);
+
+		skeleton = new Skeleton(skeletonData);
+		skeleton.setToBindPose();
+
+		Bone root = skeleton.getRootBone();
+		root.setScaleX(0.35f * GameConstants.SCALE);
+		root.setScaleY(0.35f * GameConstants.SCALE);
+		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.4f);
+		root.setY(getY());
+		
+		time = new Random().nextFloat();
 	}
 	
 	@Override
@@ -61,14 +61,14 @@ public class Dog extends Entity {
 		return Actions.moveTo(this.getX() - GameConstants.BLOCK_WIDTH, this.getY(), 0.2f, Interpolation.pow2Out);
 		
 	}
-//	
-//	@Override
-//	public void draw(SpriteBatch batch, float deltaParent){
-//		time += Gdx.graphics.getDeltaTime();
-//		animation.apply(skeleton, time, true);
-//		skeleton.updateWorldTransform();
-//		skeleton.update(Gdx.graphics.getDeltaTime());
-//		skeleton.draw(batch);
-//	}
+	
+	@Override
+	public void draw(SpriteBatch batch, float deltaParent){
+		time += Gdx.graphics.getDeltaTime();
+		animation.apply(skeleton, time, true);
+		skeleton.updateWorldTransform();
+		skeleton.update(Gdx.graphics.getDeltaTime());
+		skeleton.draw(batch);
+	}
 	
 }
