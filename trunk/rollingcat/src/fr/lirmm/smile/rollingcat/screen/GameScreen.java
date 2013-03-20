@@ -17,7 +17,6 @@ import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 public class GameScreen implements Screen{
 
@@ -69,11 +68,11 @@ public class GameScreen implements Screen{
 	 * translate la camera si le chat est au bout de l'ecran
 	 */
 	private void updateCamPos() {
-		if(stage.getCamera().position.x + GameConstants.DISPLAY_WIDTH / 2 < cat.getX()){
-			stage.getCamera().translate(GameConstants.DISPLAY_WIDTH, 0, 0);
+		if(stage.getCamera().position.x + GameConstants.DISPLAY_WIDTH / 2 - GameConstants.BLOCK_WIDTH * 2 < cat.getX()){
+			stage.getCamera().translate(GameConstants.VIEWPORT_WIDTH, 0, 0);
 			box.empty();
 			box.fill();
-			box.setX(box.getX() + GameConstants.DISPLAY_WIDTH);
+			box.setX(box.getX() + GameConstants.VIEWPORT_WIDTH);
 			mc.stop();
 		}
 		

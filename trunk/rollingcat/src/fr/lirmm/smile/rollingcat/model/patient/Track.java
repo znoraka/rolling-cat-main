@@ -60,10 +60,10 @@ public class Track {
 	private void findSegments() {
 		indNextSegment.add(0);
 		for (int i = 0; i < track.size(); i++) {
-			if((int)(track.get(i)[0] / GameConstants.DISPLAY_WIDTH) == indNextSegment.size()){
+			if(Math.floor((track.get(i)[0] / GameConstants.DISPLAY_WIDTH)) == indNextSegment.size()){
 				indNextSegment.add(i);
 			}
-			track.get(i)[0] = track.get(i)[0] - GameConstants.DISPLAY_WIDTH * (indNextSegment.size() - 1);
+			track.get(i)[0] = track.get(i)[0] - GameConstants.VIEWPORT_WIDTH * (indNextSegment.size() - 1);
 		}
 		indNextSegment.add(track.size() - 1);
 	}

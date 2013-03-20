@@ -30,10 +30,10 @@ public interface GameConstants {
 	public static final int ROWS = 12;
 	
 	public static final float BLOCK_WIDTH = DISPLAY_WIDTH / (COLS+2);
-	public static final float BLOCK_HEIGHT = DISPLAY_HEIGHT / (ROWS+2);
+	public static final float BLOCK_HEIGHT = DISPLAY_HEIGHT / (ROWS + 2);
 	
-	public static final int VIEWPORT_WIDTH = DISPLAY_WIDTH;
-	public static final int VIEWPORT_HEIGHT = DISPLAY_HEIGHT;
+	public static final int VIEWPORT_WIDTH = (int) (BLOCK_WIDTH * COLS);
+	public static final int VIEWPORT_HEIGHT = (int) (BLOCK_HEIGHT * ROWS);
 	
 	public static final float SPEED = 0.25f;
 	public static final float ENTITY_SPEED = 3f;
