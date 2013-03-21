@@ -25,7 +25,7 @@ public class Entity extends Image implements EntityModel {
 //		super(TextureFetcher.getRegions(name).get(0));
 		this.setX(x * GameConstants.BLOCK_WIDTH);
 		this.setY(y * GameConstants.BLOCK_HEIGHT);
-		this.setBounds(x * GameConstants.BLOCK_WIDTH, y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+//		this.setBounds(x * GameConstants.BLOCK_WIDTH, y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 		this.setWidth(GameConstants.BLOCK_WIDTH);
 		this.setHeight(GameConstants.BLOCK_HEIGHT);
         this.anim = new Animation(0.25f, GdxRessourcesGetter.getRegions(name));

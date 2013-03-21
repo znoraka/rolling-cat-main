@@ -11,6 +11,7 @@ import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
+import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 
@@ -52,6 +53,7 @@ public class LoadingScreen implements Screen {
 	@Override
 	public void show() {
 		InternetManager.fetchLevel(patient.getID(), 0);
+        InternetManager.newGameSession(Track.GAME);
 		texture = new Texture("data/loading.png");
 		batch = getSpriteBatch();
 	}
