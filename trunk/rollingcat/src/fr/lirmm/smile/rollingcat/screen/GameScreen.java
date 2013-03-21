@@ -93,8 +93,8 @@ public class GameScreen implements Screen{
 		backgroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND);
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		cat = (Cat) stage.getActors().get(0);
-		box = new Box(GameConstants.COLS / 2, 0);
-		stage.addActor(box);
+		box = (Box) stage.getActors().get(1);//new Box(GameConstants.COLS / 2, 0);
+		//stage.addActor(box);
 		mc = new MouseCursorGame(stage, cat, box);
 		Gdx.input.setInputProcessor(mc);
 		duration = 0;
