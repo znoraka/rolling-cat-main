@@ -28,10 +28,16 @@ public class Box extends Entity{
 		atlas = getAtlas();
 		this.setHeight(2 * this.getHeight());
 		this.setWidth(2 * this.getWidth());
-		this.items = LevelBuilder.getItems();
+//		this.items = LevelBuilder.getItems();
+//		this.item = items.get(0);
+		this.setZIndex(2);
+	}
+
+	public void setItems(ArrayList<Integer> items)
+	{
+		this.items = items;
 		this.item = items.get(0);
 	}
-	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
 		if(item == BONE)

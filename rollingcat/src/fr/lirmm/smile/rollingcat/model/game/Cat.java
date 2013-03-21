@@ -43,7 +43,7 @@ public class Cat extends Entity {
 		super(x,y, GameConstants.TEXTURE_CAT);
 		nbcoin = 0;
 		done = false;
-//		this.setTouchable(Touchable.disabled);
+		//		this.setTouchable(Touchable.disabled);
 		
 		final String name = "cat-skeleton";
 
@@ -78,7 +78,6 @@ public class Cat extends Entity {
         pickUp(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY()/*+ GameConstants.BLOCK_HEIGHT / 2*/, false));
         hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, false));
         hitElementTop(stage.hit(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, false));
-        
         if(this.getActions().size == 0)
         	state = HITTING;
         
