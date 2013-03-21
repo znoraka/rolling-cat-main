@@ -91,7 +91,7 @@ public class PatientScreen implements Screen {
 		play = new TextButton("Play", style);
 		play.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new LoadingScreen(game, patient));
+					game.setScreen(new LevelSelectScreen(game, patient));
 				}
 			});
 		

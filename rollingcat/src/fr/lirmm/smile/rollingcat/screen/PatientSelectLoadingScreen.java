@@ -46,7 +46,9 @@ public class PatientSelectLoadingScreen implements Screen {
 
 	@Override
 	public void show() {
+		InternetManager.getGameId();
 		InternetManager.retrievePatients();
+		Gdx.app.log(RollingCat.LOG, "loading patient select screen");
 		texture = new Texture("data/loading.png");
 		batch = getSpriteBatch();
 		doctor = Doctor.getDoctor();

@@ -75,7 +75,7 @@ public class Cat extends Entity {
 	public void move(Stage stage){
         falling(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + 1 - GameConstants.BLOCK_HEIGHT, false));
         setVelocity(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH * 1.5f, this.getY() - GameConstants.BLOCK_HEIGHT / 2, false));
-        pickUp(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY()/*+ GameConstants.BLOCK_HEIGHT / 2*/, false));
+        pickUp(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), false));
         hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, false));
         hitElementTop(stage.hit(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, false));
         if(this.getActions().size == 0)

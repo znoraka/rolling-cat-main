@@ -21,7 +21,9 @@ public class InternetManager{
 	private static String hostName = "localhost";
 	private static int port = 9000;
 	private static String key = "PLAY_SESSION";
+	private static String gameid;
 	public static String value;
+	private static String sessionid;
 	
 	
 	/**
@@ -93,6 +95,35 @@ public class InternetManager{
 	}
 	
 	/**
+	 * envoie une requete pour l'ID du jeu sur le serveur
+	 */
+	public static void getGameId(){
+		Gdx.app.log(RollingCat.LOG, "preparing game id retrieve request...");
+		
+		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
+		
+		httpGet.setUrl("http://" + hostName + ":" + port + "/game/"+RollingCat.LOG+"/getid");
+		httpGet.setHeader(key, value);
+		Gdx.app.log(RollingCat.LOG, "sending game id retrieve request...");
+		
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+			
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				gameid = httpResponse.getResultAsString();
+				Gdx.app.log(RollingCat.LOG, "game id : " + gameid);
+	           	Gdx.app.log(RollingCat.LOG, "retrieving complete");
+
+		    }
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
+				Gdx.app.log(RollingCat.LOG, "something went wrong, could not retrieve game id");
+			}});
+	}
+	
+	/**
 	 * set la date dans la track
 	 * @param track
 	 */
@@ -124,15 +155,15 @@ public class InternetManager{
 	 * set la date dans la track
 	 * @param track
 	 */
-	public static void newGameSession(){
+	public static void newGameSession(String gameType){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/gamesession/new ");
 		OrderedMap<String, String> map = new OrderedMap<String, String>();
-		map.put("name", "rolling cat");
+		map.put("name", gameType);
 		map.put("comment", "no comment");
 		map.put("patient_id", "5149766c44ae21b28266b0f4");
-		map.put("game_id", "5149925444ae351712a0e106");
+		map.put("game_id", gameid);
 		Json json = new Json();
 		json.setOutputType(JsonWriter.OutputType.json);
 		httpGet.setContent(json.toJson(map));
@@ -143,8 +174,8 @@ public class InternetManager{
 			
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				String s = httpResponse.getResultAsString();
-				Gdx.app.log(RollingCat.LOG, "game session : " + s);
+				sessionid = httpResponse.getResultAsString();
+				Gdx.app.log(RollingCat.LOG, "game session : " + sessionid);
 	           	Gdx.app.log(RollingCat.LOG, "success");
 		    }
 
@@ -194,7 +225,7 @@ public class InternetManager{
 	public static void sendEvents(String events){
 		Gdx.app.log(RollingCat.LOG, "preparing send list event request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/event/"+"5149933944ae351712a0e20e"+"/newList");
+		httpGet.setUrl("http://" + hostName + ":" + port + "/event/"+sessionid+"/newList");
 		httpGet.setContent(events);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "application/json");

@@ -104,7 +104,7 @@ public class AssessmentScreen implements Screen {
                 parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
                 parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
                 EventManager.create(EventManager.start_game_event_type, parameters); 
-                InternetManager.newGameSession();
+                InternetManager.newGameSession(Track.ASSESSEMENT);
         }
 
         @Override
