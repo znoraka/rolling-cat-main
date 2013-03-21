@@ -13,12 +13,9 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -37,10 +34,11 @@ public class LevelSelectScreen implements Screen {
 	private BitmapFont font;
 	private Stage stage;
 	private Skin skin;
-	private TextButton button, next, previous;
+	private TextButton start, next, previous;
 	private ArrayList<Label> labels;
 	private int currentButton;
 	private Label label;
+	private int level;
 	
 	private final float X = (GameConstants.DISPLAY_WIDTH / 2);
 
@@ -78,31 +76,42 @@ public class LevelSelectScreen implements Screen {
 
 	private void changeButtonsSize() {
 		
-		label = labels.get(currentButton);
-		label.setVisible(true);
-		label.setZIndex(3);
-		label.addAction(Actions.parallel(Actions.moveTo(X  - BIG_WIDTH / 2, BIG_Y - BIG_HEIGHT / 2, SPEED)));
-		label.addAction(Actions.parallel(Actions.sizeTo(BIG_WIDTH, BIG_HEIGHT, SPEED)));
-		
-		label = labels.get(currentButton - 1);
-		label.setVisible(true);
-		label.setZIndex(2);
-		label.addAction(Actions.parallel(Actions.moveTo(X - MEDIUM_WIDTH / 2, MEDIUM_Y_TOP - MEDIUM_HEIGHT / 2, SPEED)));
-		label.addAction(Actions.parallel(Actions.sizeTo(MEDIUM_WIDTH, MEDIUM_HEIGHT, SPEED)));
-		
-		label = labels.get((currentButton + 1)%labels.size());
-		label.setVisible(true);
-		label.setZIndex(2);
-		label.addAction(Actions.parallel(Actions.moveTo(X - MEDIUM_WIDTH / 2, MEDIUM_Y_BOTTOM - MEDIUM_HEIGHT / 2, SPEED)));
-		label.addAction(Actions.parallel(Actions.sizeTo(MEDIUM_WIDTH, MEDIUM_HEIGHT, SPEED)));
-		
-		label = labels.get(currentButton - 2);
+		label = labels.get((labels.size() - (labels.size() % 17) + currentButton)%labels.size());
+		System.out.println("very small top : " + label.getName());
+		label.setVisible(false);
+		label.setHeight(0);
+		label.setWidth(0);
+
+		label = labels.get((labels.size() - (labels.size() % 3) + currentButton)%labels.size());
+		System.out.println("small top : " + label.getName());
 		label.setVisible(true);
 		label.setZIndex(1);
 		label.addAction(Actions.parallel(Actions.moveTo(X - SMALL_WIDTH / 2, SMALL_Y_TOP - SMALL_HEIGHT / 2, SPEED)));
 		label.addAction(Actions.parallel(Actions.sizeTo(SMALL_WIDTH, SMALL_HEIGHT, SPEED)));
 		
+		label = labels.get((currentButton - 1)<0?labels.size() - 1:currentButton - 1);
+		System.out.println("medium top : " + label.getName());
+		label.setVisible(true);
+		label.setZIndex(2);
+		label.addAction(Actions.parallel(Actions.moveTo(X - MEDIUM_WIDTH / 2, MEDIUM_Y_TOP - MEDIUM_HEIGHT / 2, SPEED)));
+		label.addAction(Actions.parallel(Actions.sizeTo(MEDIUM_WIDTH, MEDIUM_HEIGHT, SPEED)));
+		
+		label = labels.get(currentButton);
+		System.out.println("big : " + label.getName());
+		label.setVisible(true);
+		label.setZIndex(3);
+		label.addAction(Actions.parallel(Actions.moveTo(X  - BIG_WIDTH / 2, BIG_Y - BIG_HEIGHT / 2, SPEED)));
+		label.addAction(Actions.parallel(Actions.sizeTo(BIG_WIDTH, BIG_HEIGHT, SPEED)));
+		
+		label = labels.get((currentButton + 1)%labels.size());
+		System.out.println("medium bottom : " + label.getName());
+		label.setVisible(true);
+		label.setZIndex(2);
+		label.addAction(Actions.parallel(Actions.moveTo(X - MEDIUM_WIDTH / 2, MEDIUM_Y_BOTTOM - MEDIUM_HEIGHT / 2, SPEED)));
+		label.addAction(Actions.parallel(Actions.sizeTo(MEDIUM_WIDTH, MEDIUM_HEIGHT, SPEED)));
+		
 		label = labels.get((currentButton + 2)%labels.size());
+		System.out.println("small bottom : " + label.getName());
 		label.setVisible(true);
 		label.setZIndex(1);
 		label.addAction(Actions.parallel(Actions.moveTo(X - SMALL_WIDTH / 2, SMALL_Y_BOTTOM - SMALL_HEIGHT / 2, SPEED)));
@@ -112,11 +121,9 @@ public class LevelSelectScreen implements Screen {
 		label.setVisible(false);
 		label.setHeight(0);
 		label.setWidth(0);
+
 		
-		label = labels.get(currentButton - 3);
-		label.setVisible(false);
-		label.setHeight(0);
-		label.setWidth(0);
+		System.out.println("-----------");
 
 
 		
@@ -152,22 +159,18 @@ public class LevelSelectScreen implements Screen {
 		labelStyle.background = skin.getDrawable("button_up");
 		
 		
-		button = new TextButton("go", style);
-		button.addListener(new ClickListener() {
+		start = new TextButton("Start", style);
+		start.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new LoadingScreen(game, patient));
+					game.setScreen(new LoadingScreen(game, patient, level));
 				}
 			});
-		
-		
 		
 		previous = new TextButton("Previous", style);
 		previous.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					if(currentButton > 3)
-						currentButton--;
-					
-
+					currentButton = (currentButton < 1)?(labels.size() - 1):currentButton - 1;
+;
 					changeButtonsSize();
 				}
 			});
@@ -175,7 +178,7 @@ public class LevelSelectScreen implements Screen {
 		next = new TextButton("Next", style);
 		next.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					currentButton = (currentButton + 1)%labels.size();
+					currentButton = (currentButton > labels.size() - 2)?0:currentButton + 1;
 					
 					changeButtonsSize();
 				}
@@ -189,10 +192,12 @@ public class LevelSelectScreen implements Screen {
 		
 		stage.addActor(previous);
 		stage.addActor(next);
+		stage.addActor(start);
 		
 		changeButtonsSize();
 		
-		next.setX(GameConstants.DISPLAY_WIDTH - next.getHeight());
+		next.setX(GameConstants.DISPLAY_WIDTH - next.getWidth());
+		start.setX(GameConstants.DISPLAY_WIDTH / 2 - start.getWidth() / 2);
 		
 //		stage.addActor(table);
 
@@ -231,8 +236,7 @@ public class LevelSelectScreen implements Screen {
 			label.setX(GameConstants.DISPLAY_WIDTH / 2 - label.getWidth() / 2);
 			labels.add(label);
 			stage.addActor(label);
-			label.setOriginY(label.getHeight() / 2);
-			label.setOriginX(label.getWidth() / 2);
+			label.setVisible(false);
 
 		}
 	}

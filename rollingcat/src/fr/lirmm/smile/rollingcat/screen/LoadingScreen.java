@@ -23,10 +23,12 @@ public class LoadingScreen implements Screen {
 	private Texture texture;
 	private SpriteBatch batch;
 	private String level;
+	private int levelID;
 
-	public LoadingScreen(RollingCat game, Patient patient){
+	public LoadingScreen(RollingCat game, Patient patient, int levelID){
 		this.game = game;
 		this.patient = patient;
+		this.levelID = levelID;
 	}
 	
 	@Override
