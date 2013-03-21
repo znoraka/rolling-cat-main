@@ -23,6 +23,7 @@ public class StopBlock extends Block {
 		timer = 0;
 		sr = new ShapeRenderer();
 		draw = false;
+		this.setZIndex(1);
 	}
 	
 	/**

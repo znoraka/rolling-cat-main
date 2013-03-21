@@ -30,8 +30,8 @@ public class Entity extends Image implements EntityModel {
 		this.setHeight(GameConstants.BLOCK_HEIGHT);
         this.anim = new Animation(0.25f, GdxRessourcesGetter.getRegions(name));
         this.name = name;
+        this.setZIndex(1);
 	}
-	
 	
 	
 	@Override
