@@ -75,10 +75,10 @@ public class PatientsManager {
 		lastName = (s != null)?s:"unkown";
 		
 		l = json.readValue("birthdate", Long.class, jsonData);
-		birthDate = l;
+		birthDate = (l != null)?l:0;
 		
 		l = json.readValue("strokedate", Long.class, jsonData);
-		strokeDate = l;
+		strokeDate = (l != null)?l:0;
 		
 		s = json.readValue("handed", String.class, jsonData);
 		if(s != null)

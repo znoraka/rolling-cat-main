@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -34,7 +35,7 @@ public class LevelSelectScreen implements Screen {
 	private BitmapFont font;
 	private Stage stage;
 	private Skin skin;
-	private TextButton start, next, previous;
+	private TextButton start, next, previous, back;
 	private ArrayList<Label> labels;
 	private int currentButton;
 	private Label label;
@@ -59,6 +60,8 @@ public class LevelSelectScreen implements Screen {
 	
 	private final float SPEED = 0.2f;
 	
+	private float elapsedTime;
+	
 	public LevelSelectScreen(RollingCat game, Patient patient){
 		this.game = game;
 		this.patient = patient;
@@ -69,49 +72,58 @@ public class LevelSelectScreen implements Screen {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		if(next.isPressed() & elapsedTime > 0.4f)
+			next();
+		
+		if(previous.isPressed() & elapsedTime > 0.4f)
+			previous();
+		
+		if(next.isPressed() || previous.isPressed())
+			elapsedTime += delta;
+		else
+			elapsedTime = 0;
+		
 		stage.draw();
 		stage.act(delta);
+		
+		
+		
+		
 		
 	}
 
 	private void changeButtonsSize() {
 		
-		label = labels.get((labels.size() - (labels.size() % 17) + currentButton)%labels.size());
-		System.out.println("very small top : " + label.getName());
+		label = labels.get((labels.size() - 3 + currentButton)%labels.size());
 		label.setVisible(false);
-		label.setHeight(0);
-		label.setWidth(0);
-
-		label = labels.get((labels.size() - (labels.size() % 3) + currentButton)%labels.size());
-		System.out.println("small top : " + label.getName());
+		label.addAction(Actions.parallel(Actions.moveTo(X - SMALL_WIDTH / 4, SMALL_Y_TOP - SMALL_HEIGHT / 4, SPEED)));
+		label.addAction(Actions.parallel(Actions.sizeTo(SMALL_WIDTH / 2, SMALL_HEIGHT / 2, SPEED)));
+		
+		label = labels.get((labels.size() - 2 + currentButton)%labels.size());
 		label.setVisible(true);
 		label.setZIndex(1);
 		label.addAction(Actions.parallel(Actions.moveTo(X - SMALL_WIDTH / 2, SMALL_Y_TOP - SMALL_HEIGHT / 2, SPEED)));
 		label.addAction(Actions.parallel(Actions.sizeTo(SMALL_WIDTH, SMALL_HEIGHT, SPEED)));
 		
 		label = labels.get((currentButton - 1)<0?labels.size() - 1:currentButton - 1);
-		System.out.println("medium top : " + label.getName());
 		label.setVisible(true);
 		label.setZIndex(2);
 		label.addAction(Actions.parallel(Actions.moveTo(X - MEDIUM_WIDTH / 2, MEDIUM_Y_TOP - MEDIUM_HEIGHT / 2, SPEED)));
 		label.addAction(Actions.parallel(Actions.sizeTo(MEDIUM_WIDTH, MEDIUM_HEIGHT, SPEED)));
 		
 		label = labels.get(currentButton);
-		System.out.println("big : " + label.getName());
 		label.setVisible(true);
 		label.setZIndex(3);
 		label.addAction(Actions.parallel(Actions.moveTo(X  - BIG_WIDTH / 2, BIG_Y - BIG_HEIGHT / 2, SPEED)));
 		label.addAction(Actions.parallel(Actions.sizeTo(BIG_WIDTH, BIG_HEIGHT, SPEED)));
 		
 		label = labels.get((currentButton + 1)%labels.size());
-		System.out.println("medium bottom : " + label.getName());
 		label.setVisible(true);
 		label.setZIndex(2);
 		label.addAction(Actions.parallel(Actions.moveTo(X - MEDIUM_WIDTH / 2, MEDIUM_Y_BOTTOM - MEDIUM_HEIGHT / 2, SPEED)));
 		label.addAction(Actions.parallel(Actions.sizeTo(MEDIUM_WIDTH, MEDIUM_HEIGHT, SPEED)));
 		
 		label = labels.get((currentButton + 2)%labels.size());
-		System.out.println("small bottom : " + label.getName());
 		label.setVisible(true);
 		label.setZIndex(1);
 		label.addAction(Actions.parallel(Actions.moveTo(X - SMALL_WIDTH / 2, SMALL_Y_BOTTOM - SMALL_HEIGHT / 2, SPEED)));
@@ -119,15 +131,8 @@ public class LevelSelectScreen implements Screen {
 		
 		label = labels.get((currentButton + 3)%labels.size());
 		label.setVisible(false);
-		label.setHeight(0);
-		label.setWidth(0);
-
-		
-		System.out.println("-----------");
-
-
-		
-
+		label.addAction(Actions.parallel(Actions.moveTo(X - SMALL_WIDTH / 4, SMALL_Y_BOTTOM - SMALL_HEIGHT / 4, SPEED)));
+		label.addAction(Actions.parallel(Actions.sizeTo(SMALL_WIDTH / 2, SMALL_HEIGHT / 2, SPEED)));
 	}
 
 	@Override
@@ -149,6 +154,8 @@ public class LevelSelectScreen implements Screen {
 		table.setHeight(GameConstants.DISPLAY_HEIGHT);
 		table.setWidth(GameConstants.DISPLAY_WIDTH);
 		
+		stage.addActor(table);
+		
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("button_up");
 		style.down = skin.getDrawable("button_down");
@@ -166,41 +173,54 @@ public class LevelSelectScreen implements Screen {
 				}
 			});
 		
-		previous = new TextButton("Previous", style);
-		previous.addListener(new ClickListener() {
+		back = new TextButton("Back", style);
+		back.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					currentButton = (currentButton < 1)?(labels.size() - 1):currentButton - 1;
-;
-					changeButtonsSize();
+					game.setScreen(new PatientScreen(game, patient));
 				}
 			});
+		
+		previous = new TextButton("Previous", style);
+		previous.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				previous();
+				return true;
+			}
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				
+			}
+		});
 		
 		next = new TextButton("Next", style);
-		next.addListener(new ClickListener() {
-				public void clicked (InputEvent event, float x, float y) {
-					currentButton = (currentButton > labels.size() - 2)?0:currentButton + 1;
-					
-					changeButtonsSize();
-				}
-			});
-		
+		next.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				next();
+				return true;
+			}
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				
+			}
+		});
+//		
 		createLabels(labelStyle);
 		
-		currentButton = 10;
+		currentButton = 0;
 
 		Gdx.input.setInputProcessor(stage);
 		
 		stage.addActor(previous);
 		stage.addActor(next);
 		stage.addActor(start);
+		stage.addActor(back);
 		
 		changeButtonsSize();
 		
 		next.setX(GameConstants.DISPLAY_WIDTH - next.getWidth());
-		start.setX(GameConstants.DISPLAY_WIDTH / 2 - start.getWidth() / 2);
+		start.setX(GameConstants.DISPLAY_WIDTH - start.getWidth());
+		start.setY(GameConstants.DISPLAY_HEIGHT - start.getHeight()); 
+		back.setX(0);
+		back.setY(GameConstants.DISPLAY_HEIGHT - start.getHeight()); 
 		
-//		stage.addActor(table);
-
 	}
 
 	@Override
@@ -228,17 +248,27 @@ public class LevelSelectScreen implements Screen {
 	}
 	
 	private void createLabels(LabelStyle style) {
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 10; i++) {
 			label = new Label(""+i, style);
 			label.setName(""+i);
-			label.setHeight(50);
-			label.setWidth(100);
 			label.setX(GameConstants.DISPLAY_WIDTH / 2 - label.getWidth() / 2);
 			labels.add(label);
 			stage.addActor(label);
 			label.setVisible(false);
 
 		}
+	}
+	
+	private void next(){
+		currentButton = (currentButton > labels.size() - 2)?0:currentButton + 1;
+		changeButtonsSize();
+		elapsedTime = 0;
+	}
+	
+	private void previous(){
+		currentButton = (currentButton < 1)?(labels.size() - 1):currentButton - 1;
+		changeButtonsSize();
+		elapsedTime = 0;
 	}
 	
 

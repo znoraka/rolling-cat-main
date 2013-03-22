@@ -39,10 +39,10 @@ public class Fan extends Entity {
 		if(!given){
 			given = true;
 			this.setHeight(this.getHeight() + GameConstants.BLOCK_HEIGHT);
-			return Actions.sequence(Actions.moveTo(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, GameConstants.SPEED),Actions.moveBy(0, (GameConstants.ROWS - this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT, 1.5f, Interpolation.pow2In));
+			return Actions.sequence(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED),Actions.moveBy(0, (GameConstants.ROWS - this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT, 1.5f, Interpolation.pow2In));
 		}
 		else
-			return Actions.sequence(Actions.moveBy(0, - GameConstants.BLOCK_HEIGHT, 0.4f, Interpolation.pow2Out), Actions.moveBy(0, (GameConstants.ROWS - this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, 1.5f, Interpolation.pow2In));
+			return Actions.sequence(Actions.moveBy(0, - GameConstants.BLOCK_HEIGHT, 0.4f, Interpolation.pow2Out), Actions.moveTo(this.getX(), GameConstants.DISPLAY_HEIGHT, 1.5f, Interpolation.pow2In));
 
 	}
 
