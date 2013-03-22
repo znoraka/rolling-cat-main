@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -40,7 +41,7 @@ public class Cat extends Entity {
 	 * @param y
 	 */
 	public Cat(float x, float y){
-		super(x,y, GameConstants.TEXTURE_CAT);
+		super(x,12, GameConstants.TEXTURE_CAT);
 		nbcoin = 0;
 		done = false;
 		//		this.setTouchable(Touchable.disabled);
@@ -75,14 +76,24 @@ public class Cat extends Entity {
 	public void move(Stage stage){
         falling(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + 1 - GameConstants.BLOCK_HEIGHT, false));
         setVelocity(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH * 1.5f, this.getY() - GameConstants.BLOCK_HEIGHT / 2, false));
-        pickUp(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), false));
+        pickUp(stage.hit(this.getX(), this.getY(), false));
         hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, false));
         hitElementTop(stage.hit(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, false));
         if(this.getActions().size == 0)
         	state = HITTING;
+//		
+//		if(state == FALLING)
+//			falling(stage.hit(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() - 1) * GameConstants.BLOCK_HEIGHT, false));
+//		
+//		else if(state == FLYING)
+//			hitElementRight(stage.hit(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, this.getY(), false));
+//		
+//		else if(state == HITTING)
+//			setVelocity(stage.hit(this.getX))
         
 		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.6f);
 		root.setY(getY());
+		
 	}
 	
 	
@@ -119,9 +130,9 @@ public class Cat extends Entity {
 	 * @param hit
 	 */
 	private void hitElementTop(Actor hit) {
-		if(hit instanceof Wasp){
+		if(hit instanceof Wasp & state == FLYING){
 			this.getActions().clear();
-			this.addAction(((Wasp) hit).getActionOnCat());
+			state = FALLING;
 		}
 		else if (hit instanceof GroundBlock & state == FLYING){
 			this.getActions().clear();

@@ -3,6 +3,7 @@ package fr.lirmm.smile.rollingcat.model.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -14,6 +15,7 @@ public class Entity extends Image implements EntityModel {
 	protected Animation anim;
 	private float d;
 	private String name;
+	private Rectangle bounds;
 	
 	/**
 	 * 
@@ -31,6 +33,7 @@ public class Entity extends Image implements EntityModel {
         this.anim = new Animation(0.25f, GdxRessourcesGetter.getRegions(name));
         this.name = name;
         this.setZIndex(1);
+        this.bounds = new Rectangle(x * GameConstants.BLOCK_WIDTH, y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 	}
 	
 	
