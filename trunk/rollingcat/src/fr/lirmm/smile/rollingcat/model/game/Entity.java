@@ -74,7 +74,7 @@ public class Entity extends Image implements EntityModel {
 	 * @return la case en x dans laquelle se trouve le chat
 	 */
 	public int getXOnGrid(){
-		return (int) (this.getX()/GameConstants.BLOCK_WIDTH);
+		return (int) ((this.getX() + GameConstants.BLOCK_WIDTH / 2)/GameConstants.BLOCK_WIDTH);
 	}
 	
 	/**

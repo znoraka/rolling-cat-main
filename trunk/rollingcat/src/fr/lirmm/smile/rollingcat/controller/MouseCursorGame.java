@@ -1,9 +1,10 @@
 package fr.lirmm.smile.rollingcat.controller;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.stream.EventFilter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -16,8 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.OrderedMap;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
-
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
@@ -26,6 +25,7 @@ import fr.lirmm.smile.rollingcat.model.game.Carpet;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.game.Dog;
 import fr.lirmm.smile.rollingcat.model.game.Entity;
+import fr.lirmm.smile.rollingcat.model.game.Gap;
 import fr.lirmm.smile.rollingcat.model.game.Mouse;
 import fr.lirmm.smile.rollingcat.model.game.Spring;
 import fr.lirmm.smile.rollingcat.model.game.Wasp;
@@ -84,11 +84,9 @@ public class MouseCursorGame implements InputProcessor{
 		if(hoverTimer > GameConstants.HOVER_TIME)
 		{	
 			hoverTimer = 0;
-			if(actor instanceof Cat && item == Box.FEATHER){
-				cat.jump(actor.getXOnGrid() + 2, actor.getYOnGrid());
-				box.fill();
-				item = 0;
-				addEvent();
+			if(actor instanceof Gap && item == Box.FEATHER){
+				cat.jump();
+				this.trigger();
 			}
 		
 			else if(actor instanceof Mouse){

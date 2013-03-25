@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
@@ -31,10 +33,9 @@ public class Cat extends Entity {
 	private static final int WALKING = 4;
 	
 	private int state;
+	private int gold, silver, bronze;
 	
-	private Rectangle top;
-	private Rectangle right;
-	private Rectangle bottom;
+	private Rectangle top, right, bottom, left, veryBottom;
 	
 	SkeletonData skeletonData;
 	Skeleton skeleton;
@@ -48,10 +49,10 @@ public class Cat extends Entity {
 	 * @param y
 	 */
 	public Cat(float x, float y){
-		super(x,12, GameConstants.TEXTURE_CAT);
+		super(x,y, GameConstants.TEXTURE_CAT);
 		nbcoin = 0;
 		done = false;
-		//		this.setTouchable(Touchable.disabled);
+		this.setTouchable(Touchable.disabled);
 		
 		final String name = "cat-skeleton";
 
@@ -78,6 +79,8 @@ public class Cat extends Entity {
 		top = new Rectangle();
 		bottom = new Rectangle();
 		right = new Rectangle();
+		left = new Rectangle();
+		veryBottom = new Rectangle();
 	}
 	
 	/**
@@ -87,18 +90,25 @@ public class Cat extends Entity {
 	public void move(Stage stage){
 		top.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
 		bottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), 2, 2);
+		veryBottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() - (GameConstants.BLOCK_HEIGHT), 2, 2);
 		right.set(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
+		left.set(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
+		this.bounds.set(this.getX() + GameConstants.BLOCK_WIDTH / 4, this.getY() + GameConstants.BLOCK_HEIGHT / 4, this.getWidth() / 2, this.getHeight() / 2);
 		
-		if(state != FLYING)
+		if(state != FLYING & state != JUMPING)
 			state = FALLING;
+		
 		for (Actor actor : stage.getActors()) {
-			if(actor instanceof GroundBlock)
-				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
+			if(actor instanceof GroundBlock){
+				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible() & state != FLYING)
 					state = WALKING;
+				else if(((Entity) actor).getBounds().overlaps(veryBottom) & actor.isVisible() & (state == FLYING || state == JUMPING))
+					state = WALKING;
+			}
 			if(actor instanceof Fan)
 				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
 					state = FLYING;
-			if(actor instanceof Dog)
+			if(actor instanceof Dog & state == WALKING)
 				if(((Entity) actor).getBounds().overlaps(right) & actor.isVisible())
 					state = HITTING;
 			if(actor instanceof Wasp)
@@ -108,37 +118,48 @@ public class Cat extends Entity {
 				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
 					state = HITTING;
 			if(actor instanceof Target){
-				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
-					done = true;
-				if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
-					done = true;
-				if(((Entity) actor).getBounds().overlaps(right) & actor.isVisible())
+				if(((Entity) actor).getBounds().overlaps(bounds))
 					done = true;
 			}
+			if(actor instanceof Coin){
+				if(((Entity) actor).getBounds().overlaps(bounds) & actor.isVisible()){
+					if(((Coin) actor).getType() == Coin.BRONZE)
+						bronze++;
+					else if(((Coin) actor).getType() == Coin.SILVER)
+						silver++;
+					else if(((Coin) actor).getType() == Coin.GOLD)
+						gold++;
+					actor.setVisible(false);
+					actor.setTouchable(Touchable.disabled);
+				}
+			}
 			
+			if(actor instanceof Gap){
+				if(((Entity) actor).getBounds().overlaps(left) & actor.isVisible()){
+					if(state != JUMPING){
+						state = HITTING;
+						break;
+					}
+					else{
+						actor.setVisible(false);
+					}
+				}
+			}
 		}
 		
-//        falling(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + 1 - GameConstants.BLOCK_HEIGHT, false));
-//        setVelocity(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH * 1.5f, this.getY() - GameConstants.BLOCK_HEIGHT / 2, false));
-//        pickUp(stage.hit(this.getX(), this.getY(), false));
-//        hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, false));
-//        hitElementTop(stage.hit(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, false));
-//        if(this.getActions().size == 0)
-//        	state = HITTING;
-//		
 		if(state != JUMPING){
 			if(state == FALLING & this.getActions().size == 0){
 				this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() - 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
 			}
 			
 			else if(state == FLYING & this.getActions().size == 0)
-				this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
+				this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 0.75f));
 			
 			else if(state == WALKING & this.getActions().size == 0){
 				this.addAction(Actions.moveTo((this.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH, (this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
 			}
 			
-			else if(state == HITTING){
+			else if(state != JUMPING && state == HITTING){
 				this.getActions().clear();
 			}
 		}
@@ -146,137 +167,30 @@ public class Cat extends Entity {
 		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.6f);
 		root.setY(getY());
 		
-		System.out.println(state);
 		
-	}
-	
-	
-	private void falling(Actor hit) {
-		//si le chat n'a rien en dessous de lui
-		if(!(hit instanceof Block) && this.getActions().size == 0){
-			state = FALLING;
-			this.getActions().clear();
-			this.addAction(Actions.moveBy(0, - GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
-		}
-
-	}
-
-	/**
-	 * vérifie dans quoi le chat tape à droite
-	 * @param hit
-	 */
-	private void hitElementRight(Actor hit) {
-		if(state != FALLING){
-			if(hit instanceof Dog){
-				this.getActions().clear();
-				this.addAction(((Dog) hit).getActionOnCat());
-				state = HITTING;
-			}
-			
-			if(hit instanceof Target){
-				done = true;
-			}
-		}
-	}
-	
-	/**
-	 * vérifie dans quoi le chat tape en haut
-	 * @param hit
-	 */
-	private void hitElementTop(Actor hit) {
-		if(hit instanceof Wasp & state == FLYING){
-			this.getActions().clear();
-			state = FALLING;
-		}
-		else if (hit instanceof GroundBlock & state == FLYING){
-			this.getActions().clear();
-			this.addAction(Actions.sequence(Actions.moveTo(hit.getX(), hit.getY() + GameConstants.BLOCK_HEIGHT * 2, GameConstants.SPEED * 2, Interpolation.pow2Out), Actions.moveTo(hit.getX(), hit.getY() + GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2In)));
-			state = WALKING;
-		}
-	}
-
-	/**
-	 * ramasse les coins et les bones
-	 * @param hit
-	 */
-	private void pickUp(Actor hit) {
-		if(hit instanceof Carpet){
-			this.getActions().clear();
-			this.addAction(((Carpet) hit).getActionOnCat());
-			state = HITTING;
-		}
-		if(hit instanceof Coin)
-		{
-			hit.setVisible(false);
-			nbcoin++;
-		}
-		else if (hit instanceof Mouse){
-			hit.setVisible(false);
-		}
-		
-	}
-
-	
-	/**
-	 * le bloc que l'on touche nous donne l'action à effectuer
-	 * @param hit l'acteur touché
-	 */
-	public void setVelocity(Actor hit) {
-		if(hit instanceof StopBlock)
-			((StopBlock) hit).updateTimer();
-		
-		if(hit instanceof Block & state != FLYING){
-			state = WALKING;
-			if(this.getActions().size == 0)
-				this.addAction(((Block) hit).getActionOnCat());
-		}
-		
-		else if(hit instanceof Spring){
-//			state = FLYING;
-			if(this.getActions().size == 0)
-				this.addAction(((Spring) hit).getActionOnCat());
-		}
-		
-		else if(hit instanceof Fan){
-			if(state == FALLING)
-				this.getActions().clear();
-			if(this.getActions().size == 0 ){
-				this.addAction(((Fan) hit).getActionOnCat());
-			}
-			state = FLYING;
-		}
 	}
 	
 	/**
 	 * initialise un saut
 	 */
-	public void jump(float xDest, float yDest){
+	public void jump(){
 		if(state != JUMPING)
 		{	
 			state = JUMPING;
-//			this.addAction(Actions.forever(Actions.moveTo(500, 500)));
-			this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, 0.5f)));
+			this.getActions().clear();
+			this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, GameConstants.SPEED * 2)));
 			this.addAction(Actions.parallel(Actions.sequence(
-					Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, 0.25f, Interpolation.pow2Out),
-					Actions.moveBy(0, - GameConstants.BLOCK_HEIGHT, 0.25f, Interpolation.pow2In)
-//					new Action() {
-//						
-//						@Override
-//						public boolean act(float delta) {
-//							jumpAnimation.apply(skeleton, -time, true);
-//							return true;
-//						}
-//					}
+					Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2Out),
+					Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2In),
+					new Action() {
+						
+						@Override
+						public boolean act(float delta) {
+							setStuffAfterJump();
+							return true;
+						}
+					}
 		)));
-//			this.addAction(Actions.sequence(
-//					Actions.moveTo(xDest * GameConstants.BLOCK_WIDTH, yDest * GameConstants.BLOCK_HEIGHT, 1),
-//					new Action() {
-//						@Override
-//						public boolean act(float delta) {
-//							jumping = false;
-//							return true;
-//						}}
-//					));
 		}
 	}
 
@@ -323,7 +237,31 @@ public class Cat extends Entity {
 		sr.rect(bottom.x, bottom.y, bottom.width, bottom.height);
 		sr.setColor(Color.GREEN);
 		sr.rect(right.x, right.y, right.width, right.height);
+		sr.setColor(Color.ORANGE);
+		sr.rect(left.x, left.y, left.width, left.height);
 		sr.end();
 		
+	}
+	
+	private void setStuffAfterJump(){
+		top.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
+		bottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), 2, 2);
+		veryBottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() - (GameConstants.BLOCK_HEIGHT), 2, 2);
+		right.set(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
+		left.set(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
+		this.getActions().clear();
+		state = HITTING;
+	}
+
+	public int getBronze() {
+		return bronze;
+	}
+	
+	public int getSilver() {
+		return silver;
+	}
+	
+	public int getGold() {
+		return gold;
 	}
 }
