@@ -1,8 +1,11 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -28,6 +31,10 @@ public class Cat extends Entity {
 	private static final int WALKING = 4;
 	
 	private int state;
+	
+	private Rectangle top;
+	private Rectangle right;
+	private Rectangle bottom;
 	
 	SkeletonData skeletonData;
 	Skeleton skeleton;
@@ -67,6 +74,10 @@ public class Cat extends Entity {
 		root.setScaleX(0.10f * GameConstants.SCALE);
 		root.setScaleY(0.10f * GameConstants.SCALE);
 		skeleton.updateWorldTransform();
+		
+		top = new Rectangle();
+		bottom = new Rectangle();
+		right = new Rectangle();
 	}
 	
 	/**
@@ -74,25 +85,68 @@ public class Cat extends Entity {
 	 * @param stage
 	 */
 	public void move(Stage stage){
-        falling(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + 1 - GameConstants.BLOCK_HEIGHT, false));
-        setVelocity(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH * 1.5f, this.getY() - GameConstants.BLOCK_HEIGHT / 2, false));
-        pickUp(stage.hit(this.getX(), this.getY(), false));
-        hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, false));
-        hitElementTop(stage.hit(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, false));
-        if(this.getActions().size == 0)
-        	state = HITTING;
+		top.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
+		bottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), 2, 2);
+		right.set(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
+		
+		if(state != FLYING)
+			state = FALLING;
+		for (Actor actor : stage.getActors()) {
+			if(actor instanceof GroundBlock)
+				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
+					state = WALKING;
+			if(actor instanceof Fan)
+				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
+					state = FLYING;
+			if(actor instanceof Dog)
+				if(((Entity) actor).getBounds().overlaps(right) & actor.isVisible())
+					state = HITTING;
+			if(actor instanceof Wasp)
+				if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
+					state = FALLING;
+			if(actor instanceof Carpet)
+				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
+					state = HITTING;
+			if(actor instanceof Target){
+				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
+					done = true;
+				if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
+					done = true;
+				if(((Entity) actor).getBounds().overlaps(right) & actor.isVisible())
+					done = true;
+			}
+			
+		}
+		
+//        falling(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + 1 - GameConstants.BLOCK_HEIGHT, false));
+//        setVelocity(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH * 1.5f, this.getY() - GameConstants.BLOCK_HEIGHT / 2, false));
+//        pickUp(stage.hit(this.getX(), this.getY(), false));
+//        hitElementRight(stage.hit(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, false));
+//        hitElementTop(stage.hit(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT, false));
+//        if(this.getActions().size == 0)
+//        	state = HITTING;
 //		
-//		if(state == FALLING)
-//			falling(stage.hit(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() - 1) * GameConstants.BLOCK_HEIGHT, false));
-//		
-//		else if(state == FLYING)
-//			hitElementRight(stage.hit(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, this.getY(), false));
-//		
-//		else if(state == HITTING)
-//			setVelocity(stage.hit(this.getX))
+		if(state != JUMPING){
+			if(state == FALLING & this.getActions().size == 0){
+				this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() - 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
+			}
+			
+			else if(state == FLYING & this.getActions().size == 0)
+				this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
+			
+			else if(state == WALKING & this.getActions().size == 0){
+				this.addAction(Actions.moveTo((this.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH, (this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
+			}
+			
+			else if(state == HITTING){
+				this.getActions().clear();
+			}
+		}
         
 		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.6f);
 		root.setY(getY());
+		
+		System.out.println(state);
 		
 	}
 	
@@ -259,5 +313,17 @@ public class Cat extends Entity {
 		skeleton.updateWorldTransform();
 //		skeleton.update(time);
 		skeleton.draw(batch);
+	}
+
+	public void render(ShapeRenderer sr) {
+		sr.begin(ShapeType.Filled);
+		sr.setColor(Color.BLUE);
+		sr.rect(top.x, top.y, top.width, top.height);
+		sr.setColor(Color.RED);
+		sr.rect(bottom.x, bottom.y, bottom.width, bottom.height);
+		sr.setColor(Color.GREEN);
+		sr.rect(right.x, right.y, right.width, right.height);
+		sr.end();
+		
 	}
 }

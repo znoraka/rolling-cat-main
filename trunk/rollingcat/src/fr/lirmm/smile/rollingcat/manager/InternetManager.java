@@ -190,11 +190,11 @@ public class InternetManager{
 	 * récupère le level sur le serveur
 	 * @param IDpatient
 	 */
-	public static void fetchLevel(int IDpatient, int IDgame){
+	public static void fetchLevel(int IDpatient, int IDgame, int numLevel){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/level/playerid="+IDpatient+"/gameid="+IDgame);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/level/playerid="+IDpatient+"/gameid="+IDgame+"/nLevel="+numLevel);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded");
 		

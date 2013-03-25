@@ -16,6 +16,7 @@ public class Patient {
 	private Texture face; 
 	private ArrayList<Track> listOfTracks;
 	private int id;
+	private int nbLevels;
 	
 	public Patient(String nom, String prenom, long birthDate, long strokeDate, String hemiplegia, String dominantMember, int id, Texture face) {
 		this.nom = nom;
@@ -27,6 +28,7 @@ public class Patient {
 		this.face = face;
 		this.id = id;
 		listOfTracks = new ArrayList<Track>();
+		this.nbLevels = 0;
 	}
 
 	public Texture getFace() {
