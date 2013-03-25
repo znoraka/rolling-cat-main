@@ -24,8 +24,8 @@ public class Block extends Entity {
 		super(x, y, name);
 		this.velocityModifier = vector;
 		this.setTouchable(Touchable.disabled);
-		this.bounds.height = 1;
-		this.bounds.y += GameConstants.BLOCK_HEIGHT;
+//		this.bounds.height = 1;
+//		this.bounds.y += GameConstants.BLOCK_HEIGHT;
 	}
 	
 	/**

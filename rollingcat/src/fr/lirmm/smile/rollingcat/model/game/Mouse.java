@@ -35,7 +35,6 @@ public class Mouse extends Entity {
 			
 			@Override
 			public boolean act(float delta) {
-				getParent().addActor(new Coin(getXOnGrid(),getYOnGrid()));
 				Gdx.app.log(RollingCat.LOG, "coin added !");
 				return true;
 			}

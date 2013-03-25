@@ -1,15 +1,6 @@
 package fr.lirmm.smile.rollingcat.utils;
 
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import utils.MainConstant;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.game.Bone_Dog;
@@ -18,48 +9,62 @@ import fr.lirmm.smile.rollingcat.model.game.Carpet;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.game.Coin;
 import fr.lirmm.smile.rollingcat.model.game.Dog;
-import fr.lirmm.smile.rollingcat.model.game.Entity;
 import fr.lirmm.smile.rollingcat.model.game.Fan;
+import fr.lirmm.smile.rollingcat.model.game.Gap;
 import fr.lirmm.smile.rollingcat.model.game.GroundBlock;
 import fr.lirmm.smile.rollingcat.model.game.Mouse;
 import fr.lirmm.smile.rollingcat.model.game.Spring;
-import fr.lirmm.smile.rollingcat.model.game.StopBlock;
 import fr.lirmm.smile.rollingcat.model.game.Target;
 import fr.lirmm.smile.rollingcat.model.game.Wasp;
 import generation.LevelFactory;
+
+import java.util.ArrayList;
+
+import utils.MainConstant;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 
 public class LevelBuilder {
 
 	private static ArrayList<Integer> items;
-	//private static String level;
 	private static int segment = 0;
 
-	private static String getRandomLevel(){
-		int tabSize[] = {3,3,2};
+	private static String testRandomReal()
+	{
+		int tabSize[] = {3,3,2,4,6,5,6,7};
 		int size = 0;
-		for(int i = 0 ; i < tabSize.length ; i++){
+		for(int i = 0 ; i < tabSize.length ; i++)
+		{
 			size+=tabSize[i];
 		}
-		
+
 		int tabX[] = new int[size];
 		int tabY[] = new int[size];
 		int index = 0;
 		int minX = 5;
 		int x;
 		int y;
-		for(int j = 0 ; j < tabSize.length ; j++){
-			for(int k = 0 ; k < tabSize[j] ; k++){
-				x = (int)(Math.random() * 5) + minX;
+		for(int j = 0 ; j < tabSize.length ; j++)
+		{
+			minX = MainConstant.WIDTH * j + 5;
+			for(int k = 0 ; k < tabSize[j] ; k++)
+			{
+				x = (int)(Math.random() * (MainConstant.WIDTH-2)) + minX;
+				if(x == MainConstant.WIDTH * tabSize.length)
+				{
+					x = MainConstant.WIDTH * tabSize.length-1;
+				}
+
 				y = (int)(Math.random()*(MainConstant.HEIGHT_MAX - 3)) + 3;
-				minX=x;
 				tabX[index+k] = x;
 				tabY[index+k] = y;
 			}
 			index+=tabSize[j];
 		}
 		return LevelFactory.getStringLevelGeneratedByMCTS(tabX, tabY, tabSize);
-}
+	}
 
 	
 	/**
@@ -71,14 +76,14 @@ public class LevelBuilder {
 		items = new ArrayList<Integer>();
 		segment = 0;
 		s = s.replace("\"", "");
-		s = getRandomLevel();
+		Gdx.app.log(RollingCat.LOG, "getting random level");
+		s = testRandomReal();
+		Gdx.app.log(RollingCat.LOG, s);
 		String tab [] = s.split("/");
 		String[] subtab;
 		float x;
 		float y;
 
-		List<Entity> directions = new ArrayList<Entity>();
-		List<Entity> stops = new ArrayList<Entity>();
 		for (int i = 0; i < tab.length; i++) {
 			subtab = tab[i].split(";");
 			x = Float.valueOf(subtab[1]);
@@ -90,14 +95,9 @@ public class LevelBuilder {
 				stage.addActor(new Box(GameConstants.COLS / 2, 0));
 
 			}
-			else if(subtab[0].equals("coin"))
-			{
-				stage.addActor(new Coin(x, y));
-			}
 			else if(subtab[0].equals("wasp"))
 			{
-				stops.add(new Wasp(x, y));
-//				stage.addActor(new Wasp(x, y));
+				stage.addActor(new Wasp(x, y));
 				if(isFirstOfScreen(x))
 				{
 					items.add(Box.EMPTY);
@@ -108,8 +108,7 @@ public class LevelBuilder {
 				stage.addActor(new Mouse(x, y));
 			else if(subtab[0].equals("dog"))
 			{
-				stops.add(new Dog(x, y));
-//				stage.addActor(new Dog(x, y));
+				stage.addActor(new Dog(x, y));
 				if(isFirstOfScreen(x))
 				{
 					items.add(Box.EMPTY);
@@ -118,22 +117,32 @@ public class LevelBuilder {
 			}
 			else if(subtab[0].equals("groundBlock"))
 			{
-				//	stage.addActor(new GroundBlock(x, y));
-				directions.add(new GroundBlock(x, y));
+				stage.addActor(new GroundBlock(x, y));
 			}
-			else if(subtab[0].equals("empty"))
-			{
-				//	stage.addActor(new StopBlock(x, y));
-				directions.add(new StopBlock(x, y));
-			}
+//			else if(subtab[0].equals("empty"))
+//			{
+//				//	stage.addActor(new StopBlock(x, y));
+//				directions.add(new StopBlock(x, y));
+//			}
 			else if(subtab[0].equals("bone"))
 			{
 				stage.addActor(new Bone_Dog(x, y));
 			}
+			else if(subtab[0].equals("bronze_coin"))
+			{
+				stage.addActor(new Coin(x, y, Coin.BRONZE));
+			}
+			else if(subtab[0].equals("silver_coin"))
+			{
+				stage.addActor(new Coin(x, y, Coin.SILVER));
+			}
+			else if(subtab[0].equals("gold_coin"))
+			{
+				stage.addActor(new Coin(x, y, Coin.GOLD));
+			}
 			else if(subtab[0].equals("carpet"))
 			{
-				stops.add(new Carpet(x, y));
-//				stage.addActor(new Carpet(x, y));
+				stage.addActor(new Carpet(x, y));
 				if(isFirstOfScreen(x))
 				{
 					items.add(Box.EMPTY);
@@ -151,11 +160,11 @@ public class LevelBuilder {
 			}
 			else if(subtab[0].equals("fan"))
 			{
-				directions.add(new Fan(x,y));
-//				stage.addActor(new Fan(x,y));
+				stage.addActor(new Fan(x,y));
 			}
 			else if(subtab[0].equals("gap"))
 			{
+				stage.addActor(new Gap(x, y));
 				if(isFirstOfScreen(x))
 				{
 					items.add(Box.EMPTY);
@@ -168,19 +177,12 @@ public class LevelBuilder {
 			Gdx.app.log(RollingCat.LOG, "new "+subtab[0]+ " added in " + x + ", " + y + " !");
 		}
 		
-		for(Entity e : directions)
-		{
-			stage.addActor(e);
-		}
-		for(Entity e : stops)
-		{
-			stage.addActor(e);
-		}
+		
 		Gdx.app.log(RollingCat.LOG, "building done " + tab.length + " elements added");
 		//		stage.addActor(new Cat(10, 10));
 		//		stage.addActor(new Dog(5, 5));
 		items.add(0);
-		((Box)stage.getActors().get(1)).setItems(items);
+//		((Box)stage.getActors().get(1)).setItems(items);
 		return stage;
 	}
 
@@ -194,9 +196,9 @@ public class LevelBuilder {
 	 * @return true si l'entité est la première de l'écran
 	 */
 	private static boolean isFirstOfScreen(float x){
-		if(Math.floor(x / (GameConstants.COLS + 1)) > segment){
+		if(Math.floor(x / (GameConstants.COLS)) > segment){
 			segment ++;
-			return true;
+			return false;
 		}
 		else
 			return false;
