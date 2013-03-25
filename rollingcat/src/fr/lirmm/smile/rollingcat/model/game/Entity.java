@@ -1,8 +1,11 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -15,7 +18,7 @@ public class Entity extends Image implements EntityModel {
 	protected Animation anim;
 	private float d;
 	private String name;
-	private Rectangle bounds;
+	protected Rectangle bounds;
 	
 	/**
 	 * 
@@ -41,6 +44,13 @@ public class Entity extends Image implements EntityModel {
 	public void draw(SpriteBatch batch, float deltaParent){
 		d += Gdx.graphics.getDeltaTime();
 		batch.draw(anim.getKeyFrame(d, true), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+	}
+	
+	public void drawDebug(ShapeRenderer sr){
+		sr.begin(ShapeType.Line);
+		sr.setColor(Color.PINK);
+		sr.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+		sr.end();
 	}
 	
 	
@@ -81,6 +91,10 @@ public class Entity extends Image implements EntityModel {
 	 */
 	public Action getActionOnCat(){
 		return null;
+	}
+	
+	public Rectangle getBounds(){
+		return this.bounds;
 	}
 
 }

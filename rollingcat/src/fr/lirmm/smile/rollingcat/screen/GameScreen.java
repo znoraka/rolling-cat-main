@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.OrderedMap;
 
@@ -15,6 +16,7 @@ import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
+import fr.lirmm.smile.rollingcat.model.game.Entity;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 
@@ -53,6 +55,10 @@ public class GameScreen implements Screen{
 		stage.draw();
 		sr.setProjectionMatrix(stage.getCamera().combined);
         mc.render(sr);
+        cat.render(sr);
+        for (Actor a: stage.getActors()) {
+			((Entity) a).drawDebug(sr);
+		}
         updateCamPos();
         mc.addTrackingPoint(delta);
         if(cat.isDone()){
