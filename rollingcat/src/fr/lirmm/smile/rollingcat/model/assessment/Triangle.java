@@ -45,14 +45,14 @@ public class Triangle {
 		else
 			sr.setColor(0, color, 1, 1);
 		
-		sr.begin(ShapeType.Filled);
-		sr.triangle(
+		sr.begin(ShapeType.FilledTriangle);
+		sr.filledTriangle(
 				GameConstants.DISPLAY_WIDTH / 2, 0,
 				GameConstants.DISPLAY_WIDTH / 2 + direct.cpy().rotate(degree / 2).x, direct.cpy().rotate(degree / 2).y,
 				GameConstants.DISPLAY_WIDTH / 2 + direct.cpy().rotate(-degree / 2).x, direct.cpy().rotate(-degree / 2).y);
 		
 		sr.setColor(Color.GREEN);
-		sr.triangle(
+		sr.filledTriangle(
 				GameConstants.DISPLAY_WIDTH / 2, 0,
 				GameConstants.DISPLAY_WIDTH / 2 + progression.cpy().rotate(degree / 2).x, progression.cpy().rotate(degree / 2).y,
 				GameConstants.DISPLAY_WIDTH / 2 + progression.cpy().rotate(-degree / 2).x, progression.cpy().rotate(-degree / 2).y);
@@ -60,7 +60,7 @@ public class Triangle {
 		sr.end();
 		
 		sr.setColor(Color.BLACK);
-		sr.begin(ShapeType.Line);
+		sr.begin(ShapeType.Triangle);
 		sr.triangle(
 				GameConstants.DISPLAY_WIDTH / 2, 0,
 				GameConstants.DISPLAY_WIDTH / 2 + direct.cpy().rotate(degree / 2).x, direct.cpy().rotate(degree / 2).y,

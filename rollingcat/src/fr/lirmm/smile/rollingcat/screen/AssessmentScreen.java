@@ -64,11 +64,11 @@ public class AssessmentScreen implements Screen {
             else{
                 timeout = 0;
             }
-            sr.begin(ShapeType.Filled);
+            sr.begin(ShapeType.FilledCircle);
             sr.setColor(Color.DARK_GRAY);
-            sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100);
+            sr.filledCircle(GameConstants.DISPLAY_WIDTH / 2, 0, 100);
             sr.setColor(Color.GRAY);
-            sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100 - timeout);
+            sr.filledCircle(GameConstants.DISPLAY_WIDTH / 2, 0, 100 - timeout);
             sr.end();
             mc.addTrackingPoint(delta);
         

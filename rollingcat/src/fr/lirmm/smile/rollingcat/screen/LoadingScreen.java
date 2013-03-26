@@ -54,7 +54,7 @@ public class LoadingScreen implements Screen {
 
 	@Override
 	public void show() {
-		InternetManager.fetchLevel(patient.getID(), 0, 0); //TODO changer tout ça
+		InternetManager.fetchLevel(patient.getID(), levelID); //TODO changer tout ça
 		texture = new Texture("data/loading.png");
 		batch = getSpriteBatch();
 	}

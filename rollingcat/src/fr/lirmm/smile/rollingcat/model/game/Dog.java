@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getDogAtlas;
+
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
@@ -19,10 +21,10 @@ import fr.lirmm.smile.rollingcat.spine.SkeletonData;
 public class Dog extends Entity {
 	
 //	
-	SkeletonData skeletonData;
-	Skeleton skeleton;
-	Animation animation;
-	float time;
+	private SkeletonData skeletonData;
+	private Skeleton skeleton;
+	private Animation animation;
+	private float time;
 	
 	/**
 	 * Touchable enabled
@@ -32,12 +34,12 @@ public class Dog extends Entity {
 	 */
 	public Dog(float x, float y){
 		super(x, y, GameConstants.TEXTURE_DOG);
-		final String name = "skeleton"; //skeleton
-//		
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/dog-atlas.atlas"));
+
+		TextureAtlas atlas = getDogAtlas();
+		
 		SkeletonBinary binary = new SkeletonBinary(atlas);
-		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/skeleton.skel"));
-		animation = binary.readAnimation(Gdx.files.internal("data/skeleton-stand.anim"), skeletonData);
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/dog/dog.skel"));
+		animation = binary.readAnimation(Gdx.files.internal("data/dog/dog-stand.anim"), skeletonData);
 
 		skeleton = new Skeleton(skeletonData);
 		skeleton.setToBindPose();
@@ -54,12 +56,6 @@ public class Dog extends Entity {
 	@Override
 	public Action getAction(){
 		return Actions.visible(false);
-	}
-	
-	@Override
-	public Action getActionOnCat(){
-		return Actions.moveTo(this.getX() - GameConstants.BLOCK_WIDTH, this.getY(), 0.2f, Interpolation.pow2Out);
-		
 	}
 	
 	@Override

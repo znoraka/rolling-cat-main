@@ -24,6 +24,7 @@ public class InternetManager{
 	private static String gameid;
 	public static String value;
 	private static String sessionid;
+	private static String patientid = "5149766c44ae21b28266b0f4";
 	
 	
 	/**
@@ -162,7 +163,7 @@ public class InternetManager{
 		OrderedMap<String, String> map = new OrderedMap<String, String>();
 		map.put("name", gameType);
 		map.put("comment", "no comment");
-		map.put("patient_id", "5149766c44ae21b28266b0f4");
+		map.put("patient_id", patientid);
 		map.put("game_id", gameid);
 		Json json = new Json();
 		json.setOutputType(JsonWriter.OutputType.json);
@@ -190,11 +191,11 @@ public class InternetManager{
 	 * récupère le level sur le serveur
 	 * @param IDpatient
 	 */
-	public static void fetchLevel(int IDpatient, int IDgame, int numLevel){
+	public static void fetchLevel(int IDpatient, int numLevel){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+"5149766c44ae21b28266b0f4"+"/"+gameid+"/"+numLevel);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+patientid+"/"+gameid+"/"+sessionid+"/"+numLevel);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "text/plain");
 		
@@ -214,7 +215,7 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}
 		});
-		level = "cat;0.0;8.0/groundBlock;0.0;7.0/groundBlock;1.0;7.0/groundBlock;2.0;7.0/gap;2.0;8.0/groundBlock;4.0;6.0/groundBlock;5.0;6.0/groundBlock;6.0;7.0";
+//		level = "cat;0.0;8.0/groundBlock;0.0;7.0/groundBlock;1.0;7.0/groundBlock;2.0;7.0/gap;2.0;8.0/groundBlock;4.0;6.0/groundBlock;5.0;6.0/groundBlock;6.0;7.0";
 	}
 	
 	/** 

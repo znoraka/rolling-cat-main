@@ -38,6 +38,7 @@ public class Box extends Entity{
 		this.items = items;
 		this.item = items.get(0);
 	}
+	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
 		if(item == BONE)

@@ -24,10 +24,10 @@ public interface GameConstants {
 	public static final float SCALE = 1.0f;
 	
 	public static final int DISPLAY_WIDTH = (int) (800 * SCALE);
-	public static final int DISPLAY_HEIGHT = (int) (600 * SCALE);
+	public static final int DISPLAY_HEIGHT = (int) (640 * SCALE);
 	
 	public static final int COLS = 16;
-	public static final int ROWS = 12;
+	public static final int ROWS = 14;
 	
 	public static final float BLOCK_WIDTH = DISPLAY_WIDTH / (COLS+2);
 	public static final float BLOCK_HEIGHT = DISPLAY_HEIGHT / (ROWS + 2);

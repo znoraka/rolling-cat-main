@@ -1,5 +1,7 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getCatAtlas;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -55,16 +57,16 @@ public class Cat extends Entity {
 		this.setTouchable(Touchable.disabled);
 		
 		final String name = "cat-skeleton";
-
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/" + name + ".atlas"));
-		SkeletonBinary binary = new SkeletonBinary(atlas);
-		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/" + name + ".skel"));
 		
-		walkAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-walk.anim"), skeletonData);
-		jumpAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-jump.anim"), skeletonData);
-		endAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-levelend.anim"), skeletonData);
-		fanAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-upstreamwinp.anim"), skeletonData);
-		contactAnimation = binary.readAnimation(Gdx.files.internal("data/" + name + "-contact.anim"), skeletonData);
+		TextureAtlas atlas = getCatAtlas();
+		SkeletonBinary binary = new SkeletonBinary(atlas);
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/cat/" + name + ".skel"));
+		
+		walkAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-walk.anim"), skeletonData);
+		jumpAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-jump.anim"), skeletonData);
+		endAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-levelend.anim"), skeletonData);
+		fanAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-upstreamwinp.anim"), skeletonData);
+		contactAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-contact.anim"), skeletonData);
 		
 		
 
@@ -229,19 +231,19 @@ public class Cat extends Entity {
 		skeleton.draw(batch);
 	}
 
-	public void render(ShapeRenderer sr) {
-		sr.begin(ShapeType.Filled);
-		sr.setColor(Color.BLUE);
-		sr.rect(top.x, top.y, top.width, top.height);
-		sr.setColor(Color.RED);
-		sr.rect(bottom.x, bottom.y, bottom.width, bottom.height);
-		sr.setColor(Color.GREEN);
-		sr.rect(right.x, right.y, right.width, right.height);
-		sr.setColor(Color.ORANGE);
-		sr.rect(left.x, left.y, left.width, left.height);
-		sr.end();
-		
-	}
+//	public void render(ShapeRenderer sr) {
+//		sr.begin(ShapeType.Filled);
+//		sr.setColor(Color.BLUE);
+//		sr.rect(top.x, top.y, top.width, top.height);
+//		sr.setColor(Color.RED);
+//		sr.rect(bottom.x, bottom.y, bottom.width, bottom.height);
+//		sr.setColor(Color.GREEN);
+//		sr.rect(right.x, right.y, right.width, right.height);
+//		sr.setColor(Color.ORANGE);
+//		sr.rect(left.x, left.y, left.width, left.height);
+//		sr.end();
+//		
+//	}
 	
 	private void setStuffAfterJump(){
 		top.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Json;
 
@@ -85,20 +86,20 @@ public class Track {
 						track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
 						);
 				sr.end();
-				sr.begin(ShapeType.Filled);
-				sr.circle(
+				sr.begin(ShapeType.FilledCircle);
+				sr.filledCircle(
 						track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 						3);
 				sr.end();
 			}
 			sr.setColor(Color.RED);
-			sr.begin(ShapeType.Filled);
-			sr.circle(
+			sr.begin(ShapeType.FilledCircle);
+			sr.filledCircle(
 					track.get(indNextSegment.get(currentSegment))[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 					track.get(indNextSegment.get(currentSegment))[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 					3);
-			sr.circle(
+			sr.filledCircle(
 					track.get(indNextSegment.get(currentSegment + 1) - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 					track.get(indNextSegment.get(currentSegment + 1) - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 					3);
@@ -124,20 +125,20 @@ public class Track {
                                     track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
                                     );
                     sr.end();
-                    sr.begin(ShapeType.Filled);
-                    sr.circle(
+                    sr.begin(ShapeType.FilledCircle);
+                    sr.filledCircle(
                                     track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
                                     track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
                                     3);
                     sr.end();
             }
             sr.setColor(Color.RED);
-            sr.begin(ShapeType.Filled);
-            sr.circle(
+            sr.begin(ShapeType.FilledCircle);
+            sr.filledCircle(
                             track.get(0)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
                             track.get(0)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
                             3);
-            sr.circle(
+            sr.filledCircle(
                             track.get(track.size() - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
                             track.get(track.size() - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
                             3);
