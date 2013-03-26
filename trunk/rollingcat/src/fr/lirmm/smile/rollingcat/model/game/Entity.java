@@ -1,5 +1,7 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -27,16 +29,15 @@ public class Entity extends Image implements EntityModel {
 	 * @param name le nom de l'entity pour trouver sa texture dans le texture atlas
 	 */
 	public Entity(float x, float y, String name){
-//		super(TextureFetcher.getRegions(name).get(0));
 		this.setX(x * GameConstants.BLOCK_WIDTH);
-		this.setY(y * GameConstants.BLOCK_HEIGHT);
-//		this.setBounds(x * GameConstants.BLOCK_WIDTH, y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		this.setY((y + 2) * GameConstants.BLOCK_HEIGHT);
 		this.setWidth(GameConstants.BLOCK_WIDTH);
 		this.setHeight(GameConstants.BLOCK_HEIGHT);
         this.anim = new Animation(0.25f, GdxRessourcesGetter.getRegions(name));
         this.name = name;
         this.setZIndex(1);
-        this.bounds = new Rectangle(x * GameConstants.BLOCK_WIDTH, y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+        this.bounds = new Rectangle(x * GameConstants.BLOCK_WIDTH, (y + 2) * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+        this.d = new Random().nextFloat();
 	}
 	
 	
@@ -85,13 +86,6 @@ public class Entity extends Image implements EntityModel {
 		return (int) (this.getY()/GameConstants.BLOCK_HEIGHT);
 	}
 	
-	/**
-	 * 
-	 * @return l'action que la chat va faire au contact de cette Entity
-	 */
-	public Action getActionOnCat(){
-		return null;
-	}
 	
 	public Rectangle getBounds(){
 		return this.bounds;

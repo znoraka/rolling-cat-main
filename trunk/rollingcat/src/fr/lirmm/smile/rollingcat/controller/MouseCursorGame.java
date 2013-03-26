@@ -26,8 +26,6 @@ import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.game.Dog;
 import fr.lirmm.smile.rollingcat.model.game.Entity;
 import fr.lirmm.smile.rollingcat.model.game.Gap;
-import fr.lirmm.smile.rollingcat.model.game.Mouse;
-import fr.lirmm.smile.rollingcat.model.game.Spring;
 import fr.lirmm.smile.rollingcat.model.game.Wasp;
 
 public class MouseCursorGame implements InputProcessor{
@@ -35,8 +33,6 @@ public class MouseCursorGame implements InputProcessor{
 	private float standTimer;
 	private float x, oldX;
 	private float y, oldY;
-	private int oldBlockX;
-	private int oldBlockY;
 	private Entity actor;
 	private Stage stage;
 	private Cat cat;
@@ -46,7 +42,6 @@ public class MouseCursorGame implements InputProcessor{
 	private SpriteBatch batch;
 	private Map<Integer, float []> map;
 	private float elapsedTime;
-	private boolean started;
 	private OrderedMap<String, String> parameters;
 
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
@@ -61,8 +56,8 @@ public class MouseCursorGame implements InputProcessor{
 		atlas = getAtlas();
 		map = new HashMap<Integer, float []>();
 		elapsedTime = 0;
-		started = false;
 		parameters = new OrderedMap<String, String>();
+		standTimer = 0;
 	}
 	
 	/**
@@ -89,12 +84,8 @@ public class MouseCursorGame implements InputProcessor{
 				this.trigger();
 			}
 		
-			else if(actor instanceof Mouse){
-				actor.addAction(actor.getAction());
-			}
 			else if(actor instanceof Box){
 				item = box.empty();
-				this.start();
 				addEvent();
 			}
 			else if(actor instanceof Dog && item == Box.BONE){
@@ -104,27 +95,11 @@ public class MouseCursorGame implements InputProcessor{
 			else if(actor instanceof Wasp && item == Box.SWATTER)
 				this.trigger();
 			
-			else if(actor instanceof Spring && item == Box.SPRING)
-				this.trigger();
-			
 			else if(actor instanceof Carpet && item == Box.SCISSORS)
 				this.trigger();
 		}
 	}
 	
-	/**
-	 * démarre l'enregistrement de la trace
-	 */
-	private void start() {
-		started = true;
-	}
-	
-	/**
-	 * stop l'enregistrement de la trace
-	 */
-	public void stop(){
-		started = false;
-	}
 
 	/**
 	 * appelé lorsque l'item et l'entity correspondent
@@ -156,19 +131,19 @@ public class MouseCursorGame implements InputProcessor{
 	 * update le timer qui gere l'immobilité du patient
 	 * @param stage
 	 */
-	public void updateHitTimer(){
-		if(x % GameConstants.BLOCK_WIDTH != oldBlockX & y % GameConstants.BLOCK_HEIGHT != oldBlockY){
-			oldBlockX = (int) (x % GameConstants.BLOCK_WIDTH);
-			oldBlockY = (int) (y % GameConstants.BLOCK_HEIGHT);
-			standTimer = 0;
+	public void updateStandTimer(){
+		if(oldX == x & oldY == y & item != Box.EMPTY){
+			standTimer += Gdx.graphics.getDeltaTime() * 1;
 		}
 		else {
-			standTimer += Gdx.graphics.getDeltaTime() * 1;
+			standTimer = 0;
 		}
 		
 		if(standTimer > GameConstants.HOLD_POSITION){
 			standTimer = 0;
 			Gdx.app.log(RollingCat.LOG, "Not moving for too long");
+			cat.getActions().clear();
+			cat.setY(GameConstants.BLOCK_HEIGHT * 1);
 		}
 	}
 	
@@ -178,24 +153,24 @@ public class MouseCursorGame implements InputProcessor{
 	 * @param sr
 	 */
 	public void render(ShapeRenderer sr){
-        sr.begin(ShapeType.Filled);
-		sr.rect(x, y, 10, 10);
+        sr.begin(ShapeType.FilledRectangle);
+		sr.filledRect(x, y, 10, 10);
 		if(hoverTimer > 0)
 		{	
 			sr.setColor(Color.RED);
-			sr.rect(x, y, 70, 20);
+			sr.filledRect(x, y, 70, 20);
 			sr.setColor(Color.BLUE);
-			sr.rect(x, y, 70*hoverTimer, 20);
+			sr.filledRect(x, y, 70*hoverTimer, 20);
 		}
 		sr.end();
-//		sr.begin(ShapeType.FilledRectangle);
-//		if (standTimer > GameConstants.HOLD_POSITION / 2 & false){
-//			sr.setColor(Color.RED);
-//			sr.filledRect(cat.getX(), cat.getY(), 70, 20);
-//			sr.setColor(Color.BLUE);
-//			sr.filledRect(cat.getX(), cat.getY(), 70*(standTimer - GameConstants.HOLD_POSITION / 2) / GameConstants.HOLD_POSITION * 2, 20);
-//		}
-//		sr.end();
+		sr.begin(ShapeType.FilledRectangle);
+		if (standTimer > GameConstants.HOLD_POSITION / 2){
+			sr.setColor(Color.GREEN);
+			sr.filledRect(cat.getX(), cat.getY(), 70, 20);
+			sr.setColor(Color.ORANGE);
+			sr.filledRect(cat.getX(), cat.getY(), 70*(standTimer - GameConstants.HOLD_POSITION / 2) / GameConstants.HOLD_POSITION * 2, 20);
+		}
+		sr.end();
 		
 		batch.setProjectionMatrix(stage.getCamera().combined);
 		batch.begin();
@@ -215,22 +190,20 @@ public class MouseCursorGame implements InputProcessor{
 	}
 	
 	public void addTrackingPoint(float delta){
-		if(started){
-			elapsedTime += delta;
-			
-			if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
-				if(x != oldX & y != oldY){
-					parameters = new OrderedMap<String, String>();
-					oldX = x;
-					oldY = y;
-					map.put(map.size(), new float[] {x, y});
-					parameters.put("x", ""+x%GameConstants.DISPLAY_WIDTH);
-					parameters.put("y", ""+y);
-					parameters.put("z", ""+0);
-					EventManager.create(EventManager.player_cursor_event_type, parameters);
-				}
-				elapsedTime = 0;
+		elapsedTime += delta;
+		
+		if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
+			if(x != oldX & y != oldY){
+				parameters = new OrderedMap<String, String>();
+				oldX = x;
+				oldY = y;
+				map.put(map.size(), new float[] {x, y});
+				parameters.put("x", ""+x%GameConstants.DISPLAY_WIDTH);
+				parameters.put("y", ""+y);
+				parameters.put("z", ""+0);
+				EventManager.create(EventManager.player_cursor_event_type, parameters);
 			}
+			elapsedTime = 0;
 		}
 	}
 	

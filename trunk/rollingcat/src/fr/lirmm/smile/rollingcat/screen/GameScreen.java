@@ -1,17 +1,23 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.tiled.SimpleTileAtlas;
+import com.badlogic.gdx.graphics.g2d.tiled.TileAtlas;
+import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledLoader;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.OrderedMap;
-
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -19,10 +25,10 @@ import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
-import fr.lirmm.smile.rollingcat.model.game.Entity;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
+
 
 public class GameScreen implements Screen{
 
@@ -38,7 +44,11 @@ public class GameScreen implements Screen{
 	private float duration;
 	private BitmapFont font;
     private OrderedMap<String, String> parameters;
-
+    private TiledMap map;
+	private TileMapRenderer renderer;
+	private TileAtlas tileAtlas;
+	private OrthographicCamera camera;
+  
 	
 
 	public GameScreen(RollingCat game, Patient patient, Stage stage){
@@ -49,12 +59,15 @@ public class GameScreen implements Screen{
 	
 	@Override
 	public void render(float delta) {
+	
+//        renderer.render(0, 0, renderer.getUnitsPerTileX(), 32);
+        renderer.render(camera);
 		duration += delta;
 		mc.updateHoverTimer();
-		mc.updateHitTimer();
+		mc.updateStandTimer();
 		cat.move(stage);
 		batch.begin();
-		batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+//		batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		font.draw(batch, "bronze : " + cat.getBronze(), GameConstants.DISPLAY_WIDTH * 0.05f, GameConstants.DISPLAY_HEIGHT * 0.95f);
 		font.draw(batch, "silver : " + cat.getSilver(), GameConstants.DISPLAY_WIDTH * 0.25f, GameConstants.DISPLAY_HEIGHT * 0.95f);
 		font.draw(batch, "gold : " + cat.getGold(), GameConstants.DISPLAY_WIDTH * 0.50f, GameConstants.DISPLAY_HEIGHT * 0.95f);
@@ -63,7 +76,7 @@ public class GameScreen implements Screen{
 		stage.draw();
 		sr.setProjectionMatrix(stage.getCamera().combined);
         mc.render(sr);
-        cat.render(sr);
+//        cat.render(sr);
 //        for (Actor a: stage.getActors()) {
 //			((Entity) a).drawDebug(sr);
 //		}
@@ -76,6 +89,7 @@ public class GameScreen implements Screen{
         	patient.addTrack(new Track(mc.getMap(), Track.GAME, duration));
         	game.setScreen(new TrackingRecapScreen(game, patient));
         }
+        
 	}
 	
 	/**
@@ -87,7 +101,6 @@ public class GameScreen implements Screen{
 //			box.empty();
 //			box.fill();
 			box.setX(box.getX() + GameConstants.VIEWPORT_WIDTH);
-			mc.stop();
 		}
 		
 	}
@@ -104,12 +117,23 @@ public class GameScreen implements Screen{
 		sr = new ShapeRenderer();
 		font = getBigFont();
 		EventManager.clear();
+		
+		map = TiledLoader.createMap(Gdx.files.internal("data/tilemap/level1-background.tmx"));
+		tileAtlas = new SimpleTileAtlas(map, Gdx.files.internal("data/tilemap/"));
+		renderer = new TileMapRenderer(map, tileAtlas, 1, 1);
+		camera = new OrthographicCamera(GameConstants.DISPLAY_WIDTH / (GameConstants.SCALE * GameConstants.SCALE), GameConstants.DISPLAY_HEIGHT / (GameConstants.SCALE * GameConstants.SCALE));
+		camera.translate(GameConstants.DISPLAY_WIDTH * 0.5f, GameConstants.DISPLAY_HEIGHT * 0.5f);
+//		camera.setToOrtho(false);
+//		camera.setToOrtho(false, GameConstants.DISPLAY_WIDTH * 0.9f, GameConstants.DISPLAY_HEIGHT * 0.9f);
+		camera.update();
+
+				
 		parameters = new OrderedMap<String, String>();
 		backgroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND);
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		cat = (Cat) stage.getActors().get(0);
 //		box = (Box) stage.getActors().get(1);
-		box = new Box(GameConstants.COLS / 2, 0);
+		box = new Box(GameConstants.COLS / 2, -2);
 		box.setItems(LevelBuilder.getItems());
 		stage.addActor(box);
 		mc = new MouseCursorGame(stage, cat, box);
@@ -123,8 +147,8 @@ public class GameScreen implements Screen{
 		parameters.put("session_type", Track.GAME);
 		parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
 		parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
-     	EventManager.create(EventManager.start_game_event_type, parameters);               
-
+     	EventManager.create(EventManager.start_game_event_type, parameters);  
+     	
 	}
 
 	@Override

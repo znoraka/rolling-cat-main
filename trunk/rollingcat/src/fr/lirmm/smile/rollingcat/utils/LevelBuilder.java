@@ -3,17 +3,15 @@ package fr.lirmm.smile.rollingcat.utils;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
-import fr.lirmm.smile.rollingcat.model.game.Bone_Dog;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Carpet;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.game.Coin;
 import fr.lirmm.smile.rollingcat.model.game.Dog;
+import fr.lirmm.smile.rollingcat.model.game.Door;
 import fr.lirmm.smile.rollingcat.model.game.Fan;
 import fr.lirmm.smile.rollingcat.model.game.Gap;
 import fr.lirmm.smile.rollingcat.model.game.GroundBlock;
-import fr.lirmm.smile.rollingcat.model.game.Mouse;
-import fr.lirmm.smile.rollingcat.model.game.Spring;
 import fr.lirmm.smile.rollingcat.model.game.Target;
 import fr.lirmm.smile.rollingcat.model.game.Wasp;
 import generation.LevelFactory;
@@ -92,8 +90,6 @@ public class LevelBuilder {
 			if(subtab[0].equals("cat"))
 			{
 				stage.addActor(new Cat(x, y));
-				stage.addActor(new Box(GameConstants.COLS / 2, 0));
-
 			}
 			else if(subtab[0].equals("wasp"))
 			{
@@ -104,8 +100,6 @@ public class LevelBuilder {
 				}
 				items.add(Box.SWATTER);
 			}
-			else if(subtab[0].equals("mouse"))
-				stage.addActor(new Mouse(x, y));
 			else if(subtab[0].equals("dog"))
 			{
 				stage.addActor(new Dog(x, y));
@@ -124,10 +118,6 @@ public class LevelBuilder {
 //				//	stage.addActor(new StopBlock(x, y));
 //				directions.add(new StopBlock(x, y));
 //			}
-			else if(subtab[0].equals("bone"))
-			{
-				stage.addActor(new Bone_Dog(x, y));
-			}
 			else if(subtab[0].equals("bronze_coin"))
 			{
 				stage.addActor(new Coin(x, y, Coin.BRONZE));
@@ -149,18 +139,13 @@ public class LevelBuilder {
 				}
 				items.add(Box.SCISSORS);
 			}
-			else if(subtab[0].equals("spring"))
-			{
-				stage.addActor(new Spring(x, y));
-				if(isFirstOfScreen(x))
-				{
-					items.add(Box.EMPTY);
-				}
-				items.add(Box.SPRING);
-			}
 			else if(subtab[0].equals("fan"))
 			{
 				stage.addActor(new Fan(x,y));
+			}
+			else if(subtab[0].equals("door_right"))
+			{
+				stage.addActor(new Door(x,y));
 			}
 			else if(subtab[0].equals("gap"))
 			{

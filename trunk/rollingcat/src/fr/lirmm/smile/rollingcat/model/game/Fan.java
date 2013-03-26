@@ -1,18 +1,27 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getFanAtlas;
+
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.spine.Animation;
+import fr.lirmm.smile.rollingcat.spine.Bone;
+import fr.lirmm.smile.rollingcat.spine.Skeleton;
+import fr.lirmm.smile.rollingcat.spine.SkeletonBinary;
+import fr.lirmm.smile.rollingcat.spine.SkeletonData;
 
 public class Fan extends Entity {
 
-	float d;
-	boolean given;
+	private SkeletonData skeletonData;
+	private Skeleton skeleton;
+	private Animation animation;
+	private float time;
 	
 	/**
 	 * le ventilateur fait deux blocs de large, le chat regarde le bloc en bas à droite de lui lors de ses déplacements
@@ -22,28 +31,33 @@ public class Fan extends Entity {
 	 */
 	public Fan(float x, float y) {
 		super(x, y, "fan");
-		d = 0;
 		this.setWidth(GameConstants.BLOCK_WIDTH * 2);
 		this.setTouchable(Touchable.disabled);
-		given = false;
+		
+		TextureAtlas atlas = getFanAtlas();
+		SkeletonBinary binary = new SkeletonBinary(atlas);
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/fan/fan.skel"));
+		animation = binary.readAnimation(Gdx.files.internal("data/fan/fan-run.anim"), skeletonData);
+		
+		skeleton = new Skeleton(skeletonData);
+		skeleton.setToBindPose();
+
+		Bone root = skeleton.getRootBone();
+		root.setScaleX(0.15f * GameConstants.SCALE);
+		root.setScaleY(0.15f * GameConstants.SCALE);
+		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.5f);
+		root.setY(getY() - GameConstants.BLOCK_HEIGHT * 0.4f);
+		
+		time = new Random().nextFloat();
 	}
 	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
-		d += Gdx.graphics.getDeltaTime();
-		batch.draw(anim.getKeyFrame(d, true), this.getX(), this.getY() - GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, 2 * GameConstants.BLOCK_HEIGHT);
+		time += Gdx.graphics.getDeltaTime() * 50;
+		animation.apply(skeleton, time, true);
+		skeleton.updateWorldTransform();
+		skeleton.update(Gdx.graphics.getDeltaTime());
+		skeleton.draw(batch);
 	}
 	
-	@Override
-	public Action getActionOnCat(){
-		if(!given){
-			given = true;
-			this.setHeight(this.getHeight() + GameConstants.BLOCK_HEIGHT);
-			return Actions.sequence(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED),Actions.moveBy(0, (GameConstants.ROWS - this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT, 1.5f, Interpolation.pow2In));
-		}
-		else
-			return Actions.sequence(Actions.moveBy(0, - GameConstants.BLOCK_HEIGHT, 0.4f, Interpolation.pow2Out), Actions.moveTo(this.getX(), GameConstants.DISPLAY_HEIGHT, 1.5f, Interpolation.pow2In));
-
-	}
-
 }

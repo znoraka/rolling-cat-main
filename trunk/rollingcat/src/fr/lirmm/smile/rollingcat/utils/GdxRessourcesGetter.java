@@ -18,6 +18,7 @@ public class GdxRessourcesGetter {
 	
 	private static TextureAtlas atlasGame = new TextureAtlas(GameConstants.ATLAS);
 	private static TextureAtlas atlasPatient = new TextureAtlas("data/patientAtlas.atlas");
+	private static TextureAtlas dogAtlas, catAtlas, waspAtlas, carpetAtlas, fanAtlas;
 	private static Skin skin;
 	private static SpriteBatch batch = new SpriteBatch();
 	private static BitmapFont bigFont, smallFont;
@@ -125,6 +126,56 @@ public class GdxRessourcesGetter {
 			sr = new ShapeRenderer();
 		}
 		return sr;
+	}
+	
+	/**
+	 * 
+	 * @return le TextureAtlas du Dog
+	 */
+	public static TextureAtlas getDogAtlas(){
+		if(dogAtlas == null)
+			dogAtlas = new TextureAtlas("data/dog/dog.atlas");
+		return dogAtlas;
+	}
+	
+	/**
+	 * 
+	 * @return le TextureAtlas de la Wasp
+	 */
+	public static TextureAtlas getWaspAtlas(){
+		if(waspAtlas == null)
+			waspAtlas = new TextureAtlas("data/wasp/wasp.atlas");
+		return waspAtlas;
+	}
+	
+	/**
+	 * 
+	 * @return le TextureAtlas du Carpet
+	 */
+	public static TextureAtlas getCarpetAtlas(){
+		if(carpetAtlas == null)
+			carpetAtlas = new TextureAtlas("data/carpet/carpet.atlas");
+		return carpetAtlas;
+	}
+	
+	/**
+	 * 
+	 * @return le TextureAtlas du Cat
+	 */
+	public static TextureAtlas getCatAtlas(){
+		if(catAtlas == null)
+			catAtlas = new TextureAtlas("data/cat/cat.atlas");
+		return catAtlas;
+	}
+	
+	/**
+	 * 
+	 * @return le TextureAtlas du Fan
+	 */
+	public static TextureAtlas getFanAtlas(){
+		if(fanAtlas == null)
+			fanAtlas = new TextureAtlas("data/fan/fan.atlas");
+		return fanAtlas;
 	}
 	
 	
