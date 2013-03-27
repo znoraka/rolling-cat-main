@@ -74,8 +74,8 @@ public class LevelBuilder {
 		items = new ArrayList<Integer>();
 		segment = 0;
 		s = s.replace("\"", "");
-		Gdx.app.log(RollingCat.LOG, "getting random level");
-		s = testRandomReal();
+//		Gdx.app.log(RollingCat.LOG, "getting random level");
+//		s = testRandomReal();
 		Gdx.app.log(RollingCat.LOG, s);
 		String tab [] = s.split("/");
 		String[] subtab;

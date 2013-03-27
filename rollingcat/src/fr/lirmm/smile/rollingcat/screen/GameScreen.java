@@ -23,6 +23,7 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
+import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
@@ -83,6 +84,7 @@ public class GameScreen implements Screen{
         updateCamPos();
         mc.addTrackingPoint(delta);
         if(cat.isDone()){
+        	InternetManager.endGameSession();
         	parameters = new OrderedMap<String, String>();
         	parameters.put("duration", ""+duration);
         	EventManager.create(EventManager.end_game_event_type, parameters);

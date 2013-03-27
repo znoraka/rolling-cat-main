@@ -75,6 +75,7 @@ public class AssessmentScreen implements Screen {
 	        if(mc.isDone()){
 	        	parameters = new OrderedMap<String, String>();
 	        	parameters.put("duration", ""+(int)duration);
+	        	InternetManager.endGameSession();
 	        	EventManager.create(EventManager.end_game_event_type, parameters);
 	        	patient.addTrack(new Track(mc.getMap(), Track.ASSESSEMENT, duration));
 	        	game.setScreen(new TrackingRecapScreen(game, patient));
