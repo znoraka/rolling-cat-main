@@ -30,6 +30,11 @@ public class MouseCursorAssessment implements InputProcessor{
 		isDone = false;
 		parameters = new OrderedMap<String, String>();
 		inArea = false;
+		parameters = new OrderedMap<String, String>();
+		parameters.put("x", ""+0);
+		parameters.put("y", ""+GameConstants.DISPLAY_WIDTH / 2);
+		parameters.put("z", ""+0);
+		EventManager.create(EventManager.pointing_task_start, parameters);
 	}
 	
 	@Override
@@ -158,6 +163,11 @@ public class MouseCursorAssessment implements InputProcessor{
 			parameters.put("y", ""+GameConstants.DISPLAY_WIDTH / 2);
 			parameters.put("z", ""+0);
 			EventManager.create(EventManager.pointing_task_end, parameters);
+			parameters = new OrderedMap<String, String>();
+			parameters.put("x", ""+0);
+			parameters.put("y", ""+GameConstants.DISPLAY_WIDTH / 2);
+			parameters.put("z", ""+0);
+			EventManager.create(EventManager.pointing_task_start, parameters);
 		}
 	}
 

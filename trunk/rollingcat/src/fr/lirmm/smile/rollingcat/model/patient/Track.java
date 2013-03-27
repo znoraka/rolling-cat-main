@@ -212,7 +212,7 @@ public class Track {
 	
 	public String getListOfEvents(){
 		Json json = new Json();
-		Gdx.app.log(RollingCat.LOG, json.prettyPrint(listOfEvents));
+		Gdx.app.log(RollingCat.LOG, listOfEvents);
 		return listOfEvents;
 	}
 
