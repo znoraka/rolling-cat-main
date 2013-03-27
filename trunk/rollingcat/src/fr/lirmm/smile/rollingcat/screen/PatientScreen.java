@@ -31,7 +31,7 @@ public class PatientScreen implements Screen {
 	private RollingCat game;
 	private Patient patient;
 	private Table tableLeft, tableRight;
-	private Label cellName, name, cellBirthDate, birthDate, cellStrokeDate, strokeDate, cellHemiplegia, hemiplegia, cellDominantMember, dominantMember;
+	private Label cellName, name, cellHemiplegia, hemiplegia, cellDominantMember, dominantMember;
 	private BitmapFont font;
 	private Stage stage;
 	private Skin skin;
@@ -93,7 +93,7 @@ public class PatientScreen implements Screen {
 		play = new TextButton("Play", style);
 		play.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-			        InternetManager.newGameSession(Track.GAME);
+			        InternetManager.newGameSession(Track.GAME, patient.getID());
 					game.setScreen(new LevelSelectScreen(game, patient));
 				}
 			});
@@ -126,31 +126,21 @@ public class PatientScreen implements Screen {
 		
 		cellName = new Label("Name", labelStyle);
 		name = new Label("", labelStyle);
-		cellBirthDate = new Label("Birth Date", labelStyle);
-		birthDate = new Label("", labelStyle);
 		cellDominantMember = new Label("Dominant Member", labelStyle);
 		dominantMember = new Label("", labelStyle);
 		cellHemiplegia = new Label("Hemiplegia", labelStyle);
 		hemiplegia = new Label("", labelStyle);
-		cellStrokeDate = new Label("Stroke Date", labelStyle);
-		strokeDate = new Label("", labelStyle);
 		
 		name.setText(patient.getFirstName() + " " + patient.getLastName());
-		birthDate.setText(""+patient.getBirthDate());
-		strokeDate.setText(patient.getStrokeDate());
 		hemiplegia.setText(patient.getHemiplegia());
 		dominantMember.setText(patient.getDominantMember());
 		
 		cellName.setAlignment(Align.center);
-		cellBirthDate.setAlignment(Align.center);
 		cellDominantMember.setAlignment(Align.center);
-		cellStrokeDate.setAlignment(Align.center);
 		cellHemiplegia.setAlignment(Align.center);
 		name.setAlignment(Align.center);
-		birthDate.setAlignment(Align.center);
 		dominantMember.setAlignment(Align.center);
 		hemiplegia.setAlignment(Align.center);
-		strokeDate.setAlignment(Align.center);
 		
 //		tableLeft.add(patient.getFace()).padTop(17).maxHeight(GameConstants.DISPLAY_WIDTH / 5f * 1.3f).maxWidth(GameConstants.DISPLAY_WIDTH / 5f).setWidgetX(200);
 //		tableLeft.row();
@@ -164,12 +154,6 @@ public class PatientScreen implements Screen {
 		
 		tableRight.add(cellName).fill().expand();
 		tableRight.add(name).fill().expand();
-		tableRight.row();
-		tableRight.add(cellBirthDate).fill().expand();
-		tableRight.add(birthDate).fill().expand();
-		tableRight.row();
-		tableRight.add(cellStrokeDate).fill().expand();
-		tableRight.add(strokeDate).fill().expand();
 		tableRight.row();
 		tableRight.add(cellHemiplegia).fill().expand();
 		tableRight.add(hemiplegia).fill().expand();

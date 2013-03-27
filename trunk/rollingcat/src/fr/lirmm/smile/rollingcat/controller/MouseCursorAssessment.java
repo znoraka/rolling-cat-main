@@ -3,6 +3,8 @@ package fr.lirmm.smile.rollingcat.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.*;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -31,8 +33,8 @@ public class MouseCursorAssessment implements InputProcessor{
 		parameters = new OrderedMap<String, String>();
 		inArea = false;
 		parameters = new OrderedMap<String, String>();
-		parameters.put("x", ""+0);
-		parameters.put("y", ""+GameConstants.DISPLAY_WIDTH / 2);
+		parameters.put("x", ""+x(GameConstants.DISPLAY_WIDTH / 2));
+		parameters.put("y", ""+0);
 		parameters.put("z", ""+0);
 		EventManager.create(EventManager.pointing_task_start, parameters);
 	}
@@ -130,8 +132,8 @@ public class MouseCursorAssessment implements InputProcessor{
 					oldX = x;
 					oldY = y;
 					map.put(map.size(), new float[] {x, y});
-					parameters.put("x", ""+x);
-					parameters.put("y", ""+y);
+					parameters.put("x", ""+x(x));
+					parameters.put("y", ""+y(y));
 					parameters.put("z", ""+0);
 					EventManager.create(EventManager.player_cursor_event_type, parameters);
 				}
@@ -159,13 +161,13 @@ public class MouseCursorAssessment implements InputProcessor{
 	private void addEndTask(){
 		if(enteringArea()){
 			parameters = new OrderedMap<String, String>();
-			parameters.put("x", ""+0);
-			parameters.put("y", ""+GameConstants.DISPLAY_WIDTH / 2);
+			parameters.put("x", ""+x(GameConstants.DISPLAY_WIDTH / 2));
+			parameters.put("y", ""+0);
 			parameters.put("z", ""+0);
 			EventManager.create(EventManager.pointing_task_end, parameters);
 			parameters = new OrderedMap<String, String>();
-			parameters.put("x", ""+0);
-			parameters.put("y", ""+GameConstants.DISPLAY_WIDTH / 2);
+			parameters.put("x", ""+x(GameConstants.DISPLAY_WIDTH / 2));
+			parameters.put("y", ""+0);
 			parameters.put("z", ""+0);
 			EventManager.create(EventManager.pointing_task_start, parameters);
 		}

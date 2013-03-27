@@ -44,7 +44,7 @@ public class PatientSelectScreen implements Screen{
 	private Table tableLeft, tableRight;
 	private ArrayList<Patient> patients;
 	private Patient p;
-	private Label nom, prenom, date, hemiplegia, dominantMember;
+	private Label nom, prenom, hemiplegia, dominantMember;
 	private Texture face;
 	private LabelStyle labelStyle;
 	private Doctor doctor;
@@ -159,7 +159,6 @@ public class PatientSelectScreen implements Screen{
 			labelStyle.background = skin.getDrawable("button_up");
 			nom = new Label(p.getLastName(), labelStyle);
 			prenom = new Label(p.getFirstName(), labelStyle);
-			date = new Label(p.getStrokeDate(), labelStyle);
 			hemiplegia = new Label(p.getHemiplegia(), labelStyle);
 			dominantMember = new Label(p.getDominantMember(), labelStyle);
 			selectPatient = new TextButton("Select", style);
@@ -173,8 +172,6 @@ public class PatientSelectScreen implements Screen{
 			
 			tableRight.add(prenom).fill().expand();
 			tableRight.add(nom).fill().expand();
-			tableRight.row();
-			tableRight.add(date).fill().expand();
 			tableRight.row();
 			tableRight.add(hemiplegia).fill().expand();
 			tableRight.row();
@@ -228,7 +225,6 @@ public class PatientSelectScreen implements Screen{
 		p = patient;
 		nom.setText(patient.getLastName());
 		prenom.setText(patient.getFirstName());
-		date.setText(patient.getStrokeDate());
 		hemiplegia.setText(patient.getHemiplegia());
 		dominantMember.setText(patient.getDominantMember());
 		face = patient.getFace();

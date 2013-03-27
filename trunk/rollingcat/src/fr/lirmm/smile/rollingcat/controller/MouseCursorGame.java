@@ -2,6 +2,7 @@ package fr.lirmm.smile.rollingcat.controller;
 
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
+import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +32,8 @@ import fr.lirmm.smile.rollingcat.model.game.Wasp;
 public class MouseCursorGame implements InputProcessor{
 	private float hoverTimer;
 	private float standTimer;
-	private float x, oldX;
-	private float y, oldY;
+	private float x, oldX, workPlanX;
+	private float y, oldY, workPlanY;
 	private Entity actor;
 	private Stage stage;
 	private Cat cat;
@@ -121,8 +122,8 @@ public class MouseCursorGame implements InputProcessor{
 	 */
 	private void addEvent(){
 		parameters = new OrderedMap<String, String>();
-		parameters.put("x", ""+actor.getX()%GameConstants.DISPLAY_WIDTH);
-		parameters.put("y", ""+actor.getY());
+		parameters.put("x", ""+ x(actor.getX()%GameConstants.DISPLAY_WIDTH));
+		parameters.put("y", ""+ y(actor.getY()));
 		parameters.put("z", ""+0);
 		EventManager.create(EventManager.pointing_task_end, parameters);
 	}
@@ -153,22 +154,22 @@ public class MouseCursorGame implements InputProcessor{
 	 * @param sr
 	 */
 	public void render(ShapeRenderer sr){
-        sr.begin(ShapeType.FilledRectangle);
-		sr.filledRect(x, y, 10, 10);
+        sr.begin(ShapeType.Filled);
+		sr.rect(x, y, 10, 10);
 		if(hoverTimer > 0)
 		{	
 			sr.setColor(Color.RED);
-			sr.filledRect(x, y, 70, 20);
+			sr.rect(x, y, 70, 20);
 			sr.setColor(Color.BLUE);
-			sr.filledRect(x, y, 70*hoverTimer, 20);
+			sr.rect(x, y, 70*hoverTimer, 20);
 		}
 		sr.end();
-		sr.begin(ShapeType.FilledRectangle);
+		sr.begin(ShapeType.Filled);
 		if (standTimer > GameConstants.HOLD_POSITION / 2){
 			sr.setColor(Color.GREEN);
-			sr.filledRect(cat.getX(), cat.getY(), 70, 20);
+			sr.rect(cat.getX(), cat.getY(), 70, 20);
 			sr.setColor(Color.ORANGE);
-			sr.filledRect(cat.getX(), cat.getY(), 70*(standTimer - GameConstants.HOLD_POSITION / 2) / GameConstants.HOLD_POSITION * 2, 20);
+			sr.rect(cat.getX(), cat.getY(), 70*(standTimer - GameConstants.HOLD_POSITION / 2) / GameConstants.HOLD_POSITION * 2, 20);
 		}
 		sr.end();
 		
@@ -198,8 +199,8 @@ public class MouseCursorGame implements InputProcessor{
 				oldX = x;
 				oldY = y;
 				map.put(map.size(), new float[] {x, y});
-				parameters.put("x", ""+x%GameConstants.DISPLAY_WIDTH);
-				parameters.put("y", ""+y);
+				parameters.put("x", ""+x(x%GameConstants.DISPLAY_WIDTH));
+				parameters.put("y", ""+y(y));
 				parameters.put("z", ""+0);
 				EventManager.create(EventManager.player_cursor_event_type, parameters);
 			}

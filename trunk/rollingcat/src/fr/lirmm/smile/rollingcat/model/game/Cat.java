@@ -107,15 +107,15 @@ public class Cat extends Entity {
 				else if(((Entity) actor).getBounds().overlaps(veryBottom) & actor.isVisible() & (state == FLYING || state == JUMPING))
 					state = WALKING;
 			}
-			if(actor instanceof Fan)
-				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
-					state = FLYING;
 			if(actor instanceof Dog & state == WALKING)
 				if(((Entity) actor).getBounds().overlaps(right) & actor.isVisible())
 					state = HITTING;
 			if(actor instanceof Wasp)
 				if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
 					state = FALLING;
+			if(actor instanceof Fan)
+				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
+					state = FLYING;
 			if(actor instanceof Carpet)
 				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
 					state = HITTING;
@@ -231,19 +231,19 @@ public class Cat extends Entity {
 		skeleton.draw(batch);
 	}
 
-//	public void render(ShapeRenderer sr) {
-//		sr.begin(ShapeType.Filled);
-//		sr.setColor(Color.BLUE);
-//		sr.rect(top.x, top.y, top.width, top.height);
-//		sr.setColor(Color.RED);
-//		sr.rect(bottom.x, bottom.y, bottom.width, bottom.height);
-//		sr.setColor(Color.GREEN);
-//		sr.rect(right.x, right.y, right.width, right.height);
-//		sr.setColor(Color.ORANGE);
-//		sr.rect(left.x, left.y, left.width, left.height);
-//		sr.end();
-//		
-//	}
+	public void render(ShapeRenderer sr) {
+		sr.begin(ShapeType.Filled);
+		sr.setColor(Color.BLUE);
+		sr.rect(top.x, top.y, top.width, top.height);
+		sr.setColor(Color.RED);
+		sr.rect(bottom.x, bottom.y, bottom.width, bottom.height);
+		sr.setColor(Color.GREEN);
+		sr.rect(right.x, right.y, right.width, right.height);
+		sr.setColor(Color.ORANGE);
+		sr.rect(left.x, left.y, left.width, left.height);
+		sr.end();
+		
+	}
 	
 	private void setStuffAfterJump(){
 		top.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);

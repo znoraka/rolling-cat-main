@@ -9,20 +9,18 @@ public class Patient {
 	
 	private String nom;
 	private String prenom;
-	private long birthDate;
-	private long strokeDate;
 	private String hemiplegia;
 	private String dominantMember;
 	private Texture face; 
 	private ArrayList<Track> listOfTracks;
-	private int id;
+	private String id;
 	private int nbLevels;
 	
-	public Patient(String nom, String prenom, long birthDate, long strokeDate, String hemiplegia, String dominantMember, int id, Texture face) {
+	public Patient(String nom, String prenom, String hemiplegia, String dominantMember, String id, Texture face) {
 		this.nom = nom;
 		this.prenom = prenom;
-		this.birthDate = birthDate;
-		this.strokeDate = strokeDate;
+//		this.birthDate = birthDate;
+//		this.strokeDate = strokeDate;
 		this.hemiplegia = hemiplegia;
 		this.dominantMember = dominantMember;
 		this.face = face;
@@ -43,17 +41,17 @@ public class Patient {
 		return prenom;
 	}
 	
-	public String getBirthDate() {
-		Date date = new Date(birthDate);
-		String [] s = date.toLocaleString().split(" ");
-		return (birthDate > 0)?(s[0] + " " + s[1] + " " + s[2]):"error";
-	}
-	
-	public String getStrokeDate() {
-		Date date = new Date(strokeDate);
-		String [] s = date.toLocaleString().split(" ");
-		return (strokeDate > 0)?(s[0] + " " + s[1] + " " + s[2]):"error";
-	}
+//	public String getBirthDate() {
+//		Date date = new Date(birthDate);
+//		String [] s = date.toLocaleString().split(" ");
+//		return (birthDate > 0)?(s[0] + " " + s[1] + " " + s[2]):"error";
+//	}
+//	
+//	public String getStrokeDate() {
+//		Date date = new Date(strokeDate);
+//		String [] s = date.toLocaleString().split(" ");
+//		return (strokeDate > 0)?(s[0] + " " + s[1] + " " + s[2]):"error";
+//	}
 	
 	public String getHemiplegia() {
 		return hemiplegia;
@@ -86,7 +84,7 @@ public class Patient {
 		return this.listOfTracks;
 	}
 
-	public int getID() {
+	public String getID() {
 		return this.id;
 	}
 	

@@ -64,11 +64,11 @@ public class AssessmentScreen implements Screen {
             else{
                 timeout = 0;
             }
-            sr.begin(ShapeType.FilledCircle);
+            sr.begin(ShapeType.Filled);
             sr.setColor(Color.DARK_GRAY);
-            sr.filledCircle(GameConstants.DISPLAY_WIDTH / 2, 0, 100);
+            sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100);
             sr.setColor(Color.GRAY);
-            sr.filledCircle(GameConstants.DISPLAY_WIDTH / 2, 0, 100 - timeout);
+            sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100 - timeout);
             sr.end();
             mc.addTrackingPoint(delta);
         
@@ -105,7 +105,7 @@ public class AssessmentScreen implements Screen {
                 parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
                 parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
                 EventManager.create(EventManager.start_game_event_type, parameters); 
-                InternetManager.newGameSession(Track.ASSESSEMENT);
+                InternetManager.newGameSession(Track.ASSESSEMENT, patient.getID());
         }
 
         @Override

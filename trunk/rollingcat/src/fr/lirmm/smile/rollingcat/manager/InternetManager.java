@@ -28,7 +28,6 @@ public class InternetManager{
 	private static String gameid;
 	public static String value;
 	private static String sessionid;
-	private static String patientid = "5151e65b44ae8b68874c47a6";
 	
 	
 	/**
@@ -160,7 +159,7 @@ public class InternetManager{
 	 * set la date dans la track
 	 * @param track
 	 */
-	public static void newGameSession(String gameType){
+	public static void newGameSession(String gameType, String patientid){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/gamesession/new ");
@@ -222,7 +221,7 @@ public class InternetManager{
 	 * récupère le level sur le serveur
 	 * @param IDpatient
 	 */
-	public static void fetchLevel(int IDpatient, int numLevel){
+	public static void fetchLevel(String patientid, int numLevel){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		
 		Json json = new Json();
@@ -236,8 +235,8 @@ public class InternetManager{
 		map.put("patientId",patientid);
 		map.put("numberOfLines", ""+ 20);
 		map.put("numberOfRows", ""+ 20);
-		map.put("totalHeight",""+50);
-		map.put("totalWidth", ""+100);
+		map.put("totalHeight",""+GameConstants.WORKSPACE_HEIGHT);
+		map.put("totalWidth", ""+GameConstants.WORKSPACE_WIDTH);
 		map.put("totalVolume", ""+20);
 		map.put("volumePerLevel", ""+5);
 		map.put("ImportanceOfEffort", ""+0.9f);
