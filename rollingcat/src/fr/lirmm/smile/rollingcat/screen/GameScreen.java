@@ -4,18 +4,11 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.tiled.SimpleTileAtlas;
-import com.badlogic.gdx.graphics.g2d.tiled.TileAtlas;
-import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
-import com.badlogic.gdx.graphics.g2d.tiled.TiledLoader;
-import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.OrderedMap;
 
@@ -45,10 +38,10 @@ public class GameScreen implements Screen{
 	private float duration;
 	private BitmapFont font;
     private OrderedMap<String, String> parameters;
-    private TiledMap map;
-	private TileMapRenderer renderer;
-	private TileAtlas tileAtlas;
-	private OrthographicCamera camera;
+//    private TiledMap map;
+//	private TileMapRenderer renderer;
+//	private TileAtlas tileAtlas;
+//	private OrthographicCamera camera;
   
 	
 
@@ -62,13 +55,13 @@ public class GameScreen implements Screen{
 	public void render(float delta) {
 	
 //        renderer.render(0, 0, renderer.getUnitsPerTileX(), 32);
-        renderer.render(camera);
+//        renderer.render(camera);
 		duration += delta;
 		mc.updateHoverTimer();
 		mc.updateStandTimer();
 		cat.move(stage);
 		batch.begin();
-//		batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+		batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		font.draw(batch, "bronze : " + cat.getBronze(), GameConstants.DISPLAY_WIDTH * 0.05f, GameConstants.DISPLAY_HEIGHT * 0.95f);
 		font.draw(batch, "silver : " + cat.getSilver(), GameConstants.DISPLAY_WIDTH * 0.25f, GameConstants.DISPLAY_HEIGHT * 0.95f);
 		font.draw(batch, "gold : " + cat.getGold(), GameConstants.DISPLAY_WIDTH * 0.50f, GameConstants.DISPLAY_HEIGHT * 0.95f);
@@ -77,7 +70,7 @@ public class GameScreen implements Screen{
 		stage.draw();
 		sr.setProjectionMatrix(stage.getCamera().combined);
         mc.render(sr);
-//        cat.render(sr);
+        cat.render(sr);
 //        for (Actor a: stage.getActors()) {
 //			((Entity) a).drawDebug(sr);
 //		}
@@ -120,14 +113,14 @@ public class GameScreen implements Screen{
 		font = getBigFont();
 		EventManager.clear();
 		
-		map = TiledLoader.createMap(Gdx.files.internal("data/tilemap/level1-background.tmx"));
-		tileAtlas = new SimpleTileAtlas(map, Gdx.files.internal("data/tilemap/"));
-		renderer = new TileMapRenderer(map, tileAtlas, 1, 1);
-		camera = new OrthographicCamera(GameConstants.DISPLAY_WIDTH / (GameConstants.SCALE * GameConstants.SCALE), GameConstants.DISPLAY_HEIGHT / (GameConstants.SCALE * GameConstants.SCALE));
-		camera.translate(GameConstants.DISPLAY_WIDTH * 0.5f, GameConstants.DISPLAY_HEIGHT * 0.5f);
-//		camera.setToOrtho(false);
-//		camera.setToOrtho(false, GameConstants.DISPLAY_WIDTH * 0.9f, GameConstants.DISPLAY_HEIGHT * 0.9f);
-		camera.update();
+//		map = TiledLoader.createMap(Gdx.files.internal("data/tilemap/level1-background.tmx"));
+//		tileAtlas = new SimpleTileAtlas(map, Gdx.files.internal("data/tilemap/"));
+//		renderer = new TileMapRenderer(map, tileAtlas, 1, 1);
+//		camera = new OrthographicCamera(GameConstants.DISPLAY_WIDTH / (GameConstants.SCALE * GameConstants.SCALE), GameConstants.DISPLAY_HEIGHT / (GameConstants.SCALE * GameConstants.SCALE));
+//		camera.translate(GameConstants.DISPLAY_WIDTH * 0.5f, GameConstants.DISPLAY_HEIGHT * 0.5f);
+////		camera.setToOrtho(false);
+////		camera.setToOrtho(false, GameConstants.DISPLAY_WIDTH * 0.9f, GameConstants.DISPLAY_HEIGHT * 0.9f);
+//		camera.update();
 
 				
 		parameters = new OrderedMap<String, String>();

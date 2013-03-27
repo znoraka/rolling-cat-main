@@ -119,11 +119,11 @@ public class Skeleton {
 		renderer.end();
 
 		renderer.setColor(Color.GREEN);
-		renderer.begin(ShapeType.FilledCircle);
+		renderer.begin(ShapeType.Filled);
 		for (int i = 0, n = bones.size; i < n; i++) {
 			Bone bone = bones.get(i);
 			renderer.setColor(Color.GREEN);
-			renderer.filledCircle(bone.worldX, bone.worldY, 3);
+			renderer.circle(bone.worldX, bone.worldY, 3);
 		}
 		renderer.end();
 	}

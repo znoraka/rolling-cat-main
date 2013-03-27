@@ -1,6 +1,12 @@
 package fr.lirmm.smile.rollingcat.utils;
 
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.game.Box;
@@ -14,14 +20,6 @@ import fr.lirmm.smile.rollingcat.model.game.Gap;
 import fr.lirmm.smile.rollingcat.model.game.GroundBlock;
 import fr.lirmm.smile.rollingcat.model.game.Target;
 import fr.lirmm.smile.rollingcat.model.game.Wasp;
-import generation.LevelFactory;
-
-import java.util.ArrayList;
-
-import utils.MainConstant;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 
 public class LevelBuilder {
@@ -29,40 +27,40 @@ public class LevelBuilder {
 	private static ArrayList<Integer> items;
 	private static int segment = 0;
 
-	private static String testRandomReal()
-	{
-		int tabSize[] = {3,3,2,4,6,5,6,7};
-		int size = 0;
-		for(int i = 0 ; i < tabSize.length ; i++)
-		{
-			size+=tabSize[i];
-		}
-
-		int tabX[] = new int[size];
-		int tabY[] = new int[size];
-		int index = 0;
-		int minX = 5;
-		int x;
-		int y;
-		for(int j = 0 ; j < tabSize.length ; j++)
-		{
-			minX = MainConstant.WIDTH * j + 5;
-			for(int k = 0 ; k < tabSize[j] ; k++)
-			{
-				x = (int)(Math.random() * (MainConstant.WIDTH-2)) + minX;
-				if(x == MainConstant.WIDTH * tabSize.length)
-				{
-					x = MainConstant.WIDTH * tabSize.length-1;
-				}
-
-				y = (int)(Math.random()*(MainConstant.HEIGHT_MAX - 3)) + 3;
-				tabX[index+k] = x;
-				tabY[index+k] = y;
-			}
-			index+=tabSize[j];
-		}
-		return LevelFactory.getStringLevelGeneratedByMCTS(tabX, tabY, tabSize);
-	}
+//	private static String testRandomReal()
+//	{
+//		int tabSize[] = {3,3,2,4,6,5,6,7};
+//		int size = 0;
+//		for(int i = 0 ; i < tabSize.length ; i++)
+//		{
+//			size+=tabSize[i];
+//		}
+//
+//		int tabX[] = new int[size];
+//		int tabY[] = new int[size];
+//		int index = 0;
+//		int minX = 5;
+//		int x;
+//		int y;
+//		for(int j = 0 ; j < tabSize.length ; j++)
+//		{
+//			minX = MainConstant.WIDTH * j + 5;
+//			for(int k = 0 ; k < tabSize[j] ; k++)
+//			{
+//				x = (int)(Math.random() * (MainConstant.WIDTH-2)) + minX;
+//				if(x == MainConstant.WIDTH * tabSize.length)
+//				{
+//					x = MainConstant.WIDTH * tabSize.length-1;
+//				}
+//
+//				y = (int)(Math.random()*(MainConstant.HEIGHT_MAX - 3)) + 3;
+//				tabX[index+k] = x;
+//				tabY[index+k] = y;
+//			}
+//			index+=tabSize[j];
+//		}
+//		return LevelFactory.getStringLevelGeneratedByMCTS(tabX, tabY, tabSize);
+//	}
 
 	
 	/**
