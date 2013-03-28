@@ -39,7 +39,6 @@ public class LevelSelectScreen implements Screen {
 	private ArrayList<Label> labels;
 	private int currentButton;
 	private Label label;
-	private int level;
 	
 	private final float X = (GameConstants.DISPLAY_WIDTH / 2);
 
@@ -85,11 +84,6 @@ public class LevelSelectScreen implements Screen {
 		
 		stage.draw();
 		stage.act(delta);
-		
-		
-		
-		
-		
 	}
 
 	private void changeButtonsSize() {
@@ -180,7 +174,8 @@ public class LevelSelectScreen implements Screen {
 		start = new TextButton("Start", style);
 		start.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new LoadingScreen(game, patient, level));
+					Gdx.app.log(RollingCat.LOG, "level selected : "+currentButton);
+					game.setScreen(new LoadingScreen(game, patient, currentButton));
 				}
 			});
 		

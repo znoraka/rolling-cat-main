@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat;
 
-public interface GameConstants {
+public class GameConstants {
 	
 	public static final String ATLAS = "data/atlas.atlas";
 	public static final String TEXTURE_CAT = "cat";

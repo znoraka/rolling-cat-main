@@ -32,7 +32,7 @@ public class LoginScreen implements Screen, InputProcessor{
 	private RollingCat game;
 	private Stage stage;
 	private Skin skin;
-	private TextButton button;
+	private TextButton button, settings;
 	private TextField loginTextField, passwordTextField;
 	private Table table;
 	private Doctor doctor;
@@ -41,6 +41,7 @@ public class LoginScreen implements Screen, InputProcessor{
 	private static boolean wrong;
 	private TextureRegion region, background;
 	private InputMultiplexer multiplexer;
+	private Screen screen;
 	
 	
 	public LoginScreen(RollingCat game){
@@ -81,6 +82,8 @@ public class LoginScreen implements Screen, InputProcessor{
 
 	@Override
 	public void show() {
+		screen = this;
+		
 		skin = getSkin();
 		batch = getSpriteBatch();
 		font = getBigFont();
@@ -108,6 +111,13 @@ public class LoginScreen implements Screen, InputProcessor{
 			public void clicked (InputEvent event, float x, float y) {
 				wrong = false;
 				doctor.login(loginTextField.getText(), passwordTextField.getText());
+			}
+		});
+		
+		settings = new TextButton("Settings", style);
+		settings.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				game.setScreen(new SettingsScreen(game, screen));
 			}
 		});
 		
@@ -143,6 +153,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		table.setHeight(GameConstants.DISPLAY_HEIGHT);
 		
 		table.add(button).padTop(GameConstants.DISPLAY_HEIGHT * 0.3f);
+		table.add(settings);
 		
 		stage.addActor(loginTextField);
 		stage.addActor(passwordTextField);

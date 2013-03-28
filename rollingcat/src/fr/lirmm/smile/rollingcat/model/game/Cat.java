@@ -252,7 +252,7 @@ public class Cat extends Entity {
 		right.set(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
 		left.set(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
 		this.getActions().clear();
-		state = HITTING;
+		state = WALKING;
 	}
 
 	public int getBronze() {

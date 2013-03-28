@@ -1,8 +1,5 @@
 package fr.lirmm.smile.rollingcat.manager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
@@ -28,6 +25,7 @@ public class InternetManager{
 	private static String gameid;
 	public static String value;
 	private static String sessionid;
+	private static String world;
 	
 	
 	/**
@@ -320,6 +318,14 @@ public class InternetManager{
 		Gdx.app.log(RollingCat.LOG, "trying to get patients string");
 		return patients;
 	}
+	
+	/**
+	 * retourne le world du patient formaté sous forme de String json
+	 * @return
+	 */
+	public static String getWorld(){
+		return world;
+	}
 
 	/**
 	 * retourne true quand le client a récupéré la clé d'idendification sur le serveur
@@ -336,6 +342,60 @@ public class InternetManager{
 		level = null;
 		patients = null;
 		value = null;
+		world = null;
+	}
+
+	public static void updateLevelStats(String patientid, int levelID, int score, int duration) {
+		Gdx.app.log(RollingCat.LOG, "preparing send score update request...");
+		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+levelID+"/"+score+"/"+duration);
+		httpGet.setHeader(key, value);
+		httpGet.setHeader("Content-Type", "text/plain");
+		
+		Gdx.app.log(RollingCat.LOG, "sending score update request...");
+
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+			
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+	           	Gdx.app.log(RollingCat.LOG, "score update request success");
+		    }
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
+				Gdx.app.log(RollingCat.LOG, "something went wrong");
+			}
+		});
+		
+	}
+	
+	public static void getWorld(String patientid) {
+		Gdx.app.log(RollingCat.LOG, "preparing get world request...");
+		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid);
+		httpGet.setHeader(key, value);
+		httpGet.setHeader("Content-Type", "text/plain");
+		final Json json = new Json();
+		
+		Gdx.app.log(RollingCat.LOG, "sending get world request...");
+
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+			
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				world = httpResponse.getResultAsString();
+				Gdx.app.log(RollingCat.LOG, json.prettyPrint(world));
+	           	Gdx.app.log(RollingCat.LOG, "get world request success");
+		    }
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
+				Gdx.app.log(RollingCat.LOG, "something went wrong");
+			}
+		});
+		
 	}
 
 }
