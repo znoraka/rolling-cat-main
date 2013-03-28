@@ -160,7 +160,7 @@ public class InternetManager{
 	public static void newGameSession(String gameType, String patientid){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/gamesession/new ");
+		httpGet.setUrl("http://" + hostName + ":" + port + "/gamesession/new");
 		OrderedMap<String, String> map = new OrderedMap<String, String>();
 		map.put("name", gameType);
 		map.put("comment", "no comment");

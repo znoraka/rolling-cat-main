@@ -93,9 +93,11 @@ public class PatientScreen implements Screen {
 		play = new TextButton("Play", style);
 		play.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
+			        InternetManager.newGameSession(Track.GAME,patient.getID());
+			        game.setScreen(new LevelSelectScreen(game, patient,GameConstants.NB_OF_LEVELS_IN_MENU));
 			        InternetManager.newGameSession(Track.GAME, patient.getID());
 			        InternetManager.getWorld(patient.getID());
-					game.setScreen(new LevelSelectScreen(game, patient));
+					game.setScreen(new LevelSelectScreen(game, patient,GameConstants.NB_OF_LEVELS_IN_MENU));
 				}
 			});
 		
