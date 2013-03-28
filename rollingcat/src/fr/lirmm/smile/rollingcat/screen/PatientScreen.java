@@ -35,7 +35,7 @@ public class PatientScreen implements Screen {
 	private BitmapFont font;
 	private Stage stage;
 	private Skin skin;
-	private TextButton play, assessment, upload, back;
+	private TextButton play, assessment, upload, back, settings;
 	private SpriteBatch batch;
 	
 	public PatientScreen(RollingCat game, Patient patient){
@@ -68,6 +68,7 @@ public class PatientScreen implements Screen {
 		skin = getSkin();
 		font = getBigFont();
 		stage = getStage();
+		settings = getSettingsButton(this, game);
 		
 		tableLeft = new Table();
 		tableRight = new Table();
@@ -92,14 +93,12 @@ public class PatientScreen implements Screen {
 		
 		play = new TextButton("Play", style);
 		play.addListener(new ClickListener() {
-				public void clicked (InputEvent event, float x, float y) {
-			        InternetManager.newGameSession(Track.GAME,patient.getID());
-			        game.setScreen(new LevelSelectScreen(game, patient,GameConstants.NB_OF_LEVELS_IN_MENU));
-			        InternetManager.newGameSession(Track.GAME, patient.getID());
-			        InternetManager.getWorld(patient.getID());
-					game.setScreen(new LevelSelectScreen(game, patient,GameConstants.NB_OF_LEVELS_IN_MENU));
-				}
-			});
+			public void clicked (InputEvent event, float x, float y) {
+		        InternetManager.newGameSession(Track.GAME, patient.getID());
+		        InternetManager.getWorld(patient.getID());
+				game.setScreen(new LevelSelectScreen(game, patient));
+			}
+		});
 		
 		assessment = new TextButton("Assessment", style);
 		assessment.addListener(new ClickListener() {
@@ -153,6 +152,8 @@ public class PatientScreen implements Screen {
 		tableLeft.row();
 		tableLeft.add(upload).pad(GameConstants.DISPLAY_HEIGHT / 100 - 2).fill().expand();
 		tableLeft.row();
+		tableLeft.add(settings).pad(GameConstants.DISPLAY_HEIGHT / 100 - 2).fill().expand();
+		tableLeft.row();
 		tableLeft.add(back).pad(GameConstants.DISPLAY_HEIGHT / 100 - 2).fill().expand();
 		
 		tableRight.add(cellName).fill().expand();
@@ -163,6 +164,7 @@ public class PatientScreen implements Screen {
 		tableRight.row();
 		tableRight.add(cellDominantMember).fill().expand();
 		tableRight.add(dominantMember).fill().expand();
+		
 		
 		stage.addActor(tableLeft);
 		stage.addActor(tableRight);

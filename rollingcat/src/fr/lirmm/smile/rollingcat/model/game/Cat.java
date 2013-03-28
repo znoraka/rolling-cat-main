@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
@@ -26,7 +27,7 @@ import fr.lirmm.smile.rollingcat.spine.SkeletonData;
 public class Cat extends Entity {
 	
 	private int nbcoin;
-	private boolean done;
+	private boolean done, requestBoxEmptiing;
 	
 	private static final int FALLING = 0;
 	private static final int FLYING = 1;
@@ -57,6 +58,8 @@ public class Cat extends Entity {
 		this.setTouchable(Touchable.disabled);
 		
 		final String name = "cat-skeleton";
+		
+		requestBoxEmptiing = false;
 		
 		TextureAtlas atlas = getCatAtlas();
 		SkeletonBinary binary = new SkeletonBinary(atlas);
@@ -108,7 +111,7 @@ public class Cat extends Entity {
 					state = WALKING;
 			}
 			if(actor instanceof Dog & state == WALKING)
-				if(((Entity) actor).getBounds().overlaps(right) & actor.isVisible())
+				if((((Entity) actor).getBounds().overlaps(right) || ((Entity) actor).getBounds().overlaps(bounds)) & actor.isVisible())
 					state = HITTING;
 			if(actor instanceof Wasp)
 				if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
@@ -133,6 +136,15 @@ public class Cat extends Entity {
 						gold++;
 					actor.setVisible(false);
 					actor.setTouchable(Touchable.disabled);
+				}
+			}
+			
+			if(actor instanceof Door){
+				if(((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT){
+					Gdx.app.log(RollingCat.LOG, "hitting door");
+					this.getActions().clear();
+					requestBoxEmptiing = true;
+					this.addAction(Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT));
 				}
 			}
 			
@@ -180,7 +192,7 @@ public class Cat extends Entity {
 		{	
 			state = JUMPING;
 			this.getActions().clear();
-			this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, GameConstants.SPEED * 2)));
+			this.addAction(Actions.parallel(Actions.moveTo((this.getXOnGrid() + 2) * GameConstants.BLOCK_WIDTH, this.getYOnGrid() * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 2)));
 			this.addAction(Actions.parallel(Actions.sequence(
 					Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2Out),
 					Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2In),
@@ -252,7 +264,7 @@ public class Cat extends Entity {
 		right.set(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
 		left.set(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
 		this.getActions().clear();
-		state = WALKING;
+		this.move(this.getStage());
 	}
 
 	public int getBronze() {
@@ -265,5 +277,13 @@ public class Cat extends Entity {
 	
 	public int getGold() {
 		return gold;
+	}
+	
+	public boolean requestBoxEmptiing(){
+		return requestBoxEmptiing;
+	}
+
+	public void requestOk() {
+		requestBoxEmptiing = false;
 	}
 }

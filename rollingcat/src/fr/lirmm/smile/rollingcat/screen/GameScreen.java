@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.OrderedMap;
 
@@ -19,6 +20,7 @@ import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
+import fr.lirmm.smile.rollingcat.model.game.Entity;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
@@ -39,6 +41,7 @@ public class GameScreen implements Screen{
 	private BitmapFont font;
     private OrderedMap<String, String> parameters;
     private int level;
+    private int segment;
 //    private TiledMap map;
 //	private TileMapRenderer renderer;
 //	private TileAtlas tileAtlas;
@@ -73,9 +76,9 @@ public class GameScreen implements Screen{
 		sr.setProjectionMatrix(stage.getCamera().combined);
         mc.render(sr);
         cat.render(sr);
-//        for (Actor a: stage.getActors()) {
-//			((Entity) a).drawDebug(sr);
-//		}
+        for (Actor a: stage.getActors()) {
+			((Entity) a).drawDebug(sr);
+		}
         updateCamPos();
         mc.addTrackingPoint(delta);
         if(cat.isDone()){
@@ -87,6 +90,10 @@ public class GameScreen implements Screen{
         	patient.addTrack(new Track(mc.getMap(), Track.GAME, duration));
         	game.setScreen(new TrackingRecapScreen(game, patient));
         }
+        if(cat.requestBoxEmptiing()){
+        	mc.dropItem();
+        	cat.requestOk();
+        }
         
 	}
 	
@@ -95,9 +102,10 @@ public class GameScreen implements Screen{
 	 */
 	private void updateCamPos() {
 		if(stage.getCamera().position.x + GameConstants.DISPLAY_WIDTH / 2 - GameConstants.BLOCK_WIDTH * 3 < cat.getX()){
+        	box.emptyAfterNotMoving(segment);
+        	box.fill();
+			segment++;
 			stage.getCamera().translate(GameConstants.VIEWPORT_WIDTH, 0, 0);
-//			box.empty();
-//			box.fill();
 			box.setX(box.getX() + GameConstants.VIEWPORT_WIDTH);
 		}
 		

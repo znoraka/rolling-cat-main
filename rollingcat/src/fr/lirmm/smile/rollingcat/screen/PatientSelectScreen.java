@@ -38,7 +38,7 @@ public class PatientSelectScreen implements Screen{
 	private BitmapFont black;
 	private Skin skin;
 	private SpriteBatch batch;
-	private TextButton b, selectPatient, back;
+	private TextButton b, selectPatient, back, settings;
 	private ArrayList<TextButton> buttons;
 	private ScrollPane sp;
 	private Table tableLeft, tableRight;
@@ -107,6 +107,7 @@ public class PatientSelectScreen implements Screen{
 		skin = getSkin();
 		black = getSmallFont();
 		stage = getStage();
+		settings = getSettingsButton(this, game);
 
 		tableLeft = new Table();
 		tableRight = new Table();
@@ -179,7 +180,7 @@ public class PatientSelectScreen implements Screen{
 			tableRight.row();
 			
 			selectPatient.setX(GameConstants.DISPLAY_WIDTH * 0.7f);
-			selectPatient.setY(GameConstants.DISPLAY_HEIGHT * 0.77f);
+			selectPatient.setY(GameConstants.DISPLAY_HEIGHT * 0.81f);
 			
 			stage.addActor(selectPatient);
 		}
@@ -195,9 +196,12 @@ public class PatientSelectScreen implements Screen{
 			}
 		});
 		back.setX(GameConstants.DISPLAY_WIDTH * 0.70f);
-		back.setY(GameConstants.DISPLAY_HEIGHT * 0.70f);
+		back.setY(GameConstants.DISPLAY_HEIGHT * 0.73f);
+		settings.setX(GameConstants.DISPLAY_WIDTH * 0.70f);
+		settings.setY(GameConstants.DISPLAY_HEIGHT * 0.66f);
 		
 		stage.addActor(back);
+		stage.addActor(settings);
 	}
 
 	@Override

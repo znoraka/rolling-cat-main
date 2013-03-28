@@ -2,6 +2,9 @@ package fr.lirmm.smile.rollingcat;
 
 public class GameConstants {
 	
+	/**
+	 * constantes pour le jeu
+	 */
 	public static final String ATLAS = "data/atlas.atlas";
 	public static final String TEXTURE_CAT = "cat";
 	public static final String TEXTURE_BONE = "bone";
@@ -18,6 +21,7 @@ public class GameConstants {
 	public static final String TEXTURE_BOX = "box";
 	public static final String TEXTURE_TARGET = "target";
 	public static final String TEXTURE_CARPET = "carpet";
+	public static final String TEXTURE_BOUEE = "bouee";
 	
 	public static final String FONT_LOGIN = "data/font.fnt";
 	
@@ -46,6 +50,20 @@ public class GameConstants {
 	public static final int NB_OF_LEVELS_IN_MENU = 7;
 	public static final int NB_OF_LEVELS_IN_GAME = 20;
 	
-	public static int WORKSPACE_WIDTH = 100;
-	public static int WORKSPACE_HEIGHT = 50;
+	
+	/**
+	 * variables pour le serveur
+	 */
+	public static int workspaceWidth = 100;
+	public static int workspaceHeight = 50;
+	public static int range = 2;
+	public static float pathDeltaTime = 0.001f;
+	public static float evaporationPerDay = 0;;
+	public static float alpha = 0.9f;
+	public static int numberOfLines = 20;
+	public static int numberOfRows = 20;
+	public static int totalVolume = 20;
+	public static int volumePerLevel = 5;
+	
+	
 }

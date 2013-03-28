@@ -1,14 +1,15 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
+
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
-
 import fr.lirmm.smile.rollingcat.GameConstants;
-import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
+import fr.lirmm.smile.rollingcat.RollingCat;
 
 public class Box extends Entity{
 
@@ -21,7 +22,7 @@ public class Box extends Entity{
 		
 	private int item;
 	private TextureAtlas atlas;
-	private ArrayList<Integer> items;
+	private ArrayList<Integer[]> items;
 	
 	public Box(float x, float y) {
 		super(x, y, GameConstants.TEXTURE_BOX);
@@ -33,10 +34,10 @@ public class Box extends Entity{
 		this.setZIndex(2);
 	}
 
-	public void setItems(ArrayList<Integer> items)
+	public void setItems(ArrayList<Integer[]> items)
 	{
 		this.items = items;
-		this.item = items.get(0);
+		this.item = items.get(0)[0];
 	}
 	
 	@Override
@@ -71,7 +72,7 @@ public class Box extends Entity{
 	 * fills the box with the next item on the items list
 	 */
 	public void fill(){
-		this.item = items.get(0);
+		this.item = items.get(0)[0];
 	}
 	
 	/**
@@ -80,6 +81,14 @@ public class Box extends Entity{
 	 */
 	public boolean isEmpty() {
 		return item == 0;
+	}
+	
+	public void emptyAfterNotMoving(int segment){
+		while(items.get(0)[1] == segment){
+			Gdx.app.log(RollingCat.LOG, "dropping "+items.get(0)[0]);
+			items.remove(0);
+		}
+		
 	}
 
 }

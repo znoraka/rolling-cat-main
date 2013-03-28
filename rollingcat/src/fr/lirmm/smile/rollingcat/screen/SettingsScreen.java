@@ -7,6 +7,7 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -30,12 +31,12 @@ public class SettingsScreen implements Screen {
 	private Stage stage;
 	private Table table;
 	private ImageButton heightPlus, heightMinus, widthPlus, widthMinus;
-	private TextField height, width;
+	private TextField workspaceHeight, workspaceWidth, range, pathDeltaTime, evaporationPerDay, alpha, numberOfLines, numberOfRows, totalVolume, volumePerLevel;
 	private Skin skin;
 	private BitmapFont font;
 	private float elapsedTime;
 	private RollingCat game;
-	private Label heightLabel, widthLabel;
+	private Label heightLabel, widthLabel, rangeLabel, pathDeltaTimeLabel, evaporationPerDayLabel, alphaLabel, numberOfLinesLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel;
 	private TextButton save, discard;
 	private Screen oldScreen;
 	
@@ -48,6 +49,8 @@ public class SettingsScreen implements Screen {
 	
 	@Override
 	public void render(float delta) {
+		Gdx.gl.glClearColor(1, 1, 1, 0.5f);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		if(heightMinus.isPressed() & elapsedTime > SPEED)
 			heightModify(-1);
 		
@@ -101,9 +104,25 @@ public class SettingsScreen implements Screen {
 		
 		heightLabel = new Label("workspace height :", labelStyle);
 		widthLabel = new Label("workspace width :", labelStyle);
+		rangeLabel = new Label("range", labelStyle);
+		pathDeltaTimeLabel = new Label("pathDeltaTime", labelStyle);
+		evaporationPerDayLabel = new Label("evaporationPerDay", labelStyle);
+		alphaLabel = new Label("alpha", labelStyle);
+		numberOfLinesLabel = new Label("numberOfLines", labelStyle);
+		numberOfRowsLabel = new Label("numberOfRows", labelStyle);
+		totalVolumeLabel = new Label("totalVolume", labelStyle);
+		volumePerLevelLabel = new Label("volumePerLevel", labelStyle);
 		
-		height = new TextField(""+GameConstants.WORKSPACE_HEIGHT, textFieldStyle);
-		width = new TextField(""+GameConstants.WORKSPACE_WIDTH, textFieldStyle);
+		workspaceHeight = new TextField(""+GameConstants.workspaceHeight, textFieldStyle);
+		workspaceWidth = new TextField(""+GameConstants.workspaceWidth, textFieldStyle);
+		range = new TextField(""+GameConstants.range, textFieldStyle);
+		pathDeltaTime = new TextField(""+GameConstants.pathDeltaTime, textFieldStyle);
+		evaporationPerDay = new TextField(""+GameConstants.evaporationPerDay, textFieldStyle);
+		alpha = new TextField(""+GameConstants.alpha, textFieldStyle);
+		numberOfLines = new TextField(""+GameConstants.numberOfLines, textFieldStyle);
+		numberOfRows = new TextField(""+GameConstants.numberOfRows, textFieldStyle);
+		totalVolume = new TextField(""+GameConstants.totalVolume, textFieldStyle);
+		volumePerLevel = new TextField(""+GameConstants.volumePerLevel, textFieldStyle);
 		
 		heightPlus = new ImageButton(skin.getDrawable("triangle_up"));
 		heightPlus.addListener(new InputListener() {
@@ -162,13 +181,21 @@ public class SettingsScreen implements Screen {
 		save = new TextButton("Save", style);
 		save.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					GameConstants.WORKSPACE_HEIGHT = Integer.valueOf(height.getText());
-					GameConstants.WORKSPACE_WIDTH = Integer.valueOf(width.getText());
+					GameConstants.workspaceHeight = Integer.valueOf(workspaceHeight.getText());
+					GameConstants.workspaceWidth = Integer.valueOf(workspaceWidth.getText());
+					GameConstants.range = Integer.valueOf(range.getText());
+					GameConstants.pathDeltaTime = Float.valueOf(pathDeltaTime.getText());
+					GameConstants.evaporationPerDay = Float.valueOf(evaporationPerDay.getText());
+					GameConstants.alpha = Float.valueOf(alpha.getText());
+					GameConstants.numberOfLines = Integer.valueOf(numberOfLines.getText());
+					GameConstants.numberOfRows = Integer.valueOf(numberOfRows.getText());
+					GameConstants.totalVolume = Integer.valueOf(totalVolume.getText());
+					GameConstants.volumePerLevel = Integer.valueOf(volumePerLevel.getText());
 					game.setScreen(oldScreen);
 				}
 			});
 		
-		discard = new TextButton("Back", style);
+		discard = new TextButton("Discard", style);
 		discard.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					game.setScreen(oldScreen);
@@ -176,15 +203,38 @@ public class SettingsScreen implements Screen {
 			});
 		
 		table.add(heightLabel);
-		table.add(height);
-		table.add(heightPlus);
-		table.add(heightMinus);
+		table.add(workspaceHeight);
+//		table.add(heightPlus);
+//		table.add(heightMinus);
 		table.row();
 		table.add(widthLabel);
-		table.add(width);
-		table.add(widthPlus);
-		table.add(widthMinus);
+		table.add(workspaceWidth);
+//		table.add(widthPlus);
+//		table.add(widthMinus);
 		table.row();
+		table.add(rangeLabel);
+		table.add(range);
+		table.row();
+		table.add(pathDeltaTimeLabel);
+		table.add(pathDeltaTime);
+		table.row();
+		table.add(evaporationPerDayLabel);
+		table.add(evaporationPerDay);
+		table.row();
+		table.add(alphaLabel);
+		table.add(alpha);
+		table.row();
+		table.add(numberOfLinesLabel);
+		table.add(numberOfLines);
+		table.row();
+		table.add(numberOfRowsLabel);
+		table.add(numberOfRows);
+		table.row();
+		table.add(totalVolumeLabel);
+		table.add(totalVolume);
+		table.row();
+		table.add(volumePerLevelLabel);
+		table.add(volumePerLevel);
 		table.add(save);
 		table.add(discard);
 		
@@ -201,7 +251,6 @@ public class SettingsScreen implements Screen {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -219,30 +268,30 @@ public class SettingsScreen implements Screen {
 	
 	private void heightModify(int i) {
 		elapsedTime = 0;
-		height.setText(""+(Integer.valueOf(height.getText()) + i));
+		workspaceHeight.setText(""+(Integer.valueOf(workspaceHeight.getText()) + i));
 		checkHeightBounds();
 	}
 	
 	private void checkHeightBounds() {
-		if(Integer.valueOf(height.getText()) > 500)
-			height.setText("500");
+		if(Integer.valueOf(workspaceHeight.getText()) > 500)
+			workspaceHeight.setText("500");
 		
-		if(Integer.valueOf(height.getText()) < 2)
-			height.setText(""+1);		
+		if(Integer.valueOf(workspaceHeight.getText()) < 2)
+			workspaceHeight.setText(""+1);		
 	}
 
 	private void widthModify(int i) {
 		elapsedTime = 0;
-		width.setText(""+(Integer.valueOf(width.getText()) + i));
+		workspaceWidth.setText(""+(Integer.valueOf(workspaceWidth.getText()) + i));
 		checkWidthBounds();
 	}
 
 	private void checkWidthBounds() {
-		if(Integer.valueOf(width.getText()) > 500)
-			width.setText("500");
+		if(Integer.valueOf(workspaceWidth.getText()) > 500)
+			workspaceWidth.setText("500");
 		
-		if(Integer.valueOf(width.getText()) < 2)
-			width.setText(""+1);
+		if(Integer.valueOf(workspaceWidth.getText()) < 2)
+			workspaceWidth.setText(""+1);
 	}
 
 

@@ -1,18 +1,25 @@
 package fr.lirmm.smile.rollingcat.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.screen.SettingsScreen;
 
 public class GdxRessourcesGetter {
 	
@@ -24,6 +31,7 @@ public class GdxRessourcesGetter {
 	private static BitmapFont bigFont, smallFont;
 	private static Stage stage;
 	private static ShapeRenderer sr;
+	private static TextButton settings;
 	
 	/**
 	 * 
@@ -176,6 +184,23 @@ public class GdxRessourcesGetter {
 		if(fanAtlas == null)
 			fanAtlas = new TextureAtlas("data/fan/fan.atlas");
 		return fanAtlas;
+	}
+	
+	public static TextButton getSettingsButton(final Screen screen, final RollingCat game){
+		TextButtonStyle style = new TextButtonStyle();
+		style.up = skin.getDrawable("button_up");
+		style.down = skin.getDrawable("button_down");
+		style.font = getBigFont();
+		style.fontColor = Color.BLACK;
+		settings = new TextButton("Settings", style);
+
+		settings.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				screen.resume();
+				game.setScreen(new SettingsScreen(game, screen));
+			}
+		});
+		return settings;
 	}
 	
 	

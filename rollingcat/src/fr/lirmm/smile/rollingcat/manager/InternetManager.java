@@ -220,6 +220,7 @@ public class InternetManager{
 	 * @param IDpatient
 	 */
 	public static void fetchLevel(String patientid, int numLevel){
+		level = null;
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		
 		Json json = new Json();
@@ -230,20 +231,20 @@ public class InternetManager{
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
 		map.put("builderId","ant-0.1");
-		map.put("patientId",patientid);
-		map.put("numberOfLines", ""+ 20);
-		map.put("numberOfRows", ""+ 20);
-		map.put("totalHeight",""+GameConstants.WORKSPACE_HEIGHT);
-		map.put("totalWidth", ""+GameConstants.WORKSPACE_WIDTH);
-		map.put("totalVolume", ""+20);
-		map.put("volumePerLevel", ""+5);
-		map.put("ImportanceOfEffort", ""+0.9f);
+		map.put("patientId", patientid);
+		map.put("numberOfLines", GameConstants.numberOfLines);
+		map.put("numberOfRows", GameConstants.numberOfRows);
+		map.put("totalHeight", GameConstants.workspaceHeight);
+		map.put("totalWidth", GameConstants.workspaceWidth);
+		map.put("totalVolume", GameConstants.totalVolume);
+		map.put("volumePerLevel", GameConstants.volumePerLevel);
+		map.put("ImportanceOfEffort", 0.9f);
 		
     	OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
-        algoParameterAZ.put("range",2);
-        algoParameterAZ.put("pathDeltaTime",""+0.001f);
-        algoParameterAZ.put("evaporationRatioPerDay","0");
-        algoParameterAZ.put("alpha",0.9f);
+        algoParameterAZ.put("range", GameConstants.range);
+        algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
+        algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
+        algoParameterAZ.put("alpha", GameConstants.alpha);
         map.put("parameters", algoParameterAZ); 
 		
 		
@@ -344,7 +345,7 @@ public class InternetManager{
 		value = null;
 		world = null;
 	}
-
+	
 	public static void updateLevelStats(String patientid, int levelID, int score, int duration) {
 		Gdx.app.log(RollingCat.LOG, "preparing send score update request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
@@ -371,12 +372,12 @@ public class InternetManager{
 	}
 	
 	public static void getWorld(String patientid) {
+		world = null;
 		Gdx.app.log(RollingCat.LOG, "preparing get world request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "text/plain");
-		final Json json = new Json();
 		
 		Gdx.app.log(RollingCat.LOG, "sending get world request...");
 
@@ -385,7 +386,6 @@ public class InternetManager{
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				world = httpResponse.getResultAsString();
-				Gdx.app.log(RollingCat.LOG, json.prettyPrint(world));
 	           	Gdx.app.log(RollingCat.LOG, "get world request success");
 		    }
 
