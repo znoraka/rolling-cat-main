@@ -285,5 +285,9 @@ public class MouseCursorGame implements InputProcessor{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public void dropItem() {
+		item = Box.EMPTY;
+	}
 	
 }

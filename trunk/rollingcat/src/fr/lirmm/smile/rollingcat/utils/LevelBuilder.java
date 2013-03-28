@@ -24,7 +24,7 @@ import fr.lirmm.smile.rollingcat.model.game.Wasp;
 
 public class LevelBuilder {
 
-	private static ArrayList<Integer> items;
+	private static ArrayList<Integer[]> items;
 	private static int segment = 0;
 
 //	private static String testRandomReal()
@@ -69,7 +69,7 @@ public class LevelBuilder {
 	 */
 	public static Stage build(String s) {
 		Stage stage = getStage();
-		items = new ArrayList<Integer>();
+		items = new ArrayList<Integer[]>();
 		segment = 0;
 		s = s.replace("\"", "");
 //		Gdx.app.log(RollingCat.LOG, "getting random level");
@@ -94,18 +94,18 @@ public class LevelBuilder {
 				stage.addActor(new Wasp(x, y));
 				if(isFirstOfScreen(x))
 				{
-					items.add(Box.EMPTY);
+					items.add(new Integer []{Box.EMPTY, segment});
 				}
-				items.add(Box.SWATTER);
+				items.add(new Integer [] {Box.SWATTER, segment});
 			}
 			else if(subtab[0].equals("dog"))
 			{
 				stage.addActor(new Dog(x, y));
 				if(isFirstOfScreen(x))
 				{
-					items.add(Box.EMPTY);
+					items.add(new Integer []{Box.EMPTY, segment});
 				}
-				items.add(Box.BONE);
+				items.add(new Integer []{Box.BONE, segment});
 			}
 			else if(subtab[0].equals("groundBlock"))
 			{
@@ -133,26 +133,33 @@ public class LevelBuilder {
 				stage.addActor(new Carpet(x, y));
 				if(isFirstOfScreen(x))
 				{
-					items.add(Box.EMPTY);
+					items.add(new Integer []{Box.EMPTY, segment});
 				}
-				items.add(Box.SCISSORS);
+				items.add(new Integer []{Box.SCISSORS, segment});
 			}
 			else if(subtab[0].equals("fan"))
 			{
 				stage.addActor(new Fan(x,y));
 			}
+			else if(subtab[0].equals("door_left"))
+			{	
+				String [] temp = tab[i+1].split(";");
+				float nextX = Float.valueOf(temp[1]);
+				float nextY = Float.valueOf(temp[2]);
+				stage.addActor(new Door(x,y, Door.LEFT, nextX, nextY));
+			}
 			else if(subtab[0].equals("door_right"))
 			{
-				stage.addActor(new Door(x,y));
+				stage.addActor(new Door(x,y, Door.RIGHT, 0, 0));
 			}
 			else if(subtab[0].equals("gap"))
 			{
 				stage.addActor(new Gap(x, y));
 				if(isFirstOfScreen(x))
 				{
-					items.add(Box.EMPTY);
+					items.add(new Integer []{Box.EMPTY, segment});
 				}
-				items.add(Box.FEATHER);
+				items.add(new Integer []{Box.FEATHER, segment});
 			}
 			else if(subtab[0].equals("target"))
 				stage.addActor(new Target(x, y));
@@ -164,12 +171,12 @@ public class LevelBuilder {
 		Gdx.app.log(RollingCat.LOG, "building done " + tab.length + " elements added");
 		//		stage.addActor(new Cat(10, 10));
 		//		stage.addActor(new Dog(5, 5));
-		items.add(0);
+		items.add(new Integer []{Box.EMPTY, segment});
 //		((Box)stage.getActors().get(1)).setItems(items);
 		return stage;
 	}
 
-	public static ArrayList<Integer> getItems(){
+	public static ArrayList<Integer[]> getItems(){
 		return items;
 	}
 
