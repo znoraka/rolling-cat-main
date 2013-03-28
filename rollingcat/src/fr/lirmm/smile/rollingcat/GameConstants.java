@@ -42,6 +42,9 @@ public class GameConstants {
 	
 	public static final float HOVER_TIME = 1f;
 	public static final float HOLD_POSITION = 5f;
+
+	public static final int NB_OF_LEVELS_IN_MENU = 7;
+	public static final int NB_OF_LEVELS_IN_GAME = 20;
 	
 	public static int WORKSPACE_WIDTH = 100;
 	public static int WORKSPACE_HEIGHT = 50;
