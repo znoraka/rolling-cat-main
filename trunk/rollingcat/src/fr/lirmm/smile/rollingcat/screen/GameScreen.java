@@ -38,6 +38,7 @@ public class GameScreen implements Screen{
 	private float duration;
 	private BitmapFont font;
     private OrderedMap<String, String> parameters;
+    private int level;
 //    private TiledMap map;
 //	private TileMapRenderer renderer;
 //	private TileAtlas tileAtlas;
@@ -45,10 +46,11 @@ public class GameScreen implements Screen{
   
 	
 
-	public GameScreen(RollingCat game, Patient patient, Stage stage){
+	public GameScreen(RollingCat game, Patient patient, Stage stage, int level){
 		this.game = game;
 		this.patient = patient;
 		this.stage = stage;
+		this.level = level;
 	}
 	
 	@Override
@@ -78,6 +80,7 @@ public class GameScreen implements Screen{
         mc.addTrackingPoint(delta);
         if(cat.isDone()){
         	InternetManager.endGameSession();
+        	InternetManager.updateLevelStats(patient.getID(), level, getScore(), (int) duration);
         	parameters = new OrderedMap<String, String>();
         	parameters.put("duration", ""+duration);
         	EventManager.create(EventManager.end_game_event_type, parameters);
@@ -166,6 +169,10 @@ public class GameScreen implements Screen{
 		Gdx.app.log(RollingCat.LOG, "disposing...");
 		backgroundTexture.dispose();
 		sr.dispose();
+	}
+	
+	public int getScore(){
+		return cat.getBronze() + cat.getSilver() * 2 + cat.getGold() * 3;
 	}
 
 }

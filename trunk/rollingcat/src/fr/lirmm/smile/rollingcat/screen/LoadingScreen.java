@@ -1,5 +1,7 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,12 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
-import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
-import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 
 public class LoadingScreen implements Screen {
 	
@@ -42,7 +41,7 @@ public class LoadingScreen implements Screen {
 		if(level != null)
 		{
 			this.stage = LevelBuilder.build(level);
-			game.setScreen(new GameScreen(game, patient, stage));
+			game.setScreen(new GameScreen(game, patient, stage, levelID));
 		}
 	}
 
