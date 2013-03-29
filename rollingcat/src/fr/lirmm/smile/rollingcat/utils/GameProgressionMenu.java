@@ -1,22 +1,29 @@
 package fr.lirmm.smile.rollingcat.utils;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.MainConstant;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.model.patient.Patient;
+import fr.lirmm.smile.rollingcat.screen.LevelSelectScreen;
 
 public class GameProgressionMenu implements Screen{
 
@@ -25,6 +32,12 @@ public class GameProgressionMenu implements Screen{
 	private Stage stage;
 	private List<Image> entities;
 	private List<Image> trous;
+	private TextButton back;
+
+	private Skin skin;	
+	private BitmapFont font;
+	private RollingCat game;
+	private Patient patient;
 
 	private Point centralDiamond;
 	private float sizeCentralDiamond;
@@ -32,7 +45,11 @@ public class GameProgressionMenu implements Screen{
 	private boolean bossWin;
 	private Image centralDiamondEntity;
 	private List<String> gems;
+
+
+
 	public GameProgressionMenu(
+			RollingCat game, Patient patient,
 			int centerX, 
 			int centerY, 
 			int rayon, 
@@ -68,9 +85,8 @@ public class GameProgressionMenu implements Screen{
 			stage.addActor(trous.get(trous.size()-1));
 
 		}
-
-
 	}
+
 
 	public void rotateEffect(int angle)
 	{
@@ -136,57 +152,77 @@ public class GameProgressionMenu implements Screen{
 				}
 			});
 			stage.addActor(centralDiamondEntity);
-			}
 		}
+	}
 
-		@Override
-		public void render(float delta) 
+	@Override
+	public void render(float delta) 
+	{
+		Gdx.gl.glClearColor(0, 0, 0, 0);
+		Gdx.gl.glClear(Gdx.gl10.GL_COLOR_BUFFER_BIT);
+
+		elapsedTime+=delta;
+		if(isCentralButtonDeclenched)
 		{
-			Gdx.gl.glClearColor(0, 0, 0, 0);
-			Gdx.gl.glClear(Gdx.gl10.GL_COLOR_BUFFER_BIT);
-
-			elapsedTime+=delta;
-			if(isCentralButtonDeclenched)
+			if(elapsedTime > 0.3)
 			{
-				if(elapsedTime > 0.3)
-				{
-					angle = (angle + 1 )%360;
-					elapsedTime -= delta;
-				}
-				rotateEffect(angle);
+				angle = (angle + 1 )%360;
+				elapsedTime -= delta;
 			}
-			stage.act(delta);
-			stage.draw();
-
+			rotateEffect(angle);
 		}
-
-		@Override
-		public void resize(int width, int height) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void show() 
-		{
-			stage = getStage();
-			if(entities == null)
-			{
-				this.createItemsShape();
-			}		
-			Gdx.input.setInputProcessor(stage);
-		}
-
-		@Override
-		public void hide() {}
-
-		@Override
-		public void pause() {}
-
-		@Override
-		public void resume() {}
-
-		@Override
-		public void dispose() {}
+		stage.act(delta);
+		stage.draw();
 
 	}
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void show() 
+	{
+
+		font = getBigFont();
+		stage = getStage();
+		skin = getSkin();
+
+		TextButtonStyle style = new TextButtonStyle();
+		style.up = skin.getDrawable("button_up");
+		style.down = skin.getDrawable("button_down");
+		style.font = font;
+		style.fontColor = Color.BLACK;
+
+		if(entities == null)
+		{
+			this.createItemsShape();
+
+			back = new TextButton("Back", style);
+			back.addListener(new ClickListener() {
+				public void clicked (InputEvent event, float x, float y) {
+					game.setScreen(new LevelSelectScreen(game, patient,GameConstants.NB_OF_LEVELS_IN_MENU));
+				}
+			});
+
+		}		
+		stage.addActor(back);
+		
+		Gdx.input.setInputProcessor(stage);
+	}
+
+	@Override
+	public void hide() {}
+
+	@Override
+	public void pause() {}
+
+	@Override
+	public void resume() {}
+
+	@Override
+	public void dispose() {}
+
+}
