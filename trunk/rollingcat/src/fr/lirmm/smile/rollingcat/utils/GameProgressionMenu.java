@@ -31,10 +31,16 @@ public class GameProgressionMenu implements Screen{
 	private int nbLevelsWin;
 	private boolean bossWin;
 	private Image centralDiamondEntity;
-	
-	public GameProgressionMenu(int centerX, int centerY, int rayon, int nbLevelWin, boolean bossWin)
+	private List<String> gems;
+	public GameProgressionMenu(
+			int centerX, 
+			int centerY, 
+			int rayon, 
+			List<String> gems,
+			boolean bossWin)
 	{
-		this.nbLevelsWin = nbLevelWin;
+		this.gems = gems;
+		this.nbLevelsWin = gems.size();
 		this.bossWin = bossWin;
 
 		this.centerX = centerX;
@@ -92,12 +98,12 @@ public class GameProgressionMenu implements Screen{
 		entities = new ArrayList<Image>();
 		this.initTrous();
 		float step = 360.0f/GameConstants.NB_OF_LEVELS_IN_GAME;
-		for (int i = 0; i < nbLevelsWin ; i++) 
+		for (int i = 0; i < gems.size() ; i++) 
 		{
 			int x = (int) (Math.cos(Math.toRadians(i*step)) * rayon) + centerX;
 			int y = (int) (Math.sin(Math.toRadians(i*step)) * rayon)+ centerY;
 
-			Image button = new Image(GdxRessourcesGetter.getAtlas().findRegion("green_gem"));
+			Image button = new Image(GdxRessourcesGetter.getAtlas().findRegion(gems.get(i)));
 			button.setWidth(size*0.5f);
 			button.setHeight(size*0.5f);
 			button.setX(x - button.getWidth()/2);
