@@ -1,8 +1,10 @@
 package fr.lirmm.smile.rollingcat;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Game;
 
-import fr.lirmm.smile.rollingcat.screen.LoginScreen;
+import fr.lirmm.smile.rollingcat.screen.GameProgressionScreen;
 
 
 public class RollingCat extends Game {
@@ -13,7 +15,25 @@ public class RollingCat extends Game {
 	
 	@Override
 	public void create() {		
-		this.setScreen(new LoginScreen(this));
+//		this.setScreen(new LoginScreen(this));
+		ArrayList<String> gems = new ArrayList<String>();
+		String r = "red_gem";
+		String g = "green_gem";
+		String p = "purple_gem";
+		String y = "yellow_gem";
+		gems.add(r);
+		gems.add(r);
+		gems.add(g);
+		gems.add(p);
+		gems.add(p);		
+		gems.add(y);
+		gems.add(r);
+
+		this.setScreen(new GameProgressionScreen(
+				null,null,
+				gems,
+				true			));
+
 	}
 
 	@Override
