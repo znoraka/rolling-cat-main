@@ -55,10 +55,10 @@ public class LevelSelectScreen implements Screen {
 	private int[] Zindexes;
 	private int numberOfLevels;
 	
-	public LevelSelectScreen(RollingCat game, Patient patient, int numberOfLevels){
+	public LevelSelectScreen(RollingCat game, Patient patient){
 		this.game = game;
 		this.patient = patient;
-		this.numberOfLevels = numberOfLevels;
+		this.numberOfLevels = GameConstants.NB_OF_LEVELS_IN_MENU;
 
 		this.init();
 	}
