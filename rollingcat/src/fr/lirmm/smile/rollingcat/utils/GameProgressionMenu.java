@@ -1,113 +1,186 @@
 package fr.lirmm.smile.rollingcat.utils;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+
+import utils.MainConstant;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 
-public class GameProgressionMenu {
+public class GameProgressionMenu implements Screen{
 
-	private Point items[];
-	private Color colors[];
 	private int size;
 	private int centerX,centerY,rayon;
-	public GameProgressionMenu(int centerX, int centerY, int rayon)
+	private Stage stage;
+	private List<Image> entities;
+	private List<Image> trous;
+
+	private Point centralDiamond;
+	private float sizeCentralDiamond;
+	private int nbLevelsWin;
+	private boolean bossWin;
+	private Image centralDiamondEntity;
+	
+	public GameProgressionMenu(int centerX, int centerY, int rayon, int nbLevelWin, boolean bossWin)
 	{
+		this.nbLevelsWin = nbLevelWin;
+		this.bossWin = bossWin;
+
 		this.centerX = centerX;
 		this.centerY = centerY;
 		this.rayon = rayon;
-		items = new Point[GameConstants.NB_OF_LEVELS_IN_GAME];
-		colors = new Color[items.length];
-		size = (int) ((int) (2*Math.PI * rayon / items.length) * 1f); 
-		
-		initCircleLevels();
-
-		final JFrame frame = new JFrame("AffichageMenu");
-		frame.add(new JPanel()
-		{
-			@Override
-			public void paintComponent(Graphics g)
-			{
-				final float coeff = (float) (1.0f / Math.sqrt(2.0f));
-				super.paintComponent(g);
-
-				int i = 0 ;
-				for(Point t : items)
-				{
-					g.setColor(colors[i]);
-					g.drawOval(t.x, t.y, size, size);
-					g.drawRect(t.x + (int)(size*coeff)/4, t.y+(int)(size*coeff)/4, (int)(size*coeff), (int)(size*coeff));
-					i++;
-				}
-			}
-		});
-		frame.setSize(GameConstants.DISPLAY_WIDTH,GameConstants.DISPLAY_HEIGHT);
-		
-		frame.setVisible(true);
-
-		Thread th = new Thread(new Runnable()
-		{
-			int angle = 0;
-			@Override
-			public void run() {
-				while(angle < 360)
-				{
-					rotateEffect();
-					angle++;
-					System.out.println("p");
-					frame.repaint();
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-			
-		});
-		th.start();
-		
+		this.sizeCentralDiamond = rayon*0.7f;
+		this.centralDiamond = new Point((int)(centerX-sizeCentralDiamond/2),(int)(centerY-sizeCentralDiamond/2));
+		size = (int) ((int) (2*Math.PI * rayon / GameConstants.NB_OF_LEVELS_IN_GAME) * 0.8f); 
 	}
-	
-	public void initCircleLevels()
+
+	public void initTrous()
 	{
-		float step = 360.0f/items.length;
-		for(int i = 0 ; i < items.length ; i++)
+		trous = new ArrayList<Image>();
+		float step = 360.0f/GameConstants.NB_OF_LEVELS_IN_GAME;
+		for(int i = 0 ; i < GameConstants.NB_OF_LEVELS_IN_GAME ; i++)
 		{
 			int x = (int) (Math.cos(Math.toRadians(i*step)) * rayon) + centerX;
 			int y = (int) (Math.sin(Math.toRadians(i*step)) * rayon)+ centerY;
-			items[i] = new Point(x,y);
-			colors[i] = new Color(0,0,i*255/items.length); 
+			Image button = new Image(GdxRessourcesGetter.getAtlas().findRegion("trou1"));
+			button.setWidth(size);
+			button.setHeight(size);
+			button.setX(x - button.getWidth()/2);
+			button.setY(y - button.getHeight()/2);
+			trous.add(button);
+			stage.addActor(trous.get(trous.size()-1));
+
 		}
+
+
 	}
-	
-	public void rotateEffect()
+
+	public void rotateEffect(int angle)
 	{
-		float step = 360.0f/items.length;
-		Point tmp = null;
-		for(int i = 1 ; i < items.length; i++)
+		float step = 360.0f/GameConstants.NB_OF_LEVELS_IN_GAME;
+		for(int i = 0 ; i < entities.size(); i++)
 		{
-			int a = i;
-			int b = i+1 < items.length ? i+1 : 0;
+			float x =  (float) ((Math.cos(Math.toRadians(i*step + angle)) * rayon) + centerX - entities.get(i).getWidth()/2);
+			float y =  (float) ((Math.sin(Math.toRadians(i*step + angle)) * rayon) + centerY - entities.get(i).getHeight()/2);
+			entities.get(i).setX(x);
+			entities.get(i).setY(y);
+			/*			int b = i+1 < items.length ? i+1 : 0;
 			tmp = items[a];
 			items[a] = items[b];
 			items[b] = tmp;
+			 */
 		}	
+		for(int i = 0 ; i < trous.size(); i++)
+		{
+			trous.get(i).setX( (int) (Math.cos(Math.toRadians(i*step + angle)) * rayon) + centerX - trous.get(i).getWidth()/2);
+			trous.get(i).setY( (int) (Math.sin(Math.toRadians(i*step + angle)) * rayon) + centerY - trous.get(i).getHeight()/2);
+		}
 	}
-	
-	public static void main(String args[])
+
+	private void createItemsShape() {
+		entities = new ArrayList<Image>();
+		this.initTrous();
+		float step = 360.0f/GameConstants.NB_OF_LEVELS_IN_GAME;
+		for (int i = 0; i < nbLevelsWin ; i++) 
+		{
+			int x = (int) (Math.cos(Math.toRadians(i*step)) * rayon) + centerX;
+			int y = (int) (Math.sin(Math.toRadians(i*step)) * rayon)+ centerY;
+
+			Image button = new Image(GdxRessourcesGetter.getAtlas().findRegion("green_gem"));
+			button.setWidth(size*0.5f);
+			button.setHeight(size*0.5f);
+			button.setX(x - button.getWidth()/2);
+			button.setY(y - button.getHeight()/2);
+			entities.add(button);
+			stage.addActor(entities.get(entities.size()-1));
+		}
+		initCentralDiamond();
+	}
+
+	private int angle = 0;
+	private float elapsedTime;
+	private boolean isCentralButtonDeclenched;
+
+	private void initCentralDiamond()
 	{
-		final GameProgressionMenu menu = new GameProgressionMenu(
-				GameConstants.DISPLAY_WIDTH/2, 
-				GameConstants.DISPLAY_HEIGHT/2, 
-				GameConstants.DISPLAY_WIDTH/4 );
-		
+		if(bossWin)
+		{
+			this.centralDiamondEntity = new Image(GdxRessourcesGetter.getAtlas().findRegion("diamant"));
+			this.centralDiamondEntity.setWidth(sizeCentralDiamond);
+			this.centralDiamondEntity.setHeight(sizeCentralDiamond);
+			this.centralDiamondEntity.setX(centralDiamond.x);
+			this.centralDiamondEntity.setY(centralDiamond.y);
+			centralDiamondEntity.addListener(new ClickListener()
+			{
+				@Override
+				public void clicked(InputEvent event, float x, float y)
+				{
+					isCentralButtonDeclenched = true;
+				}
+			});
+			stage.addActor(centralDiamondEntity);
+			}
+		}
+
+		@Override
+		public void render(float delta) 
+		{
+			Gdx.gl.glClearColor(0, 0, 0, 0);
+			Gdx.gl.glClear(Gdx.gl10.GL_COLOR_BUFFER_BIT);
+
+			elapsedTime+=delta;
+			if(isCentralButtonDeclenched)
+			{
+				if(elapsedTime > 0.3)
+				{
+					angle = (angle + 1 )%360;
+					elapsedTime -= delta;
+				}
+				rotateEffect(angle);
+			}
+			stage.act(delta);
+			stage.draw();
+
+		}
+
+		@Override
+		public void resize(int width, int height) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void show() 
+		{
+			stage = getStage();
+			if(entities == null)
+			{
+				this.createItemsShape();
+			}		
+			Gdx.input.setInputProcessor(stage);
+		}
+
+		@Override
+		public void hide() {}
+
+		@Override
+		public void pause() {}
+
+		@Override
+		public void resume() {}
+
+		@Override
+		public void dispose() {}
+
 	}
-	
-	
-}
