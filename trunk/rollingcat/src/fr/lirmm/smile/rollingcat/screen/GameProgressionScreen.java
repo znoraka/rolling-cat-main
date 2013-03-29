@@ -66,7 +66,7 @@ public class GameProgressionScreen implements Screen{
 
 		this.centerX = GameConstants.DISPLAY_WIDTH / 2;
 		this.centerY = GameConstants.DISPLAY_HEIGHT / 2;
-		this.rayon = GameConstants.DISPLAY_WIDTH / 4;
+		this.rayon = (int) (GameConstants.DISPLAY_WIDTH  * 0.20f);
 		this.sizeCentralDiamond = rayon*0.7f;
 		this.centralDiamond = new Point((int)(centerX-sizeCentralDiamond/2),(int)(centerY-sizeCentralDiamond/2));
 		size = (int) ((int) (2*Math.PI * rayon / GameConstants.NB_OF_LEVELS_IN_GAME) * 0.8f); 
