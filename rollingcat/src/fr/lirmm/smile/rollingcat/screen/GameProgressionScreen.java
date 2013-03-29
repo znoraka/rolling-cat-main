@@ -11,7 +11,10 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -34,6 +37,9 @@ public class GameProgressionScreen implements Screen{
 	private List<Image> trous;
 	private TextButton back;
 
+	private Texture backgroundTexture;
+	private SpriteBatch batch;
+
 	private Skin skin;	
 	private BitmapFont font;
 	private RollingCat game;
@@ -44,6 +50,7 @@ public class GameProgressionScreen implements Screen{
 	private int nbLevelsWin;
 	private boolean bossWin;
 	private Image centralDiamondEntity;
+	private Image woordCircle;
 	private List<String> gems;
 
 
@@ -80,8 +87,8 @@ public class GameProgressionScreen implements Screen{
 			button.setY(y - button.getHeight()/2);
 			trous.add(button);
 			stage.addActor(trous.get(trous.size()-1));
-
 		}
+
 	}
 
 
@@ -94,17 +101,13 @@ public class GameProgressionScreen implements Screen{
 			float y =  (float) ((Math.sin(Math.toRadians(i*step + angle)) * rayon) + centerY - entities.get(i).getHeight()/2);
 			entities.get(i).setX(x);
 			entities.get(i).setY(y);
-			/*			int b = i+1 < items.length ? i+1 : 0;
-			tmp = items[a];
-			items[a] = items[b];
-			items[b] = tmp;
-			 */
 		}	
 		for(int i = 0 ; i < trous.size(); i++)
 		{
 			trous.get(i).setX( (int) (Math.cos(Math.toRadians(i*step + angle)) * rayon) + centerX - trous.get(i).getWidth()/2);
 			trous.get(i).setY( (int) (Math.sin(Math.toRadians(i*step + angle)) * rayon) + centerY - trous.get(i).getHeight()/2);
 		}
+		woordCircle.rotate(1);
 	}
 
 	private void createItemsShape() {
@@ -159,6 +162,12 @@ public class GameProgressionScreen implements Screen{
 		Gdx.gl.glClear(Gdx.gl10.GL_COLOR_BUFFER_BIT);
 
 		elapsedTime+=delta;
+		
+		batch.begin();
+		batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+		batch.end();
+
+		
 		if(isCentralButtonDeclenched)
 		{
 			if(elapsedTime > 0.3)
@@ -168,6 +177,8 @@ public class GameProgressionScreen implements Screen{
 			}
 			rotateEffect(angle);
 		}
+		
+		
 		stage.act(delta);
 		stage.draw();
 
@@ -186,15 +197,26 @@ public class GameProgressionScreen implements Screen{
 		font = getBigFont();
 		stage = getStage();
 		skin = getSkin();
-
+		batch = new SpriteBatch();
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("button_up");
 		style.down = skin.getDrawable("button_down");
 		style.font = font;
 		style.fontColor = Color.BLACK;
-
+		backgroundTexture = new Texture("data/backgroundGameProgression.png");
+		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+	
 		if(entities == null)
 		{
+			woordCircle =new Image(GdxRessourcesGetter.getAtlas().findRegion("woodCircle"));
+			woordCircle.setWidth(rayon*2.4f);
+			woordCircle.setHeight(rayon*2.4f);
+			woordCircle.setOrigin(woordCircle.getWidth()/2, woordCircle.getHeight()/2);
+			woordCircle.setX(centerX - woordCircle.getWidth()/2);
+			woordCircle.setY(centerY - woordCircle.getHeight()/2);
+
+
+			stage.addActor(woordCircle);
 			this.createItemsShape();
 
 			back = new TextButton("Back", style);
@@ -220,6 +242,9 @@ public class GameProgressionScreen implements Screen{
 	public void resume() {}
 
 	@Override
-	public void dispose() {}
+	public void dispose() 
+	{
+		backgroundTexture.dispose();
+	}
 
 }
