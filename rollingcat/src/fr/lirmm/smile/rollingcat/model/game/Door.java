@@ -1,6 +1,7 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
@@ -36,6 +37,12 @@ public class Door extends Entity {
 	public float getNextY(){
 		Gdx.app.log(RollingCat.LOG, ""+nextY);
 		return nextY;
+	}
+	
+	@Override
+	public void draw(SpriteBatch batch, float deltaParent){
+		if(type == LEFT)
+			super.draw(batch, deltaParent);
 	}
 
 	

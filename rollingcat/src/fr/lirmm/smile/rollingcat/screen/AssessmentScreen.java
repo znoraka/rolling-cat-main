@@ -38,7 +38,6 @@ public class AssessmentScreen implements Screen {
                 this.game = game;
                 this.patient = patient;
         }
-        
         @Override
         public void render(float delta) {
             Gdx.gl.glClearColor(1, 1, 1, 1);

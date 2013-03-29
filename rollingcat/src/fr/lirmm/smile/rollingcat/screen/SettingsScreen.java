@@ -49,8 +49,10 @@ public class SettingsScreen implements Screen {
 	
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1, 1, 1, 0.5f);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+//		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glEnable(GL10.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		
 		if(heightMinus.isPressed() & elapsedTime > SPEED)
 			heightModify(-1);
 		
@@ -101,6 +103,7 @@ public class SettingsScreen implements Screen {
 		LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
 		labelStyle.background = skin.getDrawable("empty");
 		labelStyle.font = font;
+		labelStyle.fontColor = Color.WHITE;
 		
 		heightLabel = new Label("workspace height :", labelStyle);
 		widthLabel = new Label("workspace width :", labelStyle);

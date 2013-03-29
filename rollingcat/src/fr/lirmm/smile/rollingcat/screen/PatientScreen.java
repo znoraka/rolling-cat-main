@@ -54,6 +54,9 @@ public class PatientScreen implements Screen {
 		batch.end();
 		
 		stage.draw();
+		
+		if(patient.needsAssessment() != null && patient.needsAssessment().equals("true"))
+			play.setVisible(false);
 	}
 
 	@Override
@@ -124,8 +127,6 @@ public class PatientScreen implements Screen {
 		LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
 		labelStyle.background = skin.getDrawable("button_up");
 		
-//		tableRight.setBackground(skin.getDrawable("green_background"));
-		
 		cellName = new Label("Name", labelStyle);
 		name = new Label("", labelStyle);
 		cellDominantMember = new Label("Dominant Member", labelStyle);
@@ -144,8 +145,6 @@ public class PatientScreen implements Screen {
 		dominantMember.setAlignment(Align.center);
 		hemiplegia.setAlignment(Align.center);
 		
-//		tableLeft.add(patient.getFace()).padTop(17).maxHeight(GameConstants.DISPLAY_WIDTH / 5f * 1.3f).maxWidth(GameConstants.DISPLAY_WIDTH / 5f).setWidgetX(200);
-//		tableLeft.row();
 		tableLeft.add(play).pad(GameConstants.DISPLAY_HEIGHT / 100 - 2).fill().expand();
 		tableLeft.row();
 		tableLeft.add(assessment).pad(GameConstants.DISPLAY_HEIGHT / 100 - 2).fill().expand();

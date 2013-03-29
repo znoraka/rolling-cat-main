@@ -32,8 +32,8 @@ import fr.lirmm.smile.rollingcat.model.game.Wasp;
 public class MouseCursorGame implements InputProcessor{
 	private float hoverTimer;
 	private float standTimer;
-	private float x, oldX, workPlanX;
-	private float y, oldY, workPlanY;
+	private float x, oldX;
+	private float y, oldY;
 	private Entity actor;
 	private Stage stage;
 	private Cat cat;
@@ -81,8 +81,10 @@ public class MouseCursorGame implements InputProcessor{
 		{	
 			hoverTimer = 0;
 			if(actor instanceof Gap && item == Box.FEATHER){
-				cat.jump();
-				this.trigger();
+				if(!cat.isMoving()){
+					cat.jump();
+					this.trigger();
+				}
 			}
 		
 			else if(actor instanceof Box){
@@ -144,7 +146,11 @@ public class MouseCursorGame implements InputProcessor{
 			standTimer = 0;
 			Gdx.app.log(RollingCat.LOG, "Not moving for too long");
 			cat.getActions().clear();
+			item = Box.EMPTY;
 			cat.setY(GameConstants.BLOCK_HEIGHT * 1);
+			cat.setX((cat.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH);
+			cat.getActions().clear();
+			cat.setState(Cat.FALLING);
 		}
 	}
 	
@@ -288,6 +294,19 @@ public class MouseCursorGame implements InputProcessor{
 
 	public void dropItem() {
 		item = Box.EMPTY;
+	}
+
+	public float getX() {
+		return x;
+	}
+	
+	public void setX(float x){
+		this.x = x;
+	}
+
+	public boolean isHoldingItem() {
+		Gdx.app.log(RollingCat.LOG, "holding an item" + (item != Box.EMPTY));
+		return item != Box.EMPTY;
 	}
 	
 }

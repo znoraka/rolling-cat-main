@@ -22,6 +22,7 @@ public class GameConstants {
 	public static final String TEXTURE_TARGET = "target";
 	public static final String TEXTURE_CARPET = "carpet";
 	public static final String TEXTURE_BOUEE = "bouee";
+	public static final String TEXTURE_GEM = "_gem";
 	
 	public static final String FONT_LOGIN = "data/font.fnt";
 	

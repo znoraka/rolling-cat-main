@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.screen.LoginScreen;
 
@@ -272,6 +273,58 @@ public class InternetManager{
 			}
 		});
 //		level = "cat;0.0;8.0/groundBlock;0.0;7.0/groundBlock;1.0;7.0/groundBlock;2.0;7.0/gap;2.0;8.0/groundBlock;4.0;6.0/groundBlock;5.0;6.0/groundBlock;6.0;7.0";
+	}
+	
+	public static void needsAssessment(final Patient patient){
+		Gdx.app.log(RollingCat.LOG, "preparing request...");
+		
+		Json json = new Json();
+		json.setOutputType(JsonWriter.OutputType.json);
+		
+		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/"+patient.getID()+"/needsassessment");
+		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
+
+		map.put("builderId","ant-0.1");
+		map.put("patientId", patient.getID());
+		map.put("numberOfLines", GameConstants.numberOfLines);
+		map.put("numberOfRows", GameConstants.numberOfRows);
+		map.put("totalHeight", GameConstants.workspaceHeight);
+		map.put("totalWidth", GameConstants.workspaceWidth);
+		map.put("totalVolume", GameConstants.totalVolume);
+		map.put("volumePerLevel", GameConstants.volumePerLevel);
+		map.put("ImportanceOfEffort", 0.9f);
+		
+    	OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
+        algoParameterAZ.put("range", GameConstants.range);
+        algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
+        algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
+        algoParameterAZ.put("alpha", GameConstants.alpha);
+        map.put("parameters", algoParameterAZ); 
+		
+		
+		httpGet.setContent(json.toJson(map));
+		
+		Gdx.app.log(RollingCat.LOG, httpGet.getContent());	
+		
+		httpGet.setHeader(key, value);
+		httpGet.setHeader("Content-Type", "application/json");
+		
+		Gdx.app.log(RollingCat.LOG, "sending level request...");
+
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+			
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				patient.setNeedsAssessment(httpResponse.getResultAsString());
+		    }
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
+				Gdx.app.log(RollingCat.LOG, "something went wrong");
+			}
+		});
 	}
 	
 	/** 

@@ -1,4 +1,4 @@
-package fr.lirmm.smile.rollingcat.utils;
+package fr.lirmm.smile.rollingcat.screen;
 
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
@@ -23,9 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
-import fr.lirmm.smile.rollingcat.screen.LevelSelectScreen;
+import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
-public class GameProgressionMenu implements Screen{
+public class GameProgressionScreen implements Screen{
 
 	private int size;
 	private int centerX,centerY,rayon;
@@ -48,21 +48,18 @@ public class GameProgressionMenu implements Screen{
 
 
 
-	public GameProgressionMenu(
-			RollingCat game, Patient patient,
-			int centerX, 
-			int centerY, 
-			int rayon, 
-			List<String> gems,
-			boolean bossWin)
+	public GameProgressionScreen(RollingCat game, Patient patient, List<String> gems, boolean bossWin)
 	{
 		this.gems = gems;
 		this.nbLevelsWin = gems.size();
 		this.bossWin = bossWin;
+		
+		this.patient = patient;
+		this.game = game;
 
-		this.centerX = centerX;
-		this.centerY = centerY;
-		this.rayon = rayon;
+		this.centerX = GameConstants.DISPLAY_WIDTH / 2;
+		this.centerY = GameConstants.DISPLAY_HEIGHT / 2;
+		this.rayon = GameConstants.DISPLAY_WIDTH / 4;
 		this.sizeCentralDiamond = rayon*0.7f;
 		this.centralDiamond = new Point((int)(centerX-sizeCentralDiamond/2),(int)(centerY-sizeCentralDiamond/2));
 		size = (int) ((int) (2*Math.PI * rayon / GameConstants.NB_OF_LEVELS_IN_GAME) * 0.8f); 
@@ -203,7 +200,7 @@ public class GameProgressionMenu implements Screen{
 			back = new TextButton("Back", style);
 			back.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new LevelSelectScreen(game, patient,GameConstants.NB_OF_LEVELS_IN_MENU));
+					game.setScreen(new LevelSelectScreen(game, patient));
 				}
 			});
 

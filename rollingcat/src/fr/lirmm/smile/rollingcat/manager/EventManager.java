@@ -6,6 +6,8 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
 
+import fr.lirmm.smile.rollingcat.screen.GameScreen;
+
 public class EventManager {
 	public static final String start_game_event_type = "session_start";
 	public static final String player_cursor_event_type="player_position";
@@ -48,7 +50,7 @@ public class EventManager {
 	 */
 	public static void create(String event_type, Object parameters){
 		OrderedMap<String, Object> event = new OrderedMap<String, Object>();
-		long l = System.currentTimeMillis();
+		long l = System.currentTimeMillis() - GameScreen.getElapsedTimeDuringPause();
 		event.put(timestamp, l);
 		event.put(type, event_type);
 		event.put(data, parameters);
