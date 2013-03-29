@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -40,11 +39,12 @@ public class LevelSelectScreen implements Screen {
 	private BitmapFont font;
 	private Stage stage;
 	private Skin skin;
-	private TextButton start, next, previous, back;
+	private TextButton start, next, previous, back, score;
 	private ArrayList<Label> labels;
 	private int currentButton;
 	private Label label;
-	private String[] levels;
+	private String[] levels, gems;
+	private ArrayList<String> listOfGems;
 	private String world;
 	private boolean gen;
 	
@@ -172,7 +172,13 @@ public class LevelSelectScreen implements Screen {
 			Gdx.app.log(RollingCat.LOG, json.prettyPrint(world));
 			OrderedMap<String, Object> map = (OrderedMap<String, Object>) new JsonReader().parse(world);
 			levels = json.readValue("levels", String[].class, map);
-			System.out.println(levels.length);
+			gems = json.readValue("gems", String[].class, map); 
+			
+			listOfGems = new ArrayList<String>();
+			for (String s : gems) {
+				listOfGems.add(s+GameConstants.TEXTURE_GEM);
+			}
+			
 			labels = new ArrayList<Label>();
 			
 			table = new Table();
@@ -228,6 +234,13 @@ public class LevelSelectScreen implements Screen {
 					
 				}
 			});
+			
+			score = new TextButton("Gemmes", style);
+			score.addListener(new ClickListener() {
+				public void clicked (InputEvent event, float x, float y) {
+					game.setScreen(new GameProgressionScreen(game, patient, listOfGems, listOfGems.size() == levels.length));
+				}
+			});
 	//		
 			createLabels(labelStyle);
 			
@@ -237,14 +250,16 @@ public class LevelSelectScreen implements Screen {
 			stage.addActor(next);
 			stage.addActor(start);
 			stage.addActor(back);
+			stage.addActor(score);
 			
 			changeButtonsSize();
 			
-			next.setX(GameConstants.DISPLAY_WIDTH - next.getWidth());
 			start.setX(GameConstants.DISPLAY_WIDTH - start.getWidth());
-			start.setY(GameConstants.DISPLAY_HEIGHT - start.getHeight()); 
-			back.setX(0);
-			back.setY(GameConstants.DISPLAY_HEIGHT - start.getHeight()); 
+			next.setX(GameConstants.DISPLAY_WIDTH - next.getWidth());
+			next.setY(GameConstants.DISPLAY_HEIGHT - next.getHeight()); 
+			previous.setX(0);
+			previous.setY(GameConstants.DISPLAY_HEIGHT - previous.getHeight()); 
+			score.setX(GameConstants.DISPLAY_WIDTH / 2 - score.getWidth() / 2);
 		}
 	}
 

@@ -167,6 +167,7 @@ public class PatientSelectScreen implements Screen{
 			
 			selectPatient.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
+					InternetManager.needsAssessment(p);
 					game.setScreen(new PatientScreen(game, p));
 				}
 			});

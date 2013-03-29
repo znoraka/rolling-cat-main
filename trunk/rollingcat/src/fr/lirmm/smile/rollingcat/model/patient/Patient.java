@@ -14,7 +14,7 @@ public class Patient {
 	private Texture face; 
 	private ArrayList<Track> listOfTracks;
 	private String id;
-	private int nbLevels;
+	private String needsAssessment;
 	
 	public Patient(String nom, String prenom, String hemiplegia, String dominantMember, String id, Texture face) {
 		this.nom = nom;
@@ -26,7 +26,7 @@ public class Patient {
 		this.face = face;
 		this.id = id;
 		listOfTracks = new ArrayList<Track>();
-		this.nbLevels = 0;
+		this.needsAssessment = null;
 	}
 
 	public Texture getFace() {
@@ -86,6 +86,18 @@ public class Patient {
 
 	public String getID() {
 		return this.id;
+	}
+	
+	public void setNeedsAssessment(String bool){
+		needsAssessment = bool;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String needsAssessment(){
+		return needsAssessment;
 	}
 	
 }

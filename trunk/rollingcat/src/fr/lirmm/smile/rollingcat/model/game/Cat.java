@@ -26,19 +26,18 @@ import fr.lirmm.smile.rollingcat.spine.SkeletonData;
 
 public class Cat extends Entity {
 	
-	private int nbcoin;
 	private boolean done, requestBoxEmptiing;
 	
-	private static final int FALLING = 0;
-	private static final int FLYING = 1;
-	private static final int JUMPING = 2;
-	private static final int HITTING = 3;
-	private static final int WALKING = 4;
+	public static final int FALLING = 0;
+	public static final int FLYING = 1;
+	public static final int JUMPING = 2;
+	public static final int HITTING = 3;
+	public static final int WALKING = 4;
 	
 	private int state;
 	private int gold, silver, bronze;
 	
-	private Rectangle top, right, bottom, left, veryBottom;
+	private Rectangle top, right, bottom, left;
 	
 	SkeletonData skeletonData;
 	Skeleton skeleton;
@@ -53,7 +52,6 @@ public class Cat extends Entity {
 	 */
 	public Cat(float x, float y){
 		super(x,y, GameConstants.TEXTURE_CAT);
-		nbcoin = 0;
 		done = false;
 		this.setTouchable(Touchable.disabled);
 		
@@ -85,7 +83,6 @@ public class Cat extends Entity {
 		bottom = new Rectangle();
 		right = new Rectangle();
 		left = new Rectangle();
-		veryBottom = new Rectangle();
 	}
 	
 	/**
@@ -93,22 +90,32 @@ public class Cat extends Entity {
 	 * @param stage
 	 */
 	public void move(Stage stage){
-		top.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
+		top.set(this.getX() + GameConstants.BLOCK_WIDTH *0.5f, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
 		bottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), 2, 2);
-		veryBottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() - (GameConstants.BLOCK_HEIGHT), 2, 2);
 		right.set(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
 		left.set(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
 		this.bounds.set(this.getX() + GameConstants.BLOCK_WIDTH / 4, this.getY() + GameConstants.BLOCK_HEIGHT / 4, this.getWidth() / 2, this.getHeight() / 2);
-		
 		if(state != FLYING & state != JUMPING)
 			state = FALLING;
-		
 		for (Actor actor : stage.getActors()) {
 			if(actor instanceof GroundBlock){
 				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible() & state != FLYING)
 					state = WALKING;
-				else if(((Entity) actor).getBounds().overlaps(veryBottom) & actor.isVisible() & (state == FLYING || state == JUMPING))
-					state = WALKING;
+				else if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible() & state == FLYING){
+					if(this.getActions().size == 0){
+						this.addAction(Actions.sequence(
+								Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 3) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 2),
+								new Action() {
+									
+									@Override
+									public boolean act(float delta) {
+										state = FALLING;
+										return true;
+									}
+								}
+								));
+					}
+				}
 			}
 			if(actor instanceof Dog & state == WALKING)
 				if((((Entity) actor).getBounds().overlaps(right) || ((Entity) actor).getBounds().overlaps(bounds)) & actor.isVisible())
@@ -161,26 +168,29 @@ public class Cat extends Entity {
 			}
 		}
 		
-		if(state != JUMPING){
-			if(state == FALLING & this.getActions().size == 0){
-				this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() - 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
+		if(!this.isDone()){
+			if(state != JUMPING){
+				if(state == FALLING & this.getActions().size == 0){
+					this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() - 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
+				}
+				
+				else if(state == FLYING & this.getActions().size == 0)
+					this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 0.75f));
+				
+				else if(state == WALKING & this.getActions().size == 0){
+					this.addAction(Actions.moveTo((this.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH, (this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
+				}
+				
+				else if(state != JUMPING && state == HITTING){
+					this.getActions().clear();
+				}
 			}
-			
-			else if(state == FLYING & this.getActions().size == 0)
-				this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 0.75f));
-			
-			else if(state == WALKING & this.getActions().size == 0){
-				this.addAction(Actions.moveTo((this.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH, (this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
-			}
-			
-			else if(state != JUMPING && state == HITTING){
+			else
 				this.getActions().clear();
-			}
 		}
         
 		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.6f);
 		root.setY(getY());
-		
 		
 	}
 	
@@ -190,9 +200,11 @@ public class Cat extends Entity {
 	public void jump(){
 		if(state != JUMPING)
 		{	
+			final float xDest = (this.getXOnGrid() + 2) * GameConstants.BLOCK_WIDTH;
+			final float yDest = this.getYOnGrid() * GameConstants.BLOCK_HEIGHT;
 			state = JUMPING;
 			this.getActions().clear();
-			this.addAction(Actions.parallel(Actions.moveTo((this.getXOnGrid() + 2) * GameConstants.BLOCK_WIDTH, this.getYOnGrid() * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 2)));
+			this.addAction(Actions.parallel(Actions.moveBy(2 * GameConstants.BLOCK_WIDTH, 0, GameConstants.SPEED * 2)));
 			this.addAction(Actions.parallel(Actions.sequence(
 					Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2Out),
 					Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2In),
@@ -200,16 +212,13 @@ public class Cat extends Entity {
 						
 						@Override
 						public boolean act(float delta) {
-							setStuffAfterJump();
+							setX(xDest);
+							setY(yDest);
 							return true;
 						}
 					}
 		)));
 		}
-	}
-
-	public int getNbCoin() {
-		return this.nbcoin;
 	}
 
 	/**
@@ -242,7 +251,11 @@ public class Cat extends Entity {
 //		skeleton.update(time);
 		skeleton.draw(batch);
 	}
-
+	
+	/**
+	 * dessine les zones de contact du chat
+	 * @param sr
+	 */
 	public void render(ShapeRenderer sr) {
 		sr.begin(ShapeType.Filled);
 		sr.setColor(Color.BLUE);
@@ -251,39 +264,63 @@ public class Cat extends Entity {
 		sr.rect(bottom.x, bottom.y, bottom.width, bottom.height);
 		sr.setColor(Color.GREEN);
 		sr.rect(right.x, right.y, right.width, right.height);
-		sr.setColor(Color.ORANGE);
-		sr.rect(left.x, left.y, left.width, left.height);
+		sr.setColor(Color.BLACK);
 		sr.end();
 		
 	}
 	
-	private void setStuffAfterJump(){
-		top.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
-		bottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), 2, 2);
-		veryBottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY() - (GameConstants.BLOCK_HEIGHT), 2, 2);
-		right.set(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
-		left.set(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
-		this.getActions().clear();
-		this.move(this.getStage());
-	}
-
+	/**
+	 * 
+	 * @return le nombre de pieces de bronze
+	 */
 	public int getBronze() {
 		return bronze;
 	}
 	
+	/**
+	 * 
+	 * @return le nombre de pieces d'argent
+	 */
 	public int getSilver() {
 		return silver;
 	}
 	
+	/**
+	 * 
+	 * @return le nombre de pieces d'or
+	 */
 	public int getGold() {
 		return gold;
 	}
 	
+	/**
+	 * demande un vidage de la box après une chute
+	 * @return true si le vidage est requis
+	 */
 	public boolean requestBoxEmptiing(){
 		return requestBoxEmptiing;
 	}
 
+	/**
+	 * marque la requete de vidage de la box comme traitée
+	 */
 	public void requestOk() {
 		requestBoxEmptiing = false;
+	}
+
+	/**
+	 * 
+	 * @return true si le state du chat est différent de hitting
+	 */
+	public boolean isMoving() {
+		return state != HITTING;
+	}
+	
+	/**
+	 * set le state du chat
+	 * @param state
+	 */
+	public void setState(int state){
+		this.state = state;
 	}
 }
