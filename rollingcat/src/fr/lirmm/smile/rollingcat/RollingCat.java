@@ -28,7 +28,20 @@ public class RollingCat extends Game {
 		gems.add(p);		
 		gems.add(y);
 		gems.add(r);
-
+		gems.add(r);
+		gems.add(r);
+		gems.add(r);
+		gems.add(r);
+		gems.add(r);
+		gems.add(r);
+		gems.add(r);
+	/*	gems.add(r);
+		gems.add(r);
+		gems.add(r);
+		gems.add(r);
+		gems.add(r);
+		gems.add(r);
+		*/
 		this.setScreen(new GameProgressionScreen(
 				null,null,
 				gems,
