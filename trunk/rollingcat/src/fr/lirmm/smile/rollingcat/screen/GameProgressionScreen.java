@@ -85,6 +85,7 @@ public class GameProgressionScreen implements Screen{
 			button.setHeight(size);
 			button.setX(x - button.getWidth()/2);
 			button.setY(y - button.getHeight()/2);
+			button.setOrigin(button.getWidth()/2, button.getHeight()/2);
 			trous.add(button);
 			stage.addActor(trous.get(trous.size()-1));
 		}
@@ -101,11 +102,13 @@ public class GameProgressionScreen implements Screen{
 			float y =  (float) ((Math.sin(Math.toRadians(i*step + angle)) * rayon) + centerY - entities.get(i).getHeight()/2);
 			entities.get(i).setX(x);
 			entities.get(i).setY(y);
+			entities.get(i).rotate(1);
 		}	
 		for(int i = 0 ; i < trous.size(); i++)
 		{
 			trous.get(i).setX( (int) (Math.cos(Math.toRadians(i*step + angle)) * rayon) + centerX - trous.get(i).getWidth()/2);
 			trous.get(i).setY( (int) (Math.sin(Math.toRadians(i*step + angle)) * rayon) + centerY - trous.get(i).getHeight()/2);
+			trous.get(i).rotate(1);
 		}
 		woordCircle.rotate(1);
 	}
@@ -124,6 +127,9 @@ public class GameProgressionScreen implements Screen{
 			button.setHeight(size*0.5f);
 			button.setX(x - button.getWidth()/2);
 			button.setY(y - button.getHeight()/2);
+
+			button.setOrigin(button.getWidth()/2, button.getHeight()/2);
+
 			entities.add(button);
 			stage.addActor(entities.get(entities.size()-1));
 		}
