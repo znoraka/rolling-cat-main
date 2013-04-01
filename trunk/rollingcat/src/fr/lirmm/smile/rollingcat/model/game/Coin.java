@@ -57,7 +57,7 @@ public class Coin extends Entity{
 			y = GameScreen.gold.y;
 		}
 		
-		this.addAction(Actions.moveTo(x, y, (float)(new Point((int)this.getX(), (int)this.getY()).distance(new Point((int)x, (int)y)) * GameConstants.SPEED* 0.01f), Interpolation.pow2Out));
+		this.addAction(Actions.moveTo(x, y, (float) (( Math.sqrt(Math.pow(this.getX() - x, 2) + Math.pow(this.getY() - y, 2)) * GameConstants.SPEED* 0.01f)), Interpolation.pow2Out));
 		
 	}
 }

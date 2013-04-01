@@ -53,22 +53,22 @@ public class SettingsScreen implements Screen {
 		Gdx.gl.glEnable(GL10.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
-		if(heightMinus.isPressed() & elapsedTime > SPEED)
-			heightModify(-1);
-		
-		if(heightPlus.isPressed() & elapsedTime > SPEED)
-			heightModify(1);
-		
-		if(widthMinus.isPressed() & elapsedTime > SPEED)
-			widthModify(-1);
-		
-		if(widthPlus.isPressed() & elapsedTime > SPEED)
-			widthModify(1);
-		
-		if(widthMinus.isPressed() || widthPlus.isPressed() || heightMinus.isPressed() || heightPlus.isPressed())
-			elapsedTime += delta;
-		else
-			elapsedTime = 0;
+//		if(heightMinus.isPressed() & elapsedTime > SPEED)
+//			heightModify(-1);
+//		
+//		if(heightPlus.isPressed() & elapsedTime > SPEED)
+//			heightModify(1);
+//		
+//		if(widthMinus.isPressed() & elapsedTime > SPEED)
+//			widthModify(-1);
+//		
+//		if(widthPlus.isPressed() & elapsedTime > SPEED)
+//			widthModify(1);
+//		
+//		if(widthMinus.isPressed() || widthPlus.isPressed() || heightMinus.isPressed() || heightPlus.isPressed())
+//			elapsedTime += delta;
+//		else
+//			elapsedTime = 0;
 		
 		stage.draw();
 		stage.act(delta);
@@ -127,53 +127,53 @@ public class SettingsScreen implements Screen {
 		totalVolume = new TextField(""+GameConstants.totalVolume, textFieldStyle);
 		volumePerLevel = new TextField(""+GameConstants.volumePerLevel, textFieldStyle);
 		
-		heightPlus = new ImageButton(skin.getDrawable("triangle_up"));
-		heightPlus.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				heightModify(1);
-				return true;
-			}
-			
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				
-			}
-		});
-		
-		heightMinus = new ImageButton(skin.getDrawable("triangle_down"));
-		heightMinus.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				heightModify(-1);
-				return true;
-			}
-			
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				
-			}
-		});
-		
-		widthPlus = new ImageButton(skin.getDrawable("triangle_up"));
-		widthPlus.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				widthModify(1);
-				return true;
-			}
-			
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				
-			}
-		});
-		
-		widthMinus = new ImageButton(skin.getDrawable("triangle_down"));
-		widthMinus.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				widthModify(-1);
-				return true;
-			}
-			
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				
-			}
-		});
+//		heightPlus = new ImageButton(skin.getDrawable("triangle_up"));
+//		heightPlus.addListener(new InputListener() {
+//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//				heightModify(1);
+//				return true;
+//			}
+//			
+//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//				
+//			}
+//		});
+//		
+//		heightMinus = new ImageButton(skin.getDrawable("triangle_down"));
+//		heightMinus.addListener(new InputListener() {
+//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//				heightModify(-1);
+//				return true;
+//			}
+//			
+//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//				
+//			}
+//		});
+//		
+//		widthPlus = new ImageButton(skin.getDrawable("triangle_up"));
+//		widthPlus.addListener(new InputListener() {
+//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//				widthModify(1);
+//				return true;
+//			}
+//			
+//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//				
+//			}
+//		});
+//		
+//		widthMinus = new ImageButton(skin.getDrawable("triangle_down"));
+//		widthMinus.addListener(new InputListener() {
+//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//				widthModify(-1);
+//				return true;
+//			}
+//			
+//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//				
+//			}
+//		});
 		
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("button_up");
