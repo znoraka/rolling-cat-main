@@ -134,15 +134,14 @@ public class Cat extends Entity {
 					done = true;
 			}
 			if(actor instanceof Coin){
-				if(((Entity) actor).getBounds().overlaps(bounds) & actor.isVisible()){
+				if(((Entity) actor).getBounds().overlaps(bounds) & !((Coin) actor).pickedUp()){
 					if(((Coin) actor).getType() == Coin.BRONZE)
 						bronze++;
 					else if(((Coin) actor).getType() == Coin.SILVER)
 						silver++;
 					else if(((Coin) actor).getType() == Coin.GOLD)
 						gold++;
-					actor.setVisible(false);
-					actor.setTouchable(Touchable.disabled);
+					((Coin) actor).pickUp();
 				}
 			}
 			
