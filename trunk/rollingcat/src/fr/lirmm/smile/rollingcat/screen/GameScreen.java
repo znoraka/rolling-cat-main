@@ -1,5 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 
 import com.badlogic.gdx.Gdx;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -26,7 +28,7 @@ import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
-import fr.lirmm.smile.rollingcat.model.game.Entity;
+import fr.lirmm.smile.rollingcat.model.game.Coin;
 import fr.lirmm.smile.rollingcat.model.game.Target;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
@@ -55,7 +57,10 @@ public class GameScreen implements Screen{
 	private Target gem;
 	
 	private static long elapsedTimeDuringPause;
-
+	
+	public static final Vector2 gold = new Vector2(GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT * 0.92f);
+	public static final Vector2 silver = new Vector2(GameConstants.BLOCK_WIDTH * 3, GameConstants.DISPLAY_HEIGHT * 0.92f);
+	public static final Vector2 bronze = new Vector2(GameConstants.BLOCK_WIDTH * 5, GameConstants.DISPLAY_HEIGHT * 0.92f);
 	
 
 	public GameScreen(RollingCat game, Patient patient, Stage stage, int level){
@@ -76,9 +81,12 @@ public class GameScreen implements Screen{
 		cat.move(stage);
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
-		font.draw(batch, "bronze : " + cat.getBronze(), GameConstants.DISPLAY_WIDTH * 0.05f, GameConstants.DISPLAY_HEIGHT * 0.95f);
-		font.draw(batch, "silver : " + cat.getSilver(), GameConstants.DISPLAY_WIDTH * 0.25f, GameConstants.DISPLAY_HEIGHT * 0.95f);
-		font.draw(batch, "gold : " + cat.getGold(), GameConstants.DISPLAY_WIDTH * 0.50f, GameConstants.DISPLAY_HEIGHT * 0.95f);
+		batch.draw(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.GOLD), gold.x, gold.y ,  GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		font.draw(batch, cat.getGold() + " x ", GameConstants.BLOCK_WIDTH * 0.25f, GameConstants.DISPLAY_HEIGHT * 0.97f);
+		batch.draw(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.SILVER), silver.x, silver.y,  GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		font.draw(batch, cat.getSilver() + " x ", GameConstants.BLOCK_WIDTH * 2.25f, GameConstants.DISPLAY_HEIGHT * 0.97f);
+		batch.draw(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.BRONZE), bronze.x, bronze.y,  GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		font.draw(batch, cat.getBronze() + " x ", GameConstants.BLOCK_WIDTH * 4.25f, GameConstants.DISPLAY_HEIGHT * 0.97f);
 		batch.end();
 		stage.act(delta);
 		stage.draw();
