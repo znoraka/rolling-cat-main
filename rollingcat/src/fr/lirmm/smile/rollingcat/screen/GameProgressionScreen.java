@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -45,7 +46,7 @@ public class GameProgressionScreen implements Screen{
 	private RollingCat game;
 	private Patient patient;
 
-	private Point centralDiamond;
+	private Vector2 centralDiamond;
 	private float sizeCentralDiamond;
 	private int nbLevelsWin;
 	private boolean bossWin;
@@ -68,7 +69,7 @@ public class GameProgressionScreen implements Screen{
 		this.centerY = GameConstants.DISPLAY_HEIGHT / 2;
 		this.rayon = (int) (GameConstants.DISPLAY_WIDTH  * 0.20f);
 		this.sizeCentralDiamond = rayon*0.7f;
-		this.centralDiamond = new Point((int)(centerX-sizeCentralDiamond/2),(int)(centerY-sizeCentralDiamond/2));
+		this.centralDiamond = new Vector2((centerX-sizeCentralDiamond/2), (centerY-sizeCentralDiamond/2));
 		size = (int) ((int) (2*Math.PI * rayon / GameConstants.NB_OF_LEVELS_IN_GAME) * 0.8f); 
 	}
 
