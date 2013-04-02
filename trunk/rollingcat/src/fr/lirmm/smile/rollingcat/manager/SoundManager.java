@@ -13,7 +13,7 @@ public class SoundManager {
 	
 	public static void load(){
 		if(coinPickup == null){
-			coinPickup = Gdx.audio.newSound(Gdx.files.internal("data/sound/coin.ogg"));
+	//		coinPickup = Gdx.audio.newSound(Gdx.files.internal("data/sound/coin.ogg"));
 		}
 	}
 

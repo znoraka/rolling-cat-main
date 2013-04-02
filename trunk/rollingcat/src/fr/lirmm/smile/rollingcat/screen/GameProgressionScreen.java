@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.game.Target;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
@@ -69,12 +70,12 @@ public class GameProgressionScreen implements Screen{
 		this.patient = patient;
 		this.game = game;
 
-		this.centerX = GameConstants.DISPLAY_WIDTH / 2;
+		this.centerX = GameConstants.DISPLAY_WIDTH / 2 ;
 		this.centerY = GameConstants.DISPLAY_HEIGHT / 2;
-		this.rayon = (int) (GameConstants.DISPLAY_WIDTH  * 0.20f);
+		this.rayon = (int) (GameConstants.DISPLAY_WIDTH  * 0.2f);
 		this.sizeCentralDiamond = rayon*0.7f;
 		this.centralDiamond = new Vector2((centerX-sizeCentralDiamond/2), (centerY-sizeCentralDiamond/2));
-		size = (int) ((int) (2*Math.PI * rayon / GameConstants.NB_OF_LEVELS_IN_GAME) * 0.8f);
+		size = (int) ((int) (2*Math.PI * rayon / GameConstants.NB_OF_LEVELS_IN_GAME) * 0.6f); 
 		this.gem = gem;
 	}
 
@@ -129,6 +130,7 @@ public class GameProgressionScreen implements Screen{
 			int y = (int) (Math.sin(Math.toRadians(i*step)) * rayon)+ centerY;
 */
 			Vector2 p = this.getPosition(i);
+			System.out.println(gems.get(i));
 			Image button = new Image(GdxRessourcesGetter.getAtlas().findRegion(gems.get(i)));
 			button.setWidth(size*0.5f);
 			button.setHeight(size*0.5f);
@@ -237,6 +239,7 @@ public class GameProgressionScreen implements Screen{
 			back = new TextButton("Back", style);
 			back.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
+			        InternetManager.getWorld(patient.getID());
 					game.setScreen(new LevelSelectScreen(game, patient));
 				}
 			});

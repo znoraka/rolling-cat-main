@@ -219,7 +219,15 @@ public class LevelSelectScreen implements Screen {
 
 			listOfGems = new ArrayList<String>();
 			for (String s : gems) {
-				listOfGems.add(s+GameConstants.TEXTURE_GEM);
+				System.out.println(s);
+				if(!s.equals("empty"))
+				{
+					listOfGems.add(s+GameConstants.TEXTURE_GEM);
+				}
+				else
+				{
+					listOfGems.add(s);	
+				}
 			}
 			this.numberOfLevels = levels.length;
 			if(levels.length < 3)
