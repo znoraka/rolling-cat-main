@@ -46,10 +46,10 @@ public class LevelSelectScreen implements Screen {
 	private Label label;
 	private final float X = (GameConstants.DISPLAY_WIDTH / 2);
 	private String[] levels, gems;
-    private ArrayList<String> listOfGems;
-    private String world;
-    private boolean gen;
-    
+	private ArrayList<String> listOfGems;
+	private String world;
+	private boolean gen;
+
 
 	private float elapsedTime;
 
@@ -61,41 +61,50 @@ public class LevelSelectScreen implements Screen {
 	private float[] posW;
 	private int[] Zindexes;
 	private int numberOfLevels;
-	
+
 	public LevelSelectScreen(RollingCat game, Patient patient){
 		this.game = game;
 		this.patient = patient;
-		this.numberOfLevels = 5;
+		this.numberOfLevels = GameConstants.NB_OF_LEVELS_IN_MENU;
 
 		this.init();
 	}
 
 	@Override
 	public void render(float delta) {
+		if(labels != null)
+		{
+			for(Label l : labels)
+			{
+				l.setVisible(false);
+			}
+			changeButtonsSize();
+		}
 		Gdx.gl.glClearColor(1, 1, 1, 1);
-		 Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-         
-         if(gen){
-                 if(next.isPressed() & elapsedTime > 0.4f)
-                         next();
-                 
-                 if(previous.isPressed() & elapsedTime > 0.4f)
-                         previous();
-                 
-                 if(next.isPressed() || previous.isPressed())
-                         elapsedTime += delta;
-                 else
-                         elapsedTime = 0;
-                 
-                 stage.draw();
-                 stage.act(delta);
-                 Gdx.app.log("current level : ", ""+currentButton);
-         }
-         if(gen == false & InternetManager.getWorld() != null){
-                 gen = true;
-                 show();
-         }
-         init();
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+		if(gen){
+			if(next.isPressed() & elapsedTime > 0.4f)
+				next();
+
+			if(previous.isPressed() & elapsedTime > 0.4f)
+				previous();
+
+			if(next.isPressed() || previous.isPressed())
+				elapsedTime += delta;
+			else
+				elapsedTime = 0;
+
+			stage.draw();
+			stage.act(delta);
+//			Gdx.app.log("current level : ", ""+currentButton);
+		}
+		if(gen == false & InternetManager.getWorld() != null){
+			gen = true;
+			show();
+		}
+		
+		
 	}
 
 	private void init()
@@ -130,8 +139,8 @@ public class LevelSelectScreen implements Screen {
 			sizeH[n/2 +i] = sH;
 			sizeW[n/2 - i] = sW;
 			sizeW[n/2 + i ] = sW;
-			Zindexes[n/2 - i] = i;
-			Zindexes[n/2 + i] = i ; 
+			Zindexes[n/2 - i] = n/2-i;
+			Zindexes[n/2 + i] = n/2-i ; 
 			posW[n/2-i] = X - sW/2;
 			posW[n/2+i] = X - sW/2;
 		}
@@ -149,8 +158,8 @@ public class LevelSelectScreen implements Screen {
 		for(int i = 0 ; i < this.sizeH.length ; i++)
 		{
 			int index =(currentButton + i + labels.size() - sizeH.length /2 )%labels.size();  
-			
-//			label = labels.get((currentButton + i - this.sizeH.length/2 + 1)%labels.size()  );
+
+			//			label = labels.get((currentButton + i - this.sizeH.length/2 + 1)%labels.size()  );
 			label = labels.get(index);
 			label.setVisible(true);
 			label.setZIndex(Zindexes[i] + 1);
@@ -158,6 +167,7 @@ public class LevelSelectScreen implements Screen {
 			label.getTextBounds().height = sizeH[i]*0.5f;	
 			label.addAction(Actions.parallel(Actions.moveTo(posW[i],posH[i], SPEED)));
 			label.addAction(Actions.parallel(Actions.sizeTo(sizeW[i], sizeH[i], SPEED)));
+			
 		}
 	}
 
@@ -169,104 +179,104 @@ public class LevelSelectScreen implements Screen {
 
 	@Override
 	public void show() {
-		  if(gen == true){
-              font = getBigFont();
-              stage = getStage();
-              skin = getSkin();
-              world = InternetManager.getWorld();
-              Json json = new Json();
-              Gdx.app.log(RollingCat.LOG, json.prettyPrint(world));
-              OrderedMap<String, Object> map = (OrderedMap<String, Object>) new JsonReader().parse(world);
-              levels = json.readValue("levels", String[].class, map);
-              gems = json.readValue("gems", String[].class, map); 
-              
-              listOfGems = new ArrayList<String>();
-              for (String s : gems) {
-                      listOfGems.add(s+GameConstants.TEXTURE_GEM);
-              }
-              
-              labels = new ArrayList<Label>();
-              
-              table = new Table();
-              table.setBackground(skin.getDrawable("background_base"));
-              table.setHeight(GameConstants.DISPLAY_HEIGHT);
-              table.setWidth(GameConstants.DISPLAY_WIDTH);
-              
-              stage.addActor(table);
-              
-              TextButtonStyle style = new TextButtonStyle();
-              style.up = skin.getDrawable("button_up");
-              style.down = skin.getDrawable("button_down");
-              style.font = font;
-              style.fontColor = Color.BLACK;
-              
-              LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
-              labelStyle.background = skin.getDrawable("button_up");
-              
-              
-              start = new TextButton("Start", style);
-              start.addListener(new ClickListener() {
-                              public void clicked (InputEvent event, float x, float y) {
-                                      Gdx.app.log(RollingCat.LOG, "level selected : "+currentButton);
-                                      game.setScreen(new LoadingScreen(game, patient, currentButton));
-                              }
-                      });
-              
-              back = new TextButton("Back", style);
-              back.addListener(new ClickListener() {
-                              public void clicked (InputEvent event, float x, float y) {
-                                      game.setScreen(new PatientScreen(game, patient));
-                              }
-                      });
-              
-              previous = new TextButton("Previous", style);
-              previous.addListener(new InputListener() {
-                      public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                              previous();
-                              return true;
-                      }
-                      public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                              
-                      }
-              });
-              
-              next = new TextButton("Next", style);
-              next.addListener(new InputListener() {
-                      public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                              next();
-                              return true;
-                      }
-                      public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                              
-                      }
-              });
-              
-              score = new TextButton("Gemmes", style);
-              score.addListener(new ClickListener() {
-                      public void clicked (InputEvent event, float x, float y) {
-                              game.setScreen(new GameProgressionScreen(game, patient, listOfGems, listOfGems.size() == levels.length));
-                      }
-              });
-//              
-              createLabels(labelStyle);
-              
-              Gdx.input.setInputProcessor(stage);
-              
-              stage.addActor(previous);
-              stage.addActor(next);
-              stage.addActor(start);
-              stage.addActor(back);
-              stage.addActor(score);
-              
-              changeButtonsSize();
-              
-              start.setX(GameConstants.DISPLAY_WIDTH - start.getWidth());
-              next.setX(GameConstants.DISPLAY_WIDTH - next.getWidth());
-              next.setY(GameConstants.DISPLAY_HEIGHT - next.getHeight()); 
-              previous.setX(0);
-              previous.setY(GameConstants.DISPLAY_HEIGHT - previous.getHeight()); 
-              score.setX(GameConstants.DISPLAY_WIDTH / 2 - score.getWidth() / 2);
-      }
+		if(gen == true){
+			font = getBigFont();
+			stage = getStage();
+			skin = getSkin();
+			world = InternetManager.getWorld();
+			Json json = new Json();
+			Gdx.app.log(RollingCat.LOG, json.prettyPrint(world));
+			OrderedMap<String, Object> map = (OrderedMap<String, Object>) new JsonReader().parse(world);
+			levels = json.readValue("levels", String[].class, map);
+			gems = json.readValue("gems", String[].class, map); 
+
+			listOfGems = new ArrayList<String>();
+			for (String s : gems) {
+				listOfGems.add(s+GameConstants.TEXTURE_GEM);
+			}
+
+			labels = new ArrayList<Label>();
+
+			table = new Table();
+			table.setBackground(skin.getDrawable("background_base"));
+			table.setHeight(GameConstants.DISPLAY_HEIGHT);
+			table.setWidth(GameConstants.DISPLAY_WIDTH);
+
+			stage.addActor(table);
+
+			TextButtonStyle style = new TextButtonStyle();
+			style.up = skin.getDrawable("button_up");
+			style.down = skin.getDrawable("button_down");
+			style.font = font;
+			style.fontColor = Color.BLACK;
+
+			LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
+			labelStyle.background = skin.getDrawable("button_up");
+
+
+			start = new TextButton("Start", style);
+			start.addListener(new ClickListener() {
+				public void clicked (InputEvent event, float x, float y) {
+					Gdx.app.log(RollingCat.LOG, "level selected : "+currentButton);
+					game.setScreen(new LoadingScreen(game, patient, currentButton));
+				}
+			});
+
+			back = new TextButton("Back", style);
+			back.addListener(new ClickListener() {
+				public void clicked (InputEvent event, float x, float y) {
+					game.setScreen(new PatientScreen(game, patient));
+				}
+			});
+
+			previous = new TextButton("Previous", style);
+			previous.addListener(new InputListener() {
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					previous();
+					return true;
+				}
+				public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+				}
+			});
+
+			next = new TextButton("Next", style);
+			next.addListener(new InputListener() {
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					next();
+					return true;
+				}
+				public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+				}
+			});
+
+			score = new TextButton("Gemmes", style);
+			score.addListener(new ClickListener() {
+				public void clicked (InputEvent event, float x, float y) {
+					game.setScreen(new GameProgressionScreen(game, patient, listOfGems, listOfGems.size() == levels.length));
+				}
+			});
+			//              
+			createLabels(labelStyle);
+
+			Gdx.input.setInputProcessor(stage);
+
+			stage.addActor(previous);
+			stage.addActor(next);
+			stage.addActor(start);
+			stage.addActor(back);
+			stage.addActor(score);
+
+			changeButtonsSize();
+
+			start.setX(GameConstants.DISPLAY_WIDTH - start.getWidth());
+			next.setX(GameConstants.DISPLAY_WIDTH - next.getWidth());
+			next.setY(GameConstants.DISPLAY_HEIGHT - next.getHeight()); 
+			previous.setX(0);
+			previous.setY(GameConstants.DISPLAY_HEIGHT - previous.getHeight()); 
+			score.setX(GameConstants.DISPLAY_WIDTH / 2 - score.getWidth() / 2);
+		}
 	}
 
 	@Override
@@ -317,7 +327,7 @@ public class LevelSelectScreen implements Screen {
 	}
 
 
-/*
+	/*
 	public static void main(String args[])
 	{
 		int tabSize[] = {2,3,4};
@@ -335,5 +345,5 @@ public class LevelSelectScreen implements Screen {
 		}
 		System.out.println(Arrays.toString(tabX));
 	}
-	*/
+	 */
 }
