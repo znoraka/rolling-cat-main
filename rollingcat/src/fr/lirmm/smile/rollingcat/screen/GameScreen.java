@@ -122,11 +122,13 @@ public class GameScreen implements Screen{
         }
     	if(done){
         	InternetManager.endGameSession();
+        	Gdx.app.log(RollingCat.LOG,"Client sauvegarde des données : " + gem.getCouleur());
         	InternetManager.updateLevelStats(patient.getID(), level, getScore(), (int) duration, gem.getCouleur());
         	parameters = new OrderedMap<String, String>();
         	parameters.put("duration", ""+duration);
         	EventManager.create(EventManager.end_game_event_type, parameters);
         	patient.addTrack(new Track(mc.getMap(), Track.GAME, duration));
+        	Gdx.app.log(RollingCat.LOG,"Call to gameProgressionScreen : " + gem.getCouleur());
 			game.setScreen(new GameProgressionScreen(game, patient, listOfGems, true, gem));
     	}
         if(cat.requestBoxEmptiing()){

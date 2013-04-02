@@ -221,6 +221,7 @@ public class Cat extends Entity {
 						}
 					}
 		)));
+			System.out.println(state);
 		}
 	}
 
