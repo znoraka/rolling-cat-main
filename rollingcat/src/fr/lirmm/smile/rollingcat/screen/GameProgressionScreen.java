@@ -4,20 +4,22 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -26,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.model.game.Target;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
@@ -53,10 +56,11 @@ public class GameProgressionScreen implements Screen{
 	private Image centralDiamondEntity;
 	private Image woordCircle;
 	private List<String> gems;
+	private Target gem;
 
 
 
-	public GameProgressionScreen(RollingCat game, Patient patient, List<String> gems, boolean bossWin)
+	public GameProgressionScreen(RollingCat game, Patient patient, List<String> gems, boolean bossWin, Target gem)
 	{
 		this.gems = gems;
 		this.nbLevelsWin = gems.size();
@@ -70,7 +74,8 @@ public class GameProgressionScreen implements Screen{
 		this.rayon = (int) (GameConstants.DISPLAY_WIDTH  * 0.20f);
 		this.sizeCentralDiamond = rayon*0.7f;
 		this.centralDiamond = new Vector2((centerX-sizeCentralDiamond/2), (centerY-sizeCentralDiamond/2));
-		size = (int) ((int) (2*Math.PI * rayon / GameConstants.NB_OF_LEVELS_IN_GAME) * 0.8f); 
+		size = (int) ((int) (2*Math.PI * rayon / GameConstants.NB_OF_LEVELS_IN_GAME) * 0.8f);
+		this.gem = gem;
 	}
 
 	public void initTrous()
@@ -123,7 +128,7 @@ public class GameProgressionScreen implements Screen{
 			/*int x = (int) (Math.cos(Math.toRadians(i*step)) * rayon) + centerX;
 			int y = (int) (Math.sin(Math.toRadians(i*step)) * rayon)+ centerY;
 */
-			Point p = this.getPosition(i);
+			Vector2 p = this.getPosition(i);
 			Image button = new Image(GdxRessourcesGetter.getAtlas().findRegion(gems.get(i)));
 			button.setWidth(size*0.5f);
 			button.setHeight(size*0.5f);
@@ -167,7 +172,7 @@ public class GameProgressionScreen implements Screen{
 	public void render(float delta) 
 	{
 		Gdx.gl.glClearColor(0, 0, 0, 0);
-		Gdx.gl.glClear(Gdx.gl10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		elapsedTime+=delta;
 
@@ -189,6 +194,8 @@ public class GameProgressionScreen implements Screen{
 
 		stage.act(delta);
 		stage.draw();
+		
+		
 
 	}
 
@@ -238,6 +245,30 @@ public class GameProgressionScreen implements Screen{
 		stage.addActor(back);
 
 		Gdx.input.setInputProcessor(stage);
+		Vector2 tmp = getPosition(gems.size());
+		
+		if(gem != null){
+			this.gem.setOrigin(this.gem.getWidth() * 0.5f, this.gem.getHeight() * 0.5f);
+			this.gem.setX(this.gem.getX() % GameConstants.DISPLAY_WIDTH);
+			this.gem.addAction(Actions.parallel(Actions.sizeTo(size*0.5f, size*0.5f, 2)));
+			this.gem.addAction(Actions.parallel(Actions.moveTo(tmp.x - size * 0.25f, tmp.y - size * 0.25f, 2)));
+			this.gem.addAction(Actions.sequence(Actions.delay(2), new Action() {
+				
+				@Override
+				public boolean act(float delta) {
+					gems.add(gem.getCouleur()+"_gem");
+					Image tmp = new Image(GdxRessourcesGetter.getAtlas().findRegion(gem.getCouleur()+"_gem"));
+					tmp.setBounds(gem.getX(), gem.getY(), gem.getWidth(), gem.getHeight());
+					tmp.setOrigin(tmp.getWidth()/2, tmp.getHeight()/2);
+					entities.add(tmp);
+					gem.setVisible(false);
+					stage.addActor(tmp);
+					return true;
+				}
+			}));
+			stage.addActor(gem);
+		}
+
 	}
 
 	@Override
@@ -255,11 +286,11 @@ public class GameProgressionScreen implements Screen{
 		backgroundTexture.dispose();
 	}
 
-	public Point getPosition(int indexLevel)
+	public Vector2 getPosition(int indexLevel)
 	{
 		float step = 360.0f/GameConstants.NB_OF_LEVELS_IN_GAME;
 		int x = (int) (Math.cos(Math.toRadians(indexLevel*step)) * rayon) + centerX;
 		int y = (int) (Math.sin(Math.toRadians(indexLevel*step)) * rayon)+ centerY;
-		return new Point(x, y);
+		return new Vector2(x, y);
 	}
 }

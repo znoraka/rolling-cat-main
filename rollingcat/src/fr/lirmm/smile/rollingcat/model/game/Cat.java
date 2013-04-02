@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
@@ -135,6 +136,7 @@ public class Cat extends Entity {
 			}
 			if(actor instanceof Coin){
 				if(((Entity) actor).getBounds().overlaps(bounds) & !((Coin) actor).pickedUp()){
+					SoundManager.pickupPlay();
 					if(((Coin) actor).getType() == Coin.BRONZE)
 						bronze++;
 					else if(((Coin) actor).getType() == Coin.SILVER)
@@ -180,7 +182,7 @@ public class Cat extends Entity {
 					this.addAction(Actions.moveTo((this.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH, (this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
 				}
 				
-				else if(state != JUMPING && state == HITTING){
+				else if(state == HITTING){
 					this.getActions().clear();
 				}
 			}
@@ -213,6 +215,8 @@ public class Cat extends Entity {
 						public boolean act(float delta) {
 							setX(xDest);
 							setY(yDest);
+							state = WALKING;
+							Gdx.app.log(RollingCat.LOG, "landed");
 							return true;
 						}
 					}

@@ -97,14 +97,11 @@ public class LevelSelectScreen implements Screen {
 
 			stage.draw();
 			stage.act(delta);
-			//			Gdx.app.log("current level : ", ""+currentButton);
 		}
 		if(gen == false & InternetManager.getWorld() != null){
 			gen = true;
 			show();
 		}
-
-
 	}
 
 	private void initBeforeThreeElements()
@@ -159,10 +156,10 @@ public class LevelSelectScreen implements Screen {
 		sizeW[(n)/2] = maxW;
 		Zindexes[(n)/2] = (n+1)/2;
 		posW[(n)/2] = X - sizeW[(n)/2]/2;
-		System.out.println(p);
-		System.out.println("solve : " + numberOfLevels);
+//		System.out.println(p);
+//		System.out.println("solve : " + numberOfLevels);
 		float q = p.solve(0.00001f);
-		System.out.println("end solve");
+//		System.out.println("end solve");
 		for(int i = 1 ; i <= (n)/2 ; i++)
 		{
 			int sH = (int) (U0 * Math.pow(q, i * 0.75f));
@@ -189,7 +186,7 @@ public class LevelSelectScreen implements Screen {
 	private void changeButtonsSize() {
 		for(int i = 0 ; i < this.sizeH.length ; i++)
 		{
-			int index = (currentButton + i + labels.size() - sizeH.length /2 )%labels.size();  
+			int index = (currentButton + i + labels.size() - sizeH.length /2 )%labels.size(); 
 			label = labels.get(index);
 			label.setVisible(true);
 			label.setZIndex(Zindexes[i] + 1);
@@ -215,6 +212,7 @@ public class LevelSelectScreen implements Screen {
 			world = InternetManager.getWorld();
 			Json json = new Json();
 			Gdx.app.log(RollingCat.LOG, json.prettyPrint(world));
+			@SuppressWarnings("unchecked")
 			OrderedMap<String, Object> map = (OrderedMap<String, Object>) new JsonReader().parse(world);
 			levels = json.readValue("levels", String[].class, map);
 			gems = json.readValue("gems", String[].class, map); 
@@ -262,7 +260,7 @@ public class LevelSelectScreen implements Screen {
 			start.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					Gdx.app.log(RollingCat.LOG, "level selected : "+currentButton);
-					game.setScreen(new LoadingScreen(game, patient, currentButton));
+					game.setScreen(new LoadingScreen(game, patient, currentButton, listOfGems));
 				}
 			});
 
@@ -298,10 +296,10 @@ public class LevelSelectScreen implements Screen {
 			score = new TextButton("Gemmes", style);
 			score.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new GameProgressionScreen(game, patient, listOfGems, listOfGems.size() == levels.length));
+					game.setScreen(new GameProgressionScreen(game, patient, listOfGems, listOfGems.size() == levels.length, null));
 				}
 			});
-			//              
+
 			createLabels(labelStyle);
 
 			Gdx.input.setInputProcessor(stage);
@@ -364,6 +362,7 @@ public class LevelSelectScreen implements Screen {
 			stage.addActor(label);
 			label.setVisible(false);
 		}
+		currentButton = levels.length;
 	}
 	private void next(){
 		currentButton = (currentButton > labels.size() - 2)?0:currentButton + 1;
@@ -376,25 +375,4 @@ public class LevelSelectScreen implements Screen {
 		changeButtonsSize();
 		elapsedTime = 0;
 	}
-
-
-	/*
-	public static void main(String args[])
-	{
-		int tabSize[] = {2,3,4};
-		int tabX[] = {2,3,2,3,4,2,3,4,5};
-		int zoneWorkX = 16;
-		int zoneWorkyY= 12 + 2;;
-		int index = 0;
-		for(int i = 0 ; i < tabSize.length ; i++)
-		{
-			for(int j = index ; j < tabSize[i] + index ; j++) 
-			{
-				tabX[j] = tabX[j] + (zoneWorkX* i);
-			}
-			index += tabSize[i];
-		}
-		System.out.println(Arrays.toString(tabX));
-	}
-	 */
 }

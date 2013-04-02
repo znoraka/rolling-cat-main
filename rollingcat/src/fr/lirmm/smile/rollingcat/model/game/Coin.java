@@ -1,9 +1,8 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
-import java.awt.Point;
-
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
@@ -29,14 +28,25 @@ public class Coin extends Entity{
 
 	}
 	
+	/**
+	 * 
+	 * @return the coin's type
+	 */
 	public String getType(){
 		return this.type;
 	}
 	
+	/**
+	 * 
+	 * @return true if the coin has been picked up
+	 */
 	public boolean pickedUp(){
 		return pickedUp;
 	}
 	
+	/**
+	 * picks up a coin and sends it with his friends in the coin counting area
+	 */
 	public void pickUp(){
 		pickedUp = true;
 		float x = this.getStage().getCamera().position.x - GameConstants.DISPLAY_WIDTH * 0.5f;
@@ -57,7 +67,17 @@ public class Coin extends Entity{
 			y = GameScreen.gold.y;
 		}
 		
-		this.addAction(Actions.moveTo(x, y, (float) (( Math.sqrt(Math.pow(this.getX() - x, 2) + Math.pow(this.getY() - y, 2)) * GameConstants.SPEED* 0.01f)), Interpolation.pow2Out));
+		this.addAction(Actions.sequence(
+				Actions.moveTo(x, y, (float) (( Math.sqrt(Math.pow(this.getX() - x, 2) + Math.pow(this.getY() - y, 2)) * GameConstants.SPEED* 0.01f)), Interpolation.pow2Out),
+				new Action() {
+					
+					@Override
+					public boolean act(float delta) {
+						setVisible(false);
+						return true;
+					}
+				})
+				);
 		
 	}
 }
