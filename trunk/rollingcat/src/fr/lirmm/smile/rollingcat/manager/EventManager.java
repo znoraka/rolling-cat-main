@@ -2,10 +2,12 @@ package fr.lirmm.smile.rollingcat.manager;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
 
+import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.screen.GameScreen;
 
 public class EventManager {
@@ -50,8 +52,8 @@ public class EventManager {
 	 */
 	public static void create(String event_type, Object parameters){
 		OrderedMap<String, Object> event = new OrderedMap<String, Object>();
-		long l = System.currentTimeMillis() - GameScreen.getElapsedTimeDuringPause();
-		event.put(timestamp, l);
+		Long l = new Long(System.currentTimeMillis() - GameScreen.getElapsedTimeDuringPause());
+		event.put(timestamp, l.toString());
 		event.put(type, event_type);
 		event.put(data, parameters);
 		listOfEvents.add(event);

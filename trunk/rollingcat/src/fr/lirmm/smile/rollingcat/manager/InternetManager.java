@@ -399,10 +399,10 @@ public class InternetManager{
 		world = null;
 	}
 	
-	public static void updateLevelStats(String patientid, int levelID, int score, int duration) {
+	public static void updateLevelStats(String patientid, int levelID, int score, int duration, String gemColor) {
 		Gdx.app.log(RollingCat.LOG, "preparing send score update request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+levelID+"/"+score+"/"+duration);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+levelID+"/"+score+"/"+duration+"/"+gemColor);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "text/plain");
 		

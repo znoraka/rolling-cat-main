@@ -2,11 +2,15 @@ package fr.lirmm.smile.rollingcat.screen;
 
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
+
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -19,6 +23,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
@@ -55,20 +63,25 @@ public class GameScreen implements Screen{
 	private GameScreen screen;
 	private boolean done;
 	private Target gem;
+	private Image goldImage, silverImage, bronzeImage;
+	private Label goldLabel, silverLabel, bronzeLabel;
+	private Table table;
+	private List<String> listOfGems;
 	
 	private static long elapsedTimeDuringPause;
 	
-	public static final Vector2 gold = new Vector2(GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT * 0.92f);
-	public static final Vector2 silver = new Vector2(GameConstants.BLOCK_WIDTH * 3, GameConstants.DISPLAY_HEIGHT * 0.92f);
-	public static final Vector2 bronze = new Vector2(GameConstants.BLOCK_WIDTH * 5, GameConstants.DISPLAY_HEIGHT * 0.92f);
+	public static Vector2 gold = new Vector2(GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT * 0.92f);
+	public static Vector2 silver = new Vector2(GameConstants.BLOCK_WIDTH * 3, GameConstants.DISPLAY_HEIGHT * 0.92f);
+	public static Vector2 bronze = new Vector2(GameConstants.BLOCK_WIDTH * 5, GameConstants.DISPLAY_HEIGHT * 0.92f);
 	
 
-	public GameScreen(RollingCat game, Patient patient, Stage stage, int level){
+	public GameScreen(RollingCat game, Patient patient, Stage stage, int level, List<String> listOfGems){
 		this.game = game;
 		this.patient = patient;
 		this.stage = stage;
 		this.level = level;
 		elapsedTimeDuringPause = 0;
+		this.listOfGems = listOfGems;
 	}
 	
 	@Override
@@ -81,12 +94,7 @@ public class GameScreen implements Screen{
 		cat.move(stage);
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
-		batch.draw(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.GOLD), gold.x, gold.y ,  GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
-		font.draw(batch, cat.getGold() + " x ", GameConstants.BLOCK_WIDTH * 0.25f, GameConstants.DISPLAY_HEIGHT * 0.97f);
-		batch.draw(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.SILVER), silver.x, silver.y,  GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
-		font.draw(batch, cat.getSilver() + " x ", GameConstants.BLOCK_WIDTH * 2.25f, GameConstants.DISPLAY_HEIGHT * 0.97f);
-		batch.draw(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.BRONZE), bronze.x, bronze.y,  GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
-		font.draw(batch, cat.getBronze() + " x ", GameConstants.BLOCK_WIDTH * 4.25f, GameConstants.DISPLAY_HEIGHT * 0.97f);
+		table.draw(batch, 1);
 		batch.end();
 		stage.act(delta);
 		stage.draw();
@@ -100,7 +108,6 @@ public class GameScreen implements Screen{
         mc.addTrackingPoint(delta);
         if(cat.isDone() && gem.getActions().size == 0){
         	gem.addAction(Actions.parallel(Actions.sequence(
-        			Actions.sizeTo(GameConstants.DISPLAY_WIDTH / 4, GameConstants.DISPLAY_HEIGHT / 4, 3),
         			Actions.delay(2),
         			new Action() {
 						
@@ -110,23 +117,25 @@ public class GameScreen implements Screen{
 							return true;
 						}
 					})));
-        	gem.addAction(Actions.parallel(Actions.moveTo((GameConstants.DISPLAY_WIDTH) * (segment - 0.25f), GameConstants.DISPLAY_HEIGHT * 0.25f, 3)));
+        	gem.addAction(Actions.parallel(Actions.moveTo((GameConstants.DISPLAY_WIDTH) * (segment - 0.25f), GameConstants.DISPLAY_HEIGHT * 0.25f, 2)));
         	
         }
     	if(done){
         	InternetManager.endGameSession();
-        	InternetManager.updateLevelStats(patient.getID(), level, getScore(), (int) duration);
+        	InternetManager.updateLevelStats(patient.getID(), level, getScore(), (int) duration, gem.getCouleur());
         	parameters = new OrderedMap<String, String>();
         	parameters.put("duration", ""+duration);
         	EventManager.create(EventManager.end_game_event_type, parameters);
         	patient.addTrack(new Track(mc.getMap(), Track.GAME, duration));
-        	game.setScreen(new TrackingRecapScreen(game, patient));
+			game.setScreen(new GameProgressionScreen(game, patient, listOfGems, true, gem));
     	}
         if(cat.requestBoxEmptiing()){
         	mc.dropItem();
         	cat.requestOk();
         }
         
+        setLabelText();
+        setVectorCoordinates();
 	}
 	
 	/**
@@ -181,7 +190,30 @@ public class GameScreen implements Screen{
 			parameters.put("session_type", Track.GAME);
 			parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
 			parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
-	     	EventManager.create(EventManager.start_game_event_type, parameters); 
+	     	EventManager.create(EventManager.start_game_event_type, parameters);
+	     	
+	     	goldImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.GOLD, 2));
+	     	silverImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.SILVER, 2));
+	     	bronzeImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.BRONZE, 2));
+
+	     	LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
+            labelStyle.background = getSkin().getDrawable("empty");
+            
+	     	goldLabel = new Label("", labelStyle);
+	     	silverLabel = new Label("", labelStyle);
+	     	bronzeLabel  = new Label("", labelStyle);
+	     	
+	     	table = new Table();
+	     	table.setX(GameConstants.DISPLAY_WIDTH * 0.16f);
+	     	table.setY(GameConstants.DISPLAY_HEIGHT * 0.95f);
+	     	
+	     	table.add(goldLabel).padLeft(GameConstants.BLOCK_WIDTH * 0.25f);
+	     	table.add(goldImage).height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
+	     	table.add(silverLabel).padLeft(GameConstants.BLOCK_WIDTH * 0.25f);;
+	     	table.add(silverImage).height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
+	     	table.add(bronzeLabel).padLeft(GameConstants.BLOCK_WIDTH * 0.25f);;
+	     	table.add(bronzeImage).height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
+
 	     	stage.addListener(new InputListener() {
 	     		
 	     		@Override
@@ -232,11 +264,29 @@ public class GameScreen implements Screen{
 	}
 	
 	public void setElapsedTimeDuringPause(long elapsedTime){
+		Gdx.app.log(RollingCat.LOG, ""+elapsedTime);
 		elapsedTimeDuringPause += elapsedTime;
 	}
 	
 	public static long getElapsedTimeDuringPause(){
 		return elapsedTimeDuringPause;
+	}
+	
+	private void setLabelText(){
+		goldLabel.setText(cat.getGold() + "x");
+		silverLabel.setText(cat.getSilver() + "x");
+		bronzeLabel.setText(cat.getBronze() + "x");
+	}
+	
+	private void setVectorCoordinates(){
+		gold.x = table.getX() + goldImage.getX();
+		gold.y = table.getY() + goldImage.getY();
+		
+		silver.x = table.getX() + silverImage.getX();
+		silver.y = table.getY() + silverImage.getY();
+		
+		bronze.x = table.getX() + bronzeImage.getX();
+		bronze.y = table.getY() + bronzeImage.getY();
 	}
 
 }

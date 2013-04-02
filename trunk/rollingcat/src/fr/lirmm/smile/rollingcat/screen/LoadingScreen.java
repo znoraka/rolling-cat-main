@@ -2,6 +2,9 @@ package fr.lirmm.smile.rollingcat.screen;
 
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 
+import java.util.List;
+
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,11 +26,13 @@ public class LoadingScreen implements Screen {
 	private SpriteBatch batch;
 	private String level;
 	private int levelID;
+	private List<String> listOfGem;
 
-	public LoadingScreen(RollingCat game, Patient patient, int levelID){
+	public LoadingScreen(RollingCat game, Patient patient, int levelID, List<String> listOfGem){
 		this.game = game;
 		this.patient = patient;
 		this.levelID = levelID;
+		this.listOfGem = listOfGem;
 	}
 	
 	@Override
@@ -41,7 +46,7 @@ public class LoadingScreen implements Screen {
 		if(level != null)
 		{
 			this.stage = LevelBuilder.build(level);
-			game.setScreen(new GameScreen(game, patient, stage, levelID));
+			game.setScreen(new GameScreen(game, patient, stage, levelID, listOfGem));
 		}
 	}
 

@@ -7,6 +7,7 @@ import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -135,7 +136,7 @@ public class MouseCursorGame implements InputProcessor{
 	 * @param stage
 	 */
 	public void updateStandTimer(){
-		if(oldX == x & oldY == y & item != Box.EMPTY){
+		if(oldX ==  x || oldY == y & item != Box.EMPTY){
 			standTimer += Gdx.graphics.getDeltaTime() * 1;
 		}
 		else {
@@ -200,7 +201,7 @@ public class MouseCursorGame implements InputProcessor{
 		elapsedTime += delta;
 		
 		if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
-			if(x != oldX & y != oldY){
+			if(x != oldX || y != oldY){
 				parameters = new OrderedMap<String, String>();
 				oldX = x;
 				oldY = y;
@@ -262,7 +263,7 @@ public class MouseCursorGame implements InputProcessor{
 		if(screenY < 0)
 			screenY = 0;
 		
-		x = screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2;
+		x = (screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2);
 		y = Gdx.graphics.getHeight() - screenY;
 		return true;
 	}
@@ -281,7 +282,7 @@ public class MouseCursorGame implements InputProcessor{
 		if(screenY < 0)
 			screenY = 0;
 		
-		x = screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2;
+		x = (screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2);
 		y = Gdx.graphics.getHeight() - screenY;
 		return true;
 	}

@@ -6,9 +6,11 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -39,6 +41,7 @@ public class PauseScreen implements Screen{
 	public void render(float delta) {
 		stage.draw();
 		stage.act(delta);
+		Gdx.app.log(RollingCat.LOG, "elapsed time"+(System.currentTimeMillis() - beginPause));
 	}
 
 	@Override
@@ -85,6 +88,25 @@ public class PauseScreen implements Screen{
 		quit.setY(GameConstants.DISPLAY_HEIGHT * 0.45f);
 		stage.addActor(resume);
 		stage.addActor(quit);
+		
+		stage.addListener(new InputListener() {
+     		
+     		@Override
+     		public boolean keyDown (InputEvent event, int keycode) {
+     			return true;
+     		}
+
+     		@Override
+     		public boolean keyUp (InputEvent event, int keycode) {
+     			if(keycode == Keys.ESCAPE){
+     				Gdx.app.log(RollingCat.LOG, "escape pressed !");
+    				gameScreen.setElapsedTimeDuringPause(System.currentTimeMillis() - beginPause);
+    				game.setScreen(gameScreen);
+     			}
+     			return true;
+     		}
+			
+		});
 		
 	}
 

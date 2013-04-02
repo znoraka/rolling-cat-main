@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
+import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 
 public class LoginScreen implements Screen, InputProcessor{
@@ -85,6 +86,7 @@ public class LoginScreen implements Screen, InputProcessor{
 
 	@Override
 	public void show() {
+		SoundManager.load();
 		skin = getSkin();
 		batch = getSpriteBatch();
 		font = getBigFont();
