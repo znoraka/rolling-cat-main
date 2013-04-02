@@ -61,7 +61,7 @@ public class GameProgressionScreen implements Screen{
 		this.gems = gems;
 		this.nbLevelsWin = gems.size();
 		this.bossWin = bossWin;
-		
+
 		this.patient = patient;
 		this.game = game;
 
@@ -120,14 +120,15 @@ public class GameProgressionScreen implements Screen{
 		float step = 360.0f/GameConstants.NB_OF_LEVELS_IN_GAME;
 		for (int i = 0; i < gems.size() ; i++) 
 		{
-			int x = (int) (Math.cos(Math.toRadians(i*step)) * rayon) + centerX;
+			/*int x = (int) (Math.cos(Math.toRadians(i*step)) * rayon) + centerX;
 			int y = (int) (Math.sin(Math.toRadians(i*step)) * rayon)+ centerY;
-
+*/
+			Point p = this.getPosition(i);
 			Image button = new Image(GdxRessourcesGetter.getAtlas().findRegion(gems.get(i)));
 			button.setWidth(size*0.5f);
 			button.setHeight(size*0.5f);
-			button.setX(x - button.getWidth()/2);
-			button.setY(y - button.getHeight()/2);
+			button.setX(p.x - button.getWidth()/2);
+			button.setY(p.y - button.getHeight()/2);
 
 			button.setOrigin(button.getWidth()/2, button.getHeight()/2);
 
@@ -169,12 +170,12 @@ public class GameProgressionScreen implements Screen{
 		Gdx.gl.glClear(Gdx.gl10.GL_COLOR_BUFFER_BIT);
 
 		elapsedTime+=delta;
-		
+
 		batch.begin();
 		batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.end();
 
-		
+
 		if(isCentralButtonDeclenched)
 		{
 			if(elapsedTime > 0.3)
@@ -184,8 +185,8 @@ public class GameProgressionScreen implements Screen{
 			}
 			rotateEffect(angle);
 		}
-		
-		
+
+
 		stage.act(delta);
 		stage.draw();
 
@@ -212,7 +213,7 @@ public class GameProgressionScreen implements Screen{
 		style.fontColor = Color.BLACK;
 		backgroundTexture = new Texture("data/backgroundGameProgression.png");
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-	
+
 		if(entities == null)
 		{
 			woordCircle =new Image(GdxRessourcesGetter.getAtlas().findRegion("woodCircle"));
@@ -235,7 +236,7 @@ public class GameProgressionScreen implements Screen{
 
 		}		
 		stage.addActor(back);
-		
+
 		Gdx.input.setInputProcessor(stage);
 	}
 
@@ -254,4 +255,11 @@ public class GameProgressionScreen implements Screen{
 		backgroundTexture.dispose();
 	}
 
+	public Point getPosition(int indexLevel)
+	{
+		float step = 360.0f/GameConstants.NB_OF_LEVELS_IN_GAME;
+		int x = (int) (Math.cos(Math.toRadians(indexLevel*step)) * rayon) + centerX;
+		int y = (int) (Math.sin(Math.toRadians(indexLevel*step)) * rayon)+ centerY;
+		return new Point(x, y);
+	}
 }
