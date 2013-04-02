@@ -65,9 +65,9 @@ public class LevelSelectScreen implements Screen {
 	public LevelSelectScreen(RollingCat game, Patient patient){
 		this.game = game;
 		this.patient = patient;
-		this.numberOfLevels = GameConstants.NB_OF_LEVELS_IN_MENU;
+		//		this.numberOfLevels = GameConstants.NB_OF_LEVELS_IN_MENU;
+		this.numberOfLevels = 5;
 
-		this.init();
 	}
 
 	@Override
@@ -97,16 +97,45 @@ public class LevelSelectScreen implements Screen {
 
 			stage.draw();
 			stage.act(delta);
-//			Gdx.app.log("current level : ", ""+currentButton);
+			//			Gdx.app.log("current level : ", ""+currentButton);
 		}
 		if(gen == false & InternetManager.getWorld() != null){
 			gen = true;
 			show();
 		}
-		
-		
+
+
 	}
 
+	private void initBeforeThreeElements()
+	{
+		int n = 3 ;
+		sizeH = new float[n];
+		sizeW = new float[n];
+		posH = new float[n];
+		posW = new float[n];
+		Zindexes = new int[n];
+
+		float maxW = GameConstants.DISPLAY_WIDTH * 0.75f;
+		float U0 = GameConstants.DISPLAY_HEIGHT*2.f/(float)n *0.75f;
+		sizeH[1] = U0;
+		sizeH[0] = sizeH[1]*0.75f;
+		sizeH[2] = sizeH[1]*0.75f;
+		sizeW[0] = maxW*0.75f;
+		sizeW[1] = maxW;
+		sizeW[2] = maxW*0.75f;
+		for(int i = 0 ; i < n ; i++)
+		{
+			posW[i] = X - sizeW[i]/2;	
+		}
+		Zindexes[0] = 0;
+		Zindexes[1] = 1;
+		Zindexes[2] = 0;
+		posH[1] = GameConstants.DISPLAY_HEIGHT/2 - sizeH[1]/2;
+		posH[0] = posH[1] - sizeH[1]/4;
+		posH[2] = posH[1] + sizeH[1]/2;
+	
+	}
 	private void init()
 	{
 		int n = this.numberOfLevels ;
@@ -130,7 +159,10 @@ public class LevelSelectScreen implements Screen {
 		sizeW[(n)/2] = maxW;
 		Zindexes[(n)/2] = (n+1)/2;
 		posW[(n)/2] = X - sizeW[(n)/2]/2;
+		System.out.println(p);
+		System.out.println("solve : " + numberOfLevels);
 		float q = p.solve(0.00001f);
+		System.out.println("end solve");
 		for(int i = 1 ; i <= (n)/2 ; i++)
 		{
 			int sH = (int) (U0 * Math.pow(q, i * 0.75f));
@@ -157,9 +189,7 @@ public class LevelSelectScreen implements Screen {
 	private void changeButtonsSize() {
 		for(int i = 0 ; i < this.sizeH.length ; i++)
 		{
-			int index =(currentButton + i + labels.size() - sizeH.length /2 )%labels.size();  
-
-			//			label = labels.get((currentButton + i - this.sizeH.length/2 + 1)%labels.size()  );
+			int index = (currentButton + i + labels.size() - sizeH.length /2 )%labels.size();  
 			label = labels.get(index);
 			label.setVisible(true);
 			label.setZIndex(Zindexes[i] + 1);
@@ -167,7 +197,6 @@ public class LevelSelectScreen implements Screen {
 			label.getTextBounds().height = sizeH[i]*0.5f;	
 			label.addAction(Actions.parallel(Actions.moveTo(posW[i],posH[i], SPEED)));
 			label.addAction(Actions.parallel(Actions.sizeTo(sizeW[i], sizeH[i], SPEED)));
-			
 		}
 	}
 
@@ -194,6 +223,21 @@ public class LevelSelectScreen implements Screen {
 			for (String s : gems) {
 				listOfGems.add(s+GameConstants.TEXTURE_GEM);
 			}
+			this.numberOfLevels = levels.length;
+			if(levels.length < 3)
+			{
+				this.initBeforeThreeElements();
+			}
+			else
+			{
+				numberOfLevels += numberOfLevels%2+1;
+				if(numberOfLevels > GameConstants.NB_OF_LEVELS_IN_MENU)
+				{
+					numberOfLevels = GameConstants.NB_OF_LEVELS_IN_MENU;
+				}
+				init();
+			}
+
 
 			labels = new ArrayList<Label>();
 
@@ -305,9 +349,16 @@ public class LevelSelectScreen implements Screen {
 
 	private void createLabels(LabelStyle style) {
 		labels = new ArrayList<Label>();
-		for (int i = 0; i < levels.length + 1; i++) {
-			label = new Label(""+i, style);
-			label.setName(""+i);
+		String value = "";
+		int s = Math.max(levels.length, 3);
+		for (int i = 0; i <= s; i++) {
+			value = ""+i;
+			if( i >= levels.length)
+			{
+				value += " ?";
+			}
+			label = new Label(value, style);
+			label.setName(value);
 			label.setX(GameConstants.DISPLAY_WIDTH / 2 - label.getWidth() / 2);
 			labels.add(label);
 			stage.addActor(label);
