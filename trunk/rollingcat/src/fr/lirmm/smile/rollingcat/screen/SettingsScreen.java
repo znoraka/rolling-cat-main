@@ -80,8 +80,8 @@ public class SettingsScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		GameConstants.DISPLAY_WIDTH = width;
+		GameConstants.DISPLAY_HEIGHT = height;
 	}
 
 	@Override

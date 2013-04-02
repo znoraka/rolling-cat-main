@@ -11,6 +11,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -192,8 +193,8 @@ public class LevelSelectScreen implements Screen {
 			label.setZIndex(Zindexes[i] + 1);
 			label.getTextBounds().width = sizeW[i]*0.5f;	
 			label.getTextBounds().height = sizeH[i]*0.5f;	
-			label.addAction(Actions.parallel(Actions.moveTo(posW[i],posH[i], SPEED)));
-			label.addAction(Actions.parallel(Actions.sizeTo(sizeW[i], sizeH[i], SPEED)));
+			label.addAction(Actions.parallel(Actions.moveTo(posW[i],posH[i], SPEED, Interpolation.pow2Out)));
+			label.addAction(Actions.parallel(Actions.sizeTo(sizeW[i], sizeH[i], SPEED, Interpolation.pow2Out)));
 		}
 	}
 
@@ -304,7 +305,7 @@ public class LevelSelectScreen implements Screen {
 			score = new TextButton("Gemmes", style);
 			score.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new GameProgressionScreen(game, patient, listOfGems, listOfGems.size() == levels.length, null));
+					game.setScreen(new GameProgressionScreen(game, patient, listOfGems, listOfGems.size() == levels.length, null, 0));
 				}
 			});
 
