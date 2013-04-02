@@ -58,10 +58,11 @@ public class GameProgressionScreen implements Screen{
 	private Image woordCircle;
 	private List<String> gems;
 	private Target gem;
+	private int level;
 
 
 
-	public GameProgressionScreen(RollingCat game, Patient patient, List<String> gems, boolean bossWin, Target gem)
+	public GameProgressionScreen(RollingCat game, Patient patient, List<String> gems, boolean bossWin, Target gem, int level)
 	{
 		this.gems = gems;
 		this.nbLevelsWin = gems.size();
@@ -77,6 +78,7 @@ public class GameProgressionScreen implements Screen{
 		this.centralDiamond = new Vector2((centerX-sizeCentralDiamond/2), (centerY-sizeCentralDiamond/2));
 		size = (int) ((int) (2*Math.PI * rayon / GameConstants.NB_OF_LEVELS_IN_GAME) * 0.6f); 
 		this.gem = gem;
+		this.level = level;
 	}
 
 	public void initTrous()
@@ -248,9 +250,9 @@ public class GameProgressionScreen implements Screen{
 		stage.addActor(back);
 
 		Gdx.input.setInputProcessor(stage);
-		Vector2 tmp = getPosition(gems.size());
 		
 		if(gem != null){
+			Vector2 tmp = getPosition(level);
 			this.gem.setOrigin(this.gem.getWidth() * 0.5f, this.gem.getHeight() * 0.5f);
 			this.gem.setX(this.gem.getX() % GameConstants.DISPLAY_WIDTH);
 			this.gem.addAction(Actions.parallel(Actions.sizeTo(size*0.5f, size*0.5f, 2)));

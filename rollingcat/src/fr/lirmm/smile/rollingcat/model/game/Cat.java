@@ -26,26 +26,28 @@ import fr.lirmm.smile.rollingcat.spine.SkeletonBinary;
 import fr.lirmm.smile.rollingcat.spine.SkeletonData;
 
 public class Cat extends Entity {
-	
+
 	private boolean done, requestBoxEmptiing;
-	
+
 	public static final int FALLING = 0;
 	public static final int FLYING = 1;
 	public static final int JUMPING = 2;
 	public static final int HITTING = 3;
 	public static final int WALKING = 4;
-	
+
 	private int state;
 	private int gold, silver, bronze;
-	
+
+	private int oldX;
+
 	private Rectangle top, right, bottom, left;
-	
+
 	SkeletonData skeletonData;
 	Skeleton skeleton;
 	Bone root;
 	Animation walkAnimation, contactAnimation, jumpAnimation, fanAnimation, endAnimation;
 	float time;
-	
+
 	/**
 	 * l'acteur principal
 	 * @param x
@@ -55,22 +57,22 @@ public class Cat extends Entity {
 		super(x,y, GameConstants.TEXTURE_CAT);
 		done = false;
 		this.setTouchable(Touchable.disabled);
-		
+
 		final String name = "cat-skeleton";
-		
+
 		requestBoxEmptiing = false;
-		
+
 		TextureAtlas atlas = getCatAtlas();
 		SkeletonBinary binary = new SkeletonBinary(atlas);
 		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/cat/" + name + ".skel"));
-		
+
 		walkAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-walk.anim"), skeletonData);
 		jumpAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-jump.anim"), skeletonData);
 		endAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-levelend.anim"), skeletonData);
 		fanAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-upstreamwinp.anim"), skeletonData);
 		contactAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-contact.anim"), skeletonData);
-		
-		
+
+
 
 		skeleton = new Skeleton(skeletonData);
 		skeleton.setToBindPose();
@@ -79,13 +81,13 @@ public class Cat extends Entity {
 		root.setScaleX(0.10f * GameConstants.SCALE);
 		root.setScaleY(0.10f * GameConstants.SCALE);
 		skeleton.updateWorldTransform();
-		
+
 		top = new Rectangle();
 		bottom = new Rectangle();
 		right = new Rectangle();
 		left = new Rectangle();
 	}
-	
+
 	/**
 	 * methode pour gerer le déplacement
 	 * @param stage
@@ -107,7 +109,7 @@ public class Cat extends Entity {
 						this.addAction(Actions.sequence(
 								Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 3) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 2),
 								new Action() {
-									
+
 									@Override
 									public boolean act(float delta) {
 										state = FALLING;
@@ -146,7 +148,7 @@ public class Cat extends Entity {
 					((Coin) actor).pickUp();
 				}
 			}
-			
+
 			if(actor instanceof Door){
 				if(((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT){
 					Gdx.app.log(RollingCat.LOG, "hitting door");
@@ -155,33 +157,27 @@ public class Cat extends Entity {
 					this.addAction(Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT));
 				}
 			}
-			
+
 			if(actor instanceof Gap){
 				if(((Entity) actor).getBounds().overlaps(left) & actor.isVisible()){
-					if(state != JUMPING){
-						state = HITTING;
-						break;
-					}
-					else{
-						actor.setVisible(false);
-					}
+					this.addAction(Actions.moveTo(this.getX(), this.getY()));
 				}
 			}
 		}
-		
+
 		if(!this.isDone()){
 			if(state != JUMPING){
 				if(state == FALLING & this.getActions().size == 0){
 					this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() - 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
 				}
-				
+
 				else if(state == FLYING & this.getActions().size == 0)
 					this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 0.75f));
-				
+
 				else if(state == WALKING & this.getActions().size == 0){
 					this.addAction(Actions.moveTo((this.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH, (this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
 				}
-				
+
 				else if(state == HITTING){
 					this.getActions().clear();
 				}
@@ -189,40 +185,39 @@ public class Cat extends Entity {
 			else
 				this.getActions().clear();
 		}
-        
+
 		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.6f);
 		root.setY(getY());
-		
+		oldX = this.getXOnGrid();
 	}
-	
+
 	/**
 	 * initialise un saut
 	 */
 	public void jump(){
-		if(state != JUMPING)
-		{	
-			final float xDest = (this.getXOnGrid() + 2) * GameConstants.BLOCK_WIDTH;
-			final float yDest = this.getYOnGrid() * GameConstants.BLOCK_HEIGHT;
-			state = JUMPING;
-			this.getActions().clear();
-			this.addAction(Actions.parallel(Actions.moveBy(2 * GameConstants.BLOCK_WIDTH, 0, GameConstants.SPEED * 2)));
-			this.addAction(Actions.parallel(Actions.sequence(
-					Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2Out),
-					Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2In),
-					new Action() {
-						
-						@Override
-						public boolean act(float delta) {
-							setX(xDest);
-							setY(yDest);
-							state = WALKING;
-							Gdx.app.log(RollingCat.LOG, "landed");
-							return true;
-						}
+		
+		System.out.println(this.getActions().size);
+		this.getActions().clear();
+		final float xDest = (this.getXOnGrid() + 2) * GameConstants.BLOCK_WIDTH;
+		final float yDest = this.getYOnGrid() * GameConstants.BLOCK_HEIGHT;
+		System.out.println("xdest : " + xDest);
+		System.out.println("ydest : "+ yDest);
+		this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, GameConstants.SPEED * 2)));
+		this.addAction(Actions.parallel(Actions.sequence(
+				Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2Out),
+				Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2In),
+				new Action() {
+					@Override
+					public boolean act(float delta) {
+						setX(xDest);
+						setY(yDest);
+						state = WALKING;
+						Gdx.app.log(RollingCat.LOG, "landed");
+						return true;
 					}
-		)));
-			System.out.println(state);
-		}
+				}
+				)));
+	System.out.println("");
 	}
 
 	/**
@@ -232,30 +227,30 @@ public class Cat extends Entity {
 	public boolean isDone(){
 		return this.done;
 	}
-	
+
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
-//		if(state == JUMPING)
-//			jumpAnimation.apply(skeleton, time, true);
-		
-		 if(state == FLYING)
+		if(state == JUMPING)
+			walkAnimation.apply(skeleton, time, true);
+
+		if(state == FLYING)
 			fanAnimation.apply(skeleton, time, true);
-		
+
 		else if(state == HITTING)
 			contactAnimation.apply(skeleton, time, true);
-		
+
 		else if(state == WALKING)
 			walkAnimation.apply(skeleton, time, true);
-		 
+
 		else if(state == FALLING)
 			fanAnimation.apply(skeleton, time, true);
-	
+
 		time += Gdx.graphics.getDeltaTime();
 		skeleton.updateWorldTransform();
-//		skeleton.update(time);
+		//		skeleton.update(time);
 		skeleton.draw(batch);
 	}
-	
+
 	/**
 	 * dessine les zones de contact du chat
 	 * @param sr
@@ -270,9 +265,9 @@ public class Cat extends Entity {
 		sr.rect(right.x, right.y, right.width, right.height);
 		sr.setColor(Color.BLACK);
 		sr.end();
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * @return le nombre de pieces de bronze
@@ -280,7 +275,7 @@ public class Cat extends Entity {
 	public int getBronze() {
 		return bronze;
 	}
-	
+
 	/**
 	 * 
 	 * @return le nombre de pieces d'argent
@@ -288,7 +283,7 @@ public class Cat extends Entity {
 	public int getSilver() {
 		return silver;
 	}
-	
+
 	/**
 	 * 
 	 * @return le nombre de pieces d'or
@@ -296,7 +291,7 @@ public class Cat extends Entity {
 	public int getGold() {
 		return gold;
 	}
-	
+
 	/**
 	 * demande un vidage de la box après une chute
 	 * @return true si le vidage est requis
@@ -319,12 +314,20 @@ public class Cat extends Entity {
 	public boolean isMoving() {
 		return state != HITTING;
 	}
-	
+
 	/**
 	 * set le state du chat
 	 * @param state
 	 */
 	public void setState(int state){
 		this.state = state;
+	}
+
+	/**
+	 * 
+	 * @return true si l'ancienne position du chat est la meme que la nouvelle
+	 */
+	public boolean movedX(){
+		return oldX != getXOnGrid();
 	}
 }

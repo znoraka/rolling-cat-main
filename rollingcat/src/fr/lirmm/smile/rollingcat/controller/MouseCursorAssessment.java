@@ -84,6 +84,7 @@ public class MouseCursorAssessment implements InputProcessor{
 			y = GameConstants.DISPLAY_HEIGHT;
 		else
 			y = GameConstants.DISPLAY_HEIGHT - screenY;
+
 		return true;
 	}
 

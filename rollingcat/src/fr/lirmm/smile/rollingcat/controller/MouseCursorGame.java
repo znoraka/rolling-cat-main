@@ -10,6 +10,7 @@ import java.util.Map;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -82,7 +83,7 @@ public class MouseCursorGame implements InputProcessor{
 		{	
 			hoverTimer = 0;
 			if(actor instanceof Gap && item == Box.FEATHER){
-				if(!cat.isMoving()){
+				if(!cat.movedX()){
 					cat.jump();
 					this.trigger();
 				}
@@ -136,23 +137,27 @@ public class MouseCursorGame implements InputProcessor{
 	 * @param stage
 	 */
 	public void updateStandTimer(){
-		if(oldX ==  x || oldY == y & item != Box.EMPTY){
+		if((oldX ==  x || oldY == y) & item != Box.EMPTY & !cat.movedX()){
 			standTimer += Gdx.graphics.getDeltaTime() * 1;
 		}
 		else {
 			standTimer = 0;
 		}
 		
-		if(standTimer > GameConstants.HOLD_POSITION){
+		if(standTimer > GameConstants.TIMEOUT){
 			standTimer = 0;
 			Gdx.app.log(RollingCat.LOG, "Not moving for too long");
 			cat.getActions().clear();
 			item = Box.EMPTY;
-			cat.setY(GameConstants.BLOCK_HEIGHT * 1);
-			cat.setX((cat.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH);
-			cat.getActions().clear();
-			cat.setState(Cat.FALLING);
+			this.fall();
 		}
+	}
+	
+	public void fall(){
+		cat.setY(GameConstants.BLOCK_HEIGHT * 1);
+		cat.setX((cat.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH);
+		cat.getActions().clear();
+		cat.setState(Cat.FALLING);
 	}
 	
 	/**
@@ -172,11 +177,11 @@ public class MouseCursorGame implements InputProcessor{
 		}
 		sr.end();
 		sr.begin(ShapeType.Filled);
-		if (standTimer > GameConstants.HOLD_POSITION / 2){
+		if (standTimer > GameConstants.TIMEOUT / 2){
 			sr.setColor(Color.GREEN);
 			sr.rect(cat.getX(), cat.getY(), 70, 20);
 			sr.setColor(Color.ORANGE);
-			sr.rect(cat.getX(), cat.getY(), 70*(standTimer - GameConstants.HOLD_POSITION / 2) / GameConstants.HOLD_POSITION * 2, 20);
+			sr.rect(cat.getX(), cat.getY(), 70*(standTimer - GameConstants.TIMEOUT / 2) / GameConstants.TIMEOUT * 2, 20);
 		}
 		sr.end();
 		
@@ -221,20 +226,21 @@ public class MouseCursorGame implements InputProcessor{
 	
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
+		System.out.println("ris,iers,");
+		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
+		if(keycode == Keys.ENTER)
+			System.out.println("rinseuirnset");
+		return true;
 	}
 
 	@Override
 	public boolean keyTyped(char character) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

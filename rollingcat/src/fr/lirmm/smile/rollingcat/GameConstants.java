@@ -28,8 +28,8 @@ public class GameConstants {
 	
 	public static final float SCALE = 1.0f;
 	
-	public static final int DISPLAY_WIDTH = (int) (800 * SCALE);
-	public static final int DISPLAY_HEIGHT = (int) (640 * SCALE);
+	public static int DISPLAY_WIDTH = (int) (800 * SCALE);
+	public static int DISPLAY_HEIGHT = (int) (600 * SCALE);
 	
 	public static final int COLS = 16;
 	public static final int ROWS = 14;
@@ -46,7 +46,7 @@ public class GameConstants {
 	public static final float DELTATRACKINGMILLISEC = 100;
 	
 	public static final float HOVER_TIME = 1f;
-	public static final float HOLD_POSITION = 5f;
+	public static final float TIMEOUT = 10f;
 
 	public static final int NB_OF_LEVELS_IN_MENU = 7;
 	public static final int NB_OF_LEVELS_IN_GAME = 20;
