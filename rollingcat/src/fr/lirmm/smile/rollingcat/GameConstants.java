@@ -29,7 +29,7 @@ public class GameConstants {
 	public static final float SCALE = 1.0f;
 	
 	public static int DISPLAY_WIDTH = (int) (800 * SCALE);
-	public static int DISPLAY_HEIGHT = (int) (600 * SCALE);
+	public static int DISPLAY_HEIGHT = (int) (640 * SCALE);
 	
 	public static final int COLS = 16;
 	public static final int ROWS = 14;
