@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 
@@ -27,6 +27,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
@@ -46,7 +49,7 @@ import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 public class GameScreen implements Screen{
 
 	private RollingCat game;
-	private Stage stage;
+	private Stage stage, pauseStage;
 	private Texture backgroundTexture;
 	private SpriteBatch batch;
 	private ShapeRenderer sr;
@@ -65,10 +68,11 @@ public class GameScreen implements Screen{
 	private Target gem;
 	private Image goldImage, silverImage, bronzeImage;
 	private Label goldLabel, silverLabel, bronzeLabel;
-	private Table table;
+	private Table table, pauseTable;
 	private List<String> listOfGems;
-	
+	private boolean paused;
 	private static long elapsedTimeDuringPause;
+	private TextButton resume, quit;
 	
 	public static Vector2 gold = new Vector2(GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT * 0.92f);
 	public static Vector2 silver = new Vector2(GameConstants.BLOCK_WIDTH * 3, GameConstants.DISPLAY_HEIGHT * 0.92f);
@@ -86,57 +90,64 @@ public class GameScreen implements Screen{
 	
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		duration += delta;
-		mc.updateHoverTimer();
-		mc.updateStandTimer();
-		cat.move(stage);
-		batch.begin();
-		batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
-		table.draw(batch, 1);
-		batch.end();
-		stage.act(delta);
-		stage.draw();
-		sr.setProjectionMatrix(stage.getCamera().combined);
-        mc.render(sr);
-        cat.render(sr);
-//        for (Actor a: stage.getActors()) {
-//			((Entity) a).drawDebug(sr);
-//		}
-        updateCamPos();
-        mc.addTrackingPoint(delta);
-        if(cat.isDone() && gem.getActions().size == 0){
-        	gem.addAction(Actions.parallel(Actions.sequence(
-        			Actions.delay(2),
-        			new Action() {
-						
-						@Override
-						public boolean act(float delta) {
-							done = true;
-							return true;
-						}
-					})));
-        	gem.addAction(Actions.parallel(Actions.moveTo((GameConstants.DISPLAY_WIDTH) * (segment - 0.25f), GameConstants.DISPLAY_HEIGHT * 0.25f, 2)));
-        	
+        if(!paused){
+        	Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+			duration += delta;
+			mc.updateHoverTimer();
+			mc.updateStandTimer();
+			cat.move(stage);
+			batch.begin();
+			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+			table.draw(batch, 1);
+			batch.end();
+			stage.act(delta);
+			stage.draw();
+			sr.setProjectionMatrix(stage.getCamera().combined);
+	        mc.render(sr);
+	        cat.render(sr);
+	//        for (Actor a: stage.getActors()) {
+	//			((Entity) a).drawDebug(sr);
+	//		}
+	        updateCamPos();
+	        mc.addTrackingPoint(delta);
+	        if(cat.isDone() && gem.getActions().size == 0){
+	        	gem.addAction(Actions.parallel(Actions.sequence(
+	        			Actions.delay(2),
+	        			new Action() {
+							
+							@Override
+							public boolean act(float delta) {
+								done = true;
+								return true;
+							}
+						})));
+	        	gem.addAction(Actions.parallel(Actions.moveTo((GameConstants.DISPLAY_WIDTH) * (segment - 0.25f), GameConstants.DISPLAY_HEIGHT * 0.25f, 2)));
+	        	
+	        }
+	    	if(done){
+	        	InternetManager.endGameSession();
+	        	Gdx.app.log(RollingCat.LOG,"Client sauvegarde des données : " + gem.getCouleur());
+	        	InternetManager.updateLevelStats(patient.getID(), level, getScore(), (int) duration, gem.getCouleur());
+	        	parameters = new OrderedMap<String, String>();
+	        	parameters.put("duration", ""+duration);
+	        	EventManager.create(EventManager.end_game_event_type, parameters);
+	        	patient.addTrack(new Track(mc.getMap(), Track.GAME, duration));
+				game.setScreen(new GameProgressionScreen(game, patient, listOfGems, true, gem, level));
+	    	}
+	        if(cat.requestBoxEmptiing()){
+	        	mc.dropItem();
+	        	cat.requestOk();
+	        }
+	        
+	        setLabelText();
+	        setVectorCoordinates();
         }
-    	if(done){
-        	InternetManager.endGameSession();
-        	Gdx.app.log(RollingCat.LOG,"Client sauvegarde des données : " + gem.getCouleur());
-        	InternetManager.updateLevelStats(patient.getID(), level, getScore(), (int) duration, gem.getCouleur());
-        	parameters = new OrderedMap<String, String>();
-        	parameters.put("duration", ""+duration);
-        	EventManager.create(EventManager.end_game_event_type, parameters);
-        	patient.addTrack(new Track(mc.getMap(), Track.GAME, duration));
-			game.setScreen(new GameProgressionScreen(game, patient, listOfGems, true, gem, level));
-    	}
-        if(cat.requestBoxEmptiing()){
-        	mc.dropItem();
-        	cat.requestOk();
+        else
+        {
+        	pauseStage.draw();
+        	pauseStage.act();
         }
-        
-        setLabelText();
-        setVectorCoordinates();
 	}
 	
 	/**
@@ -165,10 +176,12 @@ public class GameScreen implements Screen{
 	public void show() {
 		if(screen == null){
 			Gdx.app.log(RollingCat.LOG, "showing");
+			paused = false;
 			screen = this;
 			batch = new SpriteBatch();
 			sr = new ShapeRenderer();
 			font = getBigFont();
+			pauseStage = getStage();
 			EventManager.clear();
 	//		elapsedTimeDuringPause = 0;
 			parameters = new OrderedMap<String, String>();
@@ -180,7 +193,7 @@ public class GameScreen implements Screen{
 			box.setItems(LevelBuilder.getItems());
 			stage.addActor(box);
 			mc = new MouseCursorGame(stage, cat, box);
-			multiplexer = new InputMultiplexer(stage, mc);
+			multiplexer = new InputMultiplexer(stage, mc, pauseStage);
 			Gdx.input.setInputProcessor(multiplexer);
 			duration = 0;
 			parameters = new OrderedMap<String, String>();
@@ -204,6 +217,35 @@ public class GameScreen implements Screen{
 	     	silverLabel = new Label("", labelStyle);
 	     	bronzeLabel  = new Label("", labelStyle);
 	     	
+	     	TextButtonStyle style = new TextButtonStyle();
+			style.up = getSkin().getDrawable("button_up");
+			style.down = getSkin().getDrawable("button_down");
+			style.font = font;
+			style.fontColor = Color.BLACK;
+			
+	     	resume = new TextButton("Resume", style);
+			resume.addListener(new ClickListener() {
+				public void clicked (InputEvent event, float x, float y) {
+					paused = false;
+				}
+			});
+			
+			quit = new TextButton("Quit", style);
+			quit.addListener(new ClickListener() {
+				public void clicked (InputEvent event, float x, float y) {
+					game.setScreen(new PatientScreen(game, patient));
+				}
+			});
+			
+	     	pauseTable = new Table();
+	     	pauseTable.setColor(1, 1, 1, 0.5f);
+	     	pauseTable.add(resume).pad(GameConstants.BLOCK_WIDTH * 0.5f);
+	     	pauseTable.row();
+	     	pauseTable.add(quit).pad(GameConstants.BLOCK_WIDTH * 0.5f);
+	     	pauseStage.addActor(pauseTable);
+	     	pauseTable.setWidth(GameConstants.DISPLAY_WIDTH);
+	     	pauseTable.setHeight(GameConstants.DISPLAY_HEIGHT);
+	     	
 	     	table = new Table();
 	     	table.setX(GameConstants.DISPLAY_WIDTH * 0.16f);
 	     	table.setY(GameConstants.DISPLAY_HEIGHT * 0.95f);
@@ -226,7 +268,7 @@ public class GameScreen implements Screen{
 	     		public boolean keyUp (InputEvent event, int keycode) {
 	     			if(keycode == Keys.ESCAPE){
 	     				Gdx.app.log(RollingCat.LOG, "escape pressed !");
-	     				game.setScreen(new PauseScreen(game, screen, patient));
+	     				paused = !paused;
 	     			}
 	     			if(keycode == Keys.SPACE)
 	     				mc.fall();
