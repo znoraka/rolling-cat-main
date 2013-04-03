@@ -196,12 +196,9 @@ public class Cat extends Entity {
 	 */
 	public void jump(){
 		
-		System.out.println(this.getActions().size);
 		this.getActions().clear();
 		final float xDest = (this.getXOnGrid() + 2) * GameConstants.BLOCK_WIDTH;
 		final float yDest = this.getYOnGrid() * GameConstants.BLOCK_HEIGHT;
-		System.out.println("xdest : " + xDest);
-		System.out.println("ydest : "+ yDest);
 		this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, GameConstants.SPEED * 2)));
 		this.addAction(Actions.parallel(Actions.sequence(
 				Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2Out),
@@ -217,7 +214,6 @@ public class Cat extends Entity {
 					}
 				}
 				)));
-	System.out.println("");
 	}
 
 	/**
@@ -314,7 +310,7 @@ public class Cat extends Entity {
 	public boolean isMoving() {
 		return state != HITTING;
 	}
-
+	
 	/**
 	 * set le state du chat
 	 * @param state

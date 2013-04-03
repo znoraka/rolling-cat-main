@@ -79,36 +79,4 @@ public class Polynome {
 		return s;	
 	}
 
-
-	public static void main(String args[])
-	{/*
-		float k = 5;
-		for(float   n = 2 ; n <= k ; n++)
-		{
-			Polynome p = new Polynome();
-			float U0 = 300;
-			float Sn = 3000 + U0/2;
-			p.add(-Sn/U0 + 1);
-			for(int i = 1 ; i < n ; i++)
-			{
-				p.add(1);
-			}
-			float q = p.solve(0.00001f);
-
-			float sum = 0;
-			for(int i = 0 ; i< n ; i++)
-			{
-				float size = (float) Math.pow(q, i);
-				sum+= (U0 * size); 
-			}
-
-			System.out.println(" n : " + n);
-			float q1 = 1.0f - (float) (Math.pow(( U0 / Sn),1.0f/(float)n));
-			System.out.println("q : " + q);
-			System.out.println("q1 : " + q1);
-		}
-	 */
-
-	}
-
 }

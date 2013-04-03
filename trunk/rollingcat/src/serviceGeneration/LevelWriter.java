@@ -32,7 +32,6 @@ public class LevelWriter {
 		list.add(new SimpleEntity(1.0f, 2.0f,"groundblock"));
 		list.add(new SimpleEntity(2.0f, 2.0f,"groundblock"));
 	
-		System.out.println(LevelWriter.write(list));
 	}
 	
 }

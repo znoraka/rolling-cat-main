@@ -132,7 +132,6 @@ public class GameProgressionScreen implements Screen{
 			int y = (int) (Math.sin(Math.toRadians(i*step)) * rayon)+ centerY;
 */
 			Vector2 p = this.getPosition(i);
-			System.out.println(gems.get(i));
 			Image button = new Image(GdxRessourcesGetter.getAtlas().findRegion(gems.get(i)));
 			button.setWidth(size*0.5f);
 			button.setHeight(size*0.5f);
