@@ -138,7 +138,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		passwordTextField = new TextField("", s);
 		passwordTextField.setMessageText("password");
 		passwordTextField.setPasswordMode(true);
-		passwordTextField.setPasswordCharacter('#');
+		passwordTextField.setPasswordCharacter('*');
 		passwordTextField.setX(GameConstants.DISPLAY_WIDTH / 2 - GameConstants.DISPLAY_WIDTH * 0.185f);
 		passwordTextField.setY(GameConstants.DISPLAY_HEIGHT * 0.465f);
 		passwordTextField.setWidth(GameConstants.DISPLAY_WIDTH * 0.37f);

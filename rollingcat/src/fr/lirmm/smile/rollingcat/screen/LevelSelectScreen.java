@@ -157,10 +157,7 @@ public class LevelSelectScreen implements Screen {
 		sizeW[(n)/2] = maxW;
 		Zindexes[(n)/2] = (n+1)/2;
 		posW[(n)/2] = X - sizeW[(n)/2]/2;
-//		System.out.println(p);
-//		System.out.println("solve : " + numberOfLevels);
 		float q = p.solve(0.00001f);
-//		System.out.println("end solve");
 		for(int i = 1 ; i <= (n)/2 ; i++)
 		{
 			int sH = (int) (U0 * Math.pow(q, i * 0.75f));
@@ -220,7 +217,6 @@ public class LevelSelectScreen implements Screen {
 
 			listOfGems = new ArrayList<String>();
 			for (String s : gems) {
-				System.out.println(s);
 				if(!s.equals("empty"))
 				{
 					listOfGems.add(s+GameConstants.TEXTURE_GEM);

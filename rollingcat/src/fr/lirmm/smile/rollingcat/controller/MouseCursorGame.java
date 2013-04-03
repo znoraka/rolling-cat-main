@@ -155,7 +155,6 @@ public class MouseCursorGame implements InputProcessor{
 	
 	public void fall(){
 		cat.setY(GameConstants.BLOCK_HEIGHT * 1);
-		cat.setX((cat.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH);
 		cat.getActions().clear();
 		cat.setState(Cat.FALLING);
 	}
@@ -226,14 +225,11 @@ public class MouseCursorGame implements InputProcessor{
 	
 	@Override
 	public boolean keyDown(int keycode) {
-		System.out.println("ris,iers,");
 		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		if(keycode == Keys.ENTER)
-			System.out.println("rinseuirnset");
 		return true;
 	}
 

@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -73,6 +74,7 @@ public class GameScreen implements Screen{
 	private boolean paused;
 	private static long elapsedTimeDuringPause;
 	private TextButton resume, quit;
+	private long beginPause;
 	
 	public static Vector2 gold = new Vector2(GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT * 0.92f);
 	public static Vector2 silver = new Vector2(GameConstants.BLOCK_WIDTH * 3, GameConstants.DISPLAY_HEIGHT * 0.92f);
@@ -85,11 +87,15 @@ public class GameScreen implements Screen{
 		this.stage = stage;
 		this.level = level;
 		elapsedTimeDuringPause = 0;
+		beginPause = 0;
 		this.listOfGems = listOfGems;
 	}
 	
 	@Override
 	public void render(float delta) {
+		Gdx.gl.glEnable(GL10.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		
         if(!paused){
         	Gdx.gl.glClearColor(1, 1, 1, 1);
             Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -144,7 +150,11 @@ public class GameScreen implements Screen{
 	        setVectorCoordinates();
         }
         else
-        {
+        {	
+        	sr.setColor(0, 0, 0, 0.01f);
+        	sr.begin(ShapeType.Filled);
+        	sr.rect(0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+        	sr.end();
         	pauseStage.draw();
         	pauseStage.act();
         }
@@ -227,6 +237,7 @@ public class GameScreen implements Screen{
 			resume.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					paused = false;
+					handleElapsedTime();
 				}
 			});
 			
@@ -238,7 +249,6 @@ public class GameScreen implements Screen{
 			});
 			
 	     	pauseTable = new Table();
-	     	pauseTable.setColor(1, 1, 1, 0.5f);
 	     	pauseTable.add(resume).pad(GameConstants.BLOCK_WIDTH * 0.5f);
 	     	pauseTable.row();
 	     	pauseTable.add(quit).pad(GameConstants.BLOCK_WIDTH * 0.5f);
@@ -269,6 +279,7 @@ public class GameScreen implements Screen{
 	     			if(keycode == Keys.ESCAPE){
 	     				Gdx.app.log(RollingCat.LOG, "escape pressed !");
 	     				paused = !paused;
+	     				handleElapsedTime();
 	     			}
 	     			if(keycode == Keys.SPACE)
 	     				mc.fall();
@@ -294,9 +305,8 @@ public class GameScreen implements Screen{
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
 	}
-
+	
 	@Override
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
@@ -332,6 +342,15 @@ public class GameScreen implements Screen{
 		
 		bronze.x = table.getX() + bronzeImage.getX();
 		bronze.y = table.getY() + bronzeImage.getY();
+	}
+	
+	private void handleElapsedTime(){
+		if(paused)
+			beginPause = System.currentTimeMillis();
+		else{
+			elapsedTimeDuringPause += (System.currentTimeMillis() - beginPause);
+		}
+
 	}
 
 }
