@@ -108,7 +108,7 @@ public class GameScreen implements Screen{
 			stage.draw();
 			sr.setProjectionMatrix(stage.getCamera().combined);
 			mc.render(sr);
-			cat.render(sr);
+//			cat.render(sr);
 			//        for (Actor a: stage.getActors()) {
 			//			((Entity) a).drawDebug(sr);
 			//		}
