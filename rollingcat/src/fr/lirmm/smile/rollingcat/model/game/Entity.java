@@ -18,7 +18,7 @@ import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
 public class Entity extends Image implements EntityModel {
 	protected Animation anim;
-	private float d;
+	protected float d;
 	private String name;
 	protected Rectangle bounds;
 	

@@ -1,6 +1,7 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -25,7 +26,11 @@ public class Coin extends Entity{
 		this.type = type;
         this.anim = new Animation(0.25f, GdxRessourcesGetter.getRegions("coin"+type));
         pickedUp = false;
-
+        this.setWidth(GameConstants.BLOCK_WIDTH*0.7f);
+        this.setHeight(GameConstants.BLOCK_WIDTH*0.7f);
+        this.setX(this.getX() + getWidth()/4);
+        this.setY(this.getY() + getHeight()/4);
+        inc = getCoeff(20, getHeight(), 3.0f);
 	}
 	
 	/**
@@ -79,5 +84,51 @@ public class Coin extends Entity{
 				})
 				);
 		
+	}
+	
+	float inc;
+	float base = 0;
+	float acc = 0;
+	boolean b = false;
+	@Override
+	public void draw(SpriteBatch batch, float deltaParent)
+	{		
+		super.draw(batch, deltaParent);
+		if(this.getActions().size == 0)
+		{
+			if(!b)
+			{
+				this.addAction(Actions.moveBy(0, getHeight()/2, 1, Interpolation.fade));			
+				b = true;
+			}
+			else
+			{
+				b= false;
+				this.addAction(Actions.moveBy(0, -getHeight()/2, 1, Interpolation.fade));
+			}
+		}
+//		if(deltaParent == 1)
+//		{
+//			acc += inc;
+//			this.setY(this.getY()+acc);
+//			base += acc;
+//			System.out.println(inc);
+//			if(Math.abs(base) > this.getHeight()/2)
+//			{
+//				if(base < 0 )
+//				{
+//					inc = getCoeff(20, getHeight(), 3.0f);
+//				}
+//				else
+//				{
+//					inc = -getCoeff(20, getHeight(), 3.0f);
+//				}
+//			}
+//		}
+	}
+	
+	private float getCoeff(int n , float height, float v0)
+	{
+		return (height - v0) / (n-2);
 	}
 }
