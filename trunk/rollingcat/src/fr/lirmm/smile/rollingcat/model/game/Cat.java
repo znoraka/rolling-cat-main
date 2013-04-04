@@ -47,7 +47,7 @@ public class Cat extends Entity {
 	Bone root;
 	Animation walkAnimation, contactAnimation, jumpAnimation, fanAnimation, endAnimation;
 	float time;
-
+	boolean hasCatchCoin;
 	/**
 	 * l'acteur principal
 	 * @param x
@@ -92,6 +92,8 @@ public class Cat extends Entity {
 	 * @param stage
 	 */
 	public void move(Stage stage){
+		hasCatchCoin = false;
+
 		top.set(this.getX() + GameConstants.BLOCK_WIDTH *0.5f, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
 		bottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), 2, 2);
 		right.set(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
@@ -135,15 +137,23 @@ public class Cat extends Entity {
 				if(((Entity) actor).getBounds().overlaps(bounds))
 					done = true;
 			}
+
 			if(actor instanceof Coin){
 				if(((Entity) actor).getBounds().overlaps(bounds) & !((Coin) actor).pickedUp()){
+					hasCatchCoin = true;
 					SoundManager.pickupPlay();
 					if(((Coin) actor).getType() == Coin.BRONZE)
+					{
 						bronze++;
+					}
 					else if(((Coin) actor).getType() == Coin.SILVER)
+					{
 						silver++;
+					}
 					else if(((Coin) actor).getType() == Coin.GOLD)
+					{
 						gold++;
+					}
 					((Coin) actor).pickUp();
 				}
 			}
@@ -190,6 +200,10 @@ public class Cat extends Entity {
 		oldX = this.getXOnGrid();
 	}
 
+	public boolean hasCatchCoin()
+	{
+		return hasCatchCoin;
+	}
 	/**
 	 * initialise un saut
 	 */

@@ -127,7 +127,7 @@ public class LevelSelectScreen implements Screen {
 		posH[1] = GameConstants.DISPLAY_HEIGHT/2 - sizeH[1]/2;
 		posH[0] = posH[1] - sizeH[1]/4;
 		posH[2] = posH[1] + sizeH[1]/2;
-	
+
 	}
 	private void init()
 	{
@@ -246,6 +246,8 @@ public class LevelSelectScreen implements Screen {
 
 			LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
 			labelStyle.background = skin.getDrawable("button_up");
+			LabelStyle not_possible = new LabelStyle(font, Color.RED);
+			not_possible.background = skin.getDrawable("button_up");
 
 
 			start = new TextButton("Start", style);
@@ -292,7 +294,7 @@ public class LevelSelectScreen implements Screen {
 				}
 			});
 
-			createLabels(labelStyle);
+			createLabels(labelStyle,not_possible);
 
 			Gdx.input.setInputProcessor(stage);
 
@@ -337,7 +339,7 @@ public class LevelSelectScreen implements Screen {
 
 	}
 
-	private void createLabels(LabelStyle style) {
+	private void createLabels(LabelStyle style,LabelStyle notPossible) {
 		tables = new ArrayList<Table>();
 		int s = Math.max(numberOfLevels, 3);
 		for (int i = 0; i < s; i++) {

@@ -22,7 +22,7 @@ import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 
 public class PauseScreen implements Screen{
-	private GameScreen gameScreen;
+	private ScreenPausable gameScreen;
 	private RollingCat game;
 	private Stage stage;
 	private TextButton resume, quit;
@@ -31,7 +31,7 @@ public class PauseScreen implements Screen{
 	private Patient patient;
 	private long beginPause;
 	
-	public PauseScreen(RollingCat game, GameScreen gameScreen, Patient patient){
+	public PauseScreen(RollingCat game, ScreenPausable gameScreen, Patient patient){
 		this.gameScreen = gameScreen;
 		this.game = game;
 		this.patient = patient;

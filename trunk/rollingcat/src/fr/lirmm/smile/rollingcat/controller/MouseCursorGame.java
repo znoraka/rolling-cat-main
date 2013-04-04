@@ -1,21 +1,23 @@
 package fr.lirmm.smile.rollingcat.controller;
 
+import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.x;
+import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.y;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
-import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -47,7 +49,7 @@ public class MouseCursorGame implements InputProcessor{
 	private Map<Integer, float []> map;
 	private float elapsedTime;
 	private OrderedMap<String, String> parameters;
-
+	private boolean isTrigger;
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
 		batch = getSpriteBatch();
 		hoverTimer = 0;
@@ -70,8 +72,10 @@ public class MouseCursorGame implements InputProcessor{
 	 * @param stage le stage du jeu
 	 */
 	public void updateHoverTimer(){
+		this.isTrigger = false;
 		actor = (Entity) stage.hit(x, y, true);
 		if(actor != null){
+			
 			if(actor instanceof Box && ((Box) actor).isEmpty())
 				hoverTimer = 0;
 			else if(actor.getItemToAct() != item)
@@ -107,7 +111,6 @@ public class MouseCursorGame implements InputProcessor{
 				this.trigger();
 		}
 	}
-
 	/**
 	 * appelé lorsque l'item et l'entity correspondent
 	 * ajoute l'action à l'acteur
@@ -120,6 +123,7 @@ public class MouseCursorGame implements InputProcessor{
 		item = 0;
 		actor.setTouchable(Touchable.disabled);
 		addEvent();
+		this.isTrigger = true;
 	}
 	
 	/**
@@ -317,4 +321,26 @@ public class MouseCursorGame implements InputProcessor{
 		return item;
 	}
 	
+
+	public boolean isTrigger()
+	{
+		return isTrigger;
+	}
+	
+	public Vector2 getCoordTasks()
+	{
+		if(item == Box.BONE || item == Box.FEATHER)
+		{
+			return new Vector2(cat.getX() + GameConstants.BLOCK_WIDTH,cat.getY());
+		}
+		else if(item == Box.SCISSORS)
+		{
+			return new Vector2(cat.getX(),cat.getY()- GameConstants.BLOCK_HEIGHT);
+		}
+		else if(item == Box.SWATTER)
+		{
+			return new Vector2(cat.getX(),cat.getY()+ GameConstants.BLOCK_HEIGHT);
+		}
+		else return null;
+	}
 }
