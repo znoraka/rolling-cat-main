@@ -60,11 +60,17 @@ public class Dog extends Entity {
 	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
+		highlight(batch);
 		time += Gdx.graphics.getDeltaTime();
 		animation.apply(skeleton, time, true);
 		skeleton.updateWorldTransform();
 		skeleton.update(Gdx.graphics.getDeltaTime());
 		skeleton.draw(batch);
+	}
+	
+	@Override
+	public int getItemToAct() {
+		return Box.BONE;
 	}
 	
 }

@@ -57,7 +57,6 @@ public class Cat extends Entity {
 		super(x,y, GameConstants.TEXTURE_CAT);
 		done = false;
 		this.setTouchable(Touchable.disabled);
-
 		final String name = "cat-skeleton";
 
 		requestBoxEmptiing = false;

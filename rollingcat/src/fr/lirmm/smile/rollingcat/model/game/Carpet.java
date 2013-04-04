@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
@@ -55,10 +56,16 @@ public class Carpet extends Entity {
 	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
+		highlight(batch);
 		time += deltaParent / 150;
 		animation.apply(skeleton, time, true);
 		skeleton.updateWorldTransform();
 		skeleton.update(deltaParent);
 		skeleton.draw(batch);
+	}
+	
+	@Override
+	public int getItemToAct() {
+		return Box.SCISSORS;
 	}
 }
