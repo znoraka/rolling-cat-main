@@ -1,5 +1,7 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
+
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.utils.EntityModel;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
@@ -35,12 +38,10 @@ public class Entity extends Image implements EntityModel {
 		this.setHeight(GameConstants.BLOCK_HEIGHT);
         this.anim = new Animation(0.25f, GdxRessourcesGetter.getRegions(name));
         this.name = name;
-        this.setZIndex(1);
         this.bounds = new Rectangle(x * GameConstants.BLOCK_WIDTH, (y + 2) * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
         this.d = new Random().nextFloat();
 	}
-	
-	
+
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
 		d += Gdx.graphics.getDeltaTime();
@@ -52,6 +53,12 @@ public class Entity extends Image implements EntityModel {
 		sr.setColor(Color.PINK);
 		sr.rect(bounds.x, bounds.y, bounds.width, bounds.height);
 		sr.end();
+	}
+	
+	protected void highlight(SpriteBatch batch){
+		if(MouseCursorGame.isHoldingItem() & MouseCursorGame.getItem() == this.getItemToAct()){
+			batch.draw(getSkin().getRegion("background"), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		}
 	}
 	
 	
@@ -89,6 +96,10 @@ public class Entity extends Image implements EntityModel {
 	
 	public Rectangle getBounds(){
 		return this.bounds;
+	}
+
+	public int getItemToAct() {
+		return Box.EMPTY;
 	}
 
 }

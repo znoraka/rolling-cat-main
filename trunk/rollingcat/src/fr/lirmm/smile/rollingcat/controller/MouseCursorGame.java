@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.controller;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.*;
 
@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -40,7 +41,7 @@ public class MouseCursorGame implements InputProcessor{
 	private Stage stage;
 	private Cat cat;
 	private Box box;
-	private int item;
+	private static int item;
 	private TextureAtlas atlas;
 	private SpriteBatch batch;
 	private Map<Integer, float []> map;
@@ -73,6 +74,8 @@ public class MouseCursorGame implements InputProcessor{
 		if(actor != null){
 			if(actor instanceof Box && ((Box) actor).isEmpty())
 				hoverTimer = 0;
+			else if(actor.getItemToAct() != item)
+				hoverTimer = 0;
 			else
 				hoverTimer += Gdx.graphics.getDeltaTime() * 1;
 		}
@@ -104,7 +107,6 @@ public class MouseCursorGame implements InputProcessor{
 				this.trigger();
 		}
 	}
-	
 
 	/**
 	 * appelé lorsque l'item et l'entity correspondent
@@ -307,9 +309,12 @@ public class MouseCursorGame implements InputProcessor{
 		this.x = x;
 	}
 
-	public boolean isHoldingItem() {
-		Gdx.app.log(RollingCat.LOG, "holding an item" + (item != Box.EMPTY));
+	public static boolean isHoldingItem() {
 		return item != Box.EMPTY;
+	}
+
+	public static int getItem() {
+		return item;
 	}
 	
 }

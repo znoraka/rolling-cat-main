@@ -130,18 +130,20 @@ public class GameProgressionScreen implements Screen{
 		{
 			/*int x = (int) (Math.cos(Math.toRadians(i*step)) * rayon) + centerX;
 			int y = (int) (Math.sin(Math.toRadians(i*step)) * rayon)+ centerY;
-*/
+			 */
 			Vector2 p = this.getPosition(i);
-			Image button = new Image(GdxRessourcesGetter.getAtlas().findRegion(gems.get(i)));
-			button.setWidth(size*0.5f);
-			button.setHeight(size*0.5f);
-			button.setX(p.x - button.getWidth()/2);
-			button.setY(p.y - button.getHeight()/2);
+			if(gems.get(i) != null && !gems.get(i).equals("empty")){
+				Image button = new Image(GdxRessourcesGetter.getAtlas().findRegion(gems.get(i)+"_gem"));
+				button.setWidth(size*0.5f);
+				button.setHeight(size*0.5f);
+				button.setX(p.x - button.getWidth()/2);
+				button.setY(p.y - button.getHeight()/2);
 
-			button.setOrigin(button.getWidth()/2, button.getHeight()/2);
+				button.setOrigin(button.getWidth()/2, button.getHeight()/2);
 
-			entities.add(button);
-			stage.addActor(entities.get(entities.size()-1));
+				entities.add(button);
+				stage.addActor(entities.get(entities.size()-1));
+			}
 		}
 		initCentralDiamond();
 	}
@@ -197,8 +199,8 @@ public class GameProgressionScreen implements Screen{
 
 		stage.act(delta);
 		stage.draw();
-		
-		
+
+
 
 	}
 
@@ -240,7 +242,7 @@ public class GameProgressionScreen implements Screen{
 			back = new TextButton("Back", style);
 			back.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-			        InternetManager.getWorld(patient.getID());
+					InternetManager.getWorld(patient.getID());
 					game.setScreen(new LevelSelectScreen(game, patient));
 				}
 			});
@@ -249,7 +251,7 @@ public class GameProgressionScreen implements Screen{
 		stage.addActor(back);
 
 		Gdx.input.setInputProcessor(stage);
-		
+
 		if(gem != null){
 			Vector2 tmp = getPosition(level);
 			this.gem.setOrigin(this.gem.getWidth() * 0.5f, this.gem.getHeight() * 0.5f);
@@ -257,7 +259,7 @@ public class GameProgressionScreen implements Screen{
 			this.gem.addAction(Actions.parallel(Actions.sizeTo(size*0.5f, size*0.5f, 2)));
 			this.gem.addAction(Actions.parallel(Actions.moveTo(tmp.x - size * 0.25f, tmp.y - size * 0.25f, 2)));
 			this.gem.addAction(Actions.sequence(Actions.delay(2), new Action() {
-				
+
 				@Override
 				public boolean act(float delta) {
 					gems.add(gem.getCouleur()+"_gem");

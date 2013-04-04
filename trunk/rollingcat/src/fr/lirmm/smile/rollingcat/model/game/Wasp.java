@@ -61,11 +61,17 @@ public class Wasp extends Entity {
 	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
+		highlight(batch);
 		time += deltaParent / 50;
 		animation.apply(skeleton, time, true);
 		skeleton.updateWorldTransform();
 		skeleton.update(deltaParent);
 		skeleton.draw(batch);
+	}
+	
+	@Override
+	public int getItemToAct() {
+		return Box.SWATTER;
 	}
 	
 }

@@ -90,7 +90,7 @@ public class AssessmentScreen implements Screen {
                 sr = getShapeRenderer();
         		EventManager.clear();
                 duration = 0;
-                triangles = VectorManager.getVectorsFromAreas(5);
+                triangles = VectorManager.getVectorsFromAreas(9);
                 mc = new MouseCursorAssessment();
                 Gdx.input.setInputProcessor(mc);
                 selected = -10;

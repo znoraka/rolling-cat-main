@@ -1,6 +1,10 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSettingsButton;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -25,6 +29,7 @@ import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
+import fr.lirmm.smile.rollingcat.model.world.World;
 
 public class PatientScreen implements Screen {
 	
@@ -98,7 +103,8 @@ public class PatientScreen implements Screen {
 		play.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 		        InternetManager.newGameSession(Track.GAME, patient.getID());
-		        InternetManager.getWorld(patient.getID());
+		        if(!World.getInstance().hasBeenGenerated())
+		        	InternetManager.getWorld(patient.getID());
 				game.setScreen(new LevelSelectScreen(game, patient));
 			}
 		});

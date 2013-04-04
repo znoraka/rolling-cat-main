@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 
@@ -17,7 +17,6 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -44,6 +43,7 @@ import fr.lirmm.smile.rollingcat.model.game.Coin;
 import fr.lirmm.smile.rollingcat.model.game.Target;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
+import fr.lirmm.smile.rollingcat.model.world.Level;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
 
@@ -61,7 +61,7 @@ public class GameScreen implements Screen{
 	private float duration;
 	private BitmapFont font;
 	private OrderedMap<String, String> parameters;
-	private int level;
+	private Level level;
 	private int segment;
 	private InputMultiplexer multiplexer;
 	private GameScreen screen;
@@ -81,7 +81,7 @@ public class GameScreen implements Screen{
 	public static Vector2 bronze = new Vector2(GameConstants.BLOCK_WIDTH * 5, GameConstants.DISPLAY_HEIGHT * 0.92f);
 
 
-	public GameScreen(RollingCat game, Patient patient, Stage stage, int level, List<String> listOfGems){
+	public GameScreen(RollingCat game, Patient patient, Stage stage, Level level, List<String> listOfGems){
 		this.game = game;
 		this.patient = patient;
 		this.stage = stage;
@@ -131,12 +131,13 @@ public class GameScreen implements Screen{
 			if(done){
 				InternetManager.endGameSession();
 				Gdx.app.log(RollingCat.LOG,"Client sauvegarde des données : " + gem.getCouleur());
-				InternetManager.updateLevelStats(patient.getID(), level, getScore(), (int) duration, gem.getCouleur());
+				InternetManager.updateLevelStats(patient.getID(), level.getId(), getScore(), (int) duration, gem.getCouleur());
+				level.updateStats(getScore(), (int) duration, gem.getCouleur(), InternetManager.getLevel());
 				parameters = new OrderedMap<String, String>();
 				parameters.put("duration", ""+duration);
 				EventManager.create(EventManager.end_game_event_type, parameters);
 				patient.addTrack(new Track(mc.getMap(), Track.GAME, duration));
-				game.setScreen(new GameProgressionScreen(game, patient, listOfGems, true, gem, level));
+				game.setScreen(new GameProgressionScreen(game, patient, listOfGems, true, gem, level.getId()));
 			}
 			if(cat.requestBoxEmptiing()){
 				mc.dropItem();
@@ -159,7 +160,7 @@ public class GameScreen implements Screen{
 	private void updateCamPos() {
 		if(stage.getCamera().position.x + GameConstants.DISPLAY_WIDTH / 2 - GameConstants.BLOCK_WIDTH * 3 < cat.getX()){
 			box.emptyAfterNotMoving(segment);
-			if(!mc.isHoldingItem())
+			if(!MouseCursorGame.isHoldingItem())
 				box.fill();
 			mc.setX(mc.getX() + GameConstants.VIEWPORT_WIDTH);
 			segment++;
@@ -236,7 +237,8 @@ public class GameScreen implements Screen{
 		quit = new TextButton("Quit", style);
 		quit.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				game.setScreen(new PatientScreen(game, patient));
+				if(paused)
+					game.setScreen(new PatientScreen(game, patient));
 			}
 		});
 

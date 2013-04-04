@@ -109,7 +109,8 @@ public class LevelBuilder {
 			}
 			else if(subtab[0].equals("groundBlock"))
 			{
-				stage.addActor(new GroundBlock(x, y));
+				stage.getActors().insert(1, new GroundBlock(x, y));
+//				stage.addActor(new GroundBlock(x, y));
 			}
 //			else if(subtab[0].equals("empty"))
 //			{
