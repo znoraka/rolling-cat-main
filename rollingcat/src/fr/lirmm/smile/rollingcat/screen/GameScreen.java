@@ -47,7 +47,7 @@ import fr.lirmm.smile.rollingcat.model.world.Level;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
 
-public class GameScreen implements Screen{
+public class GameScreen implements ScreenPausable{
 
 	private RollingCat game;
 	private Stage stage, pauseStage;
@@ -209,9 +209,10 @@ public class GameScreen implements Screen{
 		parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
 		EventManager.create(EventManager.start_game_event_type, parameters);
 
-		goldImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.GOLD, 2));
-		silverImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.SILVER, 2));
-		bronzeImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.BRONZE, 2));
+
+		goldImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.GOLD));
+		silverImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.SILVER));
+		bronzeImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.BRONZE));
 
 		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
 		labelStyle.background = getSkin().getDrawable("empty");
