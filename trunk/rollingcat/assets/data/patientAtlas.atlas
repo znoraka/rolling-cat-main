@@ -1,0 +1,96 @@
+
+patientAtlas.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+textfield
+  rotate: false
+  xy: 1, 366
+  size: 574, 133
+  orig: 574, 133
+  offset: 0, 0
+  index: -1
+backgroundtrack
+  rotate: false
+  xy: 1, 197
+  size: 267, 167
+  orig: 267, 167
+  offset: 0, 0
+  index: -1
+background
+  rotate: false
+  xy: 1, 45
+  size: 200, 150
+  orig: 200, 150
+  offset: 0, 0
+  index: -1
+background_base
+  rotate: false
+  xy: 270, 214
+  size: 200, 150
+  orig: 200, 150
+  offset: 0, 0
+  index: -1
+backgroundupload
+  rotate: false
+  xy: 577, 349
+  size: 200, 150
+  orig: 200, 150
+  offset: 0, 0
+  index: -1
+green_background
+  rotate: false
+  xy: 779, 374
+  size: 200, 125
+  orig: 200, 125
+  offset: 0, 0
+  index: -1
+button_down
+  rotate: false
+  xy: 1, 1
+  size: 122, 42
+  orig: 122, 42
+  offset: 0, 0
+  index: -1
+button_up
+  rotate: false
+  xy: 779, 330
+  size: 122, 42
+  orig: 122, 42
+  offset: 0, 0
+  index: -1
+bottom_green
+  rotate: false
+  xy: 203, 145
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+top_orange
+  rotate: false
+  xy: 472, 314
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+cursor
+  rotate: false
+  xy: 981, 467
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+selection
+  rotate: false
+  xy: 125, 11
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+empty
+  rotate: false
+  xy: 270, 211
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1

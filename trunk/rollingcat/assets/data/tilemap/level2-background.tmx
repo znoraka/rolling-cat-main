@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="20" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="egypt_tilset" tilewidth="32" tileheight="32">
+  <image source="egypt_tilset.png" width="256" height="2080"/>
+ </tileset>
+ <layer name="bg" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztkrERACAIxHD/yYBKrMRlfHfwqShylzoXHSIGHCjJJwiwiL5BgkN0dicr6BQFnZLcqL/qr/qr/uqnszt5QafnFx6zm10=
+  </data>
+ </layer>
+ <layer name="deco" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwVAHAAfQAAE=
+  </data>
+ </layer>
+</map>
