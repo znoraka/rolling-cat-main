@@ -3,14 +3,12 @@ package fr.lirmm.smile.rollingcat.controller;
 import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.x;
 import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.y;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -50,7 +48,7 @@ public class MouseCursorGame implements InputProcessor{
 	private float elapsedTime;
 	private OrderedMap<String, String> parameters;
 	private boolean isTrigger;
-	
+
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
 		batch = stage.getSpriteBatch();
 		hoverTimer = 0;
@@ -66,7 +64,7 @@ public class MouseCursorGame implements InputProcessor{
 		parameters = new OrderedMap<String, String>();
 		standTimer = 0;
 	}
-	
+
 	/**
 	 * met le timer de la souris à jour en fonction du bloc sur lequel la souris se trouve
 	 * et déclenche les actions si le timer est terminé
@@ -74,44 +72,48 @@ public class MouseCursorGame implements InputProcessor{
 	 */
 	public void updateHoverTimer(){
 		this.isTrigger = false;
-		actor = (Entity) stage.hit(x, y, true);
-		if(actor != null){
-			if(actor instanceof Box && ((Box) actor).isEmpty())
-				hoverTimer = 0;
-			else if(actor.getItemToAct() != item){
-				actor.requestRedHighlight(true);
-				hoverTimer = 0;
-			}
-			else{
-				hoverTimer += Gdx.graphics.getDeltaTime() * 1;
-			}
-		}
-		else
-			hoverTimer = 0;
-		
-		if(hoverTimer > GameConstants.HOVER_TIME)
-		{	
-			hoverTimer = 0;
-			if(actor instanceof Gap && item == Box.FEATHER){
-				if(!cat.movedX()){
-					((Gap) actor).setReady();
-					this.trigger();
+		Actor tmp = stage.hit(x, y, true);
+		if(tmp instanceof Entity)
+		{
+			actor = (Entity) tmp;
+			if(actor != null){
+				if(actor instanceof Box && ((Box) actor).isEmpty())
+					hoverTimer = 0;
+				else if(actor.getItemToAct() != item){
+					actor.requestRedHighlight(true);
+					hoverTimer = 0;
+				}
+				else{
+					hoverTimer += Gdx.graphics.getDeltaTime() * 1;
 				}
 			}
-		
-			else if(actor instanceof Box){
-				item = box.empty();
-				addEvent(EventManager.pointing_task_start);
+			else
+				hoverTimer = 0;
+
+			if(hoverTimer > GameConstants.HOVER_TIME)
+			{	
+				hoverTimer = 0;
+				if(actor instanceof Gap && item == Box.FEATHER){
+					if(!cat.movedX()){
+						((Gap) actor).setReady();
+						this.trigger();
+					}
+				}
+
+				else if(actor instanceof Box){
+					item = box.empty();
+					addEvent(EventManager.pointing_task_start);
+				}
+				else if(actor instanceof Dog && item == Box.BONE){
+					this.trigger();
+				}
+
+				else if(actor instanceof Wasp && item == Box.SWATTER)
+					this.trigger();
+
+				else if(actor instanceof Carpet && item == Box.SCISSORS)
+					this.trigger();
 			}
-			else if(actor instanceof Dog && item == Box.BONE){
-				this.trigger();
-			}
-			
-			else if(actor instanceof Wasp && item == Box.SWATTER)
-				this.trigger();
-			
-			else if(actor instanceof Carpet && item == Box.SCISSORS)
-				this.trigger();
 		}
 	}
 	/**
@@ -128,7 +130,7 @@ public class MouseCursorGame implements InputProcessor{
 		addEvent(EventManager.pointing_task_end);
 		this.isTrigger = true;
 	}
-	
+
 	/**
 	 * ajoute un event à la liste d'events
 	 * appelé lorsque le patient réussi une tache de pointage
@@ -141,7 +143,7 @@ public class MouseCursorGame implements InputProcessor{
 		parameters.put("z", ""+0);
 		EventManager.create(eventType, parameters);
 	}
-	
+
 	/**
 	 * update le timer qui gere l'immobilité du patient
 	 * @param stage
@@ -153,7 +155,7 @@ public class MouseCursorGame implements InputProcessor{
 		else {
 			standTimer = 0;
 		}
-		
+
 		if(standTimer > GameConstants.TIMEOUT){
 			standTimer = 0;
 			Gdx.app.log(RollingCat.LOG, "Not moving for too long");
@@ -162,20 +164,20 @@ public class MouseCursorGame implements InputProcessor{
 			this.fall();
 		}
 	}
-	
+
 	public void fall(){
 		cat.setY(GameConstants.BLOCK_HEIGHT * 1);
 		cat.getActions().clear();
 		cat.setState(Cat.FALLING);
 	}
-	
+
 	/**
 	 * dessine l'avancement du timer lors d'un hover
 	 * dessine l'item tenu
 	 * @param sr
 	 */
 	public void render(ShapeRenderer sr){
-        sr.begin(ShapeType.Filled);
+		sr.begin(ShapeType.Filled);
 		sr.rect(x, y, 10, 10);
 		if(hoverTimer > 0)
 		{	
@@ -193,10 +195,10 @@ public class MouseCursorGame implements InputProcessor{
 			sr.rect(cat.getX(), cat.getY(), 70*(standTimer - GameConstants.TIMEOUT / 2) / GameConstants.TIMEOUT * 2, 20);
 		}
 		sr.end();
-		
+
 		batch.setProjectionMatrix(stage.getCamera().combined);
 		batch.begin();
-		
+
 		if(item == Box.BONE)
 			batch.draw(atlas.findRegion("bone"), x, y, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
 		else if(item == Box.FEATHER)
@@ -208,12 +210,12 @@ public class MouseCursorGame implements InputProcessor{
 		else if(item == Box.SCISSORS)
 			batch.draw(atlas.findRegion("scissors"), x, y, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
 		batch.end();
-		
+
 	}
-	
+
 	public void addTrackingPoint(float delta, int segment){
 		elapsedTime += delta;
-		
+
 		if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
 			if(x != oldX || y != oldY){
 				parameters = new OrderedMap<String, String>();
@@ -228,11 +230,11 @@ public class MouseCursorGame implements InputProcessor{
 			elapsedTime = 0;
 		}
 	}
-	
+
 	public Map<Integer, float[]> getMap(){
 		return this.map;
 	}
-	
+
 	@Override
 	public boolean keyDown(int keycode) {
 		return true;
@@ -265,16 +267,16 @@ public class MouseCursorGame implements InputProcessor{
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		if(screenX > GameConstants.DISPLAY_WIDTH)
 			screenX = GameConstants.DISPLAY_WIDTH - 1;
-		
+
 		if(screenX < 0)
 			screenX = 0;
-		
+
 		if(screenY > GameConstants.DISPLAY_HEIGHT)
 			screenY = GameConstants.DISPLAY_HEIGHT - 1;
-		
+
 		if(screenY < 0)
 			screenY = 0;
-		
+
 		x = (screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2);
 		y = Gdx.graphics.getHeight() - screenY;
 		return true;
@@ -284,16 +286,16 @@ public class MouseCursorGame implements InputProcessor{
 	public boolean mouseMoved(int screenX, int screenY) {
 		if(screenX > GameConstants.DISPLAY_WIDTH)
 			screenX = GameConstants.DISPLAY_WIDTH - 1;
-		
+
 		if(screenX < 0)
 			screenX = 0;
-		
+
 		if(screenY > GameConstants.DISPLAY_HEIGHT)
 			screenY = GameConstants.DISPLAY_HEIGHT - 1;
-		
+
 		if(screenY < 0)
 			screenY = 0;
-		
+
 		x = (screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2);
 		y = Gdx.graphics.getHeight() - screenY;
 		return true;
@@ -312,7 +314,7 @@ public class MouseCursorGame implements InputProcessor{
 	public float getX() {
 		return x;
 	}
-	
+
 	public void setX(float x){
 		this.x = x;
 	}
@@ -324,13 +326,13 @@ public class MouseCursorGame implements InputProcessor{
 	public static int getItem() {
 		return item;
 	}
-	
+
 
 	public boolean isTrigger()
 	{
 		return isTrigger;
 	}
-	
+
 	public Vector2 getCoordTasks()
 	{
 		if(item == Box.BONE || item == Box.FEATHER)

@@ -96,14 +96,16 @@ public class Tutorial implements ScreenPausable{
 		table.draw(batch, 1);
 		batch.end();
 		stage.act(delta);
+		
 		stage.draw();
 		sr.setProjectionMatrix(stage.getCamera().combined);
         mc.render(sr);
         cat.render(sr);
+        firstBox.render(delta);
         updateCamPos();
         mc.addTrackingPoint(delta, segment);
         
-        
+            
         if(cat.isDone() && gem.getActions().size == 0){
         	gem.addAction(Actions.parallel(Actions.sequence(
         			Actions.delay(2),
@@ -128,7 +130,6 @@ public class Tutorial implements ScreenPausable{
         
         setLabelText();
         setVectorCoordinates();
-        firstBox.render(delta);
 	}
 	
 	/**
@@ -226,7 +227,7 @@ public class Tutorial implements ScreenPausable{
 	     		}
 				
 			});
-			firstBox = new FirstBoxHelper(sr,stage,mc,cat,this);		
+			firstBox = new FirstBoxHelper(sr,stage,mc,cat,this,box);		
 
 		}
 		else
