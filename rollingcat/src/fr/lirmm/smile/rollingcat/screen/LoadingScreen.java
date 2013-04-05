@@ -47,6 +47,7 @@ public class LoadingScreen implements Screen {
 		if(levelAsString != null)
 		{
 			this.stage = LevelBuilder.build(levelAsString);
+			level.updateStats(0, 0, null, levelAsString);
 			game.setScreen(new GameScreen(game, patient, stage, level, listOfGem));
 		}
 	}

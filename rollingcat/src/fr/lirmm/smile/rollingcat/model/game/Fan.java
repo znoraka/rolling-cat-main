@@ -22,6 +22,8 @@ public class Fan extends Entity {
 	private Skeleton skeleton;
 	private Animation animation;
 	private float time;
+	private boolean declenche;
+	private float rotationSpeed;
 	
 	/**
 	 * le ventilateur fait deux blocs de large, le chat regarde le bloc en bas à droite de lui lors de ses déplacements
@@ -45,19 +47,31 @@ public class Fan extends Entity {
 		Bone root = skeleton.getRootBone();
 		root.setScaleX(0.15f * GameConstants.SCALE);
 		root.setScaleY(0.15f * GameConstants.SCALE);
-		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.5f);
+		root.setX(getX() + GameConstants.BLOCK_WIDTH * 0.5f);
 		root.setY(getY() - GameConstants.BLOCK_HEIGHT * 0.4f);
 		
 		time = new Random().nextFloat();
+		declenche = false;
+		rotationSpeed = 0;
 	}
 	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
-		time += Gdx.graphics.getDeltaTime() * 50;
+		if(!declenche){
+			if(rotationSpeed > 0)
+				rotationSpeed -= deltaParent * (rotationSpeed * 0.03f);
+		}
+		time += Gdx.graphics.getDeltaTime() * rotationSpeed;
 		animation.apply(skeleton, time, true);
 		skeleton.updateWorldTransform();
 		skeleton.update(Gdx.graphics.getDeltaTime());
 		skeleton.draw(batch);
+	}
+	
+	public void declencher(boolean b){
+		if(b)
+			rotationSpeed = (float) (Math.PI * 2);
+		declenche = b;
 	}
 	
 }

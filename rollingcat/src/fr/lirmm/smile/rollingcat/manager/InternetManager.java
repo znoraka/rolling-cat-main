@@ -14,6 +14,7 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
+import fr.lirmm.smile.rollingcat.model.world.World;
 import fr.lirmm.smile.rollingcat.screen.LoginScreen;
 
 public class InternetManager{
@@ -276,6 +277,8 @@ public class InternetManager{
 	}
 	
 	public static void needsAssessment(final Patient patient){
+		world = null;
+		World.clearInstance();
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		
 		Json json = new Json();

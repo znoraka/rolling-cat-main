@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -60,22 +61,24 @@ public class LevelSelectScreen implements Screen {
 	private float[] posW;
 	private int[] Zindexes;
 	private int numberOfLevels;
+	private int numberOfLevelsDisplayed;
 
 	public LevelSelectScreen(RollingCat game, Patient patient){
 		this.game = game;
 		this.patient = patient;
+		this.numberOfLevelsDisplayed = GameConstants.NB_OF_LEVELS_IN_MENU;
 	}
 
 	@Override
 	public void render(float delta) {
 		if(tables != null)
 		{
-			for(Table l : tables)
-			{
-				l.setVisible(false);
-			}
 			changeButtonsSize();
+			
 		}
+		
+		
+			
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -93,6 +96,11 @@ public class LevelSelectScreen implements Screen {
 
 			stage.draw();
 			stage.act(delta);
+			
+			if(currentButton >= numberOfLevels)
+				start.setTouchable(Touchable.disabled);
+			else
+				start.setTouchable(Touchable.enabled);
 		}
 		if(gen == false & InternetManager.getWorld() != null){
 			gen = true;
@@ -100,38 +108,9 @@ public class LevelSelectScreen implements Screen {
 		}
 	}
 
-	private void initBeforeThreeElements()
-	{
-		int n = 3 ;
-		sizeH = new float[n];
-		sizeW = new float[n];
-		posH = new float[n];
-		posW = new float[n];
-		Zindexes = new int[n];
-
-		float maxW = GameConstants.DISPLAY_WIDTH * 0.75f;
-		float U0 = GameConstants.DISPLAY_HEIGHT*2.f/(float)n *0.75f;
-		sizeH[1] = U0;
-		sizeH[0] = sizeH[1]*0.75f;
-		sizeH[2] = sizeH[1]*0.75f;
-		sizeW[0] = maxW*0.75f;
-		sizeW[1] = maxW;
-		sizeW[2] = maxW*0.75f;
-		for(int i = 0 ; i < n ; i++)
-		{
-			posW[i] = X - sizeW[i]/2;	
-		}
-		Zindexes[0] = 0;
-		Zindexes[1] = 1;
-		Zindexes[2] = 0;
-		posH[1] = GameConstants.DISPLAY_HEIGHT/2 - sizeH[1]/2;
-		posH[0] = posH[1] - sizeH[1]/4;
-		posH[2] = posH[1] + sizeH[1]/2;
-
-	}
 	private void init()
 	{
-		int n = this.numberOfLevels ;
+		int n = this.numberOfLevelsDisplayed;
 		float maxW = GameConstants.DISPLAY_WIDTH * 0.75f;
 		float U0 = GameConstants.DISPLAY_HEIGHT*2.f/(float)n *0.75f;
 		float Sn = GameConstants.DISPLAY_HEIGHT/2 + U0/2;
@@ -174,6 +153,12 @@ public class LevelSelectScreen implements Screen {
 			posH[i] = y * 0.75f + GameConstants.DISPLAY_WIDTH * 0.1f;
 			y+=sizeH[i];
 		}
+		posH[posH.length - 1] = GameConstants.DISPLAY_HEIGHT / 2;
+		posH[0] = GameConstants.DISPLAY_HEIGHT / 2;
+		posW[posH.length - 1] = GameConstants.DISPLAY_WIDTH / 2;
+		posW[0] = GameConstants.DISPLAY_WIDTH / 2;
+		Zindexes[0] = 0;
+		Zindexes[Zindexes.length - 1] = 0; 
 	}
 
 	private void changeButtonsSize() {
@@ -181,22 +166,13 @@ public class LevelSelectScreen implements Screen {
 		{
 			int index = (currentButton + i + tables.size() - sizeH.length /2 )%tables.size(); 
 			table = tables.get(index);
-			table.setVisible(true);
 			table.setZIndex(Zindexes[i] + 1);
-//			table.getTextBounds().width = sizeW[i]*0.5f;	
-//			table.getTextBounds().height = sizeH[i]*0.5f;	
-//			table.setBounds(posW[i],posH[i], sizeW[i], sizeH[i]);
+			if(table.getZIndex() > 1)
+				table.setVisible(true);
+			else
+				table.setVisible(false);
 			table.addAction(Actions.parallel(Actions.moveTo(posW[i],posH[i], SPEED, Interpolation.pow2Out)));
 			table.addAction(Actions.parallel(Actions.sizeTo(sizeW[i], sizeH[i], SPEED, Interpolation.pow2Out)));
-//			System.out.println(table.getHeight());
-////			table.setX(posW[i]);
-////			table.setY(posH[i]);
-////			table.setWidth(sizeW[i]);
-////			table.setHeight(sizeH[i]);
-////			table.drawDebug(stage);
-//			for (int j = 0; j < table.getCells().size(); j++) {
-//				table.getCells().get(j).fill().expand();
-//			}
 			table.invalidate();
 		}
 	}
@@ -219,15 +195,7 @@ public class LevelSelectScreen implements Screen {
 				WorldBuilder.build(worldAsString);
 			}
 			this.numberOfLevels = world.getNumberOfLevels();
-			if(this.numberOfLevels < 3)
-			{
-				this.initBeforeThreeElements();
-			}
-			else
-			{
-				init();
-			}
-
+			init();
 
 			tables = new ArrayList<Table>();
 
@@ -341,14 +309,13 @@ public class LevelSelectScreen implements Screen {
 
 	private void createLabels(LabelStyle style,LabelStyle notPossible) {
 		tables = new ArrayList<Table>();
-		int s = Math.max(numberOfLevels, 3);
-		for (int i = 0; i < s; i++) {
-			addLabelsToTable(style, i);
+		for (int i = 0; i < GameConstants.NB_OF_LEVELS_IN_GAME; i++) {
+			addLabelsToTable(style, i, GameConstants.NB_OF_LEVELS_IN_GAME);
 			tables.add(table);
 			stage.addActor(table);
-			table.setVisible(false);
+			table.setVisible(true);
 		}
-		currentButton = numberOfLevels;
+		currentButton = numberOfLevels - 1;
 	}
 	private void next(){
 		currentButton = (currentButton > tables.size() - 2)?0:currentButton + 1;
@@ -362,20 +329,29 @@ public class LevelSelectScreen implements Screen {
 		elapsedTime = 0;
 	}
 	
-	private void addLabelsToTable(LabelStyle style, int index){
+	private void addLabelsToTable(LabelStyle style, int index, int nb){
 		table = new Table();
 		table.setBackground(skin.getDrawable("button_up"));
 		style.background = skin.getDrawable("empty");
-		if(world.get(index).getContent() == null){
-			style.fontColor = Color.RED;
-			table.add(new Label("nouveau niveau !", style)).fill().expand().align(Align.center);
+		if((index < numberOfLevels)){
+			if(world.get(index).getContent() == null){
+				style.fontColor = Color.RED;
+				table.add(new Label("nouveau niveau !", style)).colspan(2).expand().center();
+				table.row();
+			}	
+			style.fontColor = Color.BLACK;
+			table.add(new Label("niveau " + (index + 1), style)).left().expand();
+			table.add(new Label("score : " + world.get(index).getScore() + " / " + world.get(index).getMaxScore(), style)).right().expand();
 			table.row();
+			table.add(new Label("durée : " + world.get(index).getDuree() + " s", style)).left().expand();
+			table.add(new Label("gemme " + ((world.get(index).getGem() == null)?"inconnue":(world.get(index).getGem().equals("empty"))?"inconnue":"trouvée"), style)).right().expand();
 		}	
-		style.fontColor = Color.BLACK;
-		table.add(new Label("niveau numéro " + index, style)).fill().expand();
-		table.add(new Label("score " + world.get(index).getScore(), style)).fill().expand();
-		table.row();
-		table.add(new Label("durée " + world.get(index).getDuree(), style)).fill().expand();
-		table.add(new Label("gemme " + ((world.get(index).getGem() == null)?"inconnue":(world.get(index).getGem().equals("empty"))?"inconnue":"trouvée"), style)).fill().expand();
+		else{
+			table.add(new Label("niveau " + (index + 1), style)).left().expand();
+			table.row();
+			table.add(new Label("bloqué !", style)).center();
+			table.row();
+			table.add(new Label(" ", style));
+		}
 	}
 }
