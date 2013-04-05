@@ -50,6 +50,7 @@ public class MouseCursorGame implements InputProcessor{
 	private float elapsedTime;
 	private OrderedMap<String, String> parameters;
 	private boolean isTrigger;
+	
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
 		batch = stage.getSpriteBatch();
 		hoverTimer = 0;
@@ -75,7 +76,6 @@ public class MouseCursorGame implements InputProcessor{
 		this.isTrigger = false;
 		actor = (Entity) stage.hit(x, y, true);
 		if(actor != null){
-			
 			if(actor instanceof Box && ((Box) actor).isEmpty())
 				hoverTimer = 0;
 			else if(actor.getItemToAct() != item){
@@ -101,7 +101,7 @@ public class MouseCursorGame implements InputProcessor{
 		
 			else if(actor instanceof Box){
 				item = box.empty();
-				addEvent();
+				addEvent(EventManager.pointing_task_start);
 			}
 			else if(actor instanceof Dog && item == Box.BONE){
 				this.trigger();
@@ -125,20 +125,21 @@ public class MouseCursorGame implements InputProcessor{
 		box.fill();
 		item = 0;
 		actor.setTouchable(Touchable.disabled);
-		addEvent();
+		addEvent(EventManager.pointing_task_end);
 		this.isTrigger = true;
 	}
 	
 	/**
 	 * ajoute un event à la liste d'events
 	 * appelé lorsque le patient réussi une tache de pointage
+	 * @param pointingTaskEnd 
 	 */
-	private void addEvent(){
+	private void addEvent(String eventType){
 		parameters = new OrderedMap<String, String>();
 		parameters.put("x", ""+ x(actor.getX()%GameConstants.DISPLAY_WIDTH));
 		parameters.put("y", ""+ y(actor.getY()));
 		parameters.put("z", ""+0);
-		EventManager.create(EventManager.pointing_task_end, parameters);
+		EventManager.create(eventType, parameters);
 	}
 	
 	/**
@@ -210,7 +211,7 @@ public class MouseCursorGame implements InputProcessor{
 		
 	}
 	
-	public void addTrackingPoint(float delta){
+	public void addTrackingPoint(float delta, int segment){
 		elapsedTime += delta;
 		
 		if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
@@ -218,7 +219,7 @@ public class MouseCursorGame implements InputProcessor{
 				parameters = new OrderedMap<String, String>();
 				oldX = x;
 				oldY = y;
-				map.put(map.size(), new float[] {x, y});
+				map.put(map.size(), new float[] {x, y, segment});
 				parameters.put("x", ""+x(x%GameConstants.DISPLAY_WIDTH));
 				parameters.put("y", ""+y(y));
 				parameters.put("z", ""+0);

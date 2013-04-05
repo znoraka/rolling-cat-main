@@ -28,6 +28,7 @@ public class Track {
 	private int id;
 	private ArrayList<Integer> indNextSegment;
 	private int currentSegment;
+	private int segment;
 	private String type;
 	private String listOfEvents;
 
@@ -44,6 +45,8 @@ public class Track {
 		this.id = TrackingPointsManager.getId();
 		if(type == GAME){
 			this.indNextSegment = new ArrayList<Integer>();
+			segment = (int) (track.get(track.size() - 1))[0] / GameConstants.VIEWPORT_HEIGHT;
+			System.out.println("number of segments" + segment);
 			findSegments();
 			currentSegment = 0;
 		}
@@ -53,19 +56,19 @@ public class Track {
 	}
 
 	/**
-	 * trouve les différends segment dans la map de points
+	 * trouve les différents segment dans la map de points
 	 * lorsque l'abscisse d'un point est supérieur à la taille de l'écran on ajoute un marqueur
 	 * met l'abscisse des points dans des coordonnées interprétables (0 - GameConstants.DISPLAY_WIDTH)
 	 */
 	private void findSegments() {
-		indNextSegment.add(0);
-		for (int i = 0; i < track.size(); i++) {
-			if(Math.floor((track.get(i)[0] / GameConstants.VIEWPORT_WIDTH)) == indNextSegment.size()){
-				indNextSegment.add(i);
-			}
-			track.get(i)[0] = track.get(i)[0] - GameConstants.VIEWPORT_WIDTH * (indNextSegment.size() - 1);
-		}
-		indNextSegment.add(track.size() - 1);
+//		indNextSegment.add(0);
+//		for (int i = 0; i < track.size(); i++) {
+//			if(Math.floor((track.get(i)[0] / GameConstants.VIEWPORT_WIDTH)) == indNextSegment.size()){
+//				indNextSegment.add(i);
+//			}
+//			track.get(i)[0] = track.get(i)[0] - GameConstants.VIEWPORT_WIDTH * (indNextSegment.size() - 1);
+//		}
+//		indNextSegment.add(track.size() - 1);
 	}
 
 	/**
@@ -76,33 +79,35 @@ public class Track {
 	public void render(ShapeRenderer sr, Rectangle bounds, SpriteBatch batch) {
 		sr.setColor(Color.WHITE);
 		if(type == GAME){
-			for (int i = indNextSegment.get(currentSegment); i < indNextSegment.get(currentSegment + 1) - 1; i++) {
-				sr.begin(ShapeType.Line);
-				sr.line(
-						track.get(i)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-						track.get(i+1)[0] * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-						track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
-						);
-				sr.end();
-				sr.begin(ShapeType.Filled);
-				sr.circle(
-						track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-						track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-						3);
-				sr.end();
+			for (int i = 0; i < track.size() - 1; i++) {
+				if(track.get(i)[2] == currentSegment){
+					sr.begin(ShapeType.Line);
+					sr.line(
+							(track.get(i)[0] % GameConstants.VIEWPORT_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+							track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+							(track.get(i+1)[0] % GameConstants.VIEWPORT_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+							track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
+							);
+					sr.end();
+					sr.begin(ShapeType.Filled);
+					sr.circle(
+							(track.get(i)[0] % GameConstants.VIEWPORT_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+							track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+							3);
+					sr.end();
+				}
 			}
-			sr.setColor(Color.RED);
-			sr.begin(ShapeType.Filled);
-			sr.circle(
-					track.get(indNextSegment.get(currentSegment))[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-					track.get(indNextSegment.get(currentSegment))[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-					3);
-			sr.circle(
-					track.get(indNextSegment.get(currentSegment + 1) - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-					track.get(indNextSegment.get(currentSegment + 1) - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-					3);
-			sr.end();
+//			sr.setColor(Color.RED);
+//			sr.begin(ShapeType.Filled);
+//			sr.circle(
+//					track.get(indNextSegment.get(currentSegment))[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+//					track.get(indNextSegment.get(currentSegment))[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+//					3);
+//			sr.circle(
+//					track.get(indNextSegment.get(currentSegment + 1) - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+//					track.get(indNextSegment.get(currentSegment + 1) - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+//					3);
+//			sr.end();
 		}
 //		else{
 //			batch.begin();
@@ -175,7 +180,7 @@ public class Track {
 	 */
 	public boolean next(){
 		currentSegment++;
-		if(currentSegment == indNextSegment.size() - 2)
+		if(currentSegment == segment - 1)
 			return false;
 		else{
 			return true;
@@ -187,11 +192,7 @@ public class Track {
 	 */
 	public boolean prev(){
 		currentSegment--;
-		if(currentSegment == 0)
-			return false;
-		else {
-			return true;
-		}
+		return (currentSegment != 0);
 	}
 	
 	/**
