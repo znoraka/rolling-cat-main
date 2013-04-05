@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import java.util.Random;
 
@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.utils.EntityModel;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
@@ -24,6 +25,7 @@ public class Entity extends Image implements EntityModel {
 	protected float d;
 	private String name;
 	protected Rectangle bounds;
+	protected boolean requestRedHighlight;
 	
 	/**
 	 * 
@@ -40,6 +42,7 @@ public class Entity extends Image implements EntityModel {
         this.name = name;
         this.bounds = new Rectangle(x * GameConstants.BLOCK_WIDTH, (y + 2) * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
         this.d = new Random().nextFloat();
+        this.requestRedHighlight = false;
 	}
 
 	@Override
@@ -55,12 +58,20 @@ public class Entity extends Image implements EntityModel {
 		sr.end();
 	}
 	
+	/**
+	 * highlight l'entité en vert si l'objet tenu correspond à l'objet requis en rouge si la souris est sur 
+	 * l'entité mais que l'objet tenu ne correspond pas
+	 * @param batch
+	 */
 	protected void highlight(SpriteBatch batch){
 		if(MouseCursorGame.isHoldingItem() & MouseCursorGame.getItem() == this.getItemToAct()){
-			batch.draw(getSkin().getRegion("background"), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+			batch.draw(getGameSkin().getRegion("green_highlight"), this.getX() - this.getWidth() * 0.25f, this.getY() - this.getHeight() * 0.25f, this.getWidth() * 1.5f, this.getHeight() * 1.5f);
+		}
+		if(requestRedHighlight){
+			batch.draw(getGameSkin().getRegion("red_highlight"), this.getX() - this.getWidth() * 0.25f, this.getY() - this.getHeight() * 0.25f, this.getWidth() * 1.5f, this.getHeight() * 1.5f);
+			requestRedHighlight(false);
 		}
 	}
-	
 	
 	/**
 	 * @return le nom de l'entity (nom utilisé pour trouver la texture dans l'atlas)
@@ -100,6 +111,10 @@ public class Entity extends Image implements EntityModel {
 
 	public int getItemToAct() {
 		return Box.EMPTY;
+	}
+
+	public void requestRedHighlight(boolean b) {
+		requestRedHighlight = b;
 	}
 
 }

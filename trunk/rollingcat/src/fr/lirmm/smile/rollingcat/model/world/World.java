@@ -8,7 +8,7 @@ public class World {
 	private List<Level> levels;
 	private List<String> gems;
 	private static World instance;
-	private boolean gen;
+	private static boolean gen;
 	
 	public static World getInstance(){
 		if(instance == null)
@@ -16,6 +16,12 @@ public class World {
 		
 		return instance;
 	}
+	
+	public static void clearInstance() {
+		gen = false;
+		instance = null;
+	}
+	
 	private World (){
 		this.levels = new ArrayList<Level>();
 		gen = false;
@@ -33,10 +39,8 @@ public class World {
 	public List<String> getGems() {
 		this.gems = new ArrayList<String>();
 		for (Level level : levels) {
-			System.out.println(level.getGem());
 			gems.add(level.getGem());
 		}
-		System.out.println("-----------------");
 		return gems;
 	}
 
@@ -50,4 +54,5 @@ public class World {
 	public boolean hasBeenGenerated() {
 		return gen;
 	}
+	
 }

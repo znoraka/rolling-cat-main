@@ -19,6 +19,7 @@ public class Coin extends Entity{
 	
 	private String type;
 	private boolean pickedUp;
+	boolean b;
 	
 	public Coin(float x, float y, String type) {
 		super(x, y, GameConstants.TEXTURE_EMPTY);
@@ -30,7 +31,7 @@ public class Coin extends Entity{
         this.setHeight(GameConstants.BLOCK_WIDTH*0.7f);
         this.setX(this.getX() + getWidth()/4);
         this.setY(this.getY() + getHeight()/4);
-        inc = getCoeff(20, getHeight(), 3.0f);
+        b = false;
 	}
 	
 	/**
@@ -86,10 +87,6 @@ public class Coin extends Entity{
 		
 	}
 	
-	float inc;
-	float base = 0;
-	float acc = 0;
-	boolean b = false;
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent)
 	{		
@@ -103,32 +100,9 @@ public class Coin extends Entity{
 			}
 			else
 			{
-				b= false;
+				b = false;
 				this.addAction(Actions.moveBy(0, -getHeight()/2, 1, Interpolation.fade));
 			}
 		}
-//		if(deltaParent == 1)
-//		{
-//			acc += inc;
-//			this.setY(this.getY()+acc);
-//			base += acc;
-//			System.out.println(inc);
-//			if(Math.abs(base) > this.getHeight()/2)
-//			{
-//				if(base < 0 )
-//				{
-//					inc = getCoeff(20, getHeight(), 3.0f);
-//				}
-//				else
-//				{
-//					inc = -getCoeff(20, getHeight(), 3.0f);
-//				}
-//			}
-//		}
-	}
-	
-	private float getCoeff(int n , float height, float v0)
-	{
-		return (height - v0) / (n-2);
 	}
 }

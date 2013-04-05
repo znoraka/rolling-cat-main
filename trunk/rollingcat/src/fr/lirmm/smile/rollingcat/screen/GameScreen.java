@@ -64,7 +64,6 @@ public class GameScreen implements ScreenPausable{
 	private Level level;
 	private int segment;
 	private InputMultiplexer multiplexer;
-	private GameScreen screen;
 	private boolean done;
 	private Target gem;
 	private Image goldImage, silverImage, bronzeImage;
@@ -97,7 +96,6 @@ public class GameScreen implements ScreenPausable{
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		if(!paused){
 			duration += delta;
-			mc.updateHoverTimer();
 			mc.updateStandTimer();
 			cat.move(stage);
 			batch.begin();
@@ -146,6 +144,7 @@ public class GameScreen implements ScreenPausable{
 
 			setLabelText();
 			setVectorCoordinates();
+			mc.updateHoverTimer();
 		}
 		else
 		{	
@@ -180,7 +179,6 @@ public class GameScreen implements ScreenPausable{
 	public void show() {
 		Gdx.app.log(RollingCat.LOG, "showing");
 		paused = false;
-		screen = this;
 		batch = new SpriteBatch();
 		sr = new ShapeRenderer();
 		font = getBigFont();
@@ -208,7 +206,6 @@ public class GameScreen implements ScreenPausable{
 		parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
 		parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
 		EventManager.create(EventManager.start_game_event_type, parameters);
-
 
 		goldImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.GOLD));
 		silverImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.SILVER));

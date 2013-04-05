@@ -1,6 +1,7 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getGameSkin;
 
 import java.util.ArrayList;
 
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 
 public class Box extends Entity{
 
@@ -29,8 +31,6 @@ public class Box extends Entity{
 		atlas = getAtlas();
 		this.setHeight(2 * this.getHeight());
 		this.setWidth(2 * this.getWidth());
-//		this.items = LevelBuilder.getItems();
-//		this.item = items.get(0);
 		this.setZIndex(2);
 	}
 
@@ -42,6 +42,9 @@ public class Box extends Entity{
 	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
+		if(!MouseCursorGame.isHoldingItem())
+			batch.draw(getGameSkin().getRegion("green_highlight"), this.getX() - this.getWidth() * 0.25f, this.getY() - this.getHeight() * 0.25f, this.getWidth() * 1.5f, this.getHeight() * 1.5f);
+
 		if(item == BONE)
 			batch.draw(atlas.findRegion("box_bone"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
 		else if(item == SPRING)

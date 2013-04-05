@@ -127,9 +127,15 @@ public class Cat extends Entity {
 			if(actor instanceof Wasp)
 				if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
 					state = FALLING;
-			if(actor instanceof Fan)
-				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
+			if(actor instanceof Fan){
+				if(this.getXOnGrid() == ((Entity) actor).getXOnGrid())
+					((Fan) actor).declencher(true);
+				else
+					((Fan) actor).declencher(false);
+				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible()){
 					state = FLYING;
+				}
+			}
 			if(actor instanceof Carpet)
 				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
 					state = HITTING;
@@ -170,6 +176,10 @@ public class Cat extends Entity {
 			if(actor instanceof Gap){
 				if(((Entity) actor).getBounds().overlaps(left) & actor.isVisible()){
 					this.addAction(Actions.moveTo(this.getX(), this.getY()));
+					if(((Gap) actor).isReady() & !((Gap) actor).isGiven()){
+						((Gap) actor).setGiven();
+						this.jump();
+					}
 				}
 			}
 		}

@@ -242,7 +242,6 @@ public class GameProgressionScreen implements Screen{
 			back = new TextButton("Back", style);
 			back.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					InternetManager.getWorld(patient.getID());
 					game.setScreen(new LevelSelectScreen(game, patient));
 				}
 			});

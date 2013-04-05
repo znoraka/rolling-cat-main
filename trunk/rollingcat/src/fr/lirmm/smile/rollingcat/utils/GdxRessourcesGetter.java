@@ -26,7 +26,7 @@ public class GdxRessourcesGetter {
 	private static TextureAtlas atlasGame = new TextureAtlas(GameConstants.ATLAS);
 	private static TextureAtlas atlasPatient = new TextureAtlas("data/patientAtlas.atlas");
 	private static TextureAtlas dogAtlas, catAtlas, waspAtlas, carpetAtlas, fanAtlas;
-	private static Skin skin;
+	private static Skin skin, gameSkin;
 	private static SpriteBatch batch = new SpriteBatch();
 	private static BitmapFont bigFont, smallFont;
 	private static Stage stage;
@@ -47,6 +47,19 @@ public class GdxRessourcesGetter {
 	
 	public static TextureAtlas getAtlas(){
 		return atlasGame;
+	}
+	
+	/**
+	 * 
+	 * @return la skin utilisée par les différents screens
+	 */
+	public static Skin getGameSkin(){
+		if(gameSkin == null){
+			Gdx.app.log(RollingCat.LOG, "generating game skin");
+			gameSkin = new Skin();
+			gameSkin.addRegions(atlasGame);
+		}
+		return gameSkin;
 	}
 	
 	/**

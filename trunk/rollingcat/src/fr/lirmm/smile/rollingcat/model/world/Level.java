@@ -1,5 +1,7 @@
 package fr.lirmm.smile.rollingcat.model.world;
 
+import fr.lirmm.smile.rollingcat.model.game.Coin;
+
 public class Level {
 
 	private int id;
@@ -8,6 +10,7 @@ public class Level {
 	private int score;
 	private int duree;
 	private String gem;
+	private int maxScore;
 	
 	public Level(int id, String content, String gameId, int score, int duree, String gem) {
 		this.id = id;
@@ -16,6 +19,24 @@ public class Level {
 		this.score = score;
 		this.duree = duree;
 		this.gem = gem;
+		if(content != null)
+			findMaxScore();
+	}
+
+	private void findMaxScore() {
+		String tab [] = content.split("/");
+		String[] subtab;
+
+		for (int i = 0; i < tab.length; i++) {
+			subtab = tab[i].split(";");
+			
+			if(subtab[0].contains(Coin.GOLD))
+				maxScore += 3;
+			else if(subtab[0].contains(Coin.SILVER))
+				maxScore += 2;
+			else if(subtab[0].contains(Coin.BRONZE))
+				maxScore += 1;
+		}
 	}
 
 	public int getId() {
@@ -41,12 +62,17 @@ public class Level {
 	public String getGem() {
 		return gem;
 	}
+	
+	public int getMaxScore() {
+		return maxScore;
+	}
 
 	public void updateStats(int score, int duration, String couleur, String level) {
 		this.score = score;
 		this.duree = duration;
 		this.gem = couleur;
 		this.content = level;
+		findMaxScore();
 		World.getInstance().add(new Level(World.getInstance().getNumberOfLevels(), null, null, 0, 0, null));
 	}
 	

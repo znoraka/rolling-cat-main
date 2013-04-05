@@ -51,7 +51,7 @@ public class MouseCursorGame implements InputProcessor{
 	private OrderedMap<String, String> parameters;
 	private boolean isTrigger;
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
-		batch = getSpriteBatch();
+		batch = stage.getSpriteBatch();
 		hoverTimer = 0;
 		x = GameConstants.DISPLAY_WIDTH / 2;
 		y = GameConstants.DISPLAY_HEIGHT / 2;
@@ -78,10 +78,13 @@ public class MouseCursorGame implements InputProcessor{
 			
 			if(actor instanceof Box && ((Box) actor).isEmpty())
 				hoverTimer = 0;
-			else if(actor.getItemToAct() != item)
+			else if(actor.getItemToAct() != item){
+				actor.requestRedHighlight(true);
 				hoverTimer = 0;
-			else
+			}
+			else{
 				hoverTimer += Gdx.graphics.getDeltaTime() * 1;
+			}
 		}
 		else
 			hoverTimer = 0;
@@ -91,7 +94,7 @@ public class MouseCursorGame implements InputProcessor{
 			hoverTimer = 0;
 			if(actor instanceof Gap && item == Box.FEATHER){
 				if(!cat.movedX()){
-					cat.jump();
+					((Gap) actor).setReady();
 					this.trigger();
 				}
 			}
