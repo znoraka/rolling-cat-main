@@ -101,7 +101,7 @@ public class Tutorial implements ScreenPausable{
         mc.render(sr);
         cat.render(sr);
         updateCamPos();
-        mc.addTrackingPoint(delta);
+        mc.addTrackingPoint(delta, segment);
         
         
         if(cat.isDone() && gem.getActions().size == 0){

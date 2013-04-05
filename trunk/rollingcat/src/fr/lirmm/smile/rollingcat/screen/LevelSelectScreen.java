@@ -341,9 +341,9 @@ public class LevelSelectScreen implements Screen {
 			}	
 			style.fontColor = Color.BLACK;
 			table.add(new Label("niveau " + (index + 1), style)).left().expand();
-			table.add(new Label("score : " + world.get(index).getScore() + " / " + world.get(index).getMaxScore(), style)).right().expand();
+			table.add(new Label("score : " + world.get(index).getScore() + " / " + ((world.get(index).getContent() != null)?world.get(index).getMaxScore():"?"), style)).right().expand();
 			table.row();
-			table.add(new Label("durée : " + world.get(index).getDuree() + " s", style)).left().expand();
+			table.add(new Label("durée : " + ((world.get(index).getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
 			table.add(new Label("gemme " + ((world.get(index).getGem() == null)?"inconnue":(world.get(index).getGem().equals("empty"))?"inconnue":"trouvée"), style)).right().expand();
 		}	
 		else{

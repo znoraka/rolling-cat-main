@@ -111,7 +111,7 @@ public class GameScreen implements ScreenPausable{
 			//			((Entity) a).drawDebug(sr);
 			//		}
 			updateCamPos();
-			mc.addTrackingPoint(delta);
+			mc.addTrackingPoint(delta, segment);
 			if(cat.isDone() && gem.getActions().size == 0){
 				gem.addAction(Actions.parallel(Actions.sequence(
 						Actions.delay(2),
@@ -130,7 +130,7 @@ public class GameScreen implements ScreenPausable{
 				InternetManager.endGameSession();
 				Gdx.app.log(RollingCat.LOG,"Client sauvegarde des données : " + gem.getCouleur());
 				InternetManager.updateLevelStats(patient.getID(), level.getId(), getScore(), (int) duration, gem.getCouleur());
-				level.updateStats(getScore(), (int) duration, gem.getCouleur(), InternetManager.getLevel());
+				level.updateStats(getScore(), (int) duration, gem.getCouleur());
 				parameters = new OrderedMap<String, String>();
 				parameters.put("duration", ""+duration);
 				EventManager.create(EventManager.end_game_event_type, parameters);

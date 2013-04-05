@@ -26,6 +26,7 @@ public class Level {
 	private void findMaxScore() {
 		String tab [] = content.split("/");
 		String[] subtab;
+		maxScore = 0;
 
 		for (int i = 0; i < tab.length; i++) {
 			subtab = tab[i].split(";");
@@ -67,13 +68,16 @@ public class Level {
 		return maxScore;
 	}
 
-	public void updateStats(int score, int duration, String couleur, String level) {
+	public void updateStats(int score, int duration, String couleur) {
 		this.score = score;
 		this.duree = duration;
 		this.gem = couleur;
-		this.content = level;
 		findMaxScore();
 		World.getInstance().add(new Level(World.getInstance().getNumberOfLevels(), null, null, 0, 0, null));
+	}
+
+	public void setContent(String levelAsString) {
+		this.content = levelAsString;
 	}
 	
 	
