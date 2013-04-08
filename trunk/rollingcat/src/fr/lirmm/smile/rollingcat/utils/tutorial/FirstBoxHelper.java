@@ -7,15 +7,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Scaling;
+
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
@@ -55,7 +54,7 @@ public class FirstBoxHelper
 		style.fontColor = Color.BLACK;
 	
 		label = new Label("", style);
-		label.setText("Bienvenue dans\n le tutoriel \nRolling Cat");
+		label.setText(localisation(_welcome));
 		stage.addActor(label);
 		firstCoin = true;
 		initRa();
@@ -93,23 +92,23 @@ public class FirstBoxHelper
 	private void renderFirstBox()
 	{
 		if(!MouseCursorGame.isHoldingItem() && isBlockInX() && first)
-		{
-			label.setText("Pointez sur la caisse");
+		{	
+			label.setText(localisation(_box_point));
 		}
 		if(MouseCursorGame.isHoldingItem())
 		{
 
 			List<Entity> tasks = this.getNextsTasks();
 			if(!tasks.isEmpty())
-			{
-				label.setText("Point the task");
+			{	
+				label.setText(localisation(_task_point));
 				first = false;
 			}
 		}
 
 		if(mc.isTrigger())
 		{
-			label.setText("Good job");
+			label.setText(localisation(_gg));
 			first = true;
 			hasCollideWasp = false;
 		}
@@ -120,9 +119,7 @@ public class FirstBoxHelper
 	{
 		if(cat.hasCatchCoin() && firstCoin)
 		{
-			label.setText("Vous avez gagne une piece.\n " +
-					"Ces pieces vous permettent \n" +
-					"de renforcer votre score");
+			label.setText(localisation(_coin_get));
 			ellapsedTimeCoin = 0;
 		}
 	}

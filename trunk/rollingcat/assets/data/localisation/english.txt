@@ -35,5 +35,6 @@
 	volume_per_level : "volume per level",
 	delete : "delete",
 	save: "save",
-	discard: "discard"
+	discard: "discard",
+	tutorial: "Tutorial"
 }

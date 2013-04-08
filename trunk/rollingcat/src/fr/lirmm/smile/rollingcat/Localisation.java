@@ -53,6 +53,12 @@ public class Localisation {
 	public static String _delete = "delete";
 	public static String _save = "save";
 	public static String _discard = "discard";
+	public static String _tutorial = "tutorial";
+	public static String _welcome = "welcome";
+	public static String _box_point = "box_point";
+	public static String _task_point = "task_point";
+	public static String _coin_get = "coin_get";
+	public static String _gg = "gg";
 
 
 	@SuppressWarnings("unchecked")

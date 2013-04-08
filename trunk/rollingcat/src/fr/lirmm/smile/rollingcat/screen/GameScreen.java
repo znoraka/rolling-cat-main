@@ -47,6 +47,7 @@ import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.model.world.Level;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
+import fr.lirmm.smile.rollingcat.utils.tutorial.FirstBoxHelper;
 
 
 public class GameScreen implements ScreenPausable{
@@ -76,6 +77,7 @@ public class GameScreen implements ScreenPausable{
 	private static long elapsedTimeDuringPause;
 	private TextButton resume, quit;
 	private long beginPause;
+	private FirstBoxHelper  firstBox;
 
 	public static Vector2 gold = new Vector2(GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT * 0.92f);
 	public static Vector2 silver = new Vector2(GameConstants.BLOCK_WIDTH * 3, GameConstants.DISPLAY_HEIGHT * 0.92f);
@@ -112,6 +114,8 @@ public class GameScreen implements ScreenPausable{
 			//        for (Actor a: stage.getActors()) {
 			//			((Entity) a).drawDebug(sr);
 			//		}
+			if(firstBox != null)
+				firstBox.render(delta);
 			updateCamPos();
 			mc.addTrackingPoint(delta, segment);
 			if(cat.isDone() && gem.getActions().size == 0){
@@ -280,6 +284,10 @@ public class GameScreen implements ScreenPausable{
 			}
 
 		});
+		
+		if(level.getId() == 0)
+			firstBox = new FirstBoxHelper(sr,stage,mc,cat,this,box);		
+
 
 	}
 
