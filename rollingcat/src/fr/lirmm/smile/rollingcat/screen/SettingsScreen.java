@@ -205,7 +205,8 @@ public class SettingsScreen implements Screen {
 					GameConstants.numberOfRows = Integer.valueOf(numberOfRows.getText());
 					GameConstants.totalVolume = Integer.valueOf(totalVolume.getText());
 					GameConstants.volumePerLevel = Integer.valueOf(volumePerLevel.getText());
-					loadLanguage(list.getSelection());
+					loadLanguage(list.getSelectedIndex());
+					RollingCat.lang = list.getSelectedIndex();
 					game.setScreen(oldScreen);
 				}
 			});
@@ -256,6 +257,8 @@ public class SettingsScreen implements Screen {
 		
 		stage.addActor(table);
 		stage.addActor(list);
+		
+		list.setSelectedIndex(RollingCat.lang);
 		
 		Gdx.input.setInputProcessor(stage);
 	}

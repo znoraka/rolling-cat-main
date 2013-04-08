@@ -1,18 +1,23 @@
 package fr.lirmm.smile.rollingcat;
 
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
+
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
-
 public class Localisation {
 	private static OrderedMap<String, String> lang;
+	private static OrderedMap<String, String> langs;
 
 	public static String _wrong_info = "wrong_info";
 	public static String _username = "username";
@@ -62,13 +67,12 @@ public class Localisation {
 
 
 	@SuppressWarnings("unchecked")
-	public static void loadLanguage(String language){
+	public static void loadLanguage(int language){
 		Json json = new Json();
 
-		Gdx.app.log(RollingCat.LOG, "retriving level file...");
+		Gdx.app.log(RollingCat.LOG, "retriving langs file...");
 
 		FileHandle file = Gdx.files.internal("data/localisation/"+language+".txt");
-
 		Gdx.app.log(RollingCat.LOG, "done.");
 		Gdx.app.log(RollingCat.LOG, "parsing level file...");
 
@@ -93,21 +97,35 @@ public class Localisation {
 		return lang.get(field);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List getAvailableLanguages(){
-		FileHandle dirHandle = Gdx.files.internal("./bin/data/localisation");
-		FileHandle[] files = dirHandle.list();
-		String [] fileNames = new String[files.length];
-	
-		for (int i = 0; i < fileNames.length; i++) {
-			fileNames[i] = files[i].nameWithoutExtension();
-		}
+		Json json = new Json();
+
+		Gdx.app.log(RollingCat.LOG, "retriving lang file...");
+
+		FileHandle file = Gdx.files.internal("data/localisation/lang.txt");
+		Gdx.app.log(RollingCat.LOG, "done.");
+		Gdx.app.log(RollingCat.LOG, "parsing lang file...");
+
+		String jsonData = file.readString();
+
+		langs = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
+		Gdx.app.log(RollingCat.LOG, json.prettyPrint(langs));
 		
+		ArrayList<String> fileNames = new ArrayList<String>();
+		int i = 0;
+		
+		while(Gdx.files.internal("data/localisation/"+i+".txt").exists()){
+			fileNames.add(langs.get(""+i));
+			i++;
+		}
+
 		ListStyle ls = new ListStyle();
 		ls.font = getBigFont();
 		ls.fontColorSelected = Color.WHITE;
 		ls.fontColorUnselected = Color.BLACK;
 		ls.selection = getSkin().getDrawable("selection");
-		return new List(fileNames, ls);
+		return new List(fileNames.toArray(), ls);
 	}
 	
 	
