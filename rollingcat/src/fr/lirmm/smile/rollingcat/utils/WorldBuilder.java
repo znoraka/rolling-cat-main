@@ -17,7 +17,6 @@ public class WorldBuilder {
 		Gdx.app.log(RollingCat.LOG, json.prettyPrint(jsonData));
 		@SuppressWarnings("unchecked")
 		Array<String> levels =  (Array<String>) new JsonReader().parse(jsonData);
-		
 		for (int i = 0; i < levels.size; i++) {
 			String content = json.readValue("content", String.class, levels.get(i));
 			String gameId = json.readValue("gameId", String.class, levels.get(i));

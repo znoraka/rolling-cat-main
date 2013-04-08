@@ -35,7 +35,7 @@ public class World {
 	
 	public void add(Level level){
 		gen = true;
-		if(levels.size() < GameConstants.NB_OF_LEVELS_IN_GAME)
+		if(levels.size() < GameConstants.NB_OF_LEVELS_IN_GAME + 1)
 			this.levels.add(level);
 	}
 

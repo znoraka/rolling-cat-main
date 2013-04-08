@@ -13,6 +13,7 @@ import static fr.lirmm.smile.rollingcat.Localisation._not_found;
 import static fr.lirmm.smile.rollingcat.Localisation._previous;
 import static fr.lirmm.smile.rollingcat.Localisation._score;
 import static fr.lirmm.smile.rollingcat.Localisation._start;
+import static fr.lirmm.smile.rollingcat.Localisation._tutorial;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
@@ -85,11 +86,11 @@ public class LevelSelectScreen implements Screen {
 		if(tables != null)
 		{
 			changeButtonsSize();
-			
+
 		}
-		
-		
-			
+
+
+
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -107,10 +108,13 @@ public class LevelSelectScreen implements Screen {
 
 			stage.draw();
 			stage.act(delta);
-			
+
 			if(currentButton >= numberOfLevels)
 				start.setTouchable(Touchable.disabled);
 			else
+				start.setTouchable(Touchable.enabled);
+			
+			if(currentButton == GameConstants.NB_OF_LEVELS_IN_GAME)
 				start.setTouchable(Touchable.enabled);
 		}
 		if(gen == false & InternetManager.getWorld() != null){
@@ -320,8 +324,8 @@ public class LevelSelectScreen implements Screen {
 
 	private void createLabels(LabelStyle style,LabelStyle notPossible) {
 		tables = new ArrayList<Table>();
-		for (int i = 0; i < GameConstants.NB_OF_LEVELS_IN_GAME; i++) {
-			addLabelsToTable(style, i, GameConstants.NB_OF_LEVELS_IN_GAME);
+		for (int i = 0; i < GameConstants.NB_OF_LEVELS_IN_GAME + 1; i++) {
+			addLabelsToTable(style, i);
 			tables.add(table);
 			stage.addActor(table);
 			table.setVisible(true);
@@ -339,30 +343,36 @@ public class LevelSelectScreen implements Screen {
 		changeButtonsSize();
 		elapsedTime = 0;
 	}
-	
-	private void addLabelsToTable(LabelStyle style, int index, int nb){
+
+	private void addLabelsToTable(LabelStyle style, int index){
 		table = new Table();
 		table.setBackground(skin.getDrawable("button_up"));
 		style.background = skin.getDrawable("empty");
-		if((index < numberOfLevels)){
-			if(world.get(index).getContent() == null){
-				style.fontColor = Color.RED;
-				table.add(new Label(localisation(_new_level), style)).colspan(2).expand().center();
+		if(index == 0){
+			table.add(new Label(localisation(_tutorial), style)).expand().center();
+		}
+		else
+		{
+			if((index < numberOfLevels)){
+				if(world.get(index).getContent() == null){
+					style.fontColor = Color.RED;
+					table.add(new Label(localisation(_new_level), style)).colspan(2).expand().center();
+					table.row();
+				}	
+				style.fontColor = Color.BLACK;
+				table.add(new Label(localisation(_level)+" " + (index), style)).left().expand();
+				table.add(new Label(localisation(_score) + " : " + world.get(index).getScore() + " / " + ((world.get(index).getContent() != null)?world.get(index).getMaxScore():"?"), style)).right().expand();
 				table.row();
+				table.add(new Label(localisation(_duration) + " : " + ((world.get(index).getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
+				table.add(new Label(localisation(_gem) + " " + ((world.get(index).getGem() == null)?localisation(_not_found):(world.get(index).getGem().equals("empty"))?localisation(_not_found):localisation(_found)), style)).right().expand();
 			}	
-			style.fontColor = Color.BLACK;
-			table.add(new Label(localisation(_level)+" " + (index + 1), style)).left().expand();
-			table.add(new Label(localisation(_score) + " : " + world.get(index).getScore() + " / " + ((world.get(index).getContent() != null)?world.get(index).getMaxScore():"?"), style)).right().expand();
-			table.row();
-			table.add(new Label(localisation(_duration) + " : " + ((world.get(index).getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
-			table.add(new Label(localisation(_gem) + " " + ((world.get(index).getGem() == null)?localisation(_not_found):(world.get(index).getGem().equals("empty"))?localisation(_not_found):localisation(_found)), style)).right().expand();
-		}	
-		else{
-			table.add(new Label(localisation(_level) + (index + 1), style)).left().expand();
-			table.row();
-			table.add(new Label(localisation(_locked), style)).center();
-			table.row();
-			table.add(new Label(" ", style));
+			else{
+				table.add(new Label(localisation(_level) + " " + (index), style)).left().expand();
+				table.row();
+				table.add(new Label(localisation(_locked), style)).center();
+				table.row();
+				table.add(new Label(" ", style));
+			}
 		}
 	}
 }
