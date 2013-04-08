@@ -1,0 +1,4 @@
+{
+	0:"Francais",
+	1:"English"
+}
