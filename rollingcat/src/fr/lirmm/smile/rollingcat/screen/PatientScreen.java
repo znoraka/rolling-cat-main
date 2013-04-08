@@ -6,6 +6,8 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
+import static fr.lirmm.smile.rollingcat.Localisation.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -24,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
@@ -99,7 +102,7 @@ public class PatientScreen implements Screen {
 		style.font = font;
 		style.fontColor = Color.BLACK;
 		
-		play = new TextButton("Play", style);
+		play = new TextButton(localisation(_play), style);
 		play.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 		        InternetManager.newGameSession(Track.GAME, patient.getID());
@@ -109,21 +112,21 @@ public class PatientScreen implements Screen {
 			}
 		});
 		
-		assessment = new TextButton("Assessment", style);
+		assessment = new TextButton(localisation(_assessment), style);
 		assessment.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				game.setScreen(new AssessmentScreen(game, patient));
 			}
 		});
 		
-		upload = new TextButton("Upload", style);
+		upload = new TextButton(localisation(_upload), style);
 		upload.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				game.setScreen(new TrackingRecapScreen(game, patient));
 			}
 		});
 		
-		back = new TextButton("Back", style);
+		back = new TextButton(localisation(_back), style);
 		back.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				game.setScreen(new PatientSelectScreen(game, Doctor.getDoctor()));
@@ -133,11 +136,11 @@ public class PatientScreen implements Screen {
 		LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
 		labelStyle.background = skin.getDrawable("button_up");
 		
-		cellName = new Label("Name", labelStyle);
+		cellName = new Label(localisation(_name), labelStyle);
 		name = new Label("", labelStyle);
-		cellDominantMember = new Label("Dominant Member", labelStyle);
+		cellDominantMember = new Label(localisation(_dominant_member), labelStyle);
 		dominantMember = new Label("", labelStyle);
-		cellHemiplegia = new Label("Hemiplegia", labelStyle);
+		cellHemiplegia = new Label(localisation(_hemiplegia), labelStyle);
 		hemiplegia = new Label("", labelStyle);
 		
 		name.setText(patient.getFirstName() + " " + patient.getLastName());

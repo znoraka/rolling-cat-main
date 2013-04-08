@@ -1,5 +1,8 @@
 package fr.lirmm.smile.rollingcat.utils;
 
+import static fr.lirmm.smile.rollingcat.Localisation._settings;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -205,7 +208,7 @@ public class GdxRessourcesGetter {
 		style.down = skin.getDrawable("button_down");
 		style.font = getBigFont();
 		style.fontColor = Color.BLACK;
-		settings = new TextButton("Settings", style);
+		settings = new TextButton(localisation(_settings), style);
 
 		settings.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {

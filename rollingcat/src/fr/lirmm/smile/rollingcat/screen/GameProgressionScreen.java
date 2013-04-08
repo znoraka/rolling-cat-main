@@ -4,6 +4,8 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
+import static fr.lirmm.smile.rollingcat.Localisation.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -239,7 +241,7 @@ public class GameProgressionScreen implements Screen{
 			stage.addActor(woordCircle);
 			this.createItemsShape();
 
-			back = new TextButton("Back", style);
+			back = new TextButton(localisation(_back), style);
 			back.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					game.setScreen(new LevelSelectScreen(game, patient));

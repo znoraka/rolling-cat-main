@@ -87,9 +87,6 @@ public class MouseCursorGame implements InputProcessor{
 					hoverTimer += Gdx.graphics.getDeltaTime() * 1;
 				}
 			}
-			else
-				hoverTimer = 0;
-
 			if(hoverTimer > GameConstants.HOVER_TIME)
 			{	
 				hoverTimer = 0;
@@ -115,6 +112,8 @@ public class MouseCursorGame implements InputProcessor{
 					this.trigger();
 			}
 		}
+		else
+			hoverTimer = 0;
 	}
 	/**
 	 * appelé lorsque l'item et l'entity correspondent

@@ -1,6 +1,5 @@
 package fr.lirmm.smile.rollingcat.model.patient;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Json;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -26,11 +24,10 @@ public class Track {
 	private String date;
 	private float duration;
 	private int id;
-	private ArrayList<Integer> indNextSegment;
 	private int currentSegment;
 	private int segment;
 	private String type;
-	private String listOfEvents;
+	private String[] listOfEvents;
 
 	
 	/**
@@ -44,31 +41,13 @@ public class Track {
 		this.duration = (float) Math.floor(duration);
 		this.id = TrackingPointsManager.getId();
 		if(type == GAME){
-			this.indNextSegment = new ArrayList<Integer>();
 			segment = (int) (track.get(track.size() - 1))[0] / GameConstants.VIEWPORT_HEIGHT;
 			System.out.println("number of segments" + segment);
-			findSegments();
 			currentSegment = 0;
 		}
 		this.type = type;
 		InternetManager.getDate(this);
 		listOfEvents = EventManager.getListAsJsonString();
-	}
-
-	/**
-	 * trouve les différents segment dans la map de points
-	 * lorsque l'abscisse d'un point est supérieur à la taille de l'écran on ajoute un marqueur
-	 * met l'abscisse des points dans des coordonnées interprétables (0 - GameConstants.DISPLAY_WIDTH)
-	 */
-	private void findSegments() {
-//		indNextSegment.add(0);
-//		for (int i = 0; i < track.size(); i++) {
-//			if(Math.floor((track.get(i)[0] / GameConstants.VIEWPORT_WIDTH)) == indNextSegment.size()){
-//				indNextSegment.add(i);
-//			}
-//			track.get(i)[0] = track.get(i)[0] - GameConstants.VIEWPORT_WIDTH * (indNextSegment.size() - 1);
-//		}
-//		indNextSegment.add(track.size() - 1);
 	}
 
 	/**
@@ -210,9 +189,7 @@ public class Track {
 		return this.track;
 	}
 	
-	public String getListOfEvents(){
-		Json json = new Json();
-		Gdx.app.log(RollingCat.LOG, listOfEvents);
+	public String[] getListOfEvents(){
 		return listOfEvents;
 	}
 

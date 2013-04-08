@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 
-import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.world.Level;
 import fr.lirmm.smile.rollingcat.model.world.World;
@@ -29,8 +28,9 @@ public class WorldBuilder {
 			world.add(new Level(i, content, gameId, score, duree, gem));
 			
 		}
-		if(levels.size <= GameConstants.NB_OF_LEVELS_IN_GAME);
-			world.add(new Level(levels.size, null, null, 0, 0, null));
+		
+		world.add(new Level(levels.size, null, null, 0, 0, null));
+		
 		return world;
 	}
 

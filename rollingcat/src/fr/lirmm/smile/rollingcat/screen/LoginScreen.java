@@ -6,6 +6,8 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
+import static fr.lirmm.smile.rollingcat.Localisation.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
@@ -27,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.SoundManager;
@@ -68,7 +71,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		
 		if(wrong){
 			batch.begin();
-			font.draw(batch, "informations incorrectes", 500, 50);
+			font.draw(batch, localisation(_wrong_info), 500, 50);
 			batch.end();
 		}
 		
@@ -129,14 +132,14 @@ public class LoginScreen implements Screen, InputProcessor{
 		
 		
 		loginTextField = new TextField("", s);
-		loginTextField.setMessageText("username");
+		loginTextField.setMessageText(localisation(_username));
 		loginTextField.setX(GameConstants.DISPLAY_WIDTH / 2 - GameConstants.DISPLAY_WIDTH * 0.185f);
 		loginTextField.setY(GameConstants.DISPLAY_HEIGHT * 0.615f);
 		loginTextField.setWidth(GameConstants.DISPLAY_WIDTH * 0.37f);
 		loginTextField.setHeight(GameConstants.DISPLAY_WIDTH * 0.07f);
 				
 		passwordTextField = new TextField("", s);
-		passwordTextField.setMessageText("password");
+		passwordTextField.setMessageText(localisation(_password));
 		passwordTextField.setPasswordMode(true);
 		passwordTextField.setPasswordCharacter('*');
 		passwordTextField.setX(GameConstants.DISPLAY_WIDTH / 2 - GameConstants.DISPLAY_WIDTH * 0.185f);
