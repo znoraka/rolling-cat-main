@@ -1,12 +1,24 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation._back;
+import static fr.lirmm.smile.rollingcat.Localisation._duration;
+import static fr.lirmm.smile.rollingcat.Localisation._found;
+import static fr.lirmm.smile.rollingcat.Localisation._gem;
+import static fr.lirmm.smile.rollingcat.Localisation._gems;
+import static fr.lirmm.smile.rollingcat.Localisation._level;
+import static fr.lirmm.smile.rollingcat.Localisation._locked;
+import static fr.lirmm.smile.rollingcat.Localisation._new_level;
+import static fr.lirmm.smile.rollingcat.Localisation._next;
+import static fr.lirmm.smile.rollingcat.Localisation._not_found;
+import static fr.lirmm.smile.rollingcat.Localisation._previous;
+import static fr.lirmm.smile.rollingcat.Localisation._score;
+import static fr.lirmm.smile.rollingcat.Localisation._start;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
 import java.util.ArrayList;
-
-import javax.xml.datatype.Duration;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -25,7 +37,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
@@ -218,7 +229,7 @@ public class LevelSelectScreen implements Screen {
 			not_possible.background = skin.getDrawable("button_up");
 
 
-			start = new TextButton("Start", style);
+			start = new TextButton(localisation(_start), style);
 			start.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					Gdx.app.log(RollingCat.LOG, "level selected : "+currentButton);
@@ -226,14 +237,14 @@ public class LevelSelectScreen implements Screen {
 				}
 			});
 
-			back = new TextButton("Back", style);
+			back = new TextButton(localisation(_back), style);
 			back.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					game.setScreen(new PatientScreen(game, patient));
 				}
 			});
 
-			previous = new TextButton("Previous", style);
+			previous = new TextButton(localisation(_previous), style);
 			previous.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 					previous();
@@ -244,7 +255,7 @@ public class LevelSelectScreen implements Screen {
 				}
 			});
 
-			next = new TextButton("Next", style);
+			next = new TextButton(localisation(_next), style);
 			next.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 					next();
@@ -255,7 +266,7 @@ public class LevelSelectScreen implements Screen {
 				}
 			});
 
-			score = new TextButton("Gemmes", style);
+			score = new TextButton(localisation(_gems), style);
 			score.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					game.setScreen(new GameProgressionScreen(game, patient, world.getGems(), false, null, 0));
@@ -336,20 +347,20 @@ public class LevelSelectScreen implements Screen {
 		if((index < numberOfLevels)){
 			if(world.get(index).getContent() == null){
 				style.fontColor = Color.RED;
-				table.add(new Label("nouveau niveau !", style)).colspan(2).expand().center();
+				table.add(new Label(localisation(_new_level), style)).colspan(2).expand().center();
 				table.row();
 			}	
 			style.fontColor = Color.BLACK;
-			table.add(new Label("niveau " + (index + 1), style)).left().expand();
-			table.add(new Label("score : " + world.get(index).getScore() + " / " + ((world.get(index).getContent() != null)?world.get(index).getMaxScore():"?"), style)).right().expand();
+			table.add(new Label(localisation(_level)+" " + (index + 1), style)).left().expand();
+			table.add(new Label(localisation(_score) + " : " + world.get(index).getScore() + " / " + ((world.get(index).getContent() != null)?world.get(index).getMaxScore():"?"), style)).right().expand();
 			table.row();
-			table.add(new Label("durée : " + ((world.get(index).getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
-			table.add(new Label("gemme " + ((world.get(index).getGem() == null)?"inconnue":(world.get(index).getGem().equals("empty"))?"inconnue":"trouvée"), style)).right().expand();
+			table.add(new Label(localisation(_duration) + " : " + ((world.get(index).getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
+			table.add(new Label(localisation(_gem) + " " + ((world.get(index).getGem() == null)?localisation(_not_found):(world.get(index).getGem().equals("empty"))?localisation(_not_found):localisation(_found)), style)).right().expand();
 		}	
 		else{
-			table.add(new Label("niveau " + (index + 1), style)).left().expand();
+			table.add(new Label(localisation(_level) + (index + 1), style)).left().expand();
 			table.row();
-			table.add(new Label("bloqué !", style)).center();
+			table.add(new Label(localisation(_locked), style)).center();
 			table.row();
 			table.add(new Label(" ", style));
 		}

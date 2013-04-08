@@ -3,6 +3,8 @@ package fr.lirmm.smile.rollingcat.model.world;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.lirmm.smile.rollingcat.GameConstants;
+
 public class World {
 
 	private List<Level> levels;
@@ -33,7 +35,8 @@ public class World {
 	
 	public void add(Level level){
 		gen = true;
-		this.levels.add(level);
+		if(levels.size() < GameConstants.NB_OF_LEVELS_IN_GAME)
+			this.levels.add(level);
 	}
 
 	public List<String> getGems() {

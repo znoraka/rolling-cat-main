@@ -334,29 +334,32 @@ public class InternetManager{
 	 * envoie les events au serveur dda
 	 * @param events les events sous forme de string formatée en JSON
 	 */
-	public static void sendEvents(String events){
+	public static void sendEvents(String[] events){
 		Gdx.app.log(RollingCat.LOG, "preparing send list event request...");
-		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/event/"+sessionid+"/newList");
-		httpGet.setContent(events);
-		httpGet.setHeader(key, value);
-		httpGet.setHeader("Content-Type", "application/json");
 		
-		Gdx.app.log(RollingCat.LOG, "sending list event request...");
-
-		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+		for (String event : events) {
+			HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
+			httpGet.setUrl("http://" + hostName + ":" + port + "/event/"+sessionid+"/newList");
+			httpGet.setContent(event);
+			httpGet.setHeader(key, value);
+			httpGet.setHeader("Content-Type", "application/json");
 			
-			@Override
-			public void handleHttpResponse(HttpResponse httpResponse) {
-	           	Gdx.app.log(RollingCat.LOG, "list event request success");
-		    }
-
-			@Override
-			public void failed(Throwable t) {	
-				Gdx.app.log(RollingCat.LOG, t.toString());
-				Gdx.app.log(RollingCat.LOG, "something went wrong");
-			}
-		});
+			Gdx.app.log(RollingCat.LOG, "sending list event request...");
+			
+			Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+				
+				@Override
+				public void handleHttpResponse(HttpResponse httpResponse) {
+					Gdx.app.log(RollingCat.LOG, "list event request success");
+				}
+				
+				@Override
+				public void failed(Throwable t) {	
+					Gdx.app.log(RollingCat.LOG, t.toString());
+					Gdx.app.log(RollingCat.LOG, "something went wrong");
+				}
+			});
+		}
 	}
 
 	/**

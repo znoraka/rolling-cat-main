@@ -1,6 +1,12 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSettingsButton;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSmallFont;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
+
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 
 import java.util.ArrayList;
 
@@ -25,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
@@ -162,7 +169,7 @@ public class PatientSelectScreen implements Screen{
 			prenom = new Label(p.getFirstName(), labelStyle);
 			hemiplegia = new Label(p.getHemiplegia(), labelStyle);
 			dominantMember = new Label(p.getDominantMember(), labelStyle);
-			selectPatient = new TextButton("Select", style);
+			selectPatient = new TextButton(localisation(_select), style);
 			face = p.getFace();
 			
 			selectPatient.addListener(new ClickListener() {
@@ -188,7 +195,7 @@ public class PatientSelectScreen implements Screen{
 		else 
 			face = new Texture("data/nopatient.png");
 		
-		back = new TextButton("Back", style);
+		back = new TextButton(localisation(_back), style);
 		
 		back.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {

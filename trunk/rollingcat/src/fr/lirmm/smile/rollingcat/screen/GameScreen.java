@@ -4,12 +4,13 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 
+import static fr.lirmm.smile.rollingcat.Localisation.*;
+
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
@@ -224,7 +226,7 @@ public class GameScreen implements ScreenPausable{
 		style.font = font;
 		style.fontColor = Color.BLACK;
 
-		resume = new TextButton("Resume", style);
+		resume = new TextButton(localisation(_resume), style);
 		resume.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				paused = false;
@@ -232,7 +234,7 @@ public class GameScreen implements ScreenPausable{
 			}
 		});
 
-		quit = new TextButton("Quit", style);
+		quit = new TextButton(localisation(_quit), style);
 		quit.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				if(paused)

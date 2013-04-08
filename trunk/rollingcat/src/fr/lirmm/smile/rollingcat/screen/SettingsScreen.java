@@ -4,6 +4,8 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
+import static fr.lirmm.smile.rollingcat.Localisation.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -24,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 
 public class SettingsScreen implements Screen {
@@ -39,6 +43,7 @@ public class SettingsScreen implements Screen {
 	private Label heightLabel, widthLabel, rangeLabel, pathDeltaTimeLabel, evaporationPerDayLabel, alphaLabel, numberOfLinesLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel;
 	private TextButton save, discard;
 	private Screen oldScreen;
+	private List list;
 	
 	private final float SPEED = 0.05f;
 	
@@ -90,6 +95,10 @@ public class SettingsScreen implements Screen {
 		skin = getSkin();
 		font = getBigFont();
 		
+		list = Localisation.getAvailableLanguages();
+		list.setX(GameConstants.DISPLAY_WIDTH * 0.75f);
+		list.setY(GameConstants.DISPLAY_HEIGHT * 0.75f);
+		
 		table = new Table();
 		table.setHeight(GameConstants.DISPLAY_HEIGHT);
 		table.setWidth(GameConstants.DISPLAY_WIDTH);
@@ -107,16 +116,16 @@ public class SettingsScreen implements Screen {
 		labelStyle.font = font;
 		labelStyle.fontColor = Color.WHITE;
 		
-		heightLabel = new Label("workspace height :", labelStyle);
-		widthLabel = new Label("workspace width :", labelStyle);
-		rangeLabel = new Label("range", labelStyle);
-		pathDeltaTimeLabel = new Label("pathDeltaTime :", labelStyle);
-		evaporationPerDayLabel = new Label("evaporationPerDay :", labelStyle);
-		alphaLabel = new Label("alpha :", labelStyle);
-		numberOfLinesLabel = new Label("numberOfLines :", labelStyle);
-		numberOfRowsLabel = new Label("numberOfRows :", labelStyle);
-		totalVolumeLabel = new Label("totalVolume :", labelStyle);
-		volumePerLevelLabel = new Label("volumePerLevel :", labelStyle);
+		heightLabel = new Label(localisation(_workspace_height)+" :", labelStyle);
+		widthLabel = new Label(localisation(_workspace_width)+" :", labelStyle);
+		rangeLabel = new Label(localisation(_range), labelStyle);
+		pathDeltaTimeLabel = new Label(localisation(_path_delta_time)+" :", labelStyle);
+		evaporationPerDayLabel = new Label(localisation(_evaporation_per_day)+" :", labelStyle);
+		alphaLabel = new Label(localisation(_alpha) + " :", labelStyle);
+		numberOfLinesLabel = new Label(localisation(_number_of_lines)+" :", labelStyle);
+		numberOfRowsLabel = new Label(localisation(_number_of_rows)+" :", labelStyle);
+		totalVolumeLabel = new Label(localisation(_total_volume)+" :", labelStyle);
+		volumePerLevelLabel = new Label(localisation(_volume_per_level)+" :", labelStyle);
 		
 		workspaceHeight = new TextField(""+GameConstants.workspaceHeight, textFieldStyle);
 		workspaceWidth = new TextField(""+GameConstants.workspaceWidth, textFieldStyle);
@@ -183,7 +192,7 @@ public class SettingsScreen implements Screen {
 		style.font = font;
 		style.fontColor = Color.BLACK;
 		
-		save = new TextButton("Save", style);
+		save = new TextButton(localisation(_save), style);
 		save.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					GameConstants.workspaceHeight = Integer.valueOf(workspaceHeight.getText());
@@ -196,11 +205,12 @@ public class SettingsScreen implements Screen {
 					GameConstants.numberOfRows = Integer.valueOf(numberOfRows.getText());
 					GameConstants.totalVolume = Integer.valueOf(totalVolume.getText());
 					GameConstants.volumePerLevel = Integer.valueOf(volumePerLevel.getText());
+					loadLanguage(list.getSelection());
 					game.setScreen(oldScreen);
 				}
 			});
 		
-		discard = new TextButton("Discard", style);
+		discard = new TextButton(localisation(_discard), style);
 		discard.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					game.setScreen(oldScreen);
@@ -245,6 +255,7 @@ public class SettingsScreen implements Screen {
 		table.add(discard);
 		
 		stage.addActor(table);
+		stage.addActor(list);
 		
 		Gdx.input.setInputProcessor(stage);
 	}

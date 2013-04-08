@@ -3,6 +3,7 @@ package fr.lirmm.smile.rollingcat.manager;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -24,24 +25,31 @@ public class EventManager {
 	private static String type = "event_type";
 	private static String data = "parameters";		
 	
-	private static ArrayList<OrderedMap<String, Object>> listOfEvents;
+	private static ArrayList<Array<OrderedMap<String, Object>>> listOfEvents;
 
-	/**
-	 * ajoute un event à la liste d'events
-	 * @param event
-	 */
-	public static void add(OrderedMap<String, Object> event) {
-		listOfEvents.add(event);
-	}
+//	/**
+//	 * ajoute un event à la liste d'events
+//	 * @param event
+//	 */
+//	public static void add(OrderedMap<String, Object> event) {
+//		listOfEvents.add(event);
+//	}
 	
 	/**
 	 * vide la liste en la retournant sous forme de String
 	 * @return la liste sous forme de String Json
 	 */
-	public static String getListAsJsonString(){
+	public static String[] getListAsJsonString(){
 		Json json = new Json();
 		json.setOutputType(JsonWriter.OutputType.json);
-		return json.toJson(listOfEvents);
+		String[] s = new String[listOfEvents.size()];
+		
+		for (int i = 0; i < s.length; i++) {
+			s[i] = json.toJson(listOfEvents.get(i));
+			Gdx.app.log(RollingCat.LOG, json.prettyPrint(s[i]));
+		}
+		Gdx.app.log(RollingCat.LOG, ""+listOfEvents.size());
+		return s;
 	}
 	
 	/**
@@ -56,7 +64,9 @@ public class EventManager {
 		event.put(timestamp, l.toString());
 		event.put(type, event_type);
 		event.put(data, parameters);
-		listOfEvents.add(event);
+		listOfEvents.get(listOfEvents.size() - 1).add(event);
+		if(listOfEvents.get(listOfEvents.size() - 1).size > 200)
+			listOfEvents.add(new Array<OrderedMap<String, Object>>());
 	}
 	
 	/**
@@ -64,6 +74,7 @@ public class EventManager {
 	 * devrait être appelé à chaque écran de chargement
 	 */
 	public static void clear(){
-		listOfEvents = new ArrayList<OrderedMap<String, Object>>();
+		listOfEvents = new ArrayList<Array<OrderedMap<String, Object>>>();
+		listOfEvents.add(new Array<OrderedMap<String, Object>>());
 	}
 }

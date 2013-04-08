@@ -1,6 +1,9 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -21,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
@@ -128,7 +132,7 @@ public class UploadScreen implements Screen {
 		tableLeftTop.row();
 		tableLeftTop.add(durationValue).fill().width(tableLeftTop.getWidth() * 0.95f);
 		
-		back = new TextButton("Back", style);
+		back = new TextButton(localisation(_back), style);
 		back.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				track.reset();
@@ -136,14 +140,14 @@ public class UploadScreen implements Screen {
 			}
 		});
 		
-		upload = new TextButton("Upload", style);
+		upload = new TextButton(localisation(_upload), style);
 		upload.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				InternetManager.sendEvents(track.getListOfEvents());
 			}
 		});
 		
-		delete = new TextButton("Delete", style);
+		delete = new TextButton(localisation(_delete), style);
 		delete.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				patient.getListOfTracks().remove(track);
@@ -152,7 +156,7 @@ public class UploadScreen implements Screen {
 			}
 		});
 		
-		prev = new TextButton("Previous", style);
+		prev = new TextButton(localisation(_previous), style);
 		prev.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				if(!track.prev())
@@ -161,7 +165,7 @@ public class UploadScreen implements Screen {
 			}
 		});
 		
-		next = new TextButton("Next", style);
+		next = new TextButton(localisation(_next), style);
 		next.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				if(!track.next())

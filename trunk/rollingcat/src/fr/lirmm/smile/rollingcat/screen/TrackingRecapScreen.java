@@ -1,6 +1,9 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
@@ -110,7 +114,7 @@ public class TrackingRecapScreen implements Screen{
 
 		Gdx.input.setInputProcessor(stage);
 		
-		back = new TextButton("Back", style);
+		back = new TextButton(localisation(_back), style);
 		back.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				game.setScreen(new PatientScreen(game, patient));
