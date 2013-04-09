@@ -1,10 +1,11 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation._quit;
+import static fr.lirmm.smile.rollingcat.Localisation._resume;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
-
-import static fr.lirmm.smile.rollingcat.Localisation.*;
 
 import java.util.List;
 
@@ -34,11 +35,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
-import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
+import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.game.Coin;
@@ -125,6 +126,7 @@ public class GameScreen implements ScreenPausable{
 
 							@Override
 							public boolean act(float delta) {
+								SoundManager.winPlay();
 								done = true;
 								return true;
 							}
@@ -135,13 +137,13 @@ public class GameScreen implements ScreenPausable{
 			if(done){
 				InternetManager.endGameSession();
 				Gdx.app.log(RollingCat.LOG,"Client sauvegarde des données : " + gem.getCouleur());
-				InternetManager.updateLevelStats(patient.getID(), level.getId(), getScore(), (int) duration, gem.getCouleur());
 				level.updateStats(getScore(), (int) duration, gem.getCouleur());
+				InternetManager.updateLevelStats(patient.getID(), level.getId(), level.getScore(), level.getDuree(), gem.getCouleur());
 				parameters = new OrderedMap<String, String>();
 				parameters.put("duration", ""+duration);
 				EventManager.create(EventManager.end_game_event_type, parameters);
 				patient.addTrack(new Track(mc.getMap(), Track.GAME, duration));
-				game.setScreen(new GameProgressionScreen(game, patient, listOfGems, true, gem, level.getId()));
+				game.setScreen(new GameProgressionScreen(game, patient, listOfGems, gem, level.getId()));
 			}
 			if(cat.requestBoxEmptiing()){
 				mc.dropItem();

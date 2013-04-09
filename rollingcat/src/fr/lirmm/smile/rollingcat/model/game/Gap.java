@@ -32,11 +32,11 @@ public class Gap extends Entity{
 		return ready;
 	}
 
-	public void setReady() {
-		this.ready = true;
+	public void setReady(boolean b) {
+		this.ready = b;
 	}
 
-	public boolean isGiven() {
+	public boolean hasGiven() {
 		return given;
 	}
 

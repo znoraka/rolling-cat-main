@@ -1,9 +1,12 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation._back;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
-
-import static fr.lirmm.smile.rollingcat.Localisation.*;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getShapeRenderer;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
 import java.util.ArrayList;
 
@@ -27,7 +30,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
-import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;

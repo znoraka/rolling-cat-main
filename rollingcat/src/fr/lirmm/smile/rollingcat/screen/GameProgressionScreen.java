@@ -1,10 +1,10 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation._back;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
-
-import static fr.lirmm.smile.rollingcat.Localisation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
-import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.game.Target;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
@@ -54,7 +53,6 @@ public class GameProgressionScreen implements Screen{
 
 	private Vector2 centralDiamond;
 	private float sizeCentralDiamond;
-	private int nbLevelsWin;
 	private boolean bossWin;
 	private Image centralDiamondEntity;
 	private Image woordCircle;
@@ -64,11 +62,10 @@ public class GameProgressionScreen implements Screen{
 
 
 
-	public GameProgressionScreen(RollingCat game, Patient patient, List<String> gems, boolean bossWin, Target gem, int level)
+	public GameProgressionScreen(RollingCat game, Patient patient, List<String> gems, Target gem, int level)
 	{
 		this.gems = gems;
-		this.nbLevelsWin = gems.size();
-		this.bossWin = bossWin;
+		this.bossWin = (gems.size() == GameConstants.NB_OF_LEVELS_IN_GAME);
 
 		this.patient = patient;
 		this.game = game;

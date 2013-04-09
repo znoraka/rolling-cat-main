@@ -1,10 +1,22 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation._alpha;
+import static fr.lirmm.smile.rollingcat.Localisation._discard;
+import static fr.lirmm.smile.rollingcat.Localisation._evaporation_per_day;
+import static fr.lirmm.smile.rollingcat.Localisation._number_of_lines;
+import static fr.lirmm.smile.rollingcat.Localisation._number_of_rows;
+import static fr.lirmm.smile.rollingcat.Localisation._path_delta_time;
+import static fr.lirmm.smile.rollingcat.Localisation._range;
+import static fr.lirmm.smile.rollingcat.Localisation._save;
+import static fr.lirmm.smile.rollingcat.Localisation._total_volume;
+import static fr.lirmm.smile.rollingcat.Localisation._volume_per_level;
+import static fr.lirmm.smile.rollingcat.Localisation._workspace_height;
+import static fr.lirmm.smile.rollingcat.Localisation._workspace_width;
+import static fr.lirmm.smile.rollingcat.Localisation.loadLanguage;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
-
-import static fr.lirmm.smile.rollingcat.Localisation.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,17 +24,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -34,18 +44,18 @@ public class SettingsScreen implements Screen {
 
 	private Stage stage;
 	private Table table;
-	private ImageButton heightPlus, heightMinus, widthPlus, widthMinus;
+//	private ImageButton heightPlus, heightMinus, widthPlus, widthMinus;
 	private TextField workspaceHeight, workspaceWidth, range, pathDeltaTime, evaporationPerDay, alpha, numberOfLines, numberOfRows, totalVolume, volumePerLevel;
 	private Skin skin;
 	private BitmapFont font;
-	private float elapsedTime;
+//	private float elapsedTime;
 	private RollingCat game;
 	private Label heightLabel, widthLabel, rangeLabel, pathDeltaTimeLabel, evaporationPerDayLabel, alphaLabel, numberOfLinesLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel;
 	private TextButton save, discard;
 	private Screen oldScreen;
 	private List list;
 	
-	private final float SPEED = 0.05f;
+//	private final float SPEED = 0.05f;
 	
 	public SettingsScreen(RollingCat game, Screen oldScreen){
 		this.game = game;
@@ -286,11 +296,11 @@ public class SettingsScreen implements Screen {
 		
 	}
 	
-	private void heightModify(int i) {
-		elapsedTime = 0;
-		workspaceHeight.setText(""+(Integer.valueOf(workspaceHeight.getText()) + i));
-		checkHeightBounds();
-	}
+//	private void heightModify(int i) {
+//		elapsedTime = 0;
+//		workspaceHeight.setText(""+(Integer.valueOf(workspaceHeight.getText()) + i));
+//		checkHeightBounds();
+//	}
 	
 	private void checkHeightBounds() {
 		if(Integer.valueOf(workspaceHeight.getText()) > 500)
@@ -300,11 +310,11 @@ public class SettingsScreen implements Screen {
 			workspaceHeight.setText(""+1);		
 	}
 
-	private void widthModify(int i) {
-		elapsedTime = 0;
-		workspaceWidth.setText(""+(Integer.valueOf(workspaceWidth.getText()) + i));
-		checkWidthBounds();
-	}
+//	private void widthModify(int i) {
+//		elapsedTime = 0;
+//		workspaceWidth.setText(""+(Integer.valueOf(workspaceWidth.getText()) + i));
+//		checkWidthBounds();
+//	}
 
 	private void checkWidthBounds() {
 		if(Integer.valueOf(workspaceWidth.getText()) > 500)

@@ -1,7 +1,6 @@
 package fr.lirmm.smile.rollingcat.model.patient;
 
 import java.util.ArrayList;
-import java.sql.Date;
 
 import com.badlogic.gdx.graphics.Texture;
 

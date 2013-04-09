@@ -174,11 +174,13 @@ public class Cat extends Entity {
 			}
 
 			if(actor instanceof Gap){
-				if(((Entity) actor).getBounds().overlaps(left) & actor.isVisible()){
-					this.addAction(Actions.moveTo(this.getX(), this.getY()));
-					if(((Gap) actor).isReady() & !((Gap) actor).isGiven()){
+				if(((Entity) actor).getBounds().overlaps(left)){
+					if((! ((Gap) actor).hasGiven())){
+						state = HITTING;
+					}
+					if(((Gap) actor).isReady()){
 						((Gap) actor).setGiven();
-						this.jump();
+						jump();
 					}
 				}
 			}
@@ -201,8 +203,6 @@ public class Cat extends Entity {
 					this.getActions().clear();
 				}
 			}
-			else
-				this.getActions().clear();
 		}
 
 		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.6f);
@@ -218,25 +218,30 @@ public class Cat extends Entity {
 	 * initialise un saut
 	 */
 	public void jump(){
-		
-		this.getActions().clear();
-		final float xDest = (this.getXOnGrid() + 2) * GameConstants.BLOCK_WIDTH;
-		final float yDest = this.getYOnGrid() * GameConstants.BLOCK_HEIGHT;
-		this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, GameConstants.SPEED * 2)));
-		this.addAction(Actions.parallel(Actions.sequence(
-				Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2Out),
-				Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2In),
-				new Action() {
-					@Override
-					public boolean act(float delta) {
-						setX(xDest);
-						setY(yDest);
-						state = WALKING;
-						Gdx.app.log(RollingCat.LOG, "landed");
-						return true;
+
+		if(state != JUMPING){
+			System.out.println("jumping");
+			state = JUMPING;
+			this.getActions().clear();
+			SoundManager.jumpPlay();
+			final float xDest = (this.getXOnGrid() + 2) * GameConstants.BLOCK_WIDTH;
+			final float yDest = this.getYOnGrid() * GameConstants.BLOCK_HEIGHT;
+			this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, GameConstants.SPEED * 2)));
+			this.addAction(Actions.parallel(Actions.sequence(
+					Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2Out),
+					Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2In),
+					new Action() {
+						@Override
+						public boolean act(float delta) {
+							setX(xDest);
+							setY(yDest);
+							state = WALKING;
+							Gdx.app.log(RollingCat.LOG, "landed");
+							return true;
+						}
 					}
-				}
-				)));
+					)));
+		}
 	}
 
 	/**
@@ -333,7 +338,7 @@ public class Cat extends Entity {
 	public boolean isMoving() {
 		return state != HITTING;
 	}
-	
+
 	/**
 	 * set le state du chat
 	 * @param state

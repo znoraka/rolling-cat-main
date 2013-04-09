@@ -49,7 +49,8 @@ public class GameConstants {
 	public static final float TIMEOUT = 10f;
 
 	public static final int NB_OF_LEVELS_IN_MENU = 7;
-	public static final int NB_OF_LEVELS_IN_GAME = 20;
+	//on ajoute le niveau du tuto qui ne compte pas dans la liste de niveaux effective
+	public static final int NB_OF_LEVELS_IN_GAME = 20 + 1;
 	
 	
 	/**
