@@ -343,6 +343,13 @@ public class Cat extends Entity {
 	}
 
 	/**
+	 * @return the current state
+	 */
+	public int getState()
+	{
+		return state;
+	}
+	/**
 	 * 
 	 * @return true si l'ancienne position du chat est la meme que la nouvelle
 	 */
