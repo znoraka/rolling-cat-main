@@ -163,11 +163,22 @@ public class MouseCursorGame implements InputProcessor{
 			this.fall();
 		}
 	}
-
+	
+	private boolean isFalling;
+	public boolean isFalling()
+	{
+		if(!box.isEmpty())
+		{
+			isFalling = false;
+		}
+		return(isFalling);
+	}
+	
 	public void fall(){
 		cat.setY(GameConstants.BLOCK_HEIGHT * 1);
 		cat.getActions().clear();
 		cat.setState(Cat.FALLING);
+		isFalling = true;
 	}
 
 	/**
