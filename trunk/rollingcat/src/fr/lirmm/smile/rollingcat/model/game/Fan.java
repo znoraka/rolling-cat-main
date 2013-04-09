@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
@@ -24,6 +25,7 @@ public class Fan extends Entity {
 	private float time;
 	private boolean declenche;
 	private float rotationSpeed;
+	private boolean played;
 	
 	/**
 	 * le ventilateur fait deux blocs de large, le chat regarde le bloc en bas à droite de lui lors de ses déplacements
@@ -53,6 +55,7 @@ public class Fan extends Entity {
 		time = new Random().nextFloat();
 		declenche = false;
 		rotationSpeed = 0;
+		played = false;
 	}
 	
 	@Override
@@ -69,8 +72,13 @@ public class Fan extends Entity {
 	}
 	
 	public void declencher(boolean b){
-		if(b)
+		if(b){
+			if(!played){
+				played = true;
+				SoundManager.fanPlay();
+			}
 			rotationSpeed = (float) (Math.PI * 2);
+		}
 		declenche = b;
 	}
 	

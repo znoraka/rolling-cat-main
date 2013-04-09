@@ -1,5 +1,13 @@
 package fr.lirmm.smile.rollingcat.utils.tutorial;
 
+import static fr.lirmm.smile.rollingcat.Localisation._box_point;
+import static fr.lirmm.smile.rollingcat.Localisation._coin_get;
+import static fr.lirmm.smile.rollingcat.Localisation._fall;
+import static fr.lirmm.smile.rollingcat.Localisation._gg;
+import static fr.lirmm.smile.rollingcat.Localisation._task_point;
+import static fr.lirmm.smile.rollingcat.Localisation._welcome;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +35,7 @@ import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 /**
  * 
  * @author Cedric 
- * This class visit an other screen class and add graphics elements for help the player to play.
+ * This class visits an other screen class and add graphics elements to help the player to play.
  *
  */
 public class FirstBoxHelper 
@@ -62,7 +70,7 @@ public class FirstBoxHelper
 		style.fontColor = Color.BLACK;
 	
 		label = new Label("", style);
-		label.setText("Bienvenue dans\n le tutoriel \nRolling Cat");
+		label.setText(localisation(_welcome));
 		stage.addActor(label);
 		firstCoin = true;
 		initGenious();
@@ -80,7 +88,7 @@ public class FirstBoxHelper
 	}
 	
 	/**
-	 * Render the elements
+	 * Renders the elements
 	 * @param delta time
 	 */
 	public void render(float delta)
@@ -99,7 +107,7 @@ public class FirstBoxHelper
 	}
 
 	/**
-	 * Update the text position
+	 * Updates the text position
 	 */
 	private void updateText()
 	{
@@ -109,13 +117,13 @@ public class FirstBoxHelper
 	}
 	
 	/**
-	 * Draw the text when player must be take an element in a box and must be point the pointink task.
+	 * Draws the text when the player has to take an element in the box and has to point to the pointink task.
 	 */
 	private void renderFirstBox()
 	{
 		if(!MouseCursorGame.isHoldingItem() && isBlockInX() && first)
 		{
-			label.setText("Pointez sur la caisse");
+			label.setText(localisation(_box_point));
 		}
 		if(MouseCursorGame.isHoldingItem())
 		{
@@ -123,50 +131,48 @@ public class FirstBoxHelper
 			List<Entity> tasks = this.getNextsTasks();
 			if(!tasks.isEmpty())
 			{
-				label.setText("Point the task");
+				label.setText(localisation(_task_point));
 				first = false;
 			}
 		}
 
 		if(mc.isTrigger())
 		{
-			label.setText("Good job");
+			label.setText(localisation(_gg));
 			first = true;
 			hasCollideWasp = false;
 		}
 	}
 
 	/**
-	 * Draw the text when player put a coin
+	 * Draws the text when the player player picks a coin up
 	 * @param delta
 	 */
 	private void renderCoins(float delta)
 	{
 		if(cat.hasCatchCoin() && firstCoin)
 		{
-			label.setText("Vous avez gagne une piece.\n " +
-					"Ces pieces vous permettent \n" +
-					"de renforcer votre score");
+			label.setText(localisation(_coin_get));
 			ellapsedTimeCoin = 0;
 		}
 	}
 
 	/**
-	 * Draw the text when player put secure path
+	 * Draws the text when the player falls to the secure path
 	 * @param delta
 	 */
 	private void renderSecurePath(float delta)
 	{
 		if(mc.isFalling())
-		{
-			label.setText("Oups, ce n'est pas grave vous pourrez bientot recommencer");
+		{	
+			label.setText(localisation(_fall));
 			first = true;
 		}
 	}
 	
 	
 	/**
-	 * Update the text time value
+	 * Updates the text time value
 	 * @param delta
 	 */
 	private void updateTextTime(float delta)
@@ -185,7 +191,7 @@ public class FirstBoxHelper
 
 	/**
 	 *
-	 * @return the list of all next pointing tasks, depend of the box content.
+	 * @return the list of all next pointing tasks, depends on the box content.
 	 */
 	private List<Entity> getNextsTasks()
 	{
@@ -221,7 +227,7 @@ public class FirstBoxHelper
 
 	/**
 	 * 
-	 * @return true if cat has touch the wasp.
+	 * @return true if cat has touched a wasp.
 	 */
 	private boolean hasCollideWasp()
 	{
@@ -234,7 +240,7 @@ public class FirstBoxHelper
 	}
 
 	/**
-	 * Genious initialisation
+	 * Genious init
 	 */
 	private void initGenious()
 	{
@@ -248,7 +254,7 @@ public class FirstBoxHelper
 	}
 
 	/**
-	 * Update the genious position and genious actions.
+	 * Updates the genious's position and actions.
 	 */
 	public void updateGenious()
 	{
@@ -267,7 +273,7 @@ public class FirstBoxHelper
 		}
 	}
 	/**
-	 * Update the bubble text position, depend of genious position.
+	 * Updates the bubble text position, depends on the genious position.
 	 */
 	public void updateBubble()
 	{

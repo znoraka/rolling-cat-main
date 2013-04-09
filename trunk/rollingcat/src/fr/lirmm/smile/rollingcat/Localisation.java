@@ -10,7 +10,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -18,6 +17,7 @@ import com.badlogic.gdx.utils.OrderedMap;
 public class Localisation {
 	private static OrderedMap<String, String> lang;
 	private static OrderedMap<String, String> langs;
+	private static List list;
 
 	public static String _wrong_info = "wrong_info";
 	public static String _username = "username";
@@ -64,8 +64,15 @@ public class Localisation {
 	public static String _task_point = "task_point";
 	public static String _coin_get = "coin_get";
 	public static String _gg = "gg";
+	public static String _fall = "fall";
 
-
+	
+	/**
+	 * charge un langage depuis un fichier de langage
+	 * les fichiers de langage sont nommés de 0 à n pour être plus simples à trouver
+	 * la correspondance numéro/langage est dans un fichier Json à part
+	 * @param language
+	 */
 	@SuppressWarnings("unchecked")
 	public static void loadLanguage(int language){
 		Json json = new Json();
@@ -80,64 +87,60 @@ public class Localisation {
 
 		lang = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
 		Gdx.app.log(RollingCat.LOG, json.prettyPrint(lang));
-//		Field[] fields = Localisation.class.getFields();
-//		for (int i = 0; i < fields.length; i++) {
-//			try {
-//				fields[i].set(null, (json.readValue(fields[i].getName(), String.class, lang) == null)?fields[i].get(null):(json.readValue(fields[i].getName(), String.class, lang)));
-//			} catch (IllegalArgumentException | IllegalAccessException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+
 		getAvailableLanguages();
-	
+
 	}	
-	
+
+	/**
+	 * 
+	 * @param field
+	 * @return la valeur correspondant à la clé donnée en parametre
+	 */
 	public static String localisation(String field){
 		return lang.get(field);
 	}
-
+	
+	/**
+	 * les fichiers de langue sont numérotés de 0 à n
+	 * avec leur correspondance en lettre dans un fichier Json 
+	 * exemple : 1:"English"
+	 * on parcours tous ces fichiers et crée une {@link List} des langues disponibles
+	 * @return un {@link List} des langues trouvées
+	 */
 	@SuppressWarnings("unchecked")
 	public static List getAvailableLanguages(){
-		Json json = new Json();
+		if(list == null)
+		{
+			Json json = new Json();
 
-		Gdx.app.log(RollingCat.LOG, "retriving lang file...");
+			Gdx.app.log(RollingCat.LOG, "retriving lang file...");
 
-		FileHandle file = Gdx.files.internal("data/localisation/lang.txt");
-		Gdx.app.log(RollingCat.LOG, "done.");
-		Gdx.app.log(RollingCat.LOG, "parsing lang file...");
+			FileHandle file = Gdx.files.internal("data/localisation/lang.txt");
+			Gdx.app.log(RollingCat.LOG, "done.");
+			Gdx.app.log(RollingCat.LOG, "parsing lang file...");
 
-		String jsonData = file.readString();
+			String jsonData = file.readString();
 
-		langs = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
-		Gdx.app.log(RollingCat.LOG, json.prettyPrint(langs));
-		
-		ArrayList<String> fileNames = new ArrayList<String>();
-		int i = 0;
-		
-		while(Gdx.files.internal("data/localisation/"+i+".txt").exists()){
-			fileNames.add(langs.get(""+i));
-			i++;
+			langs = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
+			Gdx.app.log(RollingCat.LOG, json.prettyPrint(langs));
+
+			ArrayList<String> fileNames = new ArrayList<String>();
+			int i = 0;
+
+			while(Gdx.files.internal("data/localisation/"+i+".txt").exists()){
+				fileNames.add(langs.get(""+i));
+				i++;
+			}
+
+			ListStyle ls = new ListStyle();
+			ls.font = getBigFont();
+			ls.fontColorSelected = Color.WHITE;
+			ls.fontColorUnselected = Color.BLACK;
+			ls.selection = getSkin().getDrawable("selection");
+			list = new List(fileNames.toArray(), ls);
 		}
-
-		ListStyle ls = new ListStyle();
-		ls.font = getBigFont();
-		ls.fontColorSelected = Color.WHITE;
-		ls.fontColorUnselected = Color.BLACK;
-		ls.selection = getSkin().getDrawable("selection");
-		return new List(fileNames.toArray(), ls);
+		return list;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

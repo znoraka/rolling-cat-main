@@ -3,7 +3,6 @@ package fr.lirmm.smile.rollingcat.controller;
 import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.x;
 import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.y;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getAtlas;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +23,7 @@ import com.badlogic.gdx.utils.OrderedMap;
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
+import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.model.game.Box;
 import fr.lirmm.smile.rollingcat.model.game.Carpet;
 import fr.lirmm.smile.rollingcat.model.game.Cat;
@@ -48,7 +48,7 @@ public class MouseCursorGame implements InputProcessor{
 	private float elapsedTime;
 	private OrderedMap<String, String> parameters;
 	private boolean isTrigger;
-
+	
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
 		batch = stage.getSpriteBatch();
 		hoverTimer = 0;
@@ -92,7 +92,7 @@ public class MouseCursorGame implements InputProcessor{
 				hoverTimer = 0;
 				if(actor instanceof Gap && item == Box.FEATHER){
 					if(!cat.movedX()){
-						((Gap) actor).setReady();
+						((Gap) actor).setReady(true);
 						this.trigger();
 					}
 				}
@@ -175,6 +175,7 @@ public class MouseCursorGame implements InputProcessor{
 	}
 	
 	public void fall(){
+		SoundManager.fallPlay();
 		cat.setY(GameConstants.BLOCK_HEIGHT * 1);
 		cat.getActions().clear();
 		cat.setState(Cat.FALLING);

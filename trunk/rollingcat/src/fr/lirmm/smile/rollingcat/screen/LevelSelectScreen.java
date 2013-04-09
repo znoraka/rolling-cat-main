@@ -43,6 +43,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
+import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.world.World;
 import fr.lirmm.smile.rollingcat.utils.Polynome;
@@ -83,18 +84,12 @@ public class LevelSelectScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		if(tables != null)
-		{
-			changeButtonsSize();
-
-		}
-
-
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		if(gen){
+			changeTablesSize();
 			if(next.isPressed() & elapsedTime > 0.4f)
 				next();
 
@@ -123,6 +118,9 @@ public class LevelSelectScreen implements Screen {
 		}
 	}
 
+	/**
+	 * initialisation des tailles et positions pour les tables
+	 */
 	private void init()
 	{
 		int n = this.numberOfLevelsDisplayed;
@@ -176,7 +174,10 @@ public class LevelSelectScreen implements Screen {
 		Zindexes[Zindexes.length - 1] = 0; 
 	}
 
-	private void changeButtonsSize() {
+	/**
+	 * changement de la taille des {@link Table}s en fonction de la table selectionnée
+	 */
+	private void changeTablesSize() {
 		for(int i = 0 ; i < this.sizeH.length ; i++)
 		{
 			int index = (currentButton + i + tables.size() - sizeH.length /2 )%tables.size(); 
@@ -229,9 +230,6 @@ public class LevelSelectScreen implements Screen {
 
 			LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
 			labelStyle.background = skin.getDrawable("button_up");
-			LabelStyle not_possible = new LabelStyle(font, Color.RED);
-			not_possible.background = skin.getDrawable("button_up");
-
 
 			start = new TextButton(localisation(_start), style);
 			start.addListener(new ClickListener() {
@@ -273,11 +271,11 @@ public class LevelSelectScreen implements Screen {
 			score = new TextButton(localisation(_gems), style);
 			score.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new GameProgressionScreen(game, patient, world.getGems(), false, null, 0));
+					game.setScreen(new GameProgressionScreen(game, patient, world.getGems(), null, 0));
 				}
 			});
 
-			createLabels(labelStyle,not_possible);
+			createLabels(labelStyle);
 
 			Gdx.input.setInputProcessor(stage);
 
@@ -287,7 +285,7 @@ public class LevelSelectScreen implements Screen {
 			stage.addActor(back);
 			stage.addActor(score);
 
-			changeButtonsSize();
+			changeTablesSize();
 
 			start.setX(GameConstants.DISPLAY_WIDTH - start.getWidth());
 			next.setX(GameConstants.DISPLAY_WIDTH - next.getWidth());
@@ -321,10 +319,14 @@ public class LevelSelectScreen implements Screen {
 		// TODO Auto-generated method stub
 
 	}
-
-	private void createLabels(LabelStyle style,LabelStyle notPossible) {
+	
+	/**
+	 * création des {@link Table}s contenant les informations sur le niveau
+	 * @param style
+	 */
+	private void createLabels(LabelStyle style) {
 		tables = new ArrayList<Table>();
-		for (int i = 0; i < GameConstants.NB_OF_LEVELS_IN_GAME + 1; i++) {
+		for (int i = 0; i < GameConstants.NB_OF_LEVELS_IN_GAME; i++) {
 			addLabelsToTable(style, i);
 			tables.add(table);
 			stage.addActor(table);
@@ -332,18 +334,34 @@ public class LevelSelectScreen implements Screen {
 		}
 		currentButton = numberOfLevels - 1;
 	}
+	
+	/**
+	 * on passe au niveau suivant
+	 */
 	private void next(){
 		currentButton = (currentButton > tables.size() - 2)?0:currentButton + 1;
-		changeButtonsSize();
+		changeTablesSize();
 		elapsedTime = 0;
+		SoundManager.nextPlay();
 	}
 
+	/**
+	 * on passe au niveau précédent
+	 */
 	private void previous(){
 		currentButton = (currentButton < 1)?(tables.size() - 1):currentButton - 1;
-		changeButtonsSize();
+		changeTablesSize();
 		elapsedTime = 0;
+		SoundManager.nextPlay();
 	}
-
+	
+	/**
+	 * on ajoute les valeurs du niveau à la {@link Table}
+	 * avec en niveau 0 le tutoriel 
+	 * et en bloqué les niveaux pas encore débloqués
+	 * @param style
+	 * @param index
+	 */
 	private void addLabelsToTable(LabelStyle style, int index){
 		table = new Table();
 		table.setBackground(skin.getDrawable("button_up"));

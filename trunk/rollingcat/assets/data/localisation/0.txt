@@ -43,6 +43,7 @@
 	box_point: "Pointez la caisse",
 	task_point: "Pointez la tache",
 	coin_get: "Vous avez gagné une piece.\n Ces pieces vous permettent \n d'augmenter votre score",
-	gg: "Bien joué"
+	gg: "Bien joué",
+	fall: "Oups, ce n'est pas grave vous pourrez bientot recommencer"
 	
 }

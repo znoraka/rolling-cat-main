@@ -67,10 +67,18 @@ public class Level {
 	public int getMaxScore() {
 		return maxScore;
 	}
-
+	
+	/**
+	 * update les stats du niveau
+	 * met à jour le score uniquement si le nouveau score est meilleur
+	 * met à jour la durée du niveau uniquement si elle est plus courte que la durée précédente
+	 * @param score
+	 * @param duration
+	 * @param couleur
+	 */
 	public void updateStats(int score, int duration, String couleur) {
-		this.score = score;
-		this.duree = duration;
+		this.score = Math.max(this.score,  score);
+		this.duree = Math.min(this.duree, duration);
 		this.gem = couleur;
 		findMaxScore();
 		World.getInstance().add(new Level(World.getInstance().getNumberOfLevels(), null, null, 0, 0, null));

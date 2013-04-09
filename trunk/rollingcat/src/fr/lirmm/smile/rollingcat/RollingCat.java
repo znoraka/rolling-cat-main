@@ -3,7 +3,6 @@ package fr.lirmm.smile.rollingcat;
 import com.badlogic.gdx.Game;
 
 import fr.lirmm.smile.rollingcat.screen.LoginScreen;
-import fr.lirmm.smile.rollingcat.screen.Tutorial;
 
 
 public class RollingCat extends Game {

@@ -33,12 +33,20 @@ public class World {
 		return this.levels;
 	}
 	
+	/**
+	 * ajoute le niveau seulement si la taille de la liste des niveaux est inférieure à {@link GameConstants#NB_OF_LEVELS_IN_GAME}
+	 * @param level
+	 */
 	public void add(Level level){
 		gen = true;
-		if(levels.size() < GameConstants.NB_OF_LEVELS_IN_GAME + 1)
+		if(levels.size() < GameConstants.NB_OF_LEVELS_IN_GAME)
 			this.levels.add(level);
 	}
 
+	/**
+	 * les gemmes sont identifiées par leur couleur sous forme de String
+	 * @return la liste des gemmes
+	 */
 	public List<String> getGems() {
 		this.gems = new ArrayList<String>();
 		for (Level level : levels) {
@@ -54,6 +62,11 @@ public class World {
 	public int getNumberOfLevels() {
 		return levels.size();
 	}
+	
+	/**
+	 * 
+	 * @return true si le {@link World} a déjà été généré
+	 */
 	public boolean hasBeenGenerated() {
 		return gen;
 	}

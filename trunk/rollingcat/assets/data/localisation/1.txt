@@ -29,6 +29,8 @@
 	path_delta_time : "path delta time",
 	evaporation_per_day : "evaporation per day",
 	alpha : "alpha",
+	workspace_height : "workspace height",
+	workspace_width : "workspace width",
 	number_of_lines : "number of lines",
 	number_of_rows : "number of rows",
 	total_volume : "total volume",
@@ -36,5 +38,11 @@
 	delete : "delete",
 	save: "save",
 	discard: "discard",
-	tutorial: "Tutorial"
+	tutorial: "Tutorial",
+	welcome: "Welcome to\n the Rolling Cat \ntutorial",
+	box_point: "Point to the box",
+	task_point: "Point to the task",
+	coin_get: "You picked up a coin\n These coins increase \n your score",
+	gg: "Well played",
+	fall: "Woops! But it's ok, you will start over soon"
 }
