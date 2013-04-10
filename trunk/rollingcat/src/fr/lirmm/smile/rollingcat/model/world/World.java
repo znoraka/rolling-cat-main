@@ -71,4 +71,12 @@ public class World {
 		return gen;
 	}
 	
+	/**
+	 * 
+	 * @return true si l'on a besoin d'ajouter un nouveau niveau au {@link World}
+	 */
+	public boolean needsNewLevel() {
+		return (levels.get(getNumberOfLevels() - 1).getContent()) != null;
+	}
+	
 }

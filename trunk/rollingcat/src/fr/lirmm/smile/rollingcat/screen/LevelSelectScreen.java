@@ -67,7 +67,7 @@ public class LevelSelectScreen implements Screen {
 
 	private float elapsedTime;
 
-	private final float SPEED = 0.2f;
+	private final float SPEED = 0.3f;
 	private float[] sizeH;
 	private float[] sizeW;
 	private float[] posH;
@@ -90,10 +90,10 @@ public class LevelSelectScreen implements Screen {
 
 		if(gen){
 			changeTablesSize();
-			if(next.isPressed() & elapsedTime > 0.4f)
+			if(next.isPressed() & elapsedTime > 0.6f)
 				next();
 
-			if(previous.isPressed() & elapsedTime > 0.4f)
+			if(previous.isPressed() & elapsedTime > 0.6f)
 				previous();
 
 			if(next.isPressed() || previous.isPressed())
@@ -364,6 +364,8 @@ public class LevelSelectScreen implements Screen {
 	 */
 	private void addLabelsToTable(LabelStyle style, int index){
 		table = new Table();
+		table.setX(GameConstants.DISPLAY_WIDTH * 2);
+		table.setY(GameConstants.DISPLAY_HEIGHT * 2);
 		table.setBackground(skin.getDrawable("button_up"));
 		style.background = skin.getDrawable("empty");
 		if(index == 0){
