@@ -17,7 +17,7 @@ public class Level {
 		this.content = content;
 		this.gameId = gameId;
 		this.score = score;
-		this.duree = duree;
+		this.duree = (duree > 0)?score:Integer.MAX_VALUE;
 		this.gem = gem;
 		if(content != null)
 			findMaxScore();
@@ -57,7 +57,7 @@ public class Level {
 	}
 
 	public int getDuree() {
-		return duree;
+		return (duree == Integer.MAX_VALUE)?0:duree;
 	}
 
 	public String getGem() {
@@ -81,7 +81,8 @@ public class Level {
 		this.duree = Math.min(this.duree, duration);
 		this.gem = couleur;
 		findMaxScore();
-		World.getInstance().add(new Level(World.getInstance().getNumberOfLevels(), null, null, 0, 0, null));
+		if(World.getInstance().needsNewLevel())
+			World.getInstance().add(new Level(World.getInstance().getNumberOfLevels(), null, null, 0, 0, null));
 	}
 
 	public void setContent(String levelAsString) {

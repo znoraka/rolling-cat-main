@@ -120,13 +120,14 @@ public class GameScreen implements ScreenPausable{
 			updateCamPos();
 			mc.addTrackingPoint(delta, segment);
 			if(cat.isDone() && gem.getActions().size == 0){
+				SoundManager.gameMusicPlay(false);
+				SoundManager.winPlay();
 				gem.addAction(Actions.parallel(Actions.sequence(
 						Actions.delay(2),
 						new Action() {
 
 							@Override
 							public boolean act(float delta) {
-								SoundManager.winPlay();
 								done = true;
 								return true;
 							}
@@ -288,9 +289,9 @@ public class GameScreen implements ScreenPausable{
 		});
 		
 		if(level.getId() == 0)
-			firstBox = new FirstBoxHelper(sr,stage,mc,cat,this,box);		
-
-
+			firstBox = new FirstBoxHelper(sr,stage,mc,cat,this,box);	
+		
+		SoundManager.gameMusicPlay(true);
 	}
 
 	@Override
@@ -299,7 +300,7 @@ public class GameScreen implements ScreenPausable{
 
 	@Override
 	public void pause() {
-		//		LevelBuilder.writeLevel(stage);
+		dispose();
 	}
 
 	@Override
@@ -310,8 +311,7 @@ public class GameScreen implements ScreenPausable{
 	@Override
 	public void dispose() {
 		Gdx.app.log(RollingCat.LOG, "disposing...");
-		backgroundTexture.dispose();
-		sr.dispose();
+		SoundManager.gameMusicPlay(false);
 	}
 
 	public int getScore(){
@@ -345,10 +345,13 @@ public class GameScreen implements ScreenPausable{
 	}
 
 	private void handleElapsedTime(){
-		if(paused)
+		if(paused){
 			beginPause = System.currentTimeMillis();
+			SoundManager.gameMusicPause();
+		}
 		else{
 			elapsedTimeDuringPause += (System.currentTimeMillis() - beginPause);
+			SoundManager.gameMusicPlay(true);
 		}
 
 	}

@@ -1,12 +1,14 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation._password;
+import static fr.lirmm.smile.rollingcat.Localisation._username;
+import static fr.lirmm.smile.rollingcat.Localisation._wrong_info;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSettingsButton;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
-
-import static fr.lirmm.smile.rollingcat.Localisation.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -29,7 +31,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
-import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.SoundManager;
@@ -158,6 +159,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		stage.addActor(loginTextField);
 		stage.addActor(passwordTextField);
 		stage.addActor(table);
+		
 	}
 
 	@Override
