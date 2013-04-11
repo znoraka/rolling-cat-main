@@ -1,0 +1,40 @@
+
+carpet.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+g6957
+  rotate: false
+  xy: 1, 61
+  size: 384, 168
+  orig: 384, 168
+  offset: 0, 0
+  index: -1
+b3
+  rotate: false
+  xy: 1, 27
+  size: 47, 32
+  orig: 47, 32
+  offset: 0, 0
+  index: -1
+b4
+  rotate: false
+  xy: 387, 197
+  size: 35, 32
+  orig: 35, 32
+  offset: 0, 0
+  index: -1
+b1
+  rotate: false
+  xy: 1, 1
+  size: 37, 24
+  orig: 37, 24
+  offset: 0, 0
+  index: -1
+b2
+  rotate: false
+  xy: 50, 29
+  size: 29, 30
+  orig: 29, 30
+  offset: 0, 0
+  index: -1
