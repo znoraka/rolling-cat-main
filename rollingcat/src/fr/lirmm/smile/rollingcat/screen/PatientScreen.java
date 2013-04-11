@@ -87,6 +87,7 @@ public class PatientScreen implements Screen {
 		settings = getSettingsButton(this, game);
 		
 		patient.setNeedsAssessment(null);
+		InternetManager.needsAssessment(patient);
 		
 		tableLeft = new Table();
 		tableRight = new Table();
@@ -112,7 +113,6 @@ public class PatientScreen implements Screen {
 		play = new TextButton(localisation(_play), style);
 		play.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-		        InternetManager.newGameSession(Track.GAME, patient.getID());
 		        if(!World.getInstance().hasBeenGenerated())
 		        	InternetManager.getWorld(patient.getID());
 				game.setScreen(new LevelSelectScreen(game, patient));

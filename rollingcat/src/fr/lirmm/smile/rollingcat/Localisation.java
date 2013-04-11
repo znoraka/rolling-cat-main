@@ -61,10 +61,19 @@ public class Localisation {
 	public static String _tutorial = "tutorial";
 	public static String _welcome = "welcome";
 	public static String _box_point = "box_point";
-	public static String _task_point = "task_point";
 	public static String _coin_get = "coin_get";
 	public static String _gg = "gg";
 	public static String _fall = "fall";
+	public static String _task_point_1 = "task_point_1";
+	public static String _feather = "feather";
+	public static String _bone = "bone";
+	public static String _swatter = "swatter";
+	public static String _scissors = "scissors";
+	public static String _task_point_2 = "task_point_2";
+	public static String _dog = "dog";
+	public static String _wasp = "wasp";
+	public static String _cat = "cat";
+	public static String _carpet = "carpet";
 
 	
 	/**
@@ -104,7 +113,7 @@ public class Localisation {
 	/**
 	 * les fichiers de langue sont numérotés de 0 à n
 	 * avec leur correspondance en lettre dans un fichier Json 
-	 * exemple : 1:"English"
+	 * exemple  = 1:"English"
 	 * on parcours tous ces fichiers et crée une {@link List} des langues disponibles
 	 * @return un {@link List} des langues trouvées
 	 */

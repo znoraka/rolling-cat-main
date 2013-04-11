@@ -10,17 +10,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
+import fr.lirmm.smile.rollingcat.spine.Bone;
 
 public class Box extends Entity{
 
-	public static int BONE = 1;
-	public static int SPRING = 2;
-	public static int SWATTER = 3;
-	public static int FEATHER = 4;
-	public static int SCISSORS = 5;
-	public static int EMPTY = 0;
+	public static final int BONE = 1;
+	public static final int SPRING = 2;
+	public static final int SWATTER = 3;
+	public static final int FEATHER = 4;
+	public static final int SCISSORS = 5;
+	public static final int EMPTY = 0;
 		
 	private int item;
 	private TextureAtlas atlas;
@@ -92,6 +94,26 @@ public class Box extends Entity{
 			items.remove(0);
 		}
 		
+	}
+
+	public static String getItemName(int item) {
+		switch(item){
+		case(BONE): return Localisation._bone;
+		case(SWATTER): return Localisation._swatter;
+		case(FEATHER): return Localisation._feather;
+		case(SCISSORS): return Localisation._scissors;
+		}
+		return "";
+	}
+
+	public static String getRelatedEntity(int item) {
+		switch(item){
+		case(BONE): return Localisation._dog;
+		case(SWATTER): return Localisation._wasp;
+		case(FEATHER): return Localisation._cat;
+		case(SCISSORS): return Localisation._carpet;
+		}
+		return "";
 	}
 
 }
