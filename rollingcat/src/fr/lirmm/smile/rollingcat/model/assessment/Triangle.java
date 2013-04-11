@@ -13,7 +13,6 @@ public class Triangle {
 	private Vector2 progression;
 	private float degree;
 	private int id;
-	private float color;
 	private int percentage;
 	private double max;
 
@@ -40,10 +39,10 @@ public class Triangle {
 	 */
 	public void render(ShapeRenderer sr, AssessmentScreen as){
 		if(as.getSelected() == id)
-			sr.setColor(0, color - 1f, 1f, 1);
+			sr.setColor(0, 0.22f, 1f, 1);
 		
 		else
-			sr.setColor(0, color, 1, 1);
+			sr.setColor(Color.GRAY);
 		
 		sr.begin(ShapeType.Filled);
 		sr.triangle(
@@ -77,16 +76,8 @@ public class Triangle {
 	public void setProgression(float x, float y, AssessmentScreen as){
 		Vector2 a = new Vector2(x - GameConstants.DISPLAY_WIDTH / 2, y);
 		
-		if(a.len() < 100)
-			as.setSelected(-1);
-	
 		if(a.angle() <= direct.cpy().rotate(degree / 2).angle() & (a.angle() >= direct.cpy().rotate(-degree / 2).angle() | direct.angle() < degree)){
-			
-			color = 0.4f;
-			
-			if(as.getSelected() == -1 && a.len() > 100)
-				as.setSelected(this.id);
-			
+
 			if(a.len() > progression.len() && as.getSelected() == id){
 				progression.set(a);
 				progression.setAngle(direct.angle());
@@ -94,9 +85,6 @@ public class Triangle {
 			percentage = (int) ((Math.abs(progression.len() / max) * 100 < 100f)?(Math.abs(progression.len()) / max) * 100:100);
 
 		}
-		else
-			color = 0.78f;
-	
 	}
 
 	public int getAngle() {

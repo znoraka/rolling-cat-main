@@ -25,6 +25,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -79,6 +81,7 @@ public class GameScreen implements ScreenPausable{
 	private TextButton resume, quit;
 	private long beginPause;
 	private FirstBoxHelper  firstBox;
+	private CheckBox music;
 
 	public static Vector2 gold = new Vector2(GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT * 0.92f);
 	public static Vector2 silver = new Vector2(GameConstants.BLOCK_WIDTH * 3, GameConstants.DISPLAY_HEIGHT * 0.92f);
@@ -248,9 +251,32 @@ public class GameScreen implements ScreenPausable{
 					game.setScreen(new PatientScreen(game, patient));
 			}
 		});
-
+		
+		CheckBoxStyle cbs = new CheckBoxStyle();
+		cbs.checkboxOff = getSkin().getDrawable("unchecked");
+		cbs.checkboxOn = getSkin().getDrawable("checked");
+		cbs.checkboxOff.setMinHeight(GameConstants.BLOCK_HEIGHT * 0.8f);
+		cbs.checkboxOff.setMinWidth(GameConstants.BLOCK_WIDTH * 0.8f);
+		cbs.checkboxOn.setMinHeight(GameConstants.BLOCK_HEIGHT * 0.8f);
+		cbs.checkboxOn.setMinWidth(GameConstants.BLOCK_WIDTH * 0.8f);
+		cbs.font = font;
+		cbs.fontColor = Color.BLACK;
+		cbs.down = getSkin().getDrawable("button_up");
+		cbs.up = getSkin().getDrawable("button_up");
+		music = new CheckBox("musique", cbs);
+		music.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				if(music.isChecked())
+					SoundManager.gameMusicPlay(true);
+				else
+					SoundManager.gameMusicPlay(false);
+			}
+		});
+		
 		pauseTable = new Table();
 		pauseTable.add(resume).pad(GameConstants.BLOCK_WIDTH * 0.5f);
+		pauseTable.row();
+		pauseTable.add(music).pad(GameConstants.BLOCK_WIDTH * 0.5f);
 		pauseTable.row();
 		pauseTable.add(quit).pad(GameConstants.BLOCK_WIDTH * 0.5f);
 		pauseStage.addActor(pauseTable);
@@ -292,6 +318,7 @@ public class GameScreen implements ScreenPausable{
 			firstBox = new FirstBoxHelper(sr,stage,mc,cat,this,box);	
 		
 		SoundManager.gameMusicPlay(true);
+		music.setChecked(true);
 	}
 
 	@Override
@@ -347,11 +374,9 @@ public class GameScreen implements ScreenPausable{
 	private void handleElapsedTime(){
 		if(paused){
 			beginPause = System.currentTimeMillis();
-			SoundManager.gameMusicPause();
 		}
 		else{
 			elapsedTimeDuringPause += (System.currentTimeMillis() - beginPause);
-			SoundManager.gameMusicPlay(true);
 		}
 
 	}
