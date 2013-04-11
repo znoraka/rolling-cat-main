@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -48,6 +49,7 @@ public class MouseCursorGame implements InputProcessor{
 	private float elapsedTime;
 	private OrderedMap<String, String> parameters;
 	private boolean isTrigger;
+	private Rectangle bounds;
 	
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
 		batch = stage.getSpriteBatch();
@@ -63,6 +65,7 @@ public class MouseCursorGame implements InputProcessor{
 		elapsedTime = 0;
 		parameters = new OrderedMap<String, String>();
 		standTimer = 0;
+		bounds = new Rectangle();
 	}
 
 	/**
@@ -194,7 +197,6 @@ public class MouseCursorGame implements InputProcessor{
 	 */
 	public void render(ShapeRenderer sr){
 		sr.begin(ShapeType.Filled);
-		sr.rect(x, y, 10, 10);
 		if(hoverTimer > 0)
 		{	
 			sr.setColor(Color.RED);
@@ -202,8 +204,6 @@ public class MouseCursorGame implements InputProcessor{
 			sr.setColor(Color.BLUE);
 			sr.rect(x, y, 70*hoverTimer, 20);
 		}
-		sr.end();
-		sr.begin(ShapeType.Filled);
 		if (standTimer > GameConstants.TIMEOUT / 2){
 			sr.setColor(Color.GREEN);
 			sr.rect(cat.getX(), cat.getY(), 70, 20);
@@ -211,20 +211,24 @@ public class MouseCursorGame implements InputProcessor{
 			sr.rect(cat.getX(), cat.getY(), 70*(standTimer - GameConstants.TIMEOUT / 2) / GameConstants.TIMEOUT * 2, 20);
 		}
 		sr.end();
+		
+		sr.begin(ShapeType.Line);
+		sr.rect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+		sr.end();
 
 		batch.setProjectionMatrix(stage.getCamera().combined);
 		batch.begin();
 
 		if(item == Box.BONE)
-			batch.draw(atlas.findRegion("bone"), x, y, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
+			batch.draw(atlas.findRegion("bone"), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
 		else if(item == Box.FEATHER)
-			batch.draw(atlas.findRegion("feather"), x, y, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
+			batch.draw(atlas.findRegion("feather"), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
 		else if(item == Box.SPRING)
-			batch.draw(atlas.findRegion("spring"), x, y, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
+			batch.draw(atlas.findRegion("spring"), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
 		else if(item == Box.SWATTER)
-			batch.draw(atlas.findRegion("swatter"), x, y, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
+			batch.draw(atlas.findRegion("swatter"), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
 		else if(item == Box.SCISSORS)
-			batch.draw(atlas.findRegion("scissors"), x, y, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
+			batch.draw(atlas.findRegion("scissors"), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT * 1.5f, 1, 1, 0);
 		batch.end();
 
 	}
@@ -298,6 +302,7 @@ public class MouseCursorGame implements InputProcessor{
 		return true;
 	}
 
+
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		if(screenX > GameConstants.DISPLAY_WIDTH)
@@ -345,14 +350,18 @@ public class MouseCursorGame implements InputProcessor{
 
 
 	public boolean isTrigger()
-	{
+	{	
 		return isTrigger;
 	}
-
+	
+//	private void updateBounds() {
+//		bounds.set(x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, GameConstants.BLOCK_WIDTH * 1.5f, GameConstants.BLOCK_HEIGHT * 1.5f);
+//	}
+	
 	public Vector2 getCoordTasks()
 	{
 		if(item == Box.BONE || item == Box.FEATHER)
-		{
+		{	
 			return new Vector2(cat.getX() + GameConstants.BLOCK_WIDTH,cat.getY());
 		}
 		else if(item == Box.SCISSORS)

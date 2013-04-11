@@ -45,6 +45,7 @@ import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
+import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.model.world.World;
 import fr.lirmm.smile.rollingcat.utils.Polynome;
 import fr.lirmm.smile.rollingcat.utils.WorldBuilder;
@@ -202,6 +203,7 @@ public class LevelSelectScreen implements Screen {
 	@Override
 	public void show() {
 		if(gen == true){
+	        InternetManager.newGameSession(Track.GAME, patient.getID());
 			font = getBigFont();
 			stage = getStage();
 			skin = getSkin();

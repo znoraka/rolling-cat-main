@@ -4,8 +4,7 @@ import static fr.lirmm.smile.rollingcat.Localisation._box_point;
 import static fr.lirmm.smile.rollingcat.Localisation._coin_get;
 import static fr.lirmm.smile.rollingcat.Localisation._fall;
 import static fr.lirmm.smile.rollingcat.Localisation._gg;
-import static fr.lirmm.smile.rollingcat.Localisation._task_point;
-import static fr.lirmm.smile.rollingcat.Localisation._welcome;
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 
 import java.util.ArrayList;
@@ -130,8 +129,8 @@ public class FirstBoxHelper
 
 			List<Entity> tasks = this.getNextsTasks();
 			if(!tasks.isEmpty())
-			{
-				label.setText(localisation(_task_point));
+			{	
+				label.setText(localisation(_task_point_1) + " " + localisation(Box.getItemName(MouseCursorGame.getItem())) + " " + localisation(_task_point_2) + " " + localisation(Box.getRelatedEntity(MouseCursorGame.getItem())));
 				first = false;
 			}
 		}
