@@ -19,17 +19,17 @@ public class MouseCursorAssessment implements InputProcessor{
 	private Map<Integer, float []> map;
 	private float elapsedTime;
 	private boolean start;
-	private boolean isDone;
+	private boolean paused;
 	private OrderedMap<String, String> parameters;
 	private boolean inArea;
 	
 	public MouseCursorAssessment(){
 		x = GameConstants.DISPLAY_WIDTH / 2;
-		y = 101;
+		y = GameConstants.DISPLAY_HEIGHT / 2;
 		map = new HashMap<Integer, float []>();
 		elapsedTime = 0;
 		start = false;
-		isDone = false;
+		paused = false;
 		parameters = new OrderedMap<String, String>();
 		inArea = false;
 		parameters = new OrderedMap<String, String>();
@@ -47,15 +47,15 @@ public class MouseCursorAssessment implements InputProcessor{
 
 	@Override
 	public boolean keyUp(int keycode) {
-		if(keycode == Keys.ENTER)
-			isDone = true;
+		if(keycode == Keys.ESCAPE)
+			paused = !paused;
 		return true;
 	}
 
 	@Override
 	public boolean keyTyped(char character) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -147,8 +147,8 @@ public class MouseCursorAssessment implements InputProcessor{
 		return this.map;
 	}
 	
-	public boolean isDone(){
-		return isDone;
+	public boolean isPaused(){
+		return paused;
 	}
 
 	public float getElapsedTime() {
@@ -174,9 +174,14 @@ public class MouseCursorAssessment implements InputProcessor{
 		}
 	}
 
+	/**
+	 * 
+	 * @return true si le curseur de la souris vient d'entrer dans la zone centrale
+	 */
 	private boolean enteringArea() {
 		if(isInArea() & !inArea){
 			inArea = true;
+			stop();
 			return true;
 		}
 		else if(!isInArea())
@@ -185,8 +190,31 @@ public class MouseCursorAssessment implements InputProcessor{
 		return false;
 	}
 	
+	/**
+	 * 
+	 * @return true si le curseur de la souris est à l'interieur de la zone centrale
+	 */
 	public boolean isInArea(){
 		return (Math.sqrt((x - GameConstants.DISPLAY_WIDTH / 2)*(x - GameConstants.DISPLAY_WIDTH / 2) + y*y) < 100);
+	}
+	
+	/**
+	 * arrete le timer
+	 */
+	public void stop() {
+		start = false;
+	}
+	
+	/**
+	 * enleve la pause
+	 */
+	public void unPause() {
+		paused = false;
+		
+	}
+
+	public void pause() {
+		paused = true;
 	}
 
 }
