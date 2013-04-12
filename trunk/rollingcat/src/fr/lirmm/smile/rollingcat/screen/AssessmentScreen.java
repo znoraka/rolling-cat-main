@@ -1,5 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation._assessment_;
 import static fr.lirmm.smile.rollingcat.Localisation._quit;
 import static fr.lirmm.smile.rollingcat.Localisation._resume;
 import static fr.lirmm.smile.rollingcat.Localisation._upload;
@@ -7,7 +8,7 @@ import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getShapeRenderer;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import java.util.ArrayList;
 
@@ -17,10 +18,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -54,7 +58,10 @@ public class AssessmentScreen implements Screen {
 	private BitmapFont font;
 	private InputMultiplexer multiplexer;
 	private Table pauseTable;
-	private Stage pauseStage;
+	private Stage pauseStage, stage;
+	private int help;
+	private Label label;
+	private SpriteBatch batch;
 
 
 	public AssessmentScreen(RollingCat game, Patient patient){
@@ -75,7 +82,7 @@ public class AssessmentScreen implements Screen {
 		
 		sr.begin(ShapeType.Filled);
 		if(mc.isStarted())
-			sr.setColor(Color.MAGENTA);
+			sr.setColor(Color.WHITE);
 		else
 			sr.setColor(Color.DARK_GRAY);
 		sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100);
@@ -103,6 +110,10 @@ public class AssessmentScreen implements Screen {
 					timeout += delta;
 				else{
 					selected++;
+					if(help == 1)
+						help = 2;
+					if(help == 3)
+						help = 4;
 					timeout = 0;
 					waitingToEnterInArea = true;
 					mc.stop();
@@ -112,16 +123,25 @@ public class AssessmentScreen implements Screen {
 				timeout = 0;
 			}
 
-			if(!mc.isInArea())
+			if(!mc.isInArea()){
+				if(help == 2)
+					help = 3;
+				
+				if(help == 4)
+					help = 5;
 				waitingToEnterInArea = false;
+			}
+			
+			setLabelTextAndPosition();
+			
+			stage.draw();
+			
 		}
 		else
 		{
 			pauseStage.act(delta);
 			pauseStage.draw();
 		}
-		
-
 	}
 	@Override
 	public void resize(int width, int height) {
@@ -132,8 +152,11 @@ public class AssessmentScreen implements Screen {
 		sr = getShapeRenderer();
 		font = getBigFont();
 		pauseStage = getStage();
+		stage = getStage();
+		batch = getSpriteBatch();
 		EventManager.clear();
 		duration = 0;
+		help = 1;
 		done = false;
 		triangles = VectorManager.getVectorsFromAreas(9);
 		mc = new MouseCursorAssessment();
@@ -191,7 +214,13 @@ public class AssessmentScreen implements Screen {
 		pauseTable.setHeight(GameConstants.DISPLAY_HEIGHT);
 
 		Gdx.input.setInputProcessor(multiplexer);
-
+		
+		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
+		labelStyle.background = getSkin().getDrawable("empty");
+		
+		label = new Label(localisation(_assessment_ + help), labelStyle);
+		stage.addActor(label);
+		setLabelTextAndPosition();
 	}
 
 	@Override
@@ -222,5 +251,36 @@ public class AssessmentScreen implements Screen {
 	public boolean canStart(){
 		return mc.isInArea();
 	}
+	
+	private void setLabelTextAndPosition(){
+		String s = localisation(_assessment_ + help);
+		String temp[] = s.split(" ");
+		s = "";
+		int length = 0;
+		
+		for (String string : temp) {
+			s += " " + string;
+			length += string.length();
+			if(length > 20){
+				s += "\n";
+				length = 0;
+			}
+		}
+		label.setText(s);
+		label.setY(GameConstants.DISPLAY_HEIGHT * 0.85f);
+		label.setX(GameConstants.DISPLAY_WIDTH * 0.5f - 20 * 6);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

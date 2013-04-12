@@ -107,7 +107,7 @@ public class GameScreen implements ScreenPausable{
 			mc.updateStandTimer();
 			cat.move(stage);
 			batch.begin();
-			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+//			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 			table.draw(batch, 1);
 			batch.end();
 			stage.act(delta);
@@ -223,7 +223,7 @@ public class GameScreen implements ScreenPausable{
 		silverImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.SILVER));
 		bronzeImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.BRONZE));
 
-		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
+		LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
 		labelStyle.background = getSkin().getDrawable("empty");
 
 		goldLabel = new Label("", labelStyle);

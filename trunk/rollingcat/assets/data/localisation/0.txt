@@ -51,8 +51,13 @@
 	wasp: "la guêpe",
 	cat: "le chat",
 	carpet: "le tapis",
-	coin_get: "Vous avez gagné une piece.\n Ces pieces vous permettent \n d'augmenter votre score",
+	coin_get: "Vous avez gagné une piece.\n Ces pieces vous permettent \n d'augmenter votre scoore",
 	gg: "Bien joué",
-	fall: "Oups, ce n'est pas grave vous pourrez bientot recommencer"
-	
+	fall: "Oups, ce n'est pas grave vous pourrez bientot recommencer",
+	assessment_1: "Placez votre curseur dans la zone rouge jusqu'à ce qu'elle devienne entièrement blanche",
+	assessment_2: "Vous venez de selectionner la première zone, la zone colorée en bleu. Essayez de la recouvrir avec un maximum de vert",
+	assessment_3: "Lorsque vous êtes à votre maximum, placez votre curseur dans la zone rouge jusqu'à ce qu'elle devienne entièrement rose",
+	assessment_4: "Vous avez sélectionné la zone suivante, essayez à nouveau de la recouvrir de vert",
+	assessment_5: "Répetez l'opération jusqu'à avoir recouvert toutes les zones",
+	assessment_6: "Vous avez complété toutes les zones, retournez dans la zone rouge"
 }
