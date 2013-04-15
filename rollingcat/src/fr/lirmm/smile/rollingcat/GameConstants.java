@@ -1,5 +1,6 @@
 package fr.lirmm.smile.rollingcat;
 
+
 public class GameConstants {
 	
 	/**
@@ -26,19 +27,19 @@ public class GameConstants {
 	
 	public static final String FONT_LOGIN = "data/font.fnt";
 	
-	public static final float SCALE = 1.0f;
 	
-	public static int DISPLAY_WIDTH = (int) (800 * SCALE);
-	public static int DISPLAY_HEIGHT = (int) (640 * SCALE);
-	
-	public static final int COLS = 16;
-	public static final int ROWS = 14;
-	
-	public static final float BLOCK_WIDTH = DISPLAY_WIDTH / (COLS+2);
-	public static final float BLOCK_HEIGHT = DISPLAY_HEIGHT / (ROWS + 2);
-	
-	public static final int VIEWPORT_WIDTH = (int) (BLOCK_WIDTH * COLS);
-	public static final int VIEWPORT_HEIGHT = (int) (BLOCK_HEIGHT * ROWS);
+	/**
+	 * à initialiser avant de lancer le jeu
+	 */
+	public static float SCALE = 1.0f;
+	public static int DISPLAY_WIDTH;
+	public static int DISPLAY_HEIGHT;
+	public static int COLS;
+	public static int ROWS;
+	public static float BLOCK_WIDTH;
+	public static float BLOCK_HEIGHT;
+	public static int VIEWPORT_WIDTH;
+	public static int VIEWPORT_HEIGHT;
 	
 	public static final float SPEED = 0.25f;
 	public static final float ENTITY_SPEED = 3f;
@@ -66,6 +67,28 @@ public class GameConstants {
 	public static int numberOfRows = 20;
 	public static int totalVolume = 20;
 	public static int volumePerLevel = 5;
+	public static boolean area_1 = true;
+	public static boolean area_2 = true;
+	public static boolean area_3 = true;
+	public static boolean area_4 = true;
 	
-	
+	/*
+	 * initialise la taille de la fenetre et des entités
+	 */
+	public static void init(int width, int heigth){
+		DISPLAY_WIDTH = width;
+		DISPLAY_HEIGHT = heigth;
+		
+		COLS = 16;
+		ROWS = 14;
+		
+		BLOCK_WIDTH = DISPLAY_WIDTH / (COLS+2);
+		BLOCK_HEIGHT = DISPLAY_HEIGHT / (ROWS + 2);
+		
+		VIEWPORT_WIDTH = (int) (BLOCK_WIDTH * COLS);
+		VIEWPORT_HEIGHT = (int) (BLOCK_HEIGHT * ROWS);
+		
+		SCALE = (width / 800f);
+		
+	}
 }

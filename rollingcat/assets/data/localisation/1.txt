@@ -53,5 +53,12 @@
 	carpet: "the carpet",
 	coin_get: "You picked up a coin\n These coins increase \n your score",
 	gg: "Well played",
-	fall: "Woops! But it's ok, you will start over soon"
+	fall: "Woops! But it's ok, you will start over soon",
+	assessment_1: "Place your cursor in the red area until it becomes complitely white",
+	assessment_2: "You selected the first area, the blue one. Try to fill it up with as much green as possible",
+	assessment_3: "Once you reached your maximum, place your cursor in the red area until it becomes complitely white",
+	assessment_4: "You selected the next area, try to fill it up with as much green as possible",
+	assessment_5: "Repeat until you filled all the areas",
+	assessment_6: "Once you filled all the areas, go back to the red area",
+	needsAtLeastOneArea: "At least one area has to be checked"
 }

@@ -80,6 +80,7 @@ public class Localisation {
 	public static String _assessment_3 = "assessment_3";
 	public static String _assessment_4 = "assessment_4";
 	public static String _assessment_5 = "assessment_5";
+	public static String _needsAtLeastOneArea = "needsAtLeastOneArea";
 	
 	/**
 	 * charge un langage depuis un fichier de langage

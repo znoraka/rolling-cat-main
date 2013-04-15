@@ -169,15 +169,17 @@ public class GameScreen implements ScreenPausable{
 	 * translate la camera si le chat est au bout de l'ecran
 	 */
 	private void updateCamPos() {
-		if(stage.getCamera().position.x + GameConstants.DISPLAY_WIDTH / 2 - GameConstants.BLOCK_WIDTH * 3 < cat.getX()){
-			box.emptyAfterNotMoving(segment);
-			if(!MouseCursorGame.isHoldingItem())
-				box.fill();
-			mc.setX(mc.getX() + GameConstants.VIEWPORT_WIDTH);
-			segment++;
-			stage.getCamera().translate(GameConstants.VIEWPORT_WIDTH, 0, 0);
-			box.setX(box.getX() + GameConstants.VIEWPORT_WIDTH);
-		}
+		stage.getCamera().position.set(cat.getX(), cat.getY(), 0);
+		
+//		if(stage.getCamera().position.x + GameConstants.DISPLAY_WIDTH / 2 - GameConstants.BLOCK_WIDTH * 3 < cat.getX()){
+//			box.emptyAfterNotMoving(segment);
+//			if(!MouseCursorGame.isHoldingItem())
+//				box.fill();
+//			mc.setX(mc.getX() + GameConstants.VIEWPORT_WIDTH);
+//			segment++;
+////			stage.getCamera().translate(GameConstants.VIEWPORT_WIDTH, 0, 0);
+//			box.setX(box.getX() + GameConstants.VIEWPORT_WIDTH);
+//		}
 
 	}
 
@@ -247,8 +249,10 @@ public class GameScreen implements ScreenPausable{
 		quit = new TextButton(localisation(_quit), style);
 		quit.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				if(paused)
+				if(paused){
 					game.setScreen(new PatientScreen(game, patient));
+					SoundManager.gameMusicPlay(false);
+				}
 			}
 		});
 		
@@ -309,6 +313,12 @@ public class GameScreen implements ScreenPausable{
 				}
 				if(keycode == Keys.SPACE)
 					mc.fall();
+				
+				if(keycode == Keys.UP){
+					cat.setY(GameConstants.DISPLAY_HEIGHT * 2);
+					cat.setState(Cat.FALLING);
+					cat.getActions().clear();
+				}
 				return true;
 			}
 
