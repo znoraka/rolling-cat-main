@@ -27,58 +27,61 @@ public class LevelBuilder {
 	private static ArrayList<Integer[]> items;
 	private static int segment = 0;
 
-//	private static String testRandomReal()
-//	{
-//		int tabSize[] = {3,3,2,4,6,5,6,7};
-//		int size = 0;
-//		for(int i = 0 ; i < tabSize.length ; i++)
-//		{
-//			size+=tabSize[i];
-//		}
-//
-//		int tabX[] = new int[size];
-//		int tabY[] = new int[size];
-//		int index = 0;
-//		int minX = 5;
-//		int x;
-//		int y;
-//		for(int j = 0 ; j < tabSize.length ; j++)
-//		{
-//			minX = MainConstant.WIDTH * j + 5;
-//			for(int k = 0 ; k < tabSize[j] ; k++)
-//			{
-//				x = (int)(Math.random() * (MainConstant.WIDTH-2)) + minX;
-//				if(x == MainConstant.WIDTH * tabSize.length)
-//				{
-//					x = MainConstant.WIDTH * tabSize.length-1;
-//				}
-//
-//				y = (int)(Math.random()*(MainConstant.HEIGHT_MAX - 3)) + 3;
-//				tabX[index+k] = x;
-//				tabY[index+k] = y;
-//			}
-//			index+=tabSize[j];
-//		}
-//		return LevelFactory.getStringLevelGeneratedByMCTS(tabX, tabY, tabSize);
-//	}
+	//	private static String testRandomReal()
+	//	{
+	//		int tabSize[] = {3,3,2,4,6,5,6,7};
+	//		int size = 0;
+	//		for(int i = 0 ; i < tabSize.length ; i++)
+	//		{
+	//			size+=tabSize[i];
+	//		}
+	//
+	//		int tabX[] = new int[size];
+	//		int tabY[] = new int[size];
+	//		int index = 0;
+	//		int minX = 5;
+	//		int x;
+	//		int y;
+	//		for(int j = 0 ; j < tabSize.length ; j++)
+	//		{
+	//			minX = MainConstant.WIDTH * j + 5;
+	//			for(int k = 0 ; k < tabSize[j] ; k++)
+	//			{
+	//				x = (int)(Math.random() * (MainConstant.WIDTH-2)) + minX;
+	//				if(x == MainConstant.WIDTH * tabSize.length)
+	//				{
+	//					x = MainConstant.WIDTH * tabSize.length-1;
+	//				}
+	//
+	//				y = (int)(Math.random()*(MainConstant.HEIGHT_MAX - 3)) + 3;
+	//				tabX[index+k] = x;
+	//				tabY[index+k] = y;
+	//			}
+	//			index+=tabSize[j];
+	//		}
+	//		return LevelFactory.getStringLevelGeneratedByMCTS(tabX, tabY, tabSize);
+	//	}
 
-	
+
 	/**
 	 * ajoute les acteurs au stage
 	 * @param s la string du niveau
 	 */
 	public static Stage build(String s) {
-		Stage stage = getStage();
+		Stage stage = new Stage(GameConstants.DISPLAY_WIDTH * 8, GameConstants.DISPLAY_HEIGHT, true);
 		items = new ArrayList<Integer[]>();
 		segment = 0;
 		s = s.replace("\"", "");
-//		Gdx.app.log(RollingCat.LOG, "getting random level");
-//		s = testRandomReal();
+		//		Gdx.app.log(RollingCat.LOG, "getting random level");
+		//		s = testRandomReal();
 		Gdx.app.log(RollingCat.LOG, s);
 		String tab [] = s.split("/");
 		String[] subtab;
 		float x;
 		float y;
+		int decalage = 0;
+
+		//		stage.addActor(new GroundBlock(-10, -10));
 
 		for (int i = 0; i < tab.length; i++) {
 			subtab = tab[i].split(";");
@@ -87,11 +90,11 @@ public class LevelBuilder {
 
 			if(subtab[0].equals("cat"))
 			{
-				stage.addActor(new Cat(x, y));
+				stage.addActor(new Cat(x, y + decalage));
 			}
 			else if(subtab[0].equals("wasp"))
 			{
-				stage.addActor(new Wasp(x, y));
+				stage.addActor(new Wasp(x, y + decalage));
 				if(isFirstOfScreen(x))
 				{
 					items.add(new Integer []{Box.EMPTY, segment});
@@ -100,7 +103,7 @@ public class LevelBuilder {
 			}
 			else if(subtab[0].equals("dog"))
 			{
-				stage.addActor(new Dog(x, y));
+				stage.addActor(new Dog(x, y + decalage));
 				if(isFirstOfScreen(x))
 				{
 					items.add(new Integer []{Box.EMPTY, segment});
@@ -109,29 +112,29 @@ public class LevelBuilder {
 			}
 			else if(subtab[0].equals("groundBlock"))
 			{
-				stage.getActors().insert(1, new GroundBlock(x, y));
-//				stage.addActor(new GroundBlock(x, y));
+				stage.getActors().insert(1, new GroundBlock(x, y + decalage));
+				//				stage.addActor(new GroundBlock(x, y + decalage));
 			}
-//			else if(subtab[0].equals("empty"))
-//			{
-//				//	stage.addActor(new StopBlock(x, y));
-//				directions.add(new StopBlock(x, y));
-//			}
+			//			else if(subtab[0].equals("empty + decalage"))
+			//			{
+			//				//	stage.addActor(new StopBlock(x, y + decalage));
+			//				directions.add(new StopBlock(x, y + decalage));
+			//			}
 			else if(subtab[0].equals("bronze_coin"))
 			{
-				stage.addActor(new Coin(x, y, Coin.BRONZE));
+				stage.addActor(new Coin(x, y + decalage, Coin.BRONZE));
 			}
 			else if(subtab[0].equals("silver_coin"))
 			{
-				stage.addActor(new Coin(x, y, Coin.SILVER));
+				stage.addActor(new Coin(x, y + decalage, Coin.SILVER));
 			}
 			else if(subtab[0].equals("gold_coin"))
 			{
-				stage.addActor(new Coin(x, y, Coin.GOLD));
+				stage.addActor(new Coin(x, y + decalage, Coin.GOLD));
 			}
 			else if(subtab[0].equals("carpet"))
 			{
-				stage.addActor(new Carpet(x, y));
+				stage.addActor(new Carpet(x, y + decalage));
 				if(isFirstOfScreen(x))
 				{
 					items.add(new Integer []{Box.EMPTY, segment});
@@ -140,40 +143,42 @@ public class LevelBuilder {
 			}
 			else if(subtab[0].equals("fan"))
 			{
-				stage.addActor(new Fan(x,y));
+				stage.addActor(new Fan(x,y + decalage));
 			}
 			else if(subtab[0].equals("door_left"))
 			{	
 				String [] temp = tab[i+1].split(";");
 				float nextX = Float.valueOf(temp[1]);
 				float nextY = Float.valueOf(temp[2]);
-				stage.addActor(new Door(x,y, Door.LEFT, nextX, nextY));
+				stage.addActor(new Door(x,y + decalage, Door.LEFT, nextX, nextY));
 			}
 			else if(subtab[0].equals("door_right"))
 			{
-				stage.addActor(new Door(x,y, Door.RIGHT, 0, 0));
+				stage.addActor(new Door(x,y + decalage, Door.RIGHT, 0, 0));
 			}
 			else if(subtab[0].equals("gap"))
 			{
-				stage.addActor(new Gap(x, y));
+				stage.addActor(new Gap(x, y + decalage));
 				if(isFirstOfScreen(x))
 				{
 					items.add(new Integer []{Box.EMPTY, segment});
 				}
 				items.add(new Integer []{Box.FEATHER, segment});
 			}
-			else if(subtab[0].equals("target"))
-				stage.addActor(new Target(x, y));
+			else if(subtab[0].equals("target")){
+				stage.addActor(new Target(x, y + decalage));
+				decalage = GameConstants.ROWS + 2;
+			}
 
-			Gdx.app.log(RollingCat.LOG, "new "+subtab[0]+ " added in " + x + ", " + y + " !");
+			Gdx.app.log(RollingCat.LOG, "new "+subtab[0]+ " added in " + x + ", " + y + decalage + " !");
 		}
-		
-		
+
+
 		Gdx.app.log(RollingCat.LOG, "building done " + tab.length + " elements added");
 		//		stage.addActor(new Cat(10, 10));
 		//		stage.addActor(new Dog(5, 5));
 		items.add(new Integer []{Box.EMPTY, segment});
-//		((Box)stage.getActors().get(1)).setItems(items);
+		//		((Box)stage.getActors().get(1)).setItems(items);
 		return stage;
 	}
 

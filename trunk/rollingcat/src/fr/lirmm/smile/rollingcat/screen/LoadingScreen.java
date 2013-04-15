@@ -1,14 +1,17 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import java.util.List;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
@@ -28,6 +31,10 @@ public class LoadingScreen implements Screen {
 	private String levelAsString;
 	private Level level;
 	private List<String> listOfGem;
+	private float elapsedTime;
+	private ShapeRenderer sr;
+	private boolean building;
+	private int time;
 
 	public LoadingScreen(RollingCat game, Patient patient, Level level, List<String> listOfGem){
 		this.game = game;
@@ -38,18 +45,38 @@ public class LoadingScreen implements Screen {
 	
 	@Override
 	public void render(float delta) {
+		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		if(elapsedTime < time)
+			elapsedTime += delta;
+
 		batch.begin();
 		batch.draw(texture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.end();
 		
+		sr.setColor(Color.GREEN);
+		sr.begin(ShapeType.Filled);
+		sr.rect(GameConstants.DISPLAY_WIDTH * 0.1f, GameConstants.DISPLAY_HEIGHT * 0.1f, GameConstants.DISPLAY_WIDTH * 0.8f * elapsedTime / time, GameConstants.BLOCK_HEIGHT);
+		sr.end();
+		
+		sr.setColor(Color.BLACK);
+		sr.begin(ShapeType.Line);
+		sr.rect(GameConstants.DISPLAY_WIDTH * 0.1f, GameConstants.DISPLAY_HEIGHT * 0.1f, GameConstants.DISPLAY_WIDTH * 0.8f, GameConstants.BLOCK_HEIGHT);
+		sr.end();
+		
 		levelAsString = (level.getContent() == null)?InternetManager.getLevel():level.getContent();
 
-		if(levelAsString != null)
+		if(levelAsString != null & !building)
 		{
 			this.stage = LevelBuilder.build(levelAsString);
 			level.setContent(levelAsString);
-			game.setScreen(new GameScreen(game, patient, stage, level, listOfGem));
+			building = true;
 		}
+		
+		if(levelAsString != null & elapsedTime > time)
+			game.setScreen(new GameScreen(game, patient, stage, level, listOfGem));
+		
 	}
 
 	@Override
@@ -60,12 +87,17 @@ public class LoadingScreen implements Screen {
 
 	@Override
 	public void show() {
+		batch = getSpriteBatch();
+		sr = getShapeRenderer();
+		
 		if(level.getContent() == null)
 			InternetManager.fetchLevel(patient.getID(), level.getId()); 
 		else
 			levelAsString = level.getContent();
-		texture = new Texture("data/loading.png");
-		batch = getSpriteBatch();
+		texture = new Texture("data/load.png");
+		elapsedTime = 0;
+		building = false;
+		time = 5;
 	}
 
 	@Override

@@ -59,5 +59,6 @@
 	assessment_3: "Lorsque vous êtes à votre maximum, placez votre curseur dans la zone rouge jusqu'à ce qu'elle devienne entièrement rose",
 	assessment_4: "Vous avez sélectionné la zone suivante, essayez à nouveau de la recouvrir de vert",
 	assessment_5: "Répetez l'opération jusqu'à avoir recouvert toutes les zones",
-	assessment_6: "Vous avez complété toutes les zones, retournez dans la zone rouge"
+	assessment_6: "Une fois que vous avez complété toutes les zones, retournez dans la zone rouge",
+	needsAtLeastOneArea: "Impossible de desélectionner toutes les zones"
 }

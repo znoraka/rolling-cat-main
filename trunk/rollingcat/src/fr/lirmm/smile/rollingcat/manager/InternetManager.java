@@ -1,10 +1,22 @@
 package fr.lirmm.smile.rollingcat.manager;
 
+import static fr.lirmm.smile.rollingcat.Localisation._settings;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
@@ -16,6 +28,7 @@ import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.model.world.World;
 import fr.lirmm.smile.rollingcat.screen.LoginScreen;
+import fr.lirmm.smile.rollingcat.screen.TrackingRecapScreen;
 
 public class InternetManager{
 
@@ -28,6 +41,8 @@ public class InternetManager{
 	public static String value;
 	private static String sessionid;
 	private static String world;
+	private static TextButton okButton;
+	private static int sent = 0;
 	
 	
 	/**
@@ -336,6 +351,8 @@ public class InternetManager{
 	 */
 	public static void sendEvents(String[] events){
 		Gdx.app.log(RollingCat.LOG, "preparing send list event request...");
+		okButton.setVisible(true);
+		okButton.setText("en attente");
 		
 		for (String event : events) {
 			HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
@@ -343,6 +360,8 @@ public class InternetManager{
 			httpGet.setContent(event);
 			httpGet.setHeader(key, value);
 			httpGet.setHeader("Content-Type", "application/json");
+			sent = 0;
+
 			
 			Gdx.app.log(RollingCat.LOG, "sending list event request...");
 			
@@ -350,11 +369,16 @@ public class InternetManager{
 				
 				@Override
 				public void handleHttpResponse(HttpResponse httpResponse) {
+					Gdx.app.log(RollingCat.LOG, httpResponse.getResultAsString());
+					okButton.setText("envoi réussi");
+					sent = 1;
 					Gdx.app.log(RollingCat.LOG, "list event request success");
 				}
 				
 				@Override
 				public void failed(Throwable t) {	
+					okButton.setText("erreur");
+					sent = -1;
 					Gdx.app.log(RollingCat.LOG, t.toString());
 					Gdx.app.log(RollingCat.LOG, "something went wrong");
 				}
@@ -454,6 +478,27 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}
 		});
+		
+	}
+	
+	public static TextButton getOkButton(){
+		if(okButton == null){
+			TextButtonStyle style = new TextButtonStyle();
+			style.up = getSkin().getDrawable("button_up");
+			style.down = getSkin().getDrawable("button_down");
+			style.font = getBigFont();
+			style.fontColor = Color.BLACK;
+			okButton = new TextButton("ok", style);
+			
+			okButton.setVisible(false);
+			okButton.addListener(new ClickListener() {
+				public void clicked (InputEvent event, float x, float y) {
+					if(sent != 0)
+						okButton.setVisible(false);
+				}
+			});
+		}
+		return okButton;
 		
 	}
 

@@ -8,7 +8,8 @@ import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getShapeRenderer;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,7 @@ import fr.lirmm.smile.rollingcat.manager.VectorManager;
 import fr.lirmm.smile.rollingcat.model.assessment.Triangle;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
+import fr.lirmm.smile.rollingcat.utils.StringUtils;
 
 public class AssessmentScreen implements Screen {
 
@@ -129,6 +131,9 @@ public class AssessmentScreen implements Screen {
 				
 				if(help == 4)
 					help = 5;
+				
+				if(selected == triangles.size() - 1)
+					help = 6;
 				waitingToEnterInArea = false;
 			}
 			
@@ -253,19 +258,7 @@ public class AssessmentScreen implements Screen {
 	}
 	
 	private void setLabelTextAndPosition(){
-		String s = localisation(_assessment_ + help);
-		String temp[] = s.split(" ");
-		s = "";
-		int length = 0;
-		
-		for (String string : temp) {
-			s += " " + string;
-			length += string.length();
-			if(length > 20){
-				s += "\n";
-				length = 0;
-			}
-		}
+		String s = StringUtils.addEnters(localisation(_assessment_ + help), 20);
 		label.setText(s);
 		label.setY(GameConstants.DISPLAY_HEIGHT * 0.85f);
 		label.setX(GameConstants.DISPLAY_WIDTH * 0.5f - 20 * 6);

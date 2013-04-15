@@ -124,9 +124,15 @@ public class Cat extends Entity {
 			if(actor instanceof Dog & state == WALKING)
 				if((((Entity) actor).getBounds().overlaps(right) || ((Entity) actor).getBounds().overlaps(bounds)) & actor.isVisible())
 					state = HITTING;
-			if(actor instanceof Wasp)
+			if(actor instanceof Wasp){
+				if(this.getXOnGrid() == ((Entity) actor).getXOnGrid())
+					((Wasp) actor).declencher(true);
+				else
+					((Wasp) actor).declencher(false);
+				
 				if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
 					state = FALLING;
+			}
 			if(actor instanceof Fan){
 				if(this.getXOnGrid() == ((Entity) actor).getXOnGrid())
 					((Fan) actor).declencher(true);

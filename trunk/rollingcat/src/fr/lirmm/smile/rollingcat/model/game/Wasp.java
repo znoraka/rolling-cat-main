@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getWaspAtlas;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
@@ -32,6 +33,7 @@ public class Wasp extends Entity {
 	private Skeleton skeleton;
 	private Animation animation;
 	private float time;
+	private boolean declenche;
 	
 	public Wasp(float x, float y) {
 		super(x, y, GameConstants.TEXTURE_WASP);
@@ -62,7 +64,8 @@ public class Wasp extends Entity {
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
 		highlight(batch);
-		time += deltaParent / 50;
+		if(declenche)
+			time += deltaParent / 50;
 		animation.apply(skeleton, time, true);
 		skeleton.updateWorldTransform();
 		skeleton.update(deltaParent);
@@ -72,6 +75,10 @@ public class Wasp extends Entity {
 	@Override
 	public int getItemToAct() {
 		return Box.SWATTER;
+	}
+	
+	public void declencher(boolean b){
+		declenche = b;
 	}
 	
 }
