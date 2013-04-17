@@ -60,5 +60,11 @@
 	assessment_4: "You selected the next area, try to fill it up with as much green as possible",
 	assessment_5: "Repeat until you filled all the areas",
 	assessment_6: "Once you filled all the areas, go back to the red area",
-	needsAtLeastOneArea: "At least one area has to be checked"
+	needsAtLeastOneArea: "At least one area has to be checked",
+	right: "Right",
+	left: "Left",
+	right_handed: "Right handed",
+	left_handed: "Left handed",
+	tracks : "Tracks"
+	
 }

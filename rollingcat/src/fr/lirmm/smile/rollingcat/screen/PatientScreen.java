@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.Localisation._assessment;
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 import static fr.lirmm.smile.rollingcat.Localisation._back;
 import static fr.lirmm.smile.rollingcat.Localisation._dominant_member;
 import static fr.lirmm.smile.rollingcat.Localisation._hemiplegia;
@@ -84,7 +84,7 @@ public class PatientScreen implements Screen {
 		skin = getSkin();
 		font = getBigFont();
 		stage = getStage();
-		settings = getSettingsButton(this, game);
+		settings = getSettingsButton(this, game, font);
 		
 		patient.setNeedsAssessment(null);
 		InternetManager.needsAssessment(patient);
@@ -126,7 +126,7 @@ public class PatientScreen implements Screen {
 			}
 		});
 		
-		upload = new TextButton(localisation(_upload), style);
+		upload = new TextButton(localisation(_tracks), style);
 		upload.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				game.setScreen(new TrackingRecapScreen(game, patient));

@@ -51,67 +51,61 @@ public class SettingsScreen implements Screen {
 	private Stage stage;
 	private Table table, zoneTable;
 	private SpriteBatch batch;
-//	private ImageButton heightPlus, heightMinus, widthPlus, widthMinus;
+	//	private ImageButton heightPlus, heightMinus, widthPlus, widthMinus;
 	private TextField workspaceHeight, workspaceWidth, range, pathDeltaTime, evaporationPerDay, alpha, numberOfLines, numberOfRows, totalVolume, volumePerLevel;
 	private Skin skin;
 	private BitmapFont font;
-//	private float elapsedTime;
+	//	private float elapsedTime;
 	private RollingCat game;
 	private Label heightLabel, widthLabel, rangeLabel, pathDeltaTimeLabel, evaporationPerDayLabel, alphaLabel, numberOfLinesLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel;
 	private TextButton save, discard;
 	private Screen oldScreen;
 	private List list;
 	private CheckBox area_1, area_2, area_3, area_4;
-	private boolean needsToBeChecked;
 	private Label warningMessage;
-	
-//	private final float SPEED = 0.05f;
-	
+
+	//	private final float SPEED = 0.05f;
+
 	public SettingsScreen(RollingCat game, Screen oldScreen){
 		this.game = game;
 		this.oldScreen = oldScreen;
 	}
-	
+
 	@Override
 	public void render(float delta) {
-//		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-//		Gdx.gl.glEnable(GL10.GL_BLEND);
-//		Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		
-//		if(heightMinus.isPressed() & elapsedTime > SPEED)
-//			heightModify(-1);
-//		
-//		if(heightPlus.isPressed() & elapsedTime > SPEED)
-//			heightModify(1);
-//		
-//		if(widthMinus.isPressed() & elapsedTime > SPEED)
-//			widthModify(-1);
-//		
-//		if(widthPlus.isPressed() & elapsedTime > SPEED)
-//			widthModify(1);
-//		
-//		if(widthMinus.isPressed() || widthPlus.isPressed() || heightMinus.isPressed() || heightPlus.isPressed())
-//			elapsedTime += delta;
-//		else
-//			elapsedTime = 0;
-		
+		//		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		//		Gdx.gl.glEnable(GL10.GL_BLEND);
+		//		Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+		//		if(heightMinus.isPressed() & elapsedTime > SPEED)
+		//			heightModify(-1);
+		//		
+		//		if(heightPlus.isPressed() & elapsedTime > SPEED)
+		//			heightModify(1);
+		//		
+		//		if(widthMinus.isPressed() & elapsedTime > SPEED)
+		//			widthModify(-1);
+		//		
+		//		if(widthPlus.isPressed() & elapsedTime > SPEED)
+		//			widthModify(1);
+		//		
+		//		if(widthMinus.isPressed() || widthPlus.isPressed() || heightMinus.isPressed() || heightPlus.isPressed())
+		//			elapsedTime += delta;
+		//		else
+		//			elapsedTime = 0;
+
 		batch.begin();
 		batch.draw(skin.getRegion("background_base"), 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		
-		if(needsToBeChecked){
-			font.setColor(Color.WHITE);
-			warningMessage.setText(StringUtils.addEnters(localisation(_needsAtLeastOneArea), 15));
-			warningMessage.draw(batch, 1);
-		}
-		
+
 		batch.end();
-		
+
 		stage.draw();
 		stage.act(delta);
-		
+
 		checkHeightBounds();
 		checkWidthBounds();
-		
+
 	}
 
 	@Override
@@ -126,17 +120,17 @@ public class SettingsScreen implements Screen {
 		skin = getSkin();
 		font = getBigFont();
 		batch = getSpriteBatch();
-		
+
 		list = Localisation.getAvailableLanguages();
 		list.setX(GameConstants.DISPLAY_WIDTH * 0.75f);
 		list.setY(GameConstants.DISPLAY_HEIGHT * 0.75f);
-		
+
 		table = new Table();
 		table.setHeight(GameConstants.DISPLAY_HEIGHT);
 		table.setWidth(GameConstants.DISPLAY_WIDTH * 0.75f);
-		
+
 		zoneTable = new Table();
-		
+
 		zoneTable.setBackground(skin.getDrawable("top_orange"));
 
 
@@ -146,12 +140,12 @@ public class SettingsScreen implements Screen {
 		textFieldStyle.cursor = skin.getDrawable("cursor");
 		textFieldStyle.selection = skin.getDrawable("selection");
 		textFieldStyle.background = skin.getDrawable("empty");
-		
+
 		LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
 		labelStyle.background = skin.getDrawable("empty");
 		labelStyle.font = font;
 		labelStyle.fontColor = Color.WHITE;
-		
+
 		heightLabel = new Label(localisation(_workspace_height)+" :", labelStyle);
 		widthLabel = new Label(localisation(_workspace_width)+" :", labelStyle);
 		rangeLabel = new Label(localisation(_range), labelStyle);
@@ -162,7 +156,7 @@ public class SettingsScreen implements Screen {
 		numberOfRowsLabel = new Label(localisation(_number_of_rows)+" :", labelStyle);
 		totalVolumeLabel = new Label(localisation(_total_volume)+" :", labelStyle);
 		volumePerLevelLabel = new Label(localisation(_volume_per_level)+" :", labelStyle);
-		
+
 		workspaceHeight = new TextField(""+GameConstants.workspaceHeight, textFieldStyle);
 		workspaceWidth = new TextField(""+GameConstants.workspaceWidth, textFieldStyle);
 		range = new TextField(""+GameConstants.range, textFieldStyle);
@@ -173,59 +167,59 @@ public class SettingsScreen implements Screen {
 		numberOfRows = new TextField(""+GameConstants.numberOfRows, textFieldStyle);
 		totalVolume = new TextField(""+GameConstants.totalVolume, textFieldStyle);
 		volumePerLevel = new TextField(""+GameConstants.volumePerLevel, textFieldStyle);
-		
-//		heightPlus = new ImageButton(skin.getDrawable("triangle_up"));
-//		heightPlus.addListener(new InputListener() {
-//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//				heightModify(1);
-//				return true;
-//			}
-//			
-//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//				
-//			}
-//		});
-//		
-//		heightMinus = new ImageButton(skin.getDrawable("triangle_down"));
-//		heightMinus.addListener(new InputListener() {
-//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//				heightModify(-1);
-//				return true;
-//			}
-//			
-//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//				
-//			}
-//		});
-//		
-//		widthPlus = new ImageButton(skin.getDrawable("triangle_up"));
-//		widthPlus.addListener(new InputListener() {
-//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//				widthModify(1);
-//				return true;
-//			}
-//			
-//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//				
-//			}
-//		});
-//		
-//		widthMinus = new ImageButton(skin.getDrawable("triangle_down"));
-//		widthMinus.addListener(new InputListener() {
-//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//				widthModify(-1);
-//				return true;
-//			}
-//			
-//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//				
-//			}
-//		});
+
+		//		heightPlus = new ImageButton(skin.getDrawable("triangle_up"));
+		//		heightPlus.addListener(new InputListener() {
+		//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+		//				heightModify(1);
+		//				return true;
+		//			}
+		//			
+		//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+		//				
+		//			}
+		//		});
+		//		
+		//		heightMinus = new ImageButton(skin.getDrawable("triangle_down"));
+		//		heightMinus.addListener(new InputListener() {
+		//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+		//				heightModify(-1);
+		//				return true;
+		//			}
+		//			
+		//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+		//				
+		//			}
+		//		});
+		//		
+		//		widthPlus = new ImageButton(skin.getDrawable("triangle_up"));
+		//		widthPlus.addListener(new InputListener() {
+		//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+		//				widthModify(1);
+		//				return true;
+		//			}
+		//			
+		//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+		//				
+		//			}
+		//		});
+		//		
+		//		widthMinus = new ImageButton(skin.getDrawable("triangle_down"));
+		//		widthMinus.addListener(new InputListener() {
+		//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+		//				widthModify(-1);
+		//				return true;
+		//			}
+		//			
+		//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+		//				
+		//			}
+		//		});
 		zoneTable.setHeight(GameConstants.DISPLAY_HEIGHT * 0.35f);
 		zoneTable.setWidth(GameConstants.DISPLAY_WIDTH * 0.35f);
 		zoneTable.setX(GameConstants.DISPLAY_WIDTH * 0.6f);
 		zoneTable.setY(GameConstants.DISPLAY_HEIGHT * 0.34f);
-		
+
 		CheckBoxStyle cbs = new CheckBoxStyle();
 		cbs.checkboxOff = getSkin().getDrawable("unchecked");
 		cbs.checkboxOn = getSkin().getDrawable("checked");
@@ -237,74 +231,62 @@ public class SettingsScreen implements Screen {
 		cbs.fontColor = Color.BLACK;
 		cbs.down = getSkin().getDrawable("button_up");
 		cbs.up = getSkin().getDrawable("button_up");
-		
+
 		area_1 = new CheckBox("1", cbs);
 		area_2 = new CheckBox("2", cbs);
 		area_3 = new CheckBox("3", cbs);
 		area_4 = new CheckBox("4", cbs);
-		
-		area_1.setChecked(GameConstants.area_1);
-		area_2.setChecked(GameConstants.area_2);
-		area_3.setChecked(GameConstants.area_3);
-		area_4.setChecked(GameConstants.area_4);
-		
+
 		zoneTable.add(area_3).fill().expand();
 		zoneTable.add(area_4).fill().expand();
 		zoneTable.row();
 		zoneTable.add(area_1).fill().expand();
 		zoneTable.add(area_2).fill().expand();
-		
+
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("button_up");
 		style.down = skin.getDrawable("button_down");
 		style.font = font;
 		style.fontColor = Color.BLACK;
-		
+
 		save = new TextButton(localisation(_save), style);
 		save.addListener(new ClickListener() {
-				public void clicked (InputEvent event, float x, float y) {
-					if(area_1.isChecked() | area_2.isChecked() | area_3.isChecked() | area_4.isChecked()){
-						GameConstants.workspaceHeight = Integer.valueOf(workspaceHeight.getText());
-						GameConstants.workspaceWidth = Integer.valueOf(workspaceWidth.getText());
-						GameConstants.range = Integer.valueOf(range.getText());
-						GameConstants.pathDeltaTime = Float.valueOf(pathDeltaTime.getText());
-						GameConstants.evaporationPerDay = Float.valueOf(evaporationPerDay.getText());
-						GameConstants.alpha = Float.valueOf(alpha.getText());
-						GameConstants.numberOfLines = Integer.valueOf(numberOfLines.getText());
-						GameConstants.numberOfRows = Integer.valueOf(numberOfRows.getText());
-						GameConstants.totalVolume = Integer.valueOf(totalVolume.getText());
-						GameConstants.volumePerLevel = Integer.valueOf(volumePerLevel.getText());
-						GameConstants.area_1 = area_1.isChecked();
-						GameConstants.area_2 = area_2.isChecked();
-						GameConstants.area_3 = area_3.isChecked();
-						GameConstants.area_4 = area_4.isChecked();
-						loadLanguage(list.getSelectedIndex());
-						RollingCat.lang = list.getSelectedIndex();
-						game.setScreen(oldScreen);
-					}
-					else
-						needsToBeChecked = true;
-				}
-			});
-		
-		needsToBeChecked = false;
-		
+			public void clicked (InputEvent event, float x, float y) {
+				GameConstants.workspaceHeight = Integer.valueOf(workspaceHeight.getText());
+				GameConstants.workspaceWidth = Integer.valueOf(workspaceWidth.getText());
+				GameConstants.range = Integer.valueOf(range.getText());
+				GameConstants.pathDeltaTime = Float.valueOf(pathDeltaTime.getText());
+				GameConstants.evaporationPerDay = Float.valueOf(evaporationPerDay.getText());
+				GameConstants.alpha = Float.valueOf(alpha.getText());
+				GameConstants.numberOfLines = Integer.valueOf(numberOfLines.getText());
+				GameConstants.numberOfRows = Integer.valueOf(numberOfRows.getText());
+				GameConstants.totalVolume = Integer.valueOf(totalVolume.getText());
+				GameConstants.volumePerLevel = Integer.valueOf(volumePerLevel.getText());
+				GameConstants.area_1 = area_1.isChecked();
+				GameConstants.area_2 = area_2.isChecked();
+				GameConstants.area_3 = area_3.isChecked();
+				GameConstants.area_4 = area_4.isChecked();
+				loadLanguage(list.getSelectedIndex());
+				RollingCat.lang = list.getSelectedIndex();
+				game.setScreen(oldScreen);
+			}
+		});
 		discard = new TextButton(localisation(_discard), style);
 		discard.addListener(new ClickListener() {
-				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(oldScreen);
-				}
-			});
-		
+			public void clicked (InputEvent event, float x, float y) {
+				game.setScreen(oldScreen);
+			}
+		});
+
 		table.add(heightLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(workspaceHeight).right();
-//		table.add(heightPlus);
-//		table.add(heightMinus);
+		//		table.add(heightPlus);
+		//		table.add(heightMinus);
 		table.row();
 		table.add(widthLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(workspaceWidth).right();
-//		table.add(widthPlus);
-//		table.add(widthMinus);
+		//		table.add(widthPlus);
+		//		table.add(widthMinus);
 		table.row();
 		table.add(rangeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(range).right();
@@ -330,74 +312,74 @@ public class SettingsScreen implements Screen {
 		table.add(volumePerLevelLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(volumePerLevel).right();
 		table.row();
-		table.add(save);
-		table.add(discard);
-		
+		table.add(save).left();
+		table.add(discard).left();
+
 		stage.addActor(table);
 		stage.addActor(list);
 		stage.addActor(zoneTable);
-		
+
 		list.setSelectedIndex(RollingCat.lang);
-		
+
 		Gdx.input.setInputProcessor(stage);
-		
+
 		LabelStyle ls = new LabelStyle(font, Color.WHITE);
 		labelStyle.background = skin.getDrawable("empty");
-		
+
 		warningMessage = new Label("", ls);
 		warningMessage.setX(GameConstants.DISPLAY_WIDTH * 0.6f);
 		warningMessage.setY(GameConstants.DISPLAY_HEIGHT * 0.3f);
 
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-//	private void heightModify(int i) {
-//		elapsedTime = 0;
-//		workspaceHeight.setText(""+(Integer.valueOf(workspaceHeight.getText()) + i));
-//		checkHeightBounds();
-//	}
-	
+
+	//	private void heightModify(int i) {
+	//		elapsedTime = 0;
+	//		workspaceHeight.setText(""+(Integer.valueOf(workspaceHeight.getText()) + i));
+	//		checkHeightBounds();
+	//	}
+
 	private void checkHeightBounds() {
 		if(Integer.valueOf(workspaceHeight.getText()) > 500)
 			workspaceHeight.setText("500");
-		
+
 		if(Integer.valueOf(workspaceHeight.getText()) < 2)
 			workspaceHeight.setText(""+1);		
 	}
 
-//	private void widthModify(int i) {
-//		elapsedTime = 0;
-//		workspaceWidth.setText(""+(Integer.valueOf(workspaceWidth.getText()) + i));
-//		checkWidthBounds();
-//	}
+	//	private void widthModify(int i) {
+	//		elapsedTime = 0;
+	//		workspaceWidth.setText(""+(Integer.valueOf(workspaceWidth.getText()) + i));
+	//		checkWidthBounds();
+	//	}
 
 	private void checkWidthBounds() {
 		if(Integer.valueOf(workspaceWidth.getText()) > 500)
 			workspaceWidth.setText("500");
-		
+
 		if(Integer.valueOf(workspaceWidth.getText()) < 2)
 			workspaceWidth.setText(""+1);
 	}

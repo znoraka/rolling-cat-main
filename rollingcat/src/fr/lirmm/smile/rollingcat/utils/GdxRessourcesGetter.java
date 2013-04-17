@@ -202,11 +202,11 @@ public class GdxRessourcesGetter {
 		return fanAtlas;
 	}
 	
-	public static TextButton getSettingsButton(final Screen screen, final RollingCat game){
+	public static TextButton getSettingsButton(final Screen screen, final RollingCat game, BitmapFont font){
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("button_up");
 		style.down = skin.getDrawable("button_down");
-		style.font = getBigFont();
+		style.font = font;
 		style.fontColor = Color.BLACK;
 		settings = new TextButton(localisation(_settings), style);
 

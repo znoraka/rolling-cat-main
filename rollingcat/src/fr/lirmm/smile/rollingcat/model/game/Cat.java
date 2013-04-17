@@ -34,6 +34,7 @@ public class Cat extends Entity {
 	public static final int JUMPING = 2;
 	public static final int HITTING = 3;
 	public static final int WALKING = 4;
+	public static final int TELEPORTING = 5;
 
 	private int state;
 	private int gold, silver, bronze;
@@ -48,16 +49,18 @@ public class Cat extends Entity {
 	Animation walkAnimation, contactAnimation, jumpAnimation, fanAnimation, endAnimation;
 	float time;
 	boolean hasCatchCoin;
+	private boolean success;
 	/**
 	 * l'acteur principal
 	 * @param x
 	 * @param y
 	 */
 	public Cat(float x, float y){
-		super(x,y, GameConstants.TEXTURE_CAT);
+		super(x, y, GameConstants.TEXTURE_CAT);
 		done = false;
 		this.setTouchable(Touchable.disabled);
 		final String name = "cat-skeleton";
+		success = true;
 
 		requestBoxEmptiing = false;
 
@@ -99,8 +102,10 @@ public class Cat extends Entity {
 		right.set(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
 		left.set(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
 		this.bounds.set(this.getX() + GameConstants.BLOCK_WIDTH / 4, this.getY() + GameConstants.BLOCK_HEIGHT / 4, this.getWidth() / 2, this.getHeight() / 2);
+
 		if(state != FLYING & state != JUMPING)
 			state = FALLING;
+
 		for (Actor actor : stage.getActors()) {
 			if(actor instanceof GroundBlock){
 				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible() & state != FLYING)
@@ -129,7 +134,7 @@ public class Cat extends Entity {
 					((Wasp) actor).declencher(true);
 				else
 					((Wasp) actor).declencher(false);
-				
+
 				if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
 					state = FALLING;
 			}
@@ -170,26 +175,114 @@ public class Cat extends Entity {
 				}
 			}
 
-			if(actor instanceof Door){
-				if(((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT){
-					Gdx.app.log(RollingCat.LOG, "hitting door");
-					this.getActions().clear();
-					requestBoxEmptiing = true;
-					this.addAction(Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT));
+			/**
+			 * si le chat touche une bouée en mode challenge c'est qu'il est tombé, il va donc en assistance
+			 * si le chat touche une bouée en mode assistance (rater = tomber à cause du timeout)
+			 * 	s'il a réussi l'écran il passe en mode challenge
+			 * 	s'il a raté l'écran il reste en mode assistance
+			 */
+			if(state != TELEPORTING){
+				if(actor instanceof Door){
+					if(((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT){
+						Gdx.app.log(RollingCat.LOG, "hitting door");
+						this.getActions().clear();
+						requestBoxEmptiing = true;
+						state = TELEPORTING;
+						Gdx.app.log(RollingCat.LOG, ""+ ((Door) actor).getXOnGrid() % GameConstants.COLS);
+						/**
+						 * si l'on est pas au dernier écran
+						 */
+						if(((Door) actor).getXOnGrid() % GameConstants.COLS == 0)
+						{
+							if(getMode() == GameConstants.CHALLENGE){
+								if(success){
+									this.addAction(Actions.sequence(
+											Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
+											new Action() {
+
+												@Override
+												public boolean act(float delta) {
+													state = WALKING;
+													return true;
+												}
+											}));
+								}
+								else{
+									this.addAction(Actions.sequence(
+											Actions.moveTo(actor.getX(), this.getY() + GameConstants.VIEWPORT_HEIGHT * 2),
+											new Action() {
+
+												@Override
+												public boolean act(float delta) {
+													state = WALKING;
+													return true;
+												}
+											}));
+								}
+							}
+
+							if(getMode() == GameConstants.ASSISTANCE){
+								if(success){
+									this.addAction(Actions.sequence(
+											Actions.moveTo(actor.getX(), this.getY() - GameConstants.VIEWPORT_HEIGHT * 2),
+											new Action() {
+
+												@Override
+												public boolean act(float delta) {
+													state = WALKING;
+													return true;
+												}
+											}));
+								}
+								else{
+									this.addAction(Actions.sequence(
+											Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
+											new Action() {
+
+												@Override
+												public boolean act(float delta) {
+													success = true;
+													state = WALKING;
+													return true;
+												}
+											}));
+								}
+							}
+						}
+						/**
+						 * si on est on dernier écran
+						 */
+						else
+						{
+							this.addAction(Actions.sequence(
+									Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
+									new Action() {
+
+										@Override
+										public boolean act(float delta) {
+											success = true;
+											state = WALKING;
+											return true;
+										}
+									}));
+						}
+					}
+				}
+
+				if(actor instanceof Gap){
+					if(((Entity) actor).getBounds().overlaps(left)){
+						if((! ((Gap) actor).hasGiven())){
+							state = HITTING;
+						}
+						if(((Gap) actor).isReady()){
+							((Gap) actor).setGiven();
+							jump();
+						}
+					}
 				}
 			}
 
-			if(actor instanceof Gap){
-				if(((Entity) actor).getBounds().overlaps(left)){
-					if((! ((Gap) actor).hasGiven())){
-						state = HITTING;
-					}
-					if(((Gap) actor).isReady()){
-						((Gap) actor).setGiven();
-						jump();
-					}
-				}
-			}
+
 		}
 
 		if(!this.isDone()){
@@ -226,7 +319,6 @@ public class Cat extends Entity {
 	public void jump(){
 
 		if(state != JUMPING){
-			System.out.println("jumping");
 			state = JUMPING;
 			this.getActions().clear();
 			SoundManager.jumpPlay();
@@ -366,5 +458,18 @@ public class Cat extends Entity {
 	 */
 	public boolean movedX(){
 		return oldX != getXOnGrid();
+	}
+
+	/**
+	 * le chemin assistance est en haut et le chemin challenge est en bas
+	 * si le chat est en bas (y < {@link GameConstants#VIEWPORT_HEIGHT} alors il est en mode challenge
+	 * @return le mode
+	 */
+	public String getMode(){
+		return (this.getY() < GameConstants.VIEWPORT_HEIGHT * 1.5f)?GameConstants.CHALLENGE:GameConstants.ASSISTANCE;
+	}
+
+	public void setSuccess(boolean success){
+		this.success = success;
 	}
 }

@@ -50,6 +50,7 @@ public class MouseCursorGame implements InputProcessor{
 	private OrderedMap<String, String> parameters;
 	private boolean isTrigger;
 	private Rectangle bounds;
+	private int decalage;
 	
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
 		batch = stage.getSpriteBatch();
@@ -66,6 +67,7 @@ public class MouseCursorGame implements InputProcessor{
 		parameters = new OrderedMap<String, String>();
 		standTimer = 0;
 		bounds = new Rectangle();
+		decalage = 0;
 	}
 
 	/**
@@ -184,7 +186,10 @@ public class MouseCursorGame implements InputProcessor{
 	
 	public void fall(){
 		SoundManager.fallPlay();
-		cat.setY(GameConstants.BLOCK_HEIGHT * 1);
+		dropItem();
+		box.emptyAfterNotMoving();
+		cat.setSuccess(false);
+		cat.setY(stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f);
 		cat.getActions().clear();
 		cat.setState(Cat.FALLING);
 		isFalling = true;
@@ -241,9 +246,9 @@ public class MouseCursorGame implements InputProcessor{
 				parameters = new OrderedMap<String, String>();
 				oldX = x;
 				oldY = y;
-				map.put(map.size(), new float[] {x, y, segment});
+				map.put(map.size(), new float[] {x, y%GameConstants.VIEWPORT_HEIGHT, segment});
 				parameters.put("x", ""+x(x%GameConstants.DISPLAY_WIDTH));
-				parameters.put("y", ""+y(y));
+				parameters.put("y", ""+y(y%GameConstants.VIEWPORT_HEIGHT));
 				parameters.put("z", ""+0);
 				EventManager.create(EventManager.player_cursor_event_type, parameters);
 			}
@@ -298,7 +303,7 @@ public class MouseCursorGame implements InputProcessor{
 			screenY = 0;
 
 		x = (screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2);
-		y = Gdx.graphics.getHeight() - screenY;
+		y = Gdx.graphics.getHeight() - screenY + decalage;
 		return true;
 	}
 
@@ -318,7 +323,7 @@ public class MouseCursorGame implements InputProcessor{
 			screenY = 0;
 
 		x = (screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2);
-		y = Gdx.graphics.getHeight() - screenY;
+		y = Gdx.graphics.getHeight() - screenY + decalage;
 		return true;
 	}
 
@@ -373,5 +378,10 @@ public class MouseCursorGame implements InputProcessor{
 			return new Vector2(cat.getX(),cat.getY()+ GameConstants.BLOCK_HEIGHT);
 		}
 		else return null;
+	}
+
+	public void setDecalage(int i) {
+		decalage = i;
+		
 	}
 }

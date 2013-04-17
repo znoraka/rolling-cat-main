@@ -95,7 +95,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		batch = getSpriteBatch();
 		font = getBigFont();
 		stage = getStage();
-		settings = getSettingsButton(this, game);
+		settings = getSettingsButton(this, game, font);
 		table = new Table();
 		doctor = Doctor.getDoctor();
 		wrong = false;

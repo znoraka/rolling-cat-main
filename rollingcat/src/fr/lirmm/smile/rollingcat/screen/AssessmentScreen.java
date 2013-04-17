@@ -53,10 +53,10 @@ public class AssessmentScreen implements Screen {
 	private Patient patient;
 	private float timeout;
 	private float duration;
-	private boolean waitingToEnterInArea;
+	private boolean waitingToEnterInArea, requestSending;
 	private OrderedMap<String, String> parameters;
 	private boolean done;
-	private TextButton resume, quit;
+	private TextButton resume, quit, upload;
 	private BitmapFont font;
 	private InputMultiplexer multiplexer;
 	private Table pauseTable;
@@ -64,6 +64,7 @@ public class AssessmentScreen implements Screen {
 	private int help;
 	private Label label;
 	private SpriteBatch batch;
+	private Track track;
 
 
 	public AssessmentScreen(RollingCat game, Patient patient){
@@ -75,13 +76,17 @@ public class AssessmentScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
 
+		/**
+		 * dessin des triangles
+		 */
 		for (Triangle triangle : triangles) {
 			triangle.render(sr, this);
 			triangle.setProgression(mc.getX(), mc.getY(), this);
 		}
-		
+		/**
+		 * dessin du cercle central
+		 */
 		sr.begin(ShapeType.Filled);
 		if(mc.isStarted())
 			sr.setColor(Color.WHITE);
@@ -92,15 +97,15 @@ public class AssessmentScreen implements Screen {
 		float f = (100 - timeout * 100);
 		sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, (f > 1)?(f):1);
 		sr.end();
-		
+		mc.addTrackingPoint(delta);
+		duration += delta;
 		if(!mc.isPaused()){
-			mc.addTrackingPoint(delta);
-			duration += delta;
 
 			if(selected == triangles.size()){
 				done = true;
+				upload.setVisible(true);
+				resume.setVisible(false);
 				mc.pause();
-				resume.setText(localisation(_upload));
 			}
 
 			if(canStart() & !mc.isStarted()){
@@ -128,24 +133,29 @@ public class AssessmentScreen implements Screen {
 			if(!mc.isInArea()){
 				if(help == 2)
 					help = 3;
-				
+
 				if(help == 4)
 					help = 5;
-				
+
 				if(selected == triangles.size() - 1)
 					help = 6;
 				waitingToEnterInArea = false;
 			}
-			
+
 			setLabelTextAndPosition();
-			
+
 			stage.draw();
-			
+
 		}
 		else
 		{
 			pauseStage.act(delta);
 			pauseStage.draw();
+		}
+		
+		if(requestSending && track.getListOfEvents() != null){
+			InternetManager.sendEvents(track.getListOfEvents());
+			requestSending = false;
 		}
 	}
 	@Override
@@ -163,6 +173,7 @@ public class AssessmentScreen implements Screen {
 		duration = 0;
 		help = 1;
 		done = false;
+		requestSending = false;
 		triangles = VectorManager.getVectorsFromAreas(9);
 		mc = new MouseCursorAssessment();
 		multiplexer = new InputMultiplexer(mc, pauseStage);
@@ -189,18 +200,31 @@ public class AssessmentScreen implements Screen {
 		resume = new TextButton(localisation(_resume), style);
 		resume.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
+				mc.unPause();
+			}
+		});
+
+		upload = new TextButton(localisation(_upload), style);
+		upload.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
 				if(done){
 					parameters = new OrderedMap<String, String>();
 					parameters.put("duration", ""+(int)duration);
 					InternetManager.endGameSession();
 					EventManager.create(EventManager.end_game_event_type, parameters);
-					patient.addTrack(new Track(mc.getMap(), Track.ASSESSEMENT, duration));
-					game.setScreen(new TrackingRecapScreen(game, patient));
+					track = new Track(mc.getMap(), Track.ASSESSEMENT, duration);
+					patient.addTrack(track);
+					requestSending = true;
+					pauseStage.clear();
+					upload = InternetManager.getOkButton(new PatientScreen(game, patient), game);
+					pauseStage.addActor(upload);
+					upload.setX(GameConstants.DISPLAY_WIDTH * 0.5f - upload.getWidth() * 0.5f);
+					upload.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - upload.getHeight() * 0.5f);
 				}
-				else
-					mc.unPause();
 			}
 		});
+		
+		upload.setVisible(false);
 
 		quit = new TextButton(localisation(_quit), style);
 		quit.addListener(new ClickListener() {
@@ -213,16 +237,18 @@ public class AssessmentScreen implements Screen {
 		pauseTable = new Table();
 		pauseTable.add(resume).pad(GameConstants.BLOCK_WIDTH * 0.5f);
 		pauseTable.row();
+		pauseTable.add(upload).pad(GameConstants.BLOCK_WIDTH * 0.5f);
+		pauseTable.row();
 		pauseTable.add(quit).pad(GameConstants.BLOCK_WIDTH * 0.5f);
 		pauseStage.addActor(pauseTable);
 		pauseTable.setWidth(GameConstants.DISPLAY_WIDTH);
 		pauseTable.setHeight(GameConstants.DISPLAY_HEIGHT);
 
 		Gdx.input.setInputProcessor(multiplexer);
-		
+
 		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
 		labelStyle.background = getSkin().getDrawable("empty");
-		
+
 		label = new Label(localisation(_assessment_ + help), labelStyle);
 		stage.addActor(label);
 		setLabelTextAndPosition();
@@ -256,24 +282,13 @@ public class AssessmentScreen implements Screen {
 	public boolean canStart(){
 		return mc.isInArea();
 	}
-	
+
 	private void setLabelTextAndPosition(){
 		String s = StringUtils.addEnters(localisation(_assessment_ + help), 20);
 		label.setText(s);
 		label.setY(GameConstants.DISPLAY_HEIGHT * 0.85f);
 		label.setX(GameConstants.DISPLAY_WIDTH * 0.5f - 20 * 6);
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

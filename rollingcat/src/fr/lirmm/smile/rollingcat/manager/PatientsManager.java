@@ -50,13 +50,13 @@ public class PatientsManager {
 		
 		s = json.readValue("handed", String.class, jsonData);
 		if(s != null)
-			dominantMember = (s.equals("R"))?"Right":"Left";
+			dominantMember = s;
 		else
 			dominantMember = "unknown";
 		
 		s = json.readValue("side", String.class, jsonData);
 		if(s != null)
-			hemiplegia = (s.equals("R"))?"Right":"Left";
+			hemiplegia = s;
 		else
 			hemiplegia = "unkown";
 

@@ -199,10 +199,10 @@ public class UploadScreen implements Screen {
 		stage.addActor(tableRightTop);
 		
 		prev.setVisible(false);
-		okButton = InternetManager.getOkButton();
-		okButton.setX(GameConstants.DISPLAY_WIDTH * 0.5f - okButton.getWidth() * 0.5f);
-		okButton.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - okButton.getHeight() * 0.5f);
-		stage.addActor(okButton);
+//		okButton = InternetManager.getOkButton();
+//		okButton.setX(GameConstants.DISPLAY_WIDTH * 0.5f - okButton.getWidth() * 0.5f);
+//		okButton.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - okButton.getHeight() * 0.5f);
+//		stage.addActor(okButton);
 		drawArea = new Rectangle(tableRightTop.getX(), tableRightTop.getY(), tableRightTop.getWidth(), tableRightTop.getHeight());
 	}
 

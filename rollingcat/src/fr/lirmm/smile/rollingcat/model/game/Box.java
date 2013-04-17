@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.Localisation;
@@ -26,7 +27,8 @@ public class Box extends Entity{
 		
 	private int item;
 	private TextureAtlas atlas;
-	private ArrayList<Integer[]> items;
+	private OrderedMap<Integer, ArrayList<Integer>> items;
+	private int segment, etage;
 	
 	public Box(float x, float y) {
 		super(x, y, GameConstants.TEXTURE_BOX);
@@ -36,15 +38,15 @@ public class Box extends Entity{
 		this.setZIndex(2);
 	}
 
-	public void setItems(ArrayList<Integer[]> items)
+	public void setItems(OrderedMap<Integer, ArrayList<Integer>> items)
 	{
 		this.items = items;
-		this.item = items.get(0)[0];
+		this.item = getCurrentBox().get(0);
 	}
 	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
-		if(!MouseCursorGame.isHoldingItem())
+		if(!MouseCursorGame.isHoldingItem() & item != EMPTY)
 			batch.draw(getGameSkin().getRegion("green_highlight"), this.getX() - this.getWidth() * 0.25f, this.getY() - this.getHeight() * 0.25f, this.getWidth() * 1.5f, this.getHeight() * 1.5f);
 
 		if(item == BONE)
@@ -68,8 +70,8 @@ public class Box extends Entity{
 	public int empty(){
 		int a = item;
 		item = 0;
-		if(items.size() > 1)
-			items.remove(0);
+		if(getCurrentBox().size() > 1)
+			getCurrentBox().remove(0);
 		return a;
 	}
 	
@@ -77,7 +79,7 @@ public class Box extends Entity{
 	 * fills the box with the next item on the items list
 	 */
 	public void fill(){
-		this.item = items.get(0)[0];
+		this.item = getCurrentBox().get(0);
 	}
 	
 	/**
@@ -88,14 +90,18 @@ public class Box extends Entity{
 		return item == 0;
 	}
 	
-	public void emptyAfterNotMoving(int segment){
-		while(items.get(0)[1] == segment){
-			Gdx.app.log(RollingCat.LOG, "dropping "+items.get(0)[0]);
-			items.remove(0);
-		}
-		
+	public void emptyAfterNotMoving(){
+		Gdx.app.log(RollingCat.LOG, "removing " + (getCurrentBox().size() - 1) + " item(s) from the current box");
+		getCurrentBox().clear();
+		getCurrentBox().add(EMPTY);
+		this.fill();
 	}
-
+	
+	/**
+	 * 
+	 * @param item
+	 * @return le nom de l'item
+	 */
 	public static String getItemName(int item) {
 		switch(item){
 		case(BONE): return Localisation._bone;
@@ -106,6 +112,11 @@ public class Box extends Entity{
 		return "";
 	}
 
+	/**
+	 * 
+	 * @param item
+	 * @return le nom de l'entité qui correspond à l'item
+	 */
 	public static String getRelatedEntity(int item) {
 		switch(item){
 		case(BONE): return Localisation._dog;
@@ -114,6 +125,22 @@ public class Box extends Entity{
 		case(SCISSORS): return Localisation._carpet;
 		}
 		return "";
+	}
+	
+	/**
+	 * 
+	 * @return la box pour l'écran courant
+	 */
+	private ArrayList<Integer> getCurrentBox(){
+		return items.get(Integer.valueOf("" + etage + "" + segment));
+	}
+	
+	public void setEtageAndSegment(int etage, int segment)
+	{	
+		this.etage = etage;
+		this.segment = segment;
+		if(getCurrentBox().get(0) != EMPTY)
+			item = getCurrentBox().get(0);
 	}
 
 }
