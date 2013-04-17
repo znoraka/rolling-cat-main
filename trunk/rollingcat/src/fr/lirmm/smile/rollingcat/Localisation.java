@@ -75,12 +75,12 @@ public class Localisation {
 	public static String _cat = "cat";
 	public static String _carpet = "carpet";
 	public static String _assessment_ = "assessment_";
-	public static String _assessment_1 = "assessment_1";
-	public static String _assessment_2 = "assessment_2";
-	public static String _assessment_3 = "assessment_3";
-	public static String _assessment_4 = "assessment_4";
-	public static String _assessment_5 = "assessment_5";
 	public static String _needsAtLeastOneArea = "needsAtLeastOneArea";
+	public static String _tracks = "tracks";
+	public static String _left = "left";
+	public static String _right = "right";
+	public static String _left_handed = "left_handed";
+	public static String _right_handed = "right_handed";
 	
 	/**
 	 * charge un langage depuis un fichier de langage

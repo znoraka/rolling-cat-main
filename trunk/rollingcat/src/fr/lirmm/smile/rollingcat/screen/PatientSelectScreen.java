@@ -114,7 +114,7 @@ public class PatientSelectScreen implements Screen{
 		skin = getSkin();
 		black = getSmallFont();
 		stage = getStage();
-		settings = getSettingsButton(this, game);
+		settings = getSettingsButton(this, game, black);
 
 		tableLeft = new Table();
 		tableRight = new Table();

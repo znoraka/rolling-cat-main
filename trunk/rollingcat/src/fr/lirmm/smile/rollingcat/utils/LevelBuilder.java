@@ -1,11 +1,12 @@
 package fr.lirmm.smile.rollingcat.utils;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
-
 import java.util.ArrayList;
+
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -24,8 +25,10 @@ import fr.lirmm.smile.rollingcat.model.game.Wasp;
 
 public class LevelBuilder {
 
-	private static ArrayList<Integer[]> items;
+	private static ArrayList<Integer> items;
 	private static int segment = 0;
+	private static OrderedMap<Integer, ArrayList<Integer>> map;
+	private static int decalage;
 
 	//	private static String testRandomReal()
 	//	{
@@ -68,20 +71,18 @@ public class LevelBuilder {
 	 * @param s la string du niveau
 	 */
 	public static Stage build(String s) {
-		Stage stage = new Stage(GameConstants.DISPLAY_WIDTH * 8, GameConstants.DISPLAY_HEIGHT, true);
-		items = new ArrayList<Integer[]>();
+//		Stage stage = new Stage(GameConstants.DISPLAY_WIDTH * 8, GameConstants.DISPLAY_HEIGHT, true);
+		Stage stage = getStage();
+		map = new OrderedMap<Integer, ArrayList<Integer>>();
+		items = new ArrayList<Integer>();
 		segment = 0;
 		s = s.replace("\"", "");
-		//		Gdx.app.log(RollingCat.LOG, "getting random level");
-		//		s = testRandomReal();
 		Gdx.app.log(RollingCat.LOG, s);
 		String tab [] = s.split("/");
 		String[] subtab;
 		float x;
 		float y;
-		int decalage = 0;
-
-		//		stage.addActor(new GroundBlock(-10, -10));
+		decalage = 0;
 
 		for (int i = 0; i < tab.length; i++) {
 			subtab = tab[i].split(";");
@@ -97,18 +98,18 @@ public class LevelBuilder {
 				stage.addActor(new Wasp(x, y + decalage));
 				if(isFirstOfScreen(x))
 				{
-					items.add(new Integer []{Box.EMPTY, segment});
+					items.add(Box.EMPTY);
 				}
-				items.add(new Integer [] {Box.SWATTER, segment});
+				items.add(Box.SWATTER);
 			}
 			else if(subtab[0].equals("dog"))
 			{
 				stage.addActor(new Dog(x, y + decalage));
 				if(isFirstOfScreen(x))
 				{
-					items.add(new Integer []{Box.EMPTY, segment});
+					items.add(Box.EMPTY);
 				}
-				items.add(new Integer []{Box.BONE, segment});
+				items.add(Box.BONE);
 			}
 			else if(subtab[0].equals("groundBlock"))
 			{
@@ -137,9 +138,9 @@ public class LevelBuilder {
 				stage.addActor(new Carpet(x, y + decalage));
 				if(isFirstOfScreen(x))
 				{
-					items.add(new Integer []{Box.EMPTY, segment});
+					items.add(Box.EMPTY);
 				}
-				items.add(new Integer []{Box.SCISSORS, segment});
+				items.add(Box.SCISSORS);
 			}
 			else if(subtab[0].equals("fan"))
 			{
@@ -150,7 +151,7 @@ public class LevelBuilder {
 				String [] temp = tab[i+1].split(";");
 				float nextX = Float.valueOf(temp[1]);
 				float nextY = Float.valueOf(temp[2]);
-				stage.addActor(new Door(x,y + decalage, Door.LEFT, nextX, nextY));
+				stage.addActor(new Door(x,y + decalage, Door.LEFT, nextX, nextY + decalage));
 			}
 			else if(subtab[0].equals("door_right"))
 			{
@@ -161,13 +162,17 @@ public class LevelBuilder {
 				stage.addActor(new Gap(x, y + decalage));
 				if(isFirstOfScreen(x))
 				{
-					items.add(new Integer []{Box.EMPTY, segment});
+					items.add(Box.EMPTY);
 				}
-				items.add(new Integer []{Box.FEATHER, segment});
+				items.add(Box.FEATHER);
 			}
 			else if(subtab[0].equals("target")){
 				stage.addActor(new Target(x, y + decalage));
-				decalage = GameConstants.ROWS + 2;
+				items.add(Box.EMPTY);
+				addItemsInBox(segment, (decalage == 0)?0:1);
+				items = new ArrayList<Integer>();
+				decalage = GameConstants.ROWS * 2;
+				segment = 0;
 			}
 
 			Gdx.app.log(RollingCat.LOG, "new "+subtab[0]+ " added in " + x + ", " + y + decalage + " !");
@@ -177,13 +182,24 @@ public class LevelBuilder {
 		Gdx.app.log(RollingCat.LOG, "building done " + tab.length + " elements added");
 		//		stage.addActor(new Cat(10, 10));
 		//		stage.addActor(new Dog(5, 5));
-		items.add(new Integer []{Box.EMPTY, segment});
 		//		((Box)stage.getActors().get(1)).setItems(items);
 		return stage;
 	}
 
-	public static ArrayList<Integer[]> getItems(){
-		return items;
+	public static OrderedMap<Integer, ArrayList<Integer>> getItems(){
+		Gdx.app.log(RollingCat.LOG, map.toString());
+		return map;
+	}
+	
+	/**
+	 * le premier chiffre de la clé est l'étage : 0 pour le bas (challenge) et 1 pour le haut (assistance)
+	 * ce qui vient après est le segment
+	 * @param item
+	 */
+	private static void addItemsInBox(int segment, int etage){
+		items.add(Box.EMPTY);
+		map.put(Integer.valueOf("" + etage + "" + segment), items);
+		items = new ArrayList<Integer>();
 	}
 
 	/**
@@ -193,7 +209,9 @@ public class LevelBuilder {
 	 */
 	private static boolean isFirstOfScreen(float x){
 		if(Math.floor(x / (GameConstants.COLS)) > segment){
+			addItemsInBox(segment, (decalage == 0)?0:1);
 			segment ++;
+			
 			return false;
 		}
 		else

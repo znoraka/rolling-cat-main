@@ -1,7 +1,7 @@
 package fr.lirmm.smile.rollingcat.model.patient;
 
 import java.util.ArrayList;
-
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Patient {
@@ -53,11 +53,16 @@ public class Patient {
 //	}
 	
 	public String getHemiplegia() {
-		return hemiplegia;
+		return (hemiplegia.equals("R")?localisation(_right):localisation(_left));
+	}
+	
+
+	public boolean getLeftHemiplegia() {
+		return hemiplegia.equals("R");
 	}
 	
 	public String getDominantMember() {
-		return dominantMember;
+		return (dominantMember.equals("R")?localisation(_right_handed):localisation(_left_handed));
 	}
 //	
 //	public String getDominantMember(){

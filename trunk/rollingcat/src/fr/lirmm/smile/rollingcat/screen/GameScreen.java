@@ -68,7 +68,7 @@ public class GameScreen implements ScreenPausable{
 	private BitmapFont font;
 	private OrderedMap<String, String> parameters;
 	private Level level;
-	private int segment;
+	private int segment, etage;
 	private InputMultiplexer multiplexer;
 	private boolean done;
 	private Target gem;
@@ -107,7 +107,9 @@ public class GameScreen implements ScreenPausable{
 			mc.updateStandTimer();
 			cat.move(stage);
 			batch.begin();
-//			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+			font.setColor(Color.BLACK);
+			font.draw(batch, cat.getMode(), GameConstants.VIEWPORT_WIDTH * 0.5f, GameConstants.VIEWPORT_HEIGHT * 0.5f);
 			table.draw(batch, 1);
 			batch.end();
 			stage.act(delta);
@@ -169,16 +171,18 @@ public class GameScreen implements ScreenPausable{
 	 * translate la camera si le chat est au bout de l'ecran
 	 */
 	private void updateCamPos() {
-		stage.getCamera().position.set(cat.getX(), cat.getY(), 0);
-		
+		stage.getCamera().position.set((float) (Math.max(0, (Math.floor((cat.getX() - GameConstants.BLOCK_WIDTH * 0.5f) / GameConstants.VIEWPORT_WIDTH)) * GameConstants.VIEWPORT_WIDTH)) + GameConstants.VIEWPORT_WIDTH * 0.5f, ((cat.getY() > GameConstants.VIEWPORT_HEIGHT * 1.5f)?(GameConstants.VIEWPORT_HEIGHT * 2.5f):(GameConstants.VIEWPORT_HEIGHT * 0.5f)) + GameConstants.BLOCK_HEIGHT, 0);
+		box.setX(stage.getCamera().position.x - box.getWidth() / 2);
+		box.setY(stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT);
+		mc.setDecalage((cat.getY() > GameConstants.VIEWPORT_HEIGHT * 1.5f)?GameConstants.VIEWPORT_HEIGHT*2:0);
+		box.setEtageAndSegment((cat.getMode().equals(GameConstants.ASSISTANCE))?1:0, Math.abs((int) Math.floor((cat.getX() - GameConstants.BLOCK_WIDTH * 0.5f) / GameConstants.VIEWPORT_WIDTH)));
+		segment = (int) Math.floor(cat.getX() / GameConstants.VIEWPORT_WIDTH);
 //		if(stage.getCamera().position.x + GameConstants.DISPLAY_WIDTH / 2 - GameConstants.BLOCK_WIDTH * 3 < cat.getX()){
 //			box.emptyAfterNotMoving(segment);
 //			if(!MouseCursorGame.isHoldingItem())
 //				box.fill();
-//			mc.setX(mc.getX() + GameConstants.VIEWPORT_WIDTH);
 //			segment++;
-////			stage.getCamera().translate(GameConstants.VIEWPORT_WIDTH, 0, 0);
-//			box.setX(box.getX() + GameConstants.VIEWPORT_WIDTH);
+////			mc.setX(mc.getX() + GameConstants.VIEWPORT_WIDTH);
 //		}
 
 	}
@@ -191,13 +195,15 @@ public class GameScreen implements ScreenPausable{
 
 	@Override
 	public void show() {
+		batch = new SpriteBatch();
+		pauseStage = new Stage();
+		font = getBigFont();
+		EventManager.clear();
+		sr = new ShapeRenderer();
+
+		etage = 1;
 		Gdx.app.log(RollingCat.LOG, "showing");
 		paused = false;
-		batch = new SpriteBatch();
-		sr = new ShapeRenderer();
-		font = getBigFont();
-		pauseStage = new Stage();
-		EventManager.clear();
 		//		elapsedTimeDuringPause = 0;
 		parameters = new OrderedMap<String, String>();
 		backgroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND);
@@ -315,7 +321,13 @@ public class GameScreen implements ScreenPausable{
 					mc.fall();
 				
 				if(keycode == Keys.UP){
-					cat.setY(GameConstants.DISPLAY_HEIGHT * 2);
+					cat.setY(GameConstants.VIEWPORT_HEIGHT * 2);
+					cat.setState(Cat.FALLING);
+					cat.getActions().clear();
+				}
+				
+				if(keycode == Keys.DOWN){
+					cat.setY(GameConstants.VIEWPORT_HEIGHT - GameConstants.BLOCK_HEIGHT);
 					cat.setState(Cat.FALLING);
 					cat.getActions().clear();
 				}
@@ -372,13 +384,13 @@ public class GameScreen implements ScreenPausable{
 
 	private void setVectorCoordinates(){
 		gold.x = table.getX() + goldImage.getX();
-		gold.y = table.getY() + goldImage.getY();
+		gold.y = table.getY() + goldImage.getY() + stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT;
 
 		silver.x = table.getX() + silverImage.getX();
-		silver.y = table.getY() + silverImage.getY();
+		silver.y = table.getY() + silverImage.getY() + stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT;
 
 		bronze.x = table.getX() + bronzeImage.getX();
-		bronze.y = table.getY() + bronzeImage.getY();
+		bronze.y = table.getY() + bronzeImage.getY() + stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT;
 	}
 
 	private void handleElapsedTime(){

@@ -91,7 +91,7 @@ public class LoadingScreen implements Screen {
 		sr = getShapeRenderer();
 		
 		if(level.getContent() == null)
-			InternetManager.fetchLevel(patient.getID(), level.getId()); 
+			InternetManager.fetchLevel(patient, level.getId()); 
 		else
 			levelAsString = level.getContent();
 		texture = new Texture("data/load.png");

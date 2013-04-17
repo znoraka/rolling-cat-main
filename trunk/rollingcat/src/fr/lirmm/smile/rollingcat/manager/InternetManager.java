@@ -1,19 +1,17 @@
 package fr.lirmm.smile.rollingcat.manager;
 
-import static fr.lirmm.smile.rollingcat.Localisation._settings;
-import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -28,7 +26,6 @@ import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.model.world.World;
 import fr.lirmm.smile.rollingcat.screen.LoginScreen;
-import fr.lirmm.smile.rollingcat.screen.TrackingRecapScreen;
 
 public class InternetManager{
 
@@ -43,8 +40,8 @@ public class InternetManager{
 	private static String world;
 	private static TextButton okButton;
 	private static int sent = 0;
-	
-	
+
+
 	/**
 	 * envoie la requete pour récupérer une clé de connexion
 	 * @param username
@@ -52,27 +49,27 @@ public class InternetManager{
 	 * @return true si tout s'est bien passé
 	 */
 	public static boolean login(String username, String password) {
-		
+
 		Gdx.app.log(RollingCat.LOG, "preparing login request...");
-		
+
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setContent("email="+username+"&password="+password);
 		httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded");
 		httpGet.setUrl("http://" + hostName + ":" + port + "/login.json");
-		
+
 		Gdx.app.log(RollingCat.LOG, "sending login request...");
-		
+
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-			
+
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				Json json = new Json();
 				String s = httpResponse.getResultAsString();
 				value = json.readValue(key, String.class, new JsonReader().parse(s));
 				Gdx.app.log(RollingCat.LOG, value);
-	           	Gdx.app.log(RollingCat.LOG, "login ok");
+				Gdx.app.log(RollingCat.LOG, "login ok");
 
-		    }
+			}
 
 			@Override
 			public void failed(Throwable t) {
@@ -80,31 +77,31 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, t.toString());
 				Gdx.app.log(RollingCat.LOG, "something went wrong, could not login");
 			}});
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * envoie une requete pour récupérer la liste de patients depuis le serveur
 	 */
 	public static void retrievePatients(){
 		Gdx.app.log(RollingCat.LOG, "preparing patient retrieve request...");
-		
+
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		
+
 		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/all");
 		httpGet.setHeader(key, value);
 		Gdx.app.log(RollingCat.LOG, "sending patient retrieve request...");
-		
+
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-			
+
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				patients = httpResponse.getResultAsString();
 				Gdx.app.log(RollingCat.LOG, patients);
-	           	Gdx.app.log(RollingCat.LOG, "retrieving complete");
+				Gdx.app.log(RollingCat.LOG, "retrieving complete");
 
-		    }
+			}
 
 			@Override
 			public void failed(Throwable t) {	
@@ -112,28 +109,28 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong, could not retrieve patient");
 			}});
 	}
-	
+
 	/**
 	 * envoie une requete pour l'ID du jeu sur le serveur
 	 */
 	public static void getGameId(){
 		Gdx.app.log(RollingCat.LOG, "preparing game id retrieve request...");
-		
+
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		
+
 		httpGet.setUrl("http://" + hostName + ":" + port + "/game/"+RollingCat.LOG+"/getid");
 		httpGet.setHeader(key, value);
 		Gdx.app.log(RollingCat.LOG, "sending game id retrieve request...");
-		
+
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-			
+
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				gameid = httpResponse.getResultAsString();
 				Gdx.app.log(RollingCat.LOG, "game id : " + gameid);
-	           	Gdx.app.log(RollingCat.LOG, "retrieving complete");
+				Gdx.app.log(RollingCat.LOG, "retrieving complete");
 
-		    }
+			}
 
 			@Override
 			public void failed(Throwable t) {	
@@ -141,7 +138,7 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong, could not retrieve game id");
 			}});
 	}
-	
+
 	/**
 	 * set la date dans la track
 	 * @param track
@@ -153,14 +150,14 @@ public class InternetManager{
 		httpGet.setUrl("http://infolimon.iutmontp.univ-montp2.fr/~lephilippen/rollingcat/getDate.php");
 		Gdx.app.log(RollingCat.LOG, "sending request...");
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-			
+
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				String s = httpResponse.getResultAsString();
 				Gdx.app.log(RollingCat.LOG, s);
-	           	track.setDate(s);
-	           	Gdx.app.log(RollingCat.LOG, "success");
-		    }
+				track.setDate(s);
+				Gdx.app.log(RollingCat.LOG, "success");
+			}
 
 			@Override
 			public void failed(Throwable t) {	
@@ -168,8 +165,8 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 				track.setDate("error");
 			}});
-		}
-	
+	}
+
 	/**
 	 * set la date dans la track
 	 * @param track
@@ -190,21 +187,21 @@ public class InternetManager{
 		httpGet.setHeader("Content-Type", "application/json");
 		Gdx.app.log(RollingCat.LOG, "sending new game session retrieve request...");
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-			
+
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				sessionid = httpResponse.getResultAsString();
 				Gdx.app.log(RollingCat.LOG, "game session : " + sessionid);
-	           	Gdx.app.log(RollingCat.LOG, "success");
-		    }
+				Gdx.app.log(RollingCat.LOG, "success");
+			}
 
 			@Override
 			public void failed(Throwable t) {	
 				Gdx.app.log(RollingCat.LOG, t.toString());
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}});
-		}
-	
+	}
+
 	/**
 	 * set la date dans la track
 	 * @param track
@@ -213,42 +210,41 @@ public class InternetManager{
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/gamesession/"+sessionid+"/end ");
-	
+
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "text/plain");
-		
+
 		Gdx.app.log(RollingCat.LOG, "sending end game session request...");
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-			
+
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-	           	Gdx.app.log(RollingCat.LOG, "success");
-		    }
+				Gdx.app.log(RollingCat.LOG, "success");
+			}
 
 			@Override
 			public void failed(Throwable t) {	
 				Gdx.app.log(RollingCat.LOG, t.toString());
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}});
-		}
-	
+	}
+
 	/**
 	 * récupère le level sur le serveur
 	 * @param IDpatient
 	 */
-	public static void fetchLevel(String patientid, int numLevel){
+	public static void fetchLevel(Patient patient, int numLevel){
 		level = null;
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
-		
 		Json json = new Json();
 		json.setOutputType(JsonWriter.OutputType.json);
-		
+
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+patientid+"/"+gameid+"/"+sessionid+"/"+numLevel);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+patient.getID()+"/"+gameid+"/"+sessionid+"/"+numLevel);
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
 		map.put("builderId","ant-0.1");
-		map.put("patientId", patientid);
+		map.put("patientId", patient.getID());
 		map.put("numberOfLines", GameConstants.numberOfLines);
 		map.put("numberOfRows", GameConstants.numberOfRows);
 		map.put("totalHeight", GameConstants.workspaceHeight);
@@ -256,31 +252,33 @@ public class InternetManager{
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
 		map.put("ImportanceOfEffort", 0.9f);
-		
-    	OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
-        algoParameterAZ.put("range", GameConstants.range);
-        algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
-        algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
-        algoParameterAZ.put("alpha", GameConstants.alpha);
-        map.put("parameters", algoParameterAZ); 
-		
-		
+		map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+		map.put("leftHemiplegia", patient.getLeftHemiplegia());
+
+		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
+		algoParameterAZ.put("range", GameConstants.range);
+		algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
+		algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
+		algoParameterAZ.put("alpha", GameConstants.alpha);
+		map.put("parameters", algoParameterAZ); 
+
+
 		httpGet.setContent(json.toJson(map));
-		
+
 		Gdx.app.log(RollingCat.LOG, httpGet.getContent());	
-		
+
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "application/json");
-		
+
 		Gdx.app.log(RollingCat.LOG, "sending level request...");
 
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-			
+
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				level = httpResponse.getResultAsString();
-	           	Gdx.app.log(RollingCat.LOG, "success");
-		    }
+				Gdx.app.log(RollingCat.LOG, "success");
+			}
 
 			@Override
 			public void failed(Throwable t) {	
@@ -288,17 +286,17 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}
 		});
-//		level = "cat;0.0;8.0/groundBlock;0.0;7.0/groundBlock;1.0;7.0/groundBlock;2.0;7.0/gap;2.0;8.0/groundBlock;4.0;6.0/groundBlock;5.0;6.0/groundBlock;6.0;7.0";
+		//		level = "cat;0.0;8.0/groundBlock;0.0;7.0/groundBlock;1.0;7.0/groundBlock;2.0;7.0/gap;2.0;8.0/groundBlock;4.0;6.0/groundBlock;5.0;6.0/groundBlock;6.0;7.0";
 	}
-	
+
 	public static void needsAssessment(final Patient patient){
 		world = null;
 		World.clearInstance();
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
-		
+
 		Json json = new Json();
 		json.setOutputType(JsonWriter.OutputType.json);
-		
+
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/"+patient.getID()+"/needsassessment");
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
@@ -312,30 +310,30 @@ public class InternetManager{
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
 		map.put("ImportanceOfEffort", 0.9f);
-		
-    	OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
-        algoParameterAZ.put("range", GameConstants.range);
-        algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
-        algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
-        algoParameterAZ.put("alpha", GameConstants.alpha);
-        map.put("parameters", algoParameterAZ); 
-		
-		
+
+		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
+		algoParameterAZ.put("range", GameConstants.range);
+		algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
+		algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
+		algoParameterAZ.put("alpha", GameConstants.alpha);
+		map.put("parameters", algoParameterAZ); 
+
+
 		httpGet.setContent(json.toJson(map));
-		
+
 		Gdx.app.log(RollingCat.LOG, httpGet.getContent());	
-		
+
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "application/json");
-		
+
 		Gdx.app.log(RollingCat.LOG, "sending level request...");
 
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-			
+
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				patient.setNeedsAssessment(httpResponse.getResultAsString());
-		    }
+			}
 
 			@Override
 			public void failed(Throwable t) {	
@@ -344,7 +342,7 @@ public class InternetManager{
 			}
 		});
 	}
-	
+
 	/** 
 	 * envoie les events au serveur dda
 	 * @param events les events sous forme de string formatée en JSON
@@ -353,7 +351,7 @@ public class InternetManager{
 		Gdx.app.log(RollingCat.LOG, "preparing send list event request...");
 		okButton.setVisible(true);
 		okButton.setText("en attente");
-		
+
 		for (String event : events) {
 			HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 			httpGet.setUrl("http://" + hostName + ":" + port + "/event/"+sessionid+"/newList");
@@ -362,11 +360,11 @@ public class InternetManager{
 			httpGet.setHeader("Content-Type", "application/json");
 			sent = 0;
 
-			
+
 			Gdx.app.log(RollingCat.LOG, "sending list event request...");
-			
+
 			Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-				
+
 				@Override
 				public void handleHttpResponse(HttpResponse httpResponse) {
 					Gdx.app.log(RollingCat.LOG, httpResponse.getResultAsString());
@@ -374,7 +372,7 @@ public class InternetManager{
 					sent = 1;
 					Gdx.app.log(RollingCat.LOG, "list event request success");
 				}
-				
+
 				@Override
 				public void failed(Throwable t) {	
 					okButton.setText("erreur");
@@ -393,7 +391,7 @@ public class InternetManager{
 	public static String getLevel(){
 		return level;
 	}
-	
+
 	/**
 	 * retourne la liste des patients sous forme de string formatée en json
 	 * @return les patients
@@ -402,7 +400,7 @@ public class InternetManager{
 		Gdx.app.log(RollingCat.LOG, "trying to get patients string");
 		return patients;
 	}
-	
+
 	/**
 	 * retourne le world du patient formaté sous forme de String json
 	 * @return
@@ -418,7 +416,7 @@ public class InternetManager{
 	public static boolean isReady() {
 		return value != null;
 	}
-	
+
 	/**
 	 * resets the values
 	 */
@@ -428,22 +426,22 @@ public class InternetManager{
 		value = null;
 		world = null;
 	}
-	
+
 	public static void updateLevelStats(String patientid, int levelID, int score, int duration,String color_gem) {
 		Gdx.app.log(RollingCat.LOG, "preparing send score update request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+levelID+"/"+score+"/"+duration+"/"+color_gem);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "text/plain");
-		
+
 		Gdx.app.log(RollingCat.LOG, "sending score update request...");
 
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-			
+
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-	           	Gdx.app.log(RollingCat.LOG, "score update request success");
-		    }
+				Gdx.app.log(RollingCat.LOG, "score update request success");
+			}
 
 			@Override
 			public void failed(Throwable t) {	
@@ -451,9 +449,9 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}
 		});
-		
+
 	}
-	
+
 	public static void getWorld(String patientid) {
 		world = null;
 		Gdx.app.log(RollingCat.LOG, "preparing get world request...");
@@ -461,16 +459,16 @@ public class InternetManager{
 		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "text/plain");
-		
+
 		Gdx.app.log(RollingCat.LOG, "sending get world request...");
 
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-			
+
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				world = httpResponse.getResultAsString();
-	           	Gdx.app.log(RollingCat.LOG, "get world request success");
-		    }
+				Gdx.app.log(RollingCat.LOG, "get world request success");
+			}
 
 			@Override
 			public void failed(Throwable t) {	
@@ -478,10 +476,10 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong");
 			}
 		});
-		
+
 	}
-	
-	public static TextButton getOkButton(){
+
+	public static TextButton getOkButton(final Screen screen, final Game game){
 		if(okButton == null){
 			TextButtonStyle style = new TextButtonStyle();
 			style.up = getSkin().getDrawable("button_up");
@@ -489,17 +487,19 @@ public class InternetManager{
 			style.font = getBigFont();
 			style.fontColor = Color.BLACK;
 			okButton = new TextButton("ok", style);
-			
+
 			okButton.setVisible(false);
 			okButton.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					if(sent != 0)
+					if(sent != 0){
 						okButton.setVisible(false);
+						game.setScreen(screen);
+					}
 				}
 			});
 		}
 		return okButton;
-		
+
 	}
 
 }
