@@ -30,42 +30,6 @@ public class LevelBuilder {
 	private static OrderedMap<Integer, ArrayList<Integer>> map;
 	private static int decalage;
 
-	//	private static String testRandomReal()
-	//	{
-	//		int tabSize[] = {3,3,2,4,6,5,6,7};
-	//		int size = 0;
-	//		for(int i = 0 ; i < tabSize.length ; i++)
-	//		{
-	//			size+=tabSize[i];
-	//		}
-	//
-	//		int tabX[] = new int[size];
-	//		int tabY[] = new int[size];
-	//		int index = 0;
-	//		int minX = 5;
-	//		int x;
-	//		int y;
-	//		for(int j = 0 ; j < tabSize.length ; j++)
-	//		{
-	//			minX = MainConstant.WIDTH * j + 5;
-	//			for(int k = 0 ; k < tabSize[j] ; k++)
-	//			{
-	//				x = (int)(Math.random() * (MainConstant.WIDTH-2)) + minX;
-	//				if(x == MainConstant.WIDTH * tabSize.length)
-	//				{
-	//					x = MainConstant.WIDTH * tabSize.length-1;
-	//				}
-	//
-	//				y = (int)(Math.random()*(MainConstant.HEIGHT_MAX - 3)) + 3;
-	//				tabX[index+k] = x;
-	//				tabY[index+k] = y;
-	//			}
-	//			index+=tabSize[j];
-	//		}
-	//		return LevelFactory.getStringLevelGeneratedByMCTS(tabX, tabY, tabSize);
-	//	}
-
-
 	/**
 	 * ajoute les acteurs au stage
 	 * @param s la string du niveau
@@ -123,15 +87,15 @@ public class LevelBuilder {
 			//			}
 			else if(subtab[0].equals("bronze_coin"))
 			{
-				stage.addActor(new Coin(x, y + decalage, Coin.BRONZE));
+				stage.addActor(new Coin(x, y + decalage, (decalage == 0)?Coin.SILVER:Coin.BRONZE));
 			}
 			else if(subtab[0].equals("silver_coin"))
 			{
-				stage.addActor(new Coin(x, y + decalage, Coin.SILVER));
+				stage.addActor(new Coin(x, y + decalage, (decalage == 0)?Coin.GOLD:Coin.SILVER));
 			}
 			else if(subtab[0].equals("gold_coin"))
 			{
-				stage.addActor(new Coin(x, y + decalage, Coin.GOLD));
+				stage.addActor(new Coin(x, y + decalage, (decalage == 0)?Coin.GOLD:Coin.SILVER));
 			}
 			else if(subtab[0].equals("carpet"))
 			{

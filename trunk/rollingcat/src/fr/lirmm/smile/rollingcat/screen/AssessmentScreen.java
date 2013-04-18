@@ -154,8 +154,8 @@ public class AssessmentScreen implements Screen {
 		}
 		
 		if(requestSending && track.getListOfEvents() != null){
-			InternetManager.sendEvents(track.getListOfEvents());
 			requestSending = false;
+			InternetManager.sendEvents(track.getListOfEvents());
 		}
 	}
 	@Override

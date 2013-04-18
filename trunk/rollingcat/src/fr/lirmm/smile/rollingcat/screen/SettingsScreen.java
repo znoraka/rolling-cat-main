@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.Localisation._alpha;
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 import static fr.lirmm.smile.rollingcat.Localisation._discard;
 import static fr.lirmm.smile.rollingcat.Localisation._evaporation_per_day;
 import static fr.lirmm.smile.rollingcat.Localisation._name;
@@ -102,9 +102,14 @@ public class SettingsScreen implements Screen {
 
 		stage.draw();
 		stage.act(delta);
+		
+		batch.begin();
+		warningMessage.draw(batch, 1);
+		batch.end();
 
 		checkHeightBounds();
 		checkWidthBounds();
+		
 
 	}
 
@@ -326,9 +331,9 @@ public class SettingsScreen implements Screen {
 		LabelStyle ls = new LabelStyle(font, Color.WHITE);
 		labelStyle.background = skin.getDrawable("empty");
 
-		warningMessage = new Label("", ls);
+		warningMessage = new Label(StringUtils.addEnters(localisation(_cadran), 14), ls);
 		warningMessage.setX(GameConstants.DISPLAY_WIDTH * 0.6f);
-		warningMessage.setY(GameConstants.DISPLAY_HEIGHT * 0.3f);
+		warningMessage.setY(GameConstants.DISPLAY_HEIGHT * 0.25f);
 
 
 	}

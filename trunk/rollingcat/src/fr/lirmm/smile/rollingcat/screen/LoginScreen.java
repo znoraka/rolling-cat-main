@@ -154,7 +154,6 @@ public class LoginScreen implements Screen, InputProcessor{
 		table.setHeight(GameConstants.DISPLAY_HEIGHT);
 		
 		table.add(button).padTop(GameConstants.DISPLAY_HEIGHT * 0.3f).padRight(10);
-		table.add(settings).padTop(GameConstants.DISPLAY_HEIGHT * 0.3f).padLeft(10);
 		
 		stage.addActor(loginTextField);
 		stage.addActor(passwordTextField);

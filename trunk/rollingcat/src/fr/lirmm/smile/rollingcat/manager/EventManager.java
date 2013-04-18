@@ -20,6 +20,9 @@ public class EventManager {
 	public static final String pointing_task_set="pointing_task_set";
 	public static final String end_game_event_type = "session_end";
 	public static final String game_info_event_type = "game_info";
+	public static final String task_success = "task_success";
+	public static final String task_fail = "task_fail";
+
 	
 	private static final String timestamp = "timestamp";
 	private static String type = "event_type";

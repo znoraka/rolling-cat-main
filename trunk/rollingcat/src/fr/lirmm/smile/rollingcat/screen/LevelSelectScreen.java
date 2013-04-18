@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.Localisation._back;
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 import static fr.lirmm.smile.rollingcat.Localisation._duration;
 import static fr.lirmm.smile.rollingcat.Localisation._found;
 import static fr.lirmm.smile.rollingcat.Localisation._gem;
@@ -15,7 +15,7 @@ import static fr.lirmm.smile.rollingcat.Localisation._score;
 import static fr.lirmm.smile.rollingcat.Localisation._start;
 import static fr.lirmm.smile.rollingcat.Localisation._tutorial;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
@@ -32,6 +32,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -57,7 +59,8 @@ public class LevelSelectScreen implements Screen {
 	private BitmapFont font;
 	private Stage stage;
 	private Skin skin;
-	private TextButton start, next, previous, back, score;
+	private TextButton start, back;
+	private ImageButton next, previous, score;
 	private ArrayList<Table> tables;
 	private int currentButton;
 	private Table table;
@@ -183,6 +186,7 @@ public class LevelSelectScreen implements Screen {
 		{
 			int index = (currentButton + i + tables.size() - sizeH.length /2 )%tables.size(); 
 			table = tables.get(index);
+			table.setColor(0.8f, 0.8f, 0.8f, 1);
 			table.setZIndex(Zindexes[i] + 1);
 			if(table.getZIndex() > 1)
 				table.setVisible(true);
@@ -192,6 +196,7 @@ public class LevelSelectScreen implements Screen {
 			table.addAction(Actions.parallel(Actions.sizeTo(sizeW[i], sizeH[i], SPEED, Interpolation.pow2Out)));
 			table.invalidate();
 		}
+		tables.get(currentButton).setColor(1, 1, 1, 1);
 	}
 
 	@Override
@@ -247,8 +252,9 @@ public class LevelSelectScreen implements Screen {
 					game.setScreen(new PatientScreen(game, patient));
 				}
 			});
-
-			previous = new TextButton(localisation(_previous), style);
+			
+			
+			previous = new ImageButton(skin.getDrawable("triangle_up"));
 			previous.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 					previous();
@@ -259,7 +265,7 @@ public class LevelSelectScreen implements Screen {
 				}
 			});
 
-			next = new TextButton(localisation(_next), style);
+			next = new ImageButton(skin.getDrawable("triangle_down"));
 			next.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 					next();
@@ -270,7 +276,7 @@ public class LevelSelectScreen implements Screen {
 				}
 			});
 
-			score = new TextButton(localisation(_gems), style);
+			score = new ImageButton(getGameSkin().getDrawable("red_gem"));
 			score.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					game.setScreen(new GameProgressionScreen(game, patient, world.getGems(), null, 0));
@@ -290,11 +296,12 @@ public class LevelSelectScreen implements Screen {
 			changeTablesSize();
 
 			start.setX(GameConstants.DISPLAY_WIDTH - start.getWidth());
-			next.setX(GameConstants.DISPLAY_WIDTH - next.getWidth());
-			next.setY(GameConstants.DISPLAY_HEIGHT - next.getHeight()); 
-			previous.setX(0);
-			previous.setY(GameConstants.DISPLAY_HEIGHT - previous.getHeight()); 
-			score.setX(GameConstants.DISPLAY_WIDTH / 2 - score.getWidth() / 2);
+			previous.setX(GameConstants.DISPLAY_WIDTH * 0.5f - next.getWidth() * 0.5f);
+			previous.setY(GameConstants.DISPLAY_HEIGHT - next.getHeight()); 
+			next.setX(GameConstants.DISPLAY_WIDTH * 0.5f - previous.getWidth() * 0.5f);
+			next.setY(0); 
+			score.setX(0);
+			score.setY(GameConstants.DISPLAY_HEIGHT - score.getHeight());
 		}
 	}
 
@@ -383,7 +390,7 @@ public class LevelSelectScreen implements Screen {
 				}	
 				style.fontColor = Color.BLACK;
 				table.add(new Label(localisation(_level)+" " + (index), style)).left().expand();
-				table.add(new Label(localisation(_score) + " : " + world.get(index).getScore() + " / " + ((world.get(index).getContent() != null)?world.get(index).getMaxScore():"?"), style)).right().expand();
+				table.add(new Label(localisation(_high_score) + " : " + world.get(index).getScore(), style)).right().expand();
 				table.row();
 				table.add(new Label(localisation(_duration) + " : " + ((world.get(index).getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
 				table.add(new Label(localisation(_gem) + " " + ((world.get(index).getGem() == null)?localisation(_not_found):(world.get(index).getGem().equals("empty"))?localisation(_not_found):localisation(_found)), style)).right().expand();

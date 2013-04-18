@@ -137,6 +137,7 @@ public class MouseCursorGame implements InputProcessor{
 		item = 0;
 		actor.setTouchable(Touchable.disabled);
 		addEvent(EventManager.pointing_task_end);
+		addEvent(EventManager.task_success);
 		this.isTrigger = true;
 	}
 
@@ -193,6 +194,8 @@ public class MouseCursorGame implements InputProcessor{
 		cat.getActions().clear();
 		cat.setState(Cat.FALLING);
 		isFalling = true;
+		addEvent(EventManager.pointing_task_end);
+		addEvent(EventManager.task_fail);
 	}
 
 	/**

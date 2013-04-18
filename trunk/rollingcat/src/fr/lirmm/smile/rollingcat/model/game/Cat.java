@@ -139,8 +139,9 @@ public class Cat extends Entity {
 					state = FALLING;
 			}
 			if(actor instanceof Fan){
-				if(this.getXOnGrid() == ((Entity) actor).getXOnGrid())
+				if(this.getXOnGrid() == ((Entity) actor).getXOnGrid() & this.getMode().equals(((Fan) actor).getMode())){
 					((Fan) actor).declencher(true);
+				}
 				else
 					((Fan) actor).declencher(false);
 				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible()){
@@ -151,8 +152,10 @@ public class Cat extends Entity {
 				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
 					state = HITTING;
 			if(actor instanceof Target){
-				if(((Entity) actor).getBounds().overlaps(bounds))
+				if(((Entity) actor).getBounds().overlaps(bounds)){
+					Target.setInstance((Target) actor);
 					done = true;
+				}
 			}
 
 			if(actor instanceof Coin){

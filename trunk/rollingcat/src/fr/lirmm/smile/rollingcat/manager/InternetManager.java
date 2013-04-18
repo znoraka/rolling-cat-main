@@ -480,24 +480,22 @@ public class InternetManager{
 	}
 
 	public static TextButton getOkButton(final Screen screen, final Game game){
-		if(okButton == null){
-			TextButtonStyle style = new TextButtonStyle();
-			style.up = getSkin().getDrawable("button_up");
-			style.down = getSkin().getDrawable("button_down");
-			style.font = getBigFont();
-			style.fontColor = Color.BLACK;
-			okButton = new TextButton("ok", style);
+		TextButtonStyle style = new TextButtonStyle();
+		style.up = getSkin().getDrawable("button_up");
+		style.down = getSkin().getDrawable("button_down");
+		style.font = getBigFont();
+		style.fontColor = Color.BLACK;
+		okButton = new TextButton("ok", style);
 
-			okButton.setVisible(false);
-			okButton.addListener(new ClickListener() {
-				public void clicked (InputEvent event, float x, float y) {
-					if(sent != 0){
-						okButton.setVisible(false);
-						game.setScreen(screen);
-					}
+		okButton.setVisible(false);
+		okButton.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				if(sent != 0){
+					okButton.setVisible(false);
+					game.setScreen(screen);
 				}
-			});
-		}
+			}
+		});
 		return okButton;
 
 	}

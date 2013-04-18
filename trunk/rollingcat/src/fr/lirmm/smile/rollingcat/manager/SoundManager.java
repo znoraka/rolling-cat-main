@@ -71,7 +71,7 @@ public class SoundManager {
 		coinPickup = Gdx.audio.newSound(Gdx.files.internal("data/sound/coin.ogg"));
 		nextButton = Gdx.audio.newSound(Gdx.files.internal("data/sound/next.ogg"));
 		fall = Gdx.audio.newSound(Gdx.files.internal("data/sound/ohno.ogg"));
-		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sound/maintheme.ogg"));
+		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sound/game.ogg"));
 		jump = Gdx.audio.newSound(Gdx.files.internal("data/sound/bigjump.ogg"));
 		win = Gdx.audio.newSound(Gdx.files.internal("data/sound/gem_1.ogg"));
 		fan = Gdx.audio.newSound(Gdx.files.internal("data/sound/fan.ogg"));
