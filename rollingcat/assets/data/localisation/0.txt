@@ -13,7 +13,7 @@
 	dominant_member : "Gaucher ou droitier",
 	hemiplegia : "Hémiplégie",
 	previous : "Précédent",
-	start : "Commencer",
+	start : "Start",
 	next : "Suivant",
 	gems : "Gemmes",
 	gem : "Gemme",
@@ -65,5 +65,7 @@
 	right: "Droite",
 	left: "Gauche",
 	right_handed: "Droitier",
-	left_handed: "Gaucher"
+	left_handed: "Gaucher",
+	high_score: "Meilleur score",
+	cadran: "Sélectionner les cadrans préférables de travail"
 }
