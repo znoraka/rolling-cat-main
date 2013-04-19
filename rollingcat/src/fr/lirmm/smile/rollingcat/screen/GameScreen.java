@@ -179,11 +179,11 @@ public class GameScreen implements ScreenPausable{
 	 * gere la position de la camera
 	 */
 	private void updateCamPos() {
-		stage.getCamera().position.set((float) (Math.max(0, (Math.floor((cat.getX()) / GameConstants.VIEWPORT_WIDTH)) * GameConstants.VIEWPORT_WIDTH)) + GameConstants.VIEWPORT_WIDTH * 0.5f, ((cat.getY() > GameConstants.VIEWPORT_HEIGHT * 1.5f)?(GameConstants.VIEWPORT_HEIGHT * 2.5f):(GameConstants.VIEWPORT_HEIGHT * 0.5f)) + GameConstants.BLOCK_HEIGHT, 0);
+		stage.getCamera().position.set((float) (Math.max(0, (Math.floor((cat.getX() + GameConstants.BLOCK_WIDTH * 0.5f) / GameConstants.VIEWPORT_WIDTH)) * GameConstants.VIEWPORT_WIDTH)) + GameConstants.VIEWPORT_WIDTH * 0.5f, ((cat.getY() > GameConstants.VIEWPORT_HEIGHT * 1.5f)?(GameConstants.VIEWPORT_HEIGHT * 2.5f):(GameConstants.VIEWPORT_HEIGHT * 0.5f)) + GameConstants.BLOCK_HEIGHT, 0);
 		box.setX(stage.getCamera().position.x - box.getWidth() / 2);
 		box.setY(stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT);
 		mc.setDecalage((cat.getY() > GameConstants.VIEWPORT_HEIGHT * 1.5f)?GameConstants.VIEWPORT_HEIGHT*2:0);
-		box.setEtageAndSegment((cat.getMode().equals(GameConstants.ASSISTANCE))?1:0, Math.abs((int) Math.floor((cat.getX()) / GameConstants.VIEWPORT_WIDTH)));
+		box.setEtageAndSegment((cat.getMode().equals(GameConstants.ASSISTANCE))?1:0, Math.abs((int) Math.floor((cat.getX() + GameConstants.BLOCK_WIDTH) / GameConstants.VIEWPORT_WIDTH)));
 		segment = (int) Math.floor(cat.getX() / GameConstants.VIEWPORT_WIDTH);
 	}
 

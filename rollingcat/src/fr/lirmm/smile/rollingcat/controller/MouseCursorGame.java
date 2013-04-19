@@ -104,7 +104,7 @@ public class MouseCursorGame implements InputProcessor{
 
 				else if(actor instanceof Box){
 					item = box.empty();
-					addEvent(EventManager.pointing_task_start);
+					addEvent(EventManager.pointing_task_start, actor.getX() + actor.getWidth() * 0.5f, 0);
 				}
 				else if(actor instanceof Dog && item == Box.BONE){
 					SoundManager.barkPlay();
@@ -136,8 +136,8 @@ public class MouseCursorGame implements InputProcessor{
 		box.fill();
 		item = 0;
 		actor.setTouchable(Touchable.disabled);
-		addEvent(EventManager.pointing_task_end);
-		addEvent(EventManager.task_success);
+		addEvent(EventManager.pointing_task_end, actor.getX() + actor.getWidth() * 0.5f, actor.getY() + actor.getHeight() * 0.5f);
+		addEvent(EventManager.task_success, actor.getX() + actor.getWidth() * 0.5f, actor.getY() + actor.getHeight() * 0.5f);
 		this.isTrigger = true;
 	}
 
@@ -146,10 +146,12 @@ public class MouseCursorGame implements InputProcessor{
 	 * appelé lorsque le patient réussi une tache de pointage
 	 * @param pointingTaskEnd 
 	 */
-	private void addEvent(String eventType){
+	private void addEvent(String eventType, float x, float y){
+		Gdx.app.log(RollingCat.LOG, "x : " + x(x));
+		Gdx.app.log(RollingCat.LOG, "y : " + y(y));
 		parameters = new OrderedMap<String, String>();
-		parameters.put("x", ""+ x(actor.getX()%GameConstants.DISPLAY_WIDTH));
-		parameters.put("y", ""+ y(actor.getY()));
+		parameters.put("x", ""+ x(x));
+		parameters.put("y", ""+ y(y));
 		parameters.put("z", ""+0);
 		EventManager.create(eventType, parameters);
 	}
@@ -194,8 +196,8 @@ public class MouseCursorGame implements InputProcessor{
 		cat.getActions().clear();
 		cat.setState(Cat.FALLING);
 		isFalling = true;
-		addEvent(EventManager.pointing_task_end);
-		addEvent(EventManager.task_fail);
+		addEvent(EventManager.pointing_task_end, cat.getLastActorHit().getX(), cat.getLastActorHit().getY());
+		addEvent(EventManager.task_fail, cat.getLastActorHit().getX(), cat.getLastActorHit().getY());
 	}
 
 	/**
@@ -250,8 +252,8 @@ public class MouseCursorGame implements InputProcessor{
 				oldX = x;
 				oldY = y;
 				map.put(map.size(), new float[] {x, y%GameConstants.VIEWPORT_HEIGHT, segment});
-				parameters.put("x", ""+x(x%GameConstants.DISPLAY_WIDTH));
-				parameters.put("y", ""+y(y%GameConstants.VIEWPORT_HEIGHT));
+				parameters.put("x", ""+x(x));
+				parameters.put("y", ""+y(y));
 				parameters.put("z", ""+0);
 				EventManager.create(EventManager.player_cursor_event_type, parameters);
 			}

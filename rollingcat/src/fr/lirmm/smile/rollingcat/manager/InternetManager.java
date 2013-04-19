@@ -39,7 +39,7 @@ public class InternetManager{
 	private static String sessionid;
 	private static String world;
 	private static TextButton okButton;
-	private static int sent = 0;
+	public static int sent = 0;
 
 
 	/**
