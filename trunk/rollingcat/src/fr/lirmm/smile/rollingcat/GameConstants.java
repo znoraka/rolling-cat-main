@@ -69,10 +69,10 @@ public class GameConstants {
 	public static int numberOfRows = 20;
 	public static int totalVolume = 20;
 	public static int volumePerLevel = 5;
-	public static boolean area_1 = true;
-	public static boolean area_2 = true;
-	public static boolean area_3 = true;
-	public static boolean area_4 = true;
+	public static boolean area_1 = false;
+	public static boolean area_2 = false;
+	public static boolean area_3 = false;
+	public static boolean area_4 = false;
 	
 	/*
 	 * initialise la taille de la fenetre et des entités
@@ -91,6 +91,9 @@ public class GameConstants {
 		VIEWPORT_HEIGHT = (int) (BLOCK_HEIGHT * ROWS);
 		
 		SCALE = (width / 800f);
+		
+		numberOfLines = ROWS;
+		numberOfRows = COLS;
 		
 	}
 }

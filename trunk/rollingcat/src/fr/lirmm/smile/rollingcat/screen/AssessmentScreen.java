@@ -14,6 +14,7 @@ import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -52,7 +53,7 @@ public class AssessmentScreen implements Screen {
 	private int selected;
 	private Patient patient;
 	private float timeout;
-	private float duration;
+	private float duration, elapsedTime;
 	private boolean waitingToEnterInArea, requestSending;
 	private OrderedMap<String, String> parameters;
 	private boolean done;
@@ -157,6 +158,41 @@ public class AssessmentScreen implements Screen {
 			requestSending = false;
 			InternetManager.sendEvents(track.getListOfEvents());
 		}
+		
+		if(Gdx.input.isKeyPressed(Keys.ENTER)){
+			if(done){
+			parameters = new OrderedMap<String, String>();
+			parameters.put("duration", ""+(int)duration);
+			InternetManager.endGameSession();
+			EventManager.create(EventManager.end_game_event_type, parameters);
+			track = new Track(mc.getMap(), Track.ASSESSEMENT, duration);
+			patient.addTrack(track);
+			requestSending = true;
+			pauseStage.clear();
+			upload = InternetManager.getOkButton(new PatientScreen(game, patient), game);
+			pauseStage.addActor(upload);
+			upload.setX(GameConstants.DISPLAY_WIDTH * 0.5f - upload.getWidth() * 0.5f);
+			upload.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - upload.getHeight() * 0.5f);
+			done = false;
+			}
+			if(InternetManager.sent != 0)
+				game.setScreen(new PatientScreen(game, patient));
+		}
+		
+//		if(Gdx.input.isKeyPressed(Keys.SPACE) & elapsedTime > 1){
+//			if(selected > 0)
+//				selected--;
+//			
+//			if(selected > 0)
+//				selected--;
+//			
+//			triangles.get(selected).clearProgression();
+//			elapsedTime = 0;
+//			
+//			waitingToEnterInArea = false;
+//		}
+//		
+//		elapsedTime += delta;
 	}
 	@Override
 	public void resize(int width, int height) {
@@ -171,6 +207,7 @@ public class AssessmentScreen implements Screen {
 		batch = getSpriteBatch();
 		EventManager.clear();
 		duration = 0;
+		elapsedTime = 0;
 		help = 1;
 		done = false;
 		requestSending = false;
@@ -288,7 +325,6 @@ public class AssessmentScreen implements Screen {
 		label.setText(s);
 		label.setY(GameConstants.DISPLAY_HEIGHT * 0.85f);
 		label.setX(GameConstants.DISPLAY_WIDTH * 0.5f - 20 * 6);
-
 	}
 
 }

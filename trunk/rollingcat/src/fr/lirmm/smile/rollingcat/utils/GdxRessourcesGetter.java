@@ -130,6 +130,7 @@ public class GdxRessourcesGetter {
 			stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
 		}
 		else{
+			stage.clear();
 			stage.dispose();
 			stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
 		}

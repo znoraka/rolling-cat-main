@@ -3,6 +3,8 @@ package fr.lirmm.smile.rollingcat.manager;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 
+import java.util.Arrays;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpMethods;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
@@ -39,7 +42,8 @@ public class InternetManager{
 	private static String sessionid;
 	private static String world;
 	private static TextButton okButton;
-	private static int sent = 0;
+	public static int sent = 0;
+	public static float [] ability;
 
 
 	/**
@@ -468,6 +472,76 @@ public class InternetManager{
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				world = httpResponse.getResultAsString();
 				Gdx.app.log(RollingCat.LOG, "get world request success");
+			}
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
+				Gdx.app.log(RollingCat.LOG, "something went wrong");
+			}
+		});
+
+	}
+	
+	public static void getAbilityZone(Patient patient) {
+		ability = null;
+		Gdx.app.log(RollingCat.LOG, "preparing get ability zone request...");
+
+		final Json json = new Json();
+		json.setOutputType(JsonWriter.OutputType.json);
+
+		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/abilityzone/"+patient.getID()+"/get");
+		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
+
+		map.put("builderId","ant-0.1");
+		map.put("patientId", patient.getID());
+		map.put("numberOfLines", GameConstants.numberOfLines);
+		map.put("numberOfRows", GameConstants.numberOfRows);
+		map.put("totalHeight", GameConstants.workspaceHeight);
+		map.put("totalWidth", GameConstants.workspaceWidth);
+		map.put("totalVolume", GameConstants.totalVolume);
+		map.put("volumePerLevel", GameConstants.volumePerLevel);
+		map.put("ImportanceOfEffort", 0.9f);
+
+		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
+		algoParameterAZ.put("range", GameConstants.range);
+		algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
+		algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
+		algoParameterAZ.put("alpha", GameConstants.alpha);
+		map.put("parameters", algoParameterAZ); 
+
+
+		httpGet.setContent(json.toJson(map));
+
+		Gdx.app.log(RollingCat.LOG, httpGet.getContent());	
+
+		httpGet.setHeader(key, value);
+		httpGet.setHeader("Content-Type", "application/json");
+
+		Gdx.app.log(RollingCat.LOG, "sending level request...");
+
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				String string = httpResponse.getResultAsString();
+				OrderedMap<String, Object>lang = (OrderedMap<String, Object>) new JsonReader().parse(string);
+				ability = json.readValue("content", float[].class, lang);
+//				Gdx.app.log(RollingCat.LOG, Arrays.toString(s));
+//				int a = 0;
+//				ability = new float[GameConstants.ROWS][GameConstants.COLS];
+//				for (int i = 0; i < GameConstants.ROWS; i++) {
+//					for (int j = 0; j < GameConstants.COLS; j++) {
+//						ability[i][j] = s[a];
+//						a++;
+//					}
+//				}
+//				
+//				for (int i = 0; i < ability.length; i++) {
+//					Gdx.app.log(RollingCat.LOG, Arrays.toString(ability[i]));
+//				}
 			}
 
 			@Override
