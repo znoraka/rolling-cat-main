@@ -67,5 +67,6 @@
 	right_handed: "Droitier",
 	left_handed: "Gaucher",
 	high_score: "Meilleur score",
-	cadran: "Sélectionner les cadrans préférables de travail"
+	cadran: "Sélectionner les cadrans préférables de travail",
+	ready: "Je suis prêt"
 }

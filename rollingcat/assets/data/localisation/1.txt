@@ -67,6 +67,7 @@
 	left_handed: "Left handed",
 	tracks : "Tracks",
 	high_score: "Highest score",
-	cadran: "Select the work dials"
+	cadran: "Select the work dials",
+	ready: "I am ready"
 	
 }

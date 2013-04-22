@@ -50,6 +50,7 @@ public class Cat extends Entity {
 	float time;
 	boolean hasCatchCoin;
 	private boolean success;
+	private Actor actor;
 	/**
 	 * l'acteur principal
 	 * @param x
@@ -95,6 +96,7 @@ public class Cat extends Entity {
 	 * @param stage
 	 */
 	public void move(Stage stage){
+
 		hasCatchCoin = false;
 
 		top.set(this.getX() + GameConstants.BLOCK_WIDTH *0.5f, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
@@ -103,177 +105,203 @@ public class Cat extends Entity {
 		left.set(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
 		this.bounds.set(this.getX() + GameConstants.BLOCK_WIDTH / 4, this.getY() + GameConstants.BLOCK_HEIGHT / 4, this.getWidth() / 2, this.getHeight() / 2);
 
-		if(state != FLYING & state != JUMPING)
-			state = FALLING;
 
-		for (Actor actor : stage.getActors()) {
-			if(actor instanceof GroundBlock){
-				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible() & state != FLYING)
-					state = WALKING;
-				else if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible() & state == FLYING){
-					if(this.getActions().size == 0){
-						this.addAction(Actions.sequence(
-								Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 3) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 2),
-								new Action() {
+		if(state != TELEPORTING){
 
-									@Override
-									public boolean act(float delta) {
-										state = FALLING;
-										return true;
-									}
-								}
-								));
+			if(state != FLYING & state != JUMPING)
+				state = FALLING;
+
+			for (Actor actor : stage.getActors()) {
+				if(actor instanceof GroundBlock){
+					if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible() & state != FLYING){
+						state = WALKING;
+						this.actor = actor;
 					}
-				}
-			}
-			if(actor instanceof Dog & state == WALKING)
-				if((((Entity) actor).getBounds().overlaps(right) || ((Entity) actor).getBounds().overlaps(bounds)) & actor.isVisible())
-					state = HITTING;
-			if(actor instanceof Wasp){
-				if(this.getXOnGrid() == ((Entity) actor).getXOnGrid())
-					((Wasp) actor).declencher(true);
-				else
-					((Wasp) actor).declencher(false);
-
-				if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
-					state = FALLING;
-			}
-			if(actor instanceof Fan){
-				if(this.getXOnGrid() == ((Entity) actor).getXOnGrid() & this.getMode().equals(((Fan) actor).getMode())){
-					((Fan) actor).declencher(true);
-				}
-				else
-					((Fan) actor).declencher(false);
-				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible()){
-					state = FLYING;
-				}
-			}
-			if(actor instanceof Carpet)
-				if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible())
-					state = HITTING;
-			if(actor instanceof Target){
-				if(((Entity) actor).getBounds().overlaps(bounds)){
-					Target.setInstance((Target) actor);
-					done = true;
-				}
-			}
-
-			if(actor instanceof Coin){
-				if(((Entity) actor).getBounds().overlaps(bounds) & !((Coin) actor).pickedUp()){
-					hasCatchCoin = true;
-					SoundManager.pickupPlay();
-					if(((Coin) actor).getType() == Coin.BRONZE)
-					{
-						bronze++;
-					}
-					else if(((Coin) actor).getType() == Coin.SILVER)
-					{
-						silver++;
-					}
-					else if(((Coin) actor).getType() == Coin.GOLD)
-					{
-						gold++;
-					}
-					((Coin) actor).pickUp();
-				}
-			}
-
-			/**
-			 * si le chat touche une bouée en mode challenge c'est qu'il est tombé, il va donc en assistance
-			 * si le chat touche une bouée en mode assistance (rater = tomber à cause du timeout)
-			 * 	s'il a réussi l'écran il passe en mode challenge
-			 * 	s'il a raté l'écran il reste en mode assistance
-			 */
-			if(state != TELEPORTING){
-				if(actor instanceof Door){
-					if(((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT){
-						Gdx.app.log(RollingCat.LOG, "hitting door");
-						this.getActions().clear();
-						requestBoxEmptiing = true;
-						state = TELEPORTING;
-						Gdx.app.log(RollingCat.LOG, ""+ ((Door) actor).getXOnGrid() % GameConstants.COLS);
-						/**
-						 * si l'on est pas au dernier écran
-						 */
-						if(((Door) actor).getXOnGrid() % GameConstants.COLS == 0)
-						{
-							if(getMode() == GameConstants.CHALLENGE){
-								if(success){
-									this.addAction(Actions.sequence(
-											Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
-											new Action() {
-
-												@Override
-												public boolean act(float delta) {
-													state = WALKING;
-													return true;
-												}
-											}));
-								}
-								else{
-									this.addAction(Actions.sequence(
-											Actions.moveTo(actor.getX(), this.getY() + GameConstants.VIEWPORT_HEIGHT * 2),
-											new Action() {
-
-												@Override
-												public boolean act(float delta) {
-													state = WALKING;
-													return true;
-												}
-											}));
-								}
-							}
-
-							if(getMode() == GameConstants.ASSISTANCE){
-								if(success){
-									this.addAction(Actions.sequence(
-											Actions.moveTo(actor.getX(), this.getY() - GameConstants.VIEWPORT_HEIGHT * 2),
-											new Action() {
-
-												@Override
-												public boolean act(float delta) {
-													state = WALKING;
-													return true;
-												}
-											}));
-								}
-								else{
-									this.addAction(Actions.sequence(
-											Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
-											new Action() {
-
-												@Override
-												public boolean act(float delta) {
-													success = true;
-													state = WALKING;
-													return true;
-												}
-											}));
-								}
-							}
-						}
-						/**
-						 * si on est on dernier écran
-						 */
-						else
-						{
+					else if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible() & state == FLYING){
+						this.actor = actor;
+						if(this.getActions().size == 0){
 							this.addAction(Actions.sequence(
-									Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
+									Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 3) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 2),
 									new Action() {
 
 										@Override
 										public boolean act(float delta) {
-											success = true;
-											state = WALKING;
+											state = FALLING;
 											return true;
 										}
-									}));
+									}
+									));
 						}
 					}
 				}
+				if(actor instanceof Dog & state == WALKING)
+					if((((Entity) actor).getBounds().overlaps(right) || ((Entity) actor).getBounds().overlaps(bounds)) & actor.isVisible()){
+						state = HITTING;
+						this.actor = actor;
+					}
+				if(actor instanceof Wasp){
+					if(this.getXOnGrid() == ((Entity) actor).getXOnGrid()){
+						((Wasp) actor).declencher(true);
+						this.actor = actor;
+					}
+					else
+						((Wasp) actor).declencher(false);
 
+					if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
+						state = FALLING;
+				}
+				if(actor instanceof Fan){
+					if(this.getXOnGrid() == ((Entity) actor).getXOnGrid() & this.getMode().equals(((Fan) actor).getMode())){
+						((Fan) actor).declencher(true);
+					}
+					else
+						((Fan) actor).declencher(false);
+					if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible()){
+						state = FLYING;
+					}
+				}
+				if(actor instanceof Carpet)
+					if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible()){
+						state = HITTING;
+						this.actor = actor;
+					}
+				if(actor instanceof Target){
+					if(((Entity) actor).getBounds().overlaps(bounds)){
+						Target.setInstance((Target) actor);
+						done = true;
+					}
+				}
+
+				if(actor instanceof Coin){
+					if(((Entity) actor).getBounds().overlaps(bounds) & !((Coin) actor).pickedUp()){
+						hasCatchCoin = true;
+						SoundManager.pickupPlay();
+						if(((Coin) actor).getType() == Coin.BRONZE)
+						{
+							bronze++;
+						}
+						else if(((Coin) actor).getType() == Coin.SILVER)
+						{
+							silver++;
+						}
+						else if(((Coin) actor).getType() == Coin.GOLD)
+						{
+							gold++;
+						}
+						((Coin) actor).pickUp();
+					}
+				}
+
+				/**
+				 * si le chat touche une bouée en mode challenge c'est qu'il est tombé, il va donc en assistance
+				 * si le chat touche une bouée en mode assistance (rater = tomber à cause du timeout)
+				 * 	s'il a réussi l'écran il passe en mode challenge
+				 * 	s'il a raté l'écran il reste en mode assistance
+				 */
+				if(actor instanceof Door){
+					if((((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.RIGHT) & success == false){
+						success = true;
+					}
+
+					if(((Door) actor).getType() == Door.LEFT){
+						if(
+								((Entity) actor).getBounds().overlaps(right) ||
+								((Entity) actor).getMode().equals(GameConstants.ASSISTANCE) & this.getX() == actor.getX()  & this.getMode().equals(GameConstants.ASSISTANCE))
+						{
+							Gdx.app.log(RollingCat.LOG, "hitting door");
+							this.getActions().clear();
+							requestBoxEmptiing = true;
+							state = TELEPORTING;
+							Gdx.app.log(RollingCat.LOG, ""+ ((Door) actor).getXOnGrid() % GameConstants.COLS);
+							/**
+							 * si l'on est pas au dernier écran
+							 */
+							if(((Door) actor).getXOnGrid() % GameConstants.COLS == 0)
+							{
+								if(getMode() == GameConstants.CHALLENGE){
+									if(success){
+										this.addAction(Actions.sequence(
+												Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
+												new Action() {
+
+													@Override
+													public boolean act(float delta) {
+														state = HITTING;
+														return true;
+													}
+												}
+												));
+									}
+									else{
+										this.addAction(Actions.sequence(
+												Actions.moveTo(actor.getX(), actor.getY() + GameConstants.VIEWPORT_HEIGHT * 2),
+												new Action() {
+
+													@Override
+													public boolean act(float delta) {
+														state = HITTING;
+														return true;
+													}
+												}
+												));
+									}
+								}
+
+								if(getMode() == GameConstants.ASSISTANCE){
+									if(success){
+										this.addAction(Actions.sequence(
+												Actions.moveTo(actor.getX(), actor.getY() - GameConstants.VIEWPORT_HEIGHT * 2),
+												new Action() {
+
+													@Override
+													public boolean act(float delta) {
+														state = HITTING;
+														return true;
+													}
+												}
+												));
+									}
+									else{
+										this.addAction(Actions.sequence(
+												Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
+												new Action() {
+
+													@Override
+													public boolean act(float delta) {
+														state = HITTING;
+														return true;
+													}
+												}
+												));
+									}
+								}
+
+							}
+							/**
+							 * si on est on dernier écran
+							 */
+							else
+							{
+								this.addAction(Actions.sequence(
+										Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
+										new Action() {
+
+											@Override
+											public boolean act(float delta) {
+												state = HITTING;
+												return true;
+											}
+										}
+										));	
+							}
+						}
+					}
+
+				}
+				
 				if(actor instanceof Gap){
 					if(((Entity) actor).getBounds().overlaps(left)){
+						this.actor = actor;
 						if((! ((Gap) actor).hasGiven())){
 							state = HITTING;
 						}
@@ -283,30 +311,30 @@ public class Cat extends Entity {
 						}
 					}
 				}
+
+
 			}
 
+			if(!this.isDone()){
+				if(state != JUMPING){
+					if(state == FALLING & this.getActions().size == 0){
+						this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() - 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
+					}
 
-		}
+					else if(state == FLYING & this.getActions().size == 0)
+						this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 0.75f));
 
-		if(!this.isDone()){
-			if(state != JUMPING){
-				if(state == FALLING & this.getActions().size == 0){
-					this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() - 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
-				}
+					else if(state == WALKING & this.getActions().size == 0){
+						this.addAction(Actions.moveTo((this.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH, (this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
+					}
 
-				else if(state == FLYING & this.getActions().size == 0)
-					this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 0.75f));
-
-				else if(state == WALKING & this.getActions().size == 0){
-					this.addAction(Actions.moveTo((this.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH, (this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
-				}
-
-				else if(state == HITTING){
-					this.getActions().clear();
+					else if(state == HITTING){
+						this.getActions().clear();
+					}
 				}
 			}
-		}
 
+		}
 		root.setX(getX() + GameConstants.BLOCK_WIDTH *0.6f);
 		root.setY(getY());
 		oldX = this.getXOnGrid();
@@ -463,16 +491,16 @@ public class Cat extends Entity {
 		return oldX != getXOnGrid();
 	}
 
-	/**
-	 * le chemin assistance est en haut et le chemin challenge est en bas
-	 * si le chat est en bas (y < {@link GameConstants#VIEWPORT_HEIGHT} alors il est en mode challenge
-	 * @return le mode
-	 */
-	public String getMode(){
-		return (this.getY() < GameConstants.VIEWPORT_HEIGHT * 1.5f)?GameConstants.CHALLENGE:GameConstants.ASSISTANCE;
-	}
 
 	public void setSuccess(boolean success){
 		this.success = success;
+	}
+
+	/**
+	 * 
+	 * @return le dernier acteur touché par le chat
+	 */
+	public Actor getLastActorHit() {
+		return actor;
 	}
 }

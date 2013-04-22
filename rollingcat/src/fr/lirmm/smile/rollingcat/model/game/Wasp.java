@@ -1,8 +1,8 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
-import java.util.Random;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getWaspAtlas;
 
-import javax.xml.soap.Detail;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,10 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getWaspAtlas;
-
 import fr.lirmm.smile.rollingcat.GameConstants;
-import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;

@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -116,11 +117,12 @@ public class GameScreen implements ScreenPausable{
 			font.draw(batch, cat.getMode(), GameConstants.VIEWPORT_WIDTH * 0.5f, GameConstants.VIEWPORT_HEIGHT * 0.5f);
 			table.draw(batch, 1);
 			batch.end();
+			sr.setProjectionMatrix(stage.getCamera().combined);
+			drawAbilityZone();
 			stage.draw();
 			stage.act(delta);
-			sr.setProjectionMatrix(stage.getCamera().combined);
 			mc.render(sr);
-//			cat.render(sr);
+			//			cat.render(sr);
 			//        for (Actor a: stage.getActors()) {
 			//			((Entity) a).drawDebug(sr);
 			//		}
@@ -157,14 +159,14 @@ public class GameScreen implements ScreenPausable{
 			setVectorCoordinates();
 			mc.updateHoverTimer();
 		}
-		
-		
+
+
 		if(paused)
 		{	
 			pauseStage.draw();
 			pauseStage.act();
 		}
-		
+
 		if(requestSending && track.getListOfEvents() != null){
 			InternetManager.sendEvents(track.getListOfEvents());
 			Gdx.app.log(RollingCat.LOG,"Client sauvegarde des données : " + gem.getCouleur());
@@ -173,17 +175,20 @@ public class GameScreen implements ScreenPausable{
 			InternetManager.updateLevelStats(patient.getID(), level.getId(), level.getScore(), level.getDuree(), gem.getCouleur());
 			requestSending = false;
 		}
+
 	}
 
 	/**
 	 * gere la position de la camera
 	 */
 	private void updateCamPos() {
-		stage.getCamera().position.set((float) (Math.max(0, (Math.floor((cat.getX()) / GameConstants.VIEWPORT_WIDTH)) * GameConstants.VIEWPORT_WIDTH)) + GameConstants.VIEWPORT_WIDTH * 0.5f, ((cat.getY() > GameConstants.VIEWPORT_HEIGHT * 1.5f)?(GameConstants.VIEWPORT_HEIGHT * 2.5f):(GameConstants.VIEWPORT_HEIGHT * 0.5f)) + GameConstants.BLOCK_HEIGHT, 0);
+		stage.getCamera().position.set((float) (Math.max(0, (Math.floor((cat.getX() + GameConstants.BLOCK_WIDTH * 0.5f) / GameConstants.VIEWPORT_WIDTH)) * GameConstants.VIEWPORT_WIDTH)) + GameConstants.VIEWPORT_WIDTH * 0.5f, ((cat.getY() > GameConstants.VIEWPORT_HEIGHT * 1.5f)?(GameConstants.VIEWPORT_HEIGHT * 2.5f):(GameConstants.VIEWPORT_HEIGHT * 0.5f)) + GameConstants.BLOCK_HEIGHT, 0);
+//		sr.setProjectionMatrix(stage.getCamera().combined);
+//		sr.setTransformMatrix(stage.getCamera().combined);
 		box.setX(stage.getCamera().position.x - box.getWidth() / 2);
 		box.setY(stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT);
 		mc.setDecalage((cat.getY() > GameConstants.VIEWPORT_HEIGHT * 1.5f)?GameConstants.VIEWPORT_HEIGHT*2:0);
-		box.setEtageAndSegment((cat.getMode().equals(GameConstants.ASSISTANCE))?1:0, Math.abs((int) Math.floor((cat.getX()) / GameConstants.VIEWPORT_WIDTH)));
+		box.setEtageAndSegment((cat.getMode().equals(GameConstants.ASSISTANCE))?1:0, Math.abs((int) Math.floor((cat.getX() + GameConstants.BLOCK_WIDTH) / GameConstants.VIEWPORT_WIDTH)));
 		segment = (int) Math.floor(cat.getX() / GameConstants.VIEWPORT_WIDTH);
 	}
 
@@ -210,11 +215,11 @@ public class GameScreen implements ScreenPausable{
 		cat = (Cat) stage.getActors().get(0);
 		box = new Box(GameConstants.COLS / 2, -2);
 		box.setItems(LevelBuilder.getItems());
-		
+
 		stage.getActors().removeValue(cat, true);
 		stage.addActor(cat);
 		stage.addActor(box);
-		
+
 		mc = new MouseCursorGame(stage, cat, box);
 		multiplexer = new InputMultiplexer(stage, mc, pauseStage);
 		Gdx.input.setInputProcessor(multiplexer);
@@ -253,7 +258,7 @@ public class GameScreen implements ScreenPausable{
 				handleElapsedTime();
 			}
 		});
-		
+
 		upload = new TextButton(localisation(_upload), style);
 		upload.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
@@ -273,7 +278,7 @@ public class GameScreen implements ScreenPausable{
 				}
 			}
 		});
-		
+
 		upload.setVisible(false);
 
 		quit = new TextButton(localisation(_quit), style);
@@ -285,7 +290,7 @@ public class GameScreen implements ScreenPausable{
 				}
 			}
 		});
-		
+
 		CheckBoxStyle cbs = new CheckBoxStyle();
 		cbs.checkboxOff = getSkin().getDrawable("unchecked");
 		cbs.checkboxOn = getSkin().getDrawable("checked");
@@ -306,7 +311,7 @@ public class GameScreen implements ScreenPausable{
 					SoundManager.gameMusicPlay(false);
 			}
 		});
-		
+
 		pauseTable = new Table();
 		pauseTable.add(resume).pad(GameConstants.BLOCK_WIDTH * 0.5f);
 		pauseTable.row();
@@ -345,13 +350,13 @@ public class GameScreen implements ScreenPausable{
 				}
 				if(keycode == Keys.SPACE)
 					mc.fall();
-				
+
 				if(keycode == Keys.UP){
 					cat.setY(GameConstants.VIEWPORT_HEIGHT * 2);
 					cat.setState(Cat.FALLING);
 					cat.getActions().clear();
 				}
-				
+
 				if(keycode == Keys.DOWN){
 					cat.setY(GameConstants.VIEWPORT_HEIGHT - GameConstants.BLOCK_HEIGHT);
 					cat.setState(Cat.FALLING);
@@ -361,10 +366,10 @@ public class GameScreen implements ScreenPausable{
 			}
 
 		});
-		
+
 		if(level.getId() == 0)
 			firstBox = new FirstBoxHelper(sr,stage,mc,cat,this,box);	
-		
+
 		SoundManager.gameMusicPlay(true);
 		music.setChecked(true);
 	}
@@ -427,6 +432,22 @@ public class GameScreen implements ScreenPausable{
 			elapsedTimeDuringPause += (System.currentTimeMillis() - beginPause);
 		}
 
+	}
+
+	private void drawAbilityZone(){
+		sr.begin(ShapeType.Filled);
+		int a = 0;
+		float [] abilityZone = InternetManager.ability;
+		for (int i = 0; i < GameConstants.numberOfLines; i++) {
+			for (int j = 0; j < GameConstants.numberOfRows; j++) {
+//				if(abilityZone[a] != 0){
+					sr.setColor(1, 1 - abilityZone[a] * abilityZone.length / 2, 0, 1);
+					sr.rect(GameConstants.BLOCK_WIDTH * j + stage.getCamera().position.x - GameConstants.VIEWPORT_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT * i + stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f + GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+//				}
+				a++;
+			}
+		}
+		sr.end();
 	}
 
 }

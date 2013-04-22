@@ -96,8 +96,6 @@ public class SettingsScreen implements Screen {
 
 		batch.begin();
 		batch.draw(skin.getRegion("background_base"), 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
-		
-
 		batch.end();
 
 		stage.draw();
@@ -241,7 +239,12 @@ public class SettingsScreen implements Screen {
 		area_2 = new CheckBox("2", cbs);
 		area_3 = new CheckBox("3", cbs);
 		area_4 = new CheckBox("4", cbs);
-
+		
+		area_1.setChecked(GameConstants.area_1);
+		area_2.setChecked(GameConstants.area_2);
+		area_3.setChecked(GameConstants.area_3);
+		area_4.setChecked(GameConstants.area_4);
+		
 		zoneTable.add(area_3).fill().expand();
 		zoneTable.add(area_4).fill().expand();
 		zoneTable.row();
@@ -333,7 +336,7 @@ public class SettingsScreen implements Screen {
 
 		warningMessage = new Label(StringUtils.addEnters(localisation(_cadran), 14), ls);
 		warningMessage.setX(GameConstants.DISPLAY_WIDTH * 0.6f);
-		warningMessage.setY(GameConstants.DISPLAY_HEIGHT * 0.25f);
+		warningMessage.setY(GameConstants.DISPLAY_HEIGHT * 0.33f - warningMessage.getHeight());
 
 
 	}

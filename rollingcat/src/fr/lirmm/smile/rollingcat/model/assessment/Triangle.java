@@ -98,5 +98,9 @@ public class Triangle {
 	public int getProgression() {
 		return ((percentage > 1)?percentage:0);
 	}
+
+	public void clearProgression() {
+		percentage = 0;
+	}
 		
 }
