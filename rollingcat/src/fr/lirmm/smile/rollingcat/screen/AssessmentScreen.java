@@ -98,9 +98,9 @@ public class AssessmentScreen implements Screen {
 		float f = (100 - timeout * 100);
 		sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, (f > 1)?(f):1);
 		sr.end();
-		mc.addTrackingPoint(delta);
 		duration += delta;
 		if(!mc.isPaused()){
+			mc.addTrackingPoint(delta);
 
 			if(selected == triangles.size()){
 				done = true;

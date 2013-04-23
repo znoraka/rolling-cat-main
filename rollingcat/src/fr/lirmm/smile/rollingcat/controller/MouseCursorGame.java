@@ -385,8 +385,8 @@ public class MouseCursorGame implements InputProcessor{
 		else return null;
 	}
 
-	public void setDecalage(int i) {
-		decalage = i;
+	public void setDecalage(float f) {
+		decalage = (int) f;
 		
 	}
 }

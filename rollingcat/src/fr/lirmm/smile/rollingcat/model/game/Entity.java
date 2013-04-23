@@ -125,5 +125,12 @@ public class Entity extends Image implements EntityModel {
 	public String getMode(){
 		return (this.getY() < GameConstants.VIEWPORT_HEIGHT * 1.5f)?GameConstants.CHALLENGE:GameConstants.ASSISTANCE;
 	}
-
+	
+	/**
+	 * 
+	 * @return l'étage auquel se trouve l'entité
+	 */
+	public int getEtage(){
+		return (this.getYOnGrid() / (GameConstants.DECALAGE));
+	}
 }

@@ -139,6 +139,8 @@ public class Box extends Entity{
 	{	
 		this.etage = etage;
 		this.segment = segment;
+//		Gdx.app.log(RollingCat.LOG, "etage : " + etage);
+//		Gdx.app.log(RollingCat.LOG, "segment + " + segment);
 		if(getCurrentBox().get(0) != EMPTY)
 			item = getCurrentBox().get(0);
 	}

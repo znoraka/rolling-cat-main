@@ -24,6 +24,7 @@ import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
 import fr.lirmm.smile.rollingcat.spine.SkeletonBinary;
 import fr.lirmm.smile.rollingcat.spine.SkeletonData;
+import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
 public class Cat extends Entity {
 
@@ -49,7 +50,7 @@ public class Cat extends Entity {
 	Animation walkAnimation, contactAnimation, jumpAnimation, fanAnimation, endAnimation;
 	float time;
 	boolean hasCatchCoin;
-	private boolean success;
+	private boolean success, newToThisSegment;
 	private Actor actor;
 	/**
 	 * l'acteur principal
@@ -62,7 +63,7 @@ public class Cat extends Entity {
 		this.setTouchable(Touchable.disabled);
 		final String name = "cat-skeleton";
 		success = true;
-
+		newToThisSegment = false;
 		requestBoxEmptiing = false;
 
 		TextureAtlas atlas = getCatAtlas();
@@ -193,112 +194,91 @@ public class Cat extends Entity {
 				}
 
 				/**
-				 * si le chat touche une bouée en mode challenge c'est qu'il est tombé, il va donc en assistance
-				 * si le chat touche une bouée en mode assistance (rater = tomber à cause du timeout)
-				 * 	s'il a réussi l'écran il passe en mode challenge
-				 * 	s'il a raté l'écran il reste en mode assistance
+				 * si le chat touche une bouee et que success == true 
+				 * 
 				 */
 				if(actor instanceof Door){
-					if((((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.RIGHT) & success == false){
-						success = true;
-					}
 
-					if(((Door) actor).getType() == Door.LEFT){
-						if(
-								((Entity) actor).getBounds().overlaps(right) ||
-								((Entity) actor).getMode().equals(GameConstants.ASSISTANCE) & this.getX() == actor.getX()  & this.getMode().equals(GameConstants.ASSISTANCE))
+					if((((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT))
+					{
+						state = TELEPORTING;
+						actor.setVisible(false);
+						actor.setTouchable(Touchable.disabled);
+
+						if(newToThisSegment)
 						{
-							Gdx.app.log(RollingCat.LOG, "hitting door");
-							this.getActions().clear();
-							requestBoxEmptiing = true;
-							state = TELEPORTING;
-							Gdx.app.log(RollingCat.LOG, ""+ ((Door) actor).getXOnGrid() % GameConstants.COLS);
-							/**
-							 * si l'on est pas au dernier écran
-							 */
-							if(((Door) actor).getXOnGrid() % GameConstants.COLS == 0)
-							{
-								if(getMode() == GameConstants.CHALLENGE){
-									if(success){
-										this.addAction(Actions.sequence(
-												Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
-												new Action() {
-
-													@Override
-													public boolean act(float delta) {
-														state = HITTING;
-														return true;
-													}
-												}
-												));
-									}
-									else{
-										this.addAction(Actions.sequence(
-												Actions.moveTo(actor.getX(), actor.getY() + GameConstants.VIEWPORT_HEIGHT * 2),
-												new Action() {
-
-													@Override
-													public boolean act(float delta) {
-														state = HITTING;
-														return true;
-													}
-												}
-												));
-									}
-								}
-
-								if(getMode() == GameConstants.ASSISTANCE){
-									if(success){
-										this.addAction(Actions.sequence(
-												Actions.moveTo(actor.getX(), actor.getY() - GameConstants.VIEWPORT_HEIGHT * 2),
-												new Action() {
-
-													@Override
-													public boolean act(float delta) {
-														state = HITTING;
-														return true;
-													}
-												}
-												));
-									}
-									else{
-										this.addAction(Actions.sequence(
-												Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
-												new Action() {
-
-													@Override
-													public boolean act(float delta) {
-														state = HITTING;
-														return true;
-													}
-												}
-												));
-									}
-								}
-
-							}
-							/**
-							 * si on est on dernier écran
-							 */
-							else
-							{
-								this.addAction(Actions.sequence(
-										Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
-										new Action() {
-
-											@Override
-											public boolean act(float delta) {
-												state = HITTING;
-												return true;
-											}
+							newToThisSegment = false;
+							
+							this.addAction(Actions.sequence(
+									Actions.delay(0.1f),
+									Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
+									Actions.delay(0.1f),
+									new Action() {
+										@Override
+										public boolean act(float delta) {
+											state = HITTING;
+											return true;
 										}
-										));	
+									}));
+						}
+						else 
+						{
+							Gdx.app.log(RollingCat.LOG, "touched door with success : " + success);
+
+							if(success)
+							{
+								newToThisSegment = true;
+
+								if(this.getEtage() < LevelBuilder.getNumberOfEtage() - 1)
+								{
+									
+									this.addAction(Actions.sequence(
+											Actions.delay(0.1f),
+											Actions.moveTo(this.getX(), this.getY() + GameConstants.VIEWPORT_HEIGHT * 2),
+											Actions.delay(0.1f),
+											new Action() {
+												@Override
+												public boolean act(float delta) {
+													state = HITTING;
+													return true;
+												}
+											}));
+								}
+								else
+								{
+									state = HITTING;
+								}
+							}
+							else
+							{	
+								success = true;
+								newToThisSegment = true;
+								
+								if(this.getEtage() > 0)
+								{	
+
+									this.addAction(Actions.sequence(
+											Actions.delay(0.1f),
+											Actions.moveTo(this.getX(), this.getY() - GameConstants.VIEWPORT_HEIGHT * 2),
+											Actions.delay(0.1f),
+											new Action() {
+												@Override
+												public boolean act(float delta) {
+													state = HITTING;
+													return true;
+												}
+											}));
+								}
+								else
+								{
+									state = HITTING;
+								}
 							}
 						}
 					}
 
 				}
-				
+
 				if(actor instanceof Gap){
 					if(((Entity) actor).getBounds().overlaps(left)){
 						this.actor = actor;
@@ -396,6 +376,9 @@ public class Cat extends Entity {
 			walkAnimation.apply(skeleton, time, true);
 
 		else if(state == FALLING)
+			fanAnimation.apply(skeleton, time, true);
+		
+		else if(state == TELEPORTING)
 			fanAnimation.apply(skeleton, time, true);
 
 		time += Gdx.graphics.getDeltaTime();
