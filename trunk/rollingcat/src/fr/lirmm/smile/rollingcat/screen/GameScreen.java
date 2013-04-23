@@ -66,7 +66,7 @@ public class GameScreen implements ScreenPausable{
 	private Cat cat;
 	private Box box;
 	private Patient patient;
-	private float duration;
+	private float duration, elapsedTime;
 	private BitmapFont font;
 	private OrderedMap<String, String> parameters;
 	private Level level;
@@ -107,6 +107,10 @@ public class GameScreen implements ScreenPausable{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		if(!paused){
+			if(cat.getState() == Cat.TELEPORTING)
+				elapsedTime = 0;
+			
+			elapsedTime += delta;
 			gem = Target.getInstance();
 			duration += delta;
 			mc.updateStandTimer();
@@ -114,7 +118,7 @@ public class GameScreen implements ScreenPausable{
 			batch.begin();
 			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 			font.setColor(Color.BLACK);
-			font.draw(batch, cat.getMode(), GameConstants.VIEWPORT_WIDTH * 0.5f, GameConstants.VIEWPORT_HEIGHT * 0.5f);
+			font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 3, GameConstants.BLOCK_HEIGHT * 2);
 			table.draw(batch, 1);
 			batch.end();
 			sr.setProjectionMatrix(stage.getCamera().combined);
@@ -182,13 +186,15 @@ public class GameScreen implements ScreenPausable{
 	 * gere la position de la camera
 	 */
 	private void updateCamPos() {
-		stage.getCamera().position.set((float) (Math.max(0, (Math.floor((cat.getX() + GameConstants.BLOCK_WIDTH * 0.5f) / GameConstants.VIEWPORT_WIDTH)) * GameConstants.VIEWPORT_WIDTH)) + GameConstants.VIEWPORT_WIDTH * 0.5f, ((cat.getY() > GameConstants.VIEWPORT_HEIGHT * 1.5f)?(GameConstants.VIEWPORT_HEIGHT * 2.5f):(GameConstants.VIEWPORT_HEIGHT * 0.5f)) + GameConstants.BLOCK_HEIGHT, 0);
-//		sr.setProjectionMatrix(stage.getCamera().combined);
-//		sr.setTransformMatrix(stage.getCamera().combined);
+		if(elapsedTime > 0.5f)
+		{
+			stage.getCamera().position.set((float) (Math.max(0, (Math.floor((cat.getX() - GameConstants.BLOCK_WIDTH) / GameConstants.VIEWPORT_WIDTH)) * GameConstants.VIEWPORT_WIDTH)) + GameConstants.VIEWPORT_WIDTH * 0.5f, (cat.getEtage() * 2 + 0.5f) * GameConstants.VIEWPORT_HEIGHT + GameConstants.BLOCK_HEIGHT, 0);
+			elapsedTime = 0;
+			box.setEtageAndSegment(cat.getEtage(), Math.abs((int) Math.floor((cat.getX() - GameConstants.BLOCK_WIDTH) / GameConstants.VIEWPORT_WIDTH)));
+		}
 		box.setX(stage.getCamera().position.x - box.getWidth() / 2);
 		box.setY(stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT);
-		mc.setDecalage((cat.getY() > GameConstants.VIEWPORT_HEIGHT * 1.5f)?GameConstants.VIEWPORT_HEIGHT*2:0);
-		box.setEtageAndSegment((cat.getMode().equals(GameConstants.ASSISTANCE))?1:0, Math.abs((int) Math.floor((cat.getX() + GameConstants.BLOCK_WIDTH) / GameConstants.VIEWPORT_WIDTH)));
+		mc.setDecalage(cat.getEtage() * GameConstants.VIEWPORT_HEIGHT * 2);
 		segment = (int) Math.floor(cat.getX() / GameConstants.VIEWPORT_WIDTH);
 	}
 
@@ -205,6 +211,8 @@ public class GameScreen implements ScreenPausable{
 		font = getBigFont();
 		EventManager.clear();
 		sr = new ShapeRenderer();
+
+		elapsedTime = 3;
 
 		Gdx.app.log(RollingCat.LOG, "showing");
 		paused = false;
@@ -352,7 +360,7 @@ public class GameScreen implements ScreenPausable{
 					mc.fall();
 
 				if(keycode == Keys.UP){
-					cat.setY(GameConstants.VIEWPORT_HEIGHT * 2);
+					cat.setY(GameConstants.VIEWPORT_HEIGHT * 2 + GameConstants.BLOCK_HEIGHT + cat.getY());
 					cat.setState(Cat.FALLING);
 					cat.getActions().clear();
 				}
@@ -440,10 +448,10 @@ public class GameScreen implements ScreenPausable{
 		float [] abilityZone = InternetManager.ability;
 		for (int i = 0; i < GameConstants.numberOfLines; i++) {
 			for (int j = 0; j < GameConstants.numberOfRows; j++) {
-//				if(abilityZone[a] != 0){
-					sr.setColor(1, 1 - abilityZone[a] * abilityZone.length / 2, 0, 1);
+				if(abilityZone[a] != 0){
+					sr.setColor(1, 1 - abilityZone[a] * abilityZone.length * 0.75f, 0, 1);
 					sr.rect(GameConstants.BLOCK_WIDTH * j + stage.getCamera().position.x - GameConstants.VIEWPORT_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT * i + stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f + GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
-//				}
+				}
 				a++;
 			}
 		}

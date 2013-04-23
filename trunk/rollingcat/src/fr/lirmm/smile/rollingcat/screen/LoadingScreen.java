@@ -51,6 +51,11 @@ public class LoadingScreen implements Screen {
 		this.patient = patient;
 		this.level = level;
 		this.listOfGem = listOfGem;
+		
+		if(level.getContent() == null)
+			InternetManager.fetchLevel(patient, level.getId()); 
+		else
+			levelAsString = level.getContent();
 	}
 
 	@Override
@@ -79,9 +84,9 @@ public class LoadingScreen implements Screen {
 
 		if(levelAsString != null & !building)
 		{
+			building = true;
 			this.stage = LevelBuilder.build(levelAsString);
 			level.setContent(levelAsString);
-			building = true;
 		}
 
 		if(levelAsString != null & elapsedTime > time){
@@ -114,10 +119,6 @@ public class LoadingScreen implements Screen {
 
 		InternetManager.getAbilityZone(patient);
 
-		if(level.getContent() == null)
-			InternetManager.fetchLevel(patient, level.getId()); 
-		else
-			levelAsString = level.getContent();
 		texture = new Texture("data/load.png");
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		elapsedTime = 0;

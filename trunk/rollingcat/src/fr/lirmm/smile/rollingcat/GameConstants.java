@@ -42,6 +42,7 @@ public class GameConstants {
 	public static float BLOCK_HEIGHT;
 	public static int VIEWPORT_WIDTH;
 	public static int VIEWPORT_HEIGHT;
+	public static int DECALAGE = 0;
 	
 	public static final float SPEED = 0.25f;
 	public static final float ENTITY_SPEED = 3f;
@@ -64,7 +65,7 @@ public class GameConstants {
 	public static int range = 2;
 	public static float pathDeltaTime = 0.001f;
 	public static float evaporationPerDay = 0;;
-	public static float alpha = 0.9f;
+	public static float alpha = 0.5f;
 	public static int numberOfLines = 20;
 	public static int numberOfRows = 20;
 	public static int totalVolume = 20;
@@ -94,6 +95,8 @@ public class GameConstants {
 		
 		numberOfLines = ROWS;
 		numberOfRows = COLS;
+		
+		DECALAGE = ROWS * 2;
 		
 	}
 }
