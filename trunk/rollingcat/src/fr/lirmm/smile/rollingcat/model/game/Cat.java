@@ -37,7 +37,7 @@ public class Cat extends Entity {
 	public static final int WALKING = 4;
 	public static final int TELEPORTING = 5;
 
-	private int state;
+	private int state, decalage;
 	private int gold, silver, bronze;
 
 	private int oldX;
@@ -50,8 +50,9 @@ public class Cat extends Entity {
 	Animation walkAnimation, contactAnimation, jumpAnimation, fanAnimation, endAnimation;
 	float time;
 	boolean hasCatchCoin;
-	private boolean success, newToThisSegment;
+	private boolean success;
 	private Actor actor;
+	private Door door;
 	/**
 	 * l'acteur principal
 	 * @param x
@@ -63,7 +64,6 @@ public class Cat extends Entity {
 		this.setTouchable(Touchable.disabled);
 		final String name = "cat-skeleton";
 		success = true;
-		newToThisSegment = false;
 		requestBoxEmptiing = false;
 
 		TextureAtlas atlas = getCatAtlas();
@@ -152,7 +152,7 @@ public class Cat extends Entity {
 						state = FALLING;
 				}
 				if(actor instanceof Fan){
-					if(this.getXOnGrid() == ((Entity) actor).getXOnGrid() & this.getMode().equals(((Fan) actor).getMode())){
+					if(this.getXOnGrid() == ((Entity) actor).getXOnGrid() & this.getEtage() == ((Entity) actor).getEtage()){
 						((Fan) actor).declencher(true);
 					}
 					else
@@ -202,79 +202,49 @@ public class Cat extends Entity {
 					if((((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT))
 					{
 						state = TELEPORTING;
-						actor.setVisible(false);
-						actor.setTouchable(Touchable.disabled);
+//						actor.setVisible(false);
+//						actor.setTouchable(Touchable.disabled);
 
-						if(newToThisSegment)
-						{
-							newToThisSegment = false;
-							
-							this.addAction(Actions.sequence(
-									Actions.delay(0.1f),
-									Actions.moveTo(((Door) actor).getNextX() * GameConstants.BLOCK_WIDTH, ((Door) actor).getNextY() * GameConstants.BLOCK_HEIGHT),
-									Actions.delay(0.1f),
-									new Action() {
-										@Override
-										public boolean act(float delta) {
-											state = HITTING;
-											return true;
-										}
-									}));
-						}
-						else 
-						{
-							Gdx.app.log(RollingCat.LOG, "touched door with success : " + success);
+						Gdx.app.log(RollingCat.LOG, "etage du chat : " + this.getEtage());
+						Gdx.app.log(RollingCat.LOG, "nombre d'étages : " + LevelBuilder.getNumberOfEtage());
 
+						if(this.getEtage() == 0)
+						{	
 							if(success)
-							{
-								newToThisSegment = true;
-
-								if(this.getEtage() < LevelBuilder.getNumberOfEtage() - 1)
-								{
-									
-									this.addAction(Actions.sequence(
-											Actions.delay(0.1f),
-											Actions.moveTo(this.getX(), this.getY() + GameConstants.VIEWPORT_HEIGHT * 2),
-											Actions.delay(0.1f),
-											new Action() {
-												@Override
-												public boolean act(float delta) {
-													state = HITTING;
-													return true;
-												}
-											}));
-								}
-								else
-								{
-									state = HITTING;
-								}
-							}
+								decalage = (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
 							else
-							{	
-								success = true;
-								newToThisSegment = true;
-								
-								if(this.getEtage() > 0)
-								{	
-
-									this.addAction(Actions.sequence(
-											Actions.delay(0.1f),
-											Actions.moveTo(this.getX(), this.getY() - GameConstants.VIEWPORT_HEIGHT * 2),
-											Actions.delay(0.1f),
-											new Action() {
-												@Override
-												public boolean act(float delta) {
-													state = HITTING;
-													return true;
-												}
-											}));
-								}
-								else
-								{
-									state = HITTING;
-								}
-							}
+								decalage = 0;
 						}
+						else if(this.getEtage() == LevelBuilder.getNumberOfEtage() - 1)
+						{
+							if(success)
+								decalage = 0;
+							else
+								decalage = - (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+						}
+						else
+						{
+							if(success)
+								decalage = (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+							else
+								decalage = - (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+						}
+
+						door = ((Door) actor).getNextDoor(decalage);
+						this.addAction(
+								Actions.sequence(
+										Actions.delay(0.1f),
+										Actions.moveTo(door.getNextX() * GameConstants.BLOCK_WIDTH, door.getNextY() * GameConstants.BLOCK_HEIGHT),
+										new Action() {
+
+											@Override
+											public boolean act(float delta) {
+												state = HITTING;
+												success = true;
+												return true;
+											}
+										}
+										));
 					}
 
 				}
@@ -377,7 +347,7 @@ public class Cat extends Entity {
 
 		else if(state == FALLING)
 			fanAnimation.apply(skeleton, time, true);
-		
+
 		else if(state == TELEPORTING)
 			fanAnimation.apply(skeleton, time, true);
 

@@ -192,7 +192,7 @@ public class MouseCursorGame implements InputProcessor{
 		dropItem();
 		box.emptyAfterNotMoving();
 		cat.setSuccess(false);
-		cat.setY(stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f);
+		cat.setY((cat.getEtage()) * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT);
 		cat.getActions().clear();
 		cat.setState(Cat.FALLING);
 		isFalling = true;
@@ -251,7 +251,7 @@ public class MouseCursorGame implements InputProcessor{
 				parameters = new OrderedMap<String, String>();
 				oldX = x;
 				oldY = y;
-				map.put(map.size(), new float[] {x, y%GameConstants.VIEWPORT_HEIGHT, segment});
+				map.put(map.size(), new float[] {x, y%GameConstants.DISPLAY_HEIGHT, segment});
 				parameters.put("x", ""+x(x));
 				parameters.put("y", ""+y(y));
 				parameters.put("z", ""+0);

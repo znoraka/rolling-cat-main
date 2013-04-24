@@ -179,6 +179,11 @@ public class GameScreen implements ScreenPausable{
 			InternetManager.updateLevelStats(patient.getID(), level.getId(), level.getScore(), level.getDuree(), gem.getCouleur());
 			requestSending = false;
 		}
+		
+		batch.begin();
+		font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 3, GameConstants.BLOCK_HEIGHT * 2);
+		font.draw(batch, "segment : " + segment, GameConstants.BLOCK_WIDTH * 3, GameConstants.BLOCK_HEIGHT * 3);
+		batch.end();
 
 	}
 
@@ -186,16 +191,16 @@ public class GameScreen implements ScreenPausable{
 	 * gere la position de la camera
 	 */
 	private void updateCamPos() {
-		if(elapsedTime > 0.5f)
+		if(elapsedTime > 0.0f)
 		{
-			stage.getCamera().position.set((float) (Math.max(0, (Math.floor((cat.getX() - GameConstants.BLOCK_WIDTH) / GameConstants.VIEWPORT_WIDTH)) * GameConstants.VIEWPORT_WIDTH)) + GameConstants.VIEWPORT_WIDTH * 0.5f, (cat.getEtage() * 2 + 0.5f) * GameConstants.VIEWPORT_HEIGHT + GameConstants.BLOCK_HEIGHT, 0);
+			stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.DISPLAY_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
 			elapsedTime = 0;
-			box.setEtageAndSegment(cat.getEtage(), Math.abs((int) Math.floor((cat.getX() - GameConstants.BLOCK_WIDTH) / GameConstants.VIEWPORT_WIDTH)));
+			box.setEtageAndSegment(cat.getEtage(), segment);
 		}
 		box.setX(stage.getCamera().position.x - box.getWidth() / 2);
-		box.setY(stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT);
-		mc.setDecalage(cat.getEtage() * GameConstants.VIEWPORT_HEIGHT * 2);
-		segment = (int) Math.floor(cat.getX() / GameConstants.VIEWPORT_WIDTH);
+		box.setY(stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f);
+		mc.setDecalage(cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+		segment = (int) ((cat.getXOnGrid() - 1) / GameConstants.COLS);
 	}
 
 	@Override
@@ -360,13 +365,13 @@ public class GameScreen implements ScreenPausable{
 					mc.fall();
 
 				if(keycode == Keys.UP){
-					cat.setY(GameConstants.VIEWPORT_HEIGHT * 2 + GameConstants.BLOCK_HEIGHT + cat.getY());
+					cat.setY(GameConstants.DISPLAY_HEIGHT + GameConstants.BLOCK_HEIGHT + cat.getY());
 					cat.setState(Cat.FALLING);
 					cat.getActions().clear();
 				}
 
 				if(keycode == Keys.DOWN){
-					cat.setY(GameConstants.VIEWPORT_HEIGHT - GameConstants.BLOCK_HEIGHT);
+					cat.setY(- GameConstants.DISPLAY_HEIGHT + GameConstants.BLOCK_HEIGHT + cat.getY());
 					cat.setState(Cat.FALLING);
 					cat.getActions().clear();
 				}
@@ -423,13 +428,13 @@ public class GameScreen implements ScreenPausable{
 
 	private void setVectorCoordinates(){
 		gold.x = table.getX() + goldImage.getX();
-		gold.y = table.getY() + goldImage.getY() + stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT;
+		gold.y = table.getY() + goldImage.getY() + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f;
 
 		silver.x = table.getX() + silverImage.getX();
-		silver.y = table.getY() + silverImage.getY() + stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT;
+		silver.y = table.getY() + silverImage.getY() + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f;
 
 		bronze.x = table.getX() + bronzeImage.getX();
-		bronze.y = table.getY() + bronzeImage.getY() + stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f - GameConstants.BLOCK_HEIGHT;
+		bronze.y = table.getY() + bronzeImage.getY() + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f;
 	}
 
 	private void handleElapsedTime(){
@@ -450,7 +455,7 @@ public class GameScreen implements ScreenPausable{
 			for (int j = 0; j < GameConstants.numberOfRows; j++) {
 				if(abilityZone[a] != 0){
 					sr.setColor(1, 1 - abilityZone[a] * abilityZone.length * 0.75f, 0, 1);
-					sr.rect(GameConstants.BLOCK_WIDTH * j + stage.getCamera().position.x - GameConstants.VIEWPORT_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT * i + stage.getCamera().position.y - GameConstants.VIEWPORT_HEIGHT * 0.5f + GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+					sr.rect(GameConstants.BLOCK_WIDTH * j + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH * 0.5f, GameConstants.BLOCK_HEIGHT * i  + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 				}
 				a++;
 			}
