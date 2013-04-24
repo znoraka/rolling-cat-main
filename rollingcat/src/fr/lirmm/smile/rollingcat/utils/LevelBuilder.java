@@ -154,7 +154,7 @@ public class LevelBuilder {
 		//		stage.addActor(new Cat(10, 10));
 		//		stage.addActor(new Dog(5, 5));
 		//		((Box)stage.getActors().get(1)).setItems(items);
-		cat.setY(getNumberOfEtage() * GameConstants.VIEWPORT_HEIGHT);
+		cat.setY(getNumberOfEtage() * GameConstants.DISPLAY_HEIGHT - GameConstants.BLOCK_HEIGHT);
 		return stage;
 	}
 

@@ -89,7 +89,7 @@ public class LoadingScreen implements Screen {
 			level.setContent(levelAsString);
 		}
 
-		if(levelAsString != null & elapsedTime > time){
+		if(levelAsString != null & elapsedTime > time & InternetManager.ability != null){
 			ready = true;
 		}
 

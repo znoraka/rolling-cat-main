@@ -117,14 +117,14 @@ public class Entity extends Image implements EntityModel {
 		requestRedHighlight = b;
 	}
 	
-	/**
-	 * le chemin assistance est en haut et le chemin challenge est en bas
-	 * si le chat est en bas (y < {@link GameConstants#VIEWPORT_HEIGHT} alors il est en mode challenge
-	 * @return le mode
-	 */
-	public String getMode(){
-		return (this.getY() < GameConstants.VIEWPORT_HEIGHT * 1.5f)?GameConstants.CHALLENGE:GameConstants.ASSISTANCE;
-	}
+//	/**
+//	 * le chemin assistance est en haut et le chemin challenge est en bas
+//	 * si le chat est en bas (y < {@link GameConstants#VIEWPORT_HEIGHT} alors il est en mode challenge
+//	 * @return le mode
+//	 */
+//	public String getMode(){
+//		return (this.getY() < GameConstants.DISPLAY_HEIGHT * 1.5f)?GameConstants.CHALLENGE:GameConstants.ASSISTANCE;
+//	}
 	
 	/**
 	 * 

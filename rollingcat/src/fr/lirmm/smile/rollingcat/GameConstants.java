@@ -40,8 +40,6 @@ public class GameConstants {
 	public static int ROWS;
 	public static float BLOCK_WIDTH;
 	public static float BLOCK_HEIGHT;
-	public static int VIEWPORT_WIDTH;
-	public static int VIEWPORT_HEIGHT;
 	public static int DECALAGE = 0;
 	
 	public static final float SPEED = 0.25f;
@@ -85,11 +83,11 @@ public class GameConstants {
 		COLS = 16;
 		ROWS = 14;
 		
-		BLOCK_WIDTH = DISPLAY_WIDTH / (COLS+2);
-		BLOCK_HEIGHT = DISPLAY_HEIGHT / (ROWS + 2);
+		BLOCK_WIDTH = DISPLAY_WIDTH / (COLS);
+		BLOCK_HEIGHT = DISPLAY_HEIGHT / (ROWS);
 		
-		VIEWPORT_WIDTH = (int) (BLOCK_WIDTH * COLS);
-		VIEWPORT_HEIGHT = (int) (BLOCK_HEIGHT * ROWS);
+//		VIEWPORT_WIDTH = (int) (BLOCK_WIDTH * COLS);
+//		VIEWPORT_HEIGHT = (int) (BLOCK_HEIGHT * ROWS);
 		
 		SCALE = (width / 800f);
 		

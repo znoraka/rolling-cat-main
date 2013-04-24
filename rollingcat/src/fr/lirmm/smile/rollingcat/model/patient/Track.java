@@ -41,7 +41,7 @@ public class Track {
 		this.duration = (float) Math.floor(duration);
 		this.id = TrackingPointsManager.getId();
 		if(type == GAME){
-			segment = (int) (track.get(track.size() - 1))[0] / GameConstants.VIEWPORT_HEIGHT;
+			segment = (int) (track.get(track.size() - 1))[0] / GameConstants.DISPLAY_HEIGHT;
 			System.out.println("number of segments" + segment);
 			currentSegment = 0;
 		}
@@ -62,15 +62,15 @@ public class Track {
 				if(track.get(i)[2] == currentSegment){
 					sr.begin(ShapeType.Line);
 					sr.line(
-							(track.get(i)[0] % GameConstants.VIEWPORT_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+							(track.get(i)[0] % GameConstants.DISPLAY_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 							track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-							(track.get(i+1)[0] % GameConstants.VIEWPORT_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+							(track.get(i+1)[0] % GameConstants.DISPLAY_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 							track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
 							);
 					sr.end();
 					sr.begin(ShapeType.Filled);
 					sr.circle(
-							(track.get(i)[0] % GameConstants.VIEWPORT_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+							(track.get(i)[0] % GameConstants.DISPLAY_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
 							track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
 							3);
 					sr.end();
