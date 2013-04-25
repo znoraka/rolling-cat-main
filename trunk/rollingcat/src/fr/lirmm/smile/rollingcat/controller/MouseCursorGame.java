@@ -104,7 +104,7 @@ public class MouseCursorGame implements InputProcessor{
 
 				else if(actor instanceof Box){
 					item = box.empty();
-					addEvent(EventManager.pointing_task_start, actor.getX() + actor.getWidth() * 0.5f, 0);
+					addEvent(EventManager.pointing_task_start, actor.getX(), 0);
 				}
 				else if(actor instanceof Dog && item == Box.BONE){
 					SoundManager.barkPlay();

@@ -1,7 +1,5 @@
 package fr.lirmm.smile.rollingcat.utils;
 
-import com.badlogic.gdx.Game;
-
 import fr.lirmm.smile.rollingcat.GameConstants;
 
 public class CoordinateConverter {
@@ -11,7 +9,7 @@ public class CoordinateConverter {
 	}
 	
 	public static float y(float y){
-		return ((GameConstants.workspaceHeight * y / GameConstants.DISPLAY_HEIGHT) % GameConstants.workspaceHeight);
+		return ((GameConstants.workspaceHeight * (y + GameConstants.BLOCK_HEIGHT * 0.5f) / GameConstants.DISPLAY_HEIGHT) % GameConstants.workspaceHeight);
 	}
 
 }
