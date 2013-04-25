@@ -1,11 +1,7 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
-import fr.lirmm.smile.rollingcat.GameConstants;
 
 public class Block extends Entity {
 	

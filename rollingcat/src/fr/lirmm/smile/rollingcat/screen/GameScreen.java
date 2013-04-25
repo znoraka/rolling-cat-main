@@ -365,13 +365,15 @@ public class GameScreen implements ScreenPausable{
 					mc.fall();
 
 				if(keycode == Keys.UP){
-					cat.setY(GameConstants.DISPLAY_HEIGHT + GameConstants.BLOCK_HEIGHT + cat.getY());
+					if(cat.getEtage() < LevelBuilder.getNumberOfEtage() - 1)
+						cat.setY((cat.getEtage() + 1) * GameConstants.DISPLAY_HEIGHT * 2 + GameConstants.BLOCK_HEIGHT * (GameConstants.ROWS - 1));
 					cat.setState(Cat.FALLING);
 					cat.getActions().clear();
 				}
 
 				if(keycode == Keys.DOWN){
-					cat.setY(- GameConstants.DISPLAY_HEIGHT + GameConstants.BLOCK_HEIGHT + cat.getY());
+					if(cat.getEtage() > 0)
+						cat.setY((cat.getEtage() - 1) * GameConstants.DISPLAY_HEIGHT * 2 + GameConstants.BLOCK_HEIGHT * (GameConstants.ROWS - 1));
 					cat.setState(Cat.FALLING);
 					cat.getActions().clear();
 				}
@@ -455,7 +457,7 @@ public class GameScreen implements ScreenPausable{
 			for (int j = 0; j < GameConstants.numberOfRows; j++) {
 				if(abilityZone[a] != 0){
 					sr.setColor(1, 1 - abilityZone[a] * abilityZone.length * 0.75f, 0, 1);
-					sr.rect(GameConstants.BLOCK_WIDTH * j + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH * 0.5f, GameConstants.BLOCK_HEIGHT * i  + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+					sr.rect(GameConstants.BLOCK_WIDTH * j + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH * 0.5f, GameConstants.BLOCK_HEIGHT * i  + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f + GameConstants.BLOCK_HEIGHT * 2, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 				}
 				a++;
 			}

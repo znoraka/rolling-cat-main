@@ -90,19 +90,19 @@ public class Coin extends Entity{
 //	@Override
 //	public void draw(SpriteBatch batch, float deltaParent)
 //	{		
-//		super.draw(batch, deltaParent);
-//		if(this.getActions().size == 0)
-//		{
-//			if(!b)
-//			{
-//				this.addAction(Actions.moveBy(0, getHeight()/2, 1, Interpolation.fade));			
-//				b = true;
-//			}
-//			else
-//			{
-//				b = false;
-//				this.addAction(Actions.moveBy(0, -getHeight()/2, 1, Interpolation.fade));
-//			}
-//		}
+////		super.draw(batch, deltaParent);
+////		if(this.getActions().size == 0)
+////		{
+////			if(!b)
+////			{
+////				this.addAction(Actions.moveBy(0, getHeight()/2, 1, Interpolation.fade));			
+////				b = true;
+////			}
+////			else
+////			{
+////				b = false;
+////				this.addAction(Actions.moveBy(0, -getHeight()/2, 1, Interpolation.fade));
+////			}
+////		}
 //	}
 }

@@ -73,7 +73,7 @@ public class GameConstants {
 	public static boolean area_3 = false;
 	public static boolean area_4 = false;
 	
-	/*
+	/**
 	 * initialise la taille de la fenetre et des entités
 	 */
 	public static void init(int width, int heigth){
@@ -85,13 +85,10 @@ public class GameConstants {
 		
 		BLOCK_WIDTH = DISPLAY_WIDTH / (COLS);
 		BLOCK_HEIGHT = DISPLAY_HEIGHT / (ROWS);
-		
-//		VIEWPORT_WIDTH = (int) (BLOCK_WIDTH * COLS);
-//		VIEWPORT_HEIGHT = (int) (BLOCK_HEIGHT * ROWS);
-		
+
 		SCALE = (width / 800f);
 		
-		numberOfLines = ROWS;
+		numberOfLines = ROWS - 2;
 		numberOfRows = COLS;
 		
 		DECALAGE = ROWS * 2;
