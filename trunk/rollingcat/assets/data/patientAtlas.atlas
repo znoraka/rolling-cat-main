@@ -115,6 +115,13 @@ selection
   orig: 32, 32
   offset: 0, 0
   index: -1
+black
+  rotate: false
+  xy: 1015, 499
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 empty
   rotate: false
   xy: 270, 219

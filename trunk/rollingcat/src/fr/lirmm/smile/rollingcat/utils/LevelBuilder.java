@@ -141,7 +141,6 @@ public class LevelBuilder {
 				items.add(Box.EMPTY);
 				addItemsInBox(segment, decalage / (GameConstants.DECALAGE));
 				decalage += GameConstants.DECALAGE;
-				System.out.println(decalage / GameConstants.DECALAGE);
 				items = new ArrayList<Integer>();
 				segment = 0;
 			}

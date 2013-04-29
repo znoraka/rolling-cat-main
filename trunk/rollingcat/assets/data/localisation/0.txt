@@ -68,5 +68,6 @@
 	left_handed: "Gaucher",
 	high_score: "Meilleur score",
 	cadran: "Sélectionner les cadrans préférables de travail",
-	ready: "Je suis prêt"
+	ready: "Je suis prêt",
+	detail: "Détail"
 }

@@ -84,6 +84,7 @@ public class Localisation {
 	public static String _high_score = "high_score";
 	public static String _cadran = "cadran";
 	public static String _ready = "ready";
+	public static String _detail = "detail";
 	
 	/**
 	 * charge un langage depuis un fichier de langage

@@ -69,7 +69,7 @@ public class LevelSelectScreen implements Screen {
 	private boolean gen;
 	private World world;
 
-	private float elapsedTime;
+	private float elapsedTime, f;
 
 	private final float SPEED = 0.3f;
 	private float[] sizeH;
@@ -93,7 +93,11 @@ public class LevelSelectScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		if(gen){
-			changeTablesSize();
+			if(f > 0)
+			{
+				changeTablesSize();
+				f -= delta;
+			}
 			if(next.isPressed() & elapsedTime > 0.6f)
 				next();
 
@@ -208,6 +212,7 @@ public class LevelSelectScreen implements Screen {
 	@Override
 	public void show() {
 		if(gen == true){
+			f = 2;
 	        InternetManager.newGameSession(Track.GAME, patient.getID());
 			font = getBigFont();
 			stage = getStage();
@@ -349,6 +354,7 @@ public class LevelSelectScreen implements Screen {
 	 */
 	private void next(){
 		currentButton = (currentButton > tables.size() - 2)?0:currentButton + 1;
+		f = SPEED;
 		changeTablesSize();
 		elapsedTime = 0;
 		SoundManager.nextPlay();
@@ -358,6 +364,7 @@ public class LevelSelectScreen implements Screen {
 	 * on passe au niveau précédent
 	 */
 	private void previous(){
+		f = SPEED;
 		currentButton = (currentButton < 1)?(tables.size() - 1):currentButton - 1;
 		changeTablesSize();
 		elapsedTime = 0;

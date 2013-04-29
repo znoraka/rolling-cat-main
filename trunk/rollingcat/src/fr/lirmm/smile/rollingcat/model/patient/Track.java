@@ -42,7 +42,6 @@ public class Track {
 		this.id = TrackingPointsManager.getId();
 		if(type == GAME){
 			segment = (int) (track.get(track.size() - 1))[0] / GameConstants.DISPLAY_HEIGHT;
-			System.out.println("number of segments" + segment);
 			currentSegment = 0;
 		}
 		this.type = type;
@@ -68,12 +67,12 @@ public class Track {
 							track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
 							);
 					sr.end();
-					sr.begin(ShapeType.Filled);
-					sr.circle(
-							(track.get(i)[0] % GameConstants.DISPLAY_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-							track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-							3);
-					sr.end();
+//					sr.begin(ShapeType.Filled);
+//					sr.circle(
+//							(track.get(i)[0] % GameConstants.DISPLAY_WIDTH) * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+//							track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+//							3);
+//					sr.end();
 				}
 			}
 //			sr.setColor(Color.RED);
@@ -108,24 +107,24 @@ public class Track {
                                     track.get(i+1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY()
                                     );
                     sr.end();
-                    sr.begin(ShapeType.Filled);
-                    sr.circle(
-                                    track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-                                    track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-                                    3);
-                    sr.end();
+//                    sr.begin(ShapeType.Filled);
+//                    sr.circle(
+//                                    track.get(i)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+//                                    track.get(i)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+//                                    3);
+//                    sr.end();
             }
-            sr.setColor(Color.RED);
-            sr.begin(ShapeType.Filled);
-            sr.circle(
-                            track.get(0)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-                            track.get(0)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-                            3);
-            sr.circle(
-                            track.get(track.size() - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
-                            track.get(track.size() - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
-                            3);
-            sr.end();
+//            sr.setColor(Color.RED);
+//            sr.begin(ShapeType.Filled);
+//            sr.circle(
+//                            track.get(0)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+//                            track.get(0)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+//                            3);
+//            sr.circle(
+//                            track.get(track.size() - 1)[0]  * (bounds.width / GameConstants.DISPLAY_WIDTH) + bounds.getX(),
+//                            track.get(track.size() - 1)[1] * (bounds.height / GameConstants.DISPLAY_HEIGHT) + bounds.getY(),
+//                            3);
+//            sr.end();
 		}
 	}
 	

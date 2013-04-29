@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
@@ -50,6 +52,7 @@ public class Entity extends Image implements EntityModel {
 		d += Gdx.graphics.getDeltaTime();
 		batch.draw(anim.getKeyFrame(d, true), this.getX(), this.getY(), this.getWidth(), this.getHeight());
 	}
+	
 	
 	public void drawDebug(ShapeRenderer sr){
 		sr.begin(ShapeType.Line);
@@ -117,20 +120,20 @@ public class Entity extends Image implements EntityModel {
 		requestRedHighlight = b;
 	}
 	
-//	/**
-//	 * le chemin assistance est en haut et le chemin challenge est en bas
-//	 * si le chat est en bas (y < {@link GameConstants#VIEWPORT_HEIGHT} alors il est en mode challenge
-//	 * @return le mode
-//	 */
-//	public String getMode(){
-//		return (this.getY() < GameConstants.DISPLAY_HEIGHT * 1.5f)?GameConstants.CHALLENGE:GameConstants.ASSISTANCE;
-//	}
-	
 	/**
 	 * 
 	 * @return l'étage auquel se trouve l'entité
 	 */
 	public int getEtage(){
 		return (this.getYOnGrid() / (GameConstants.DECALAGE));
+	}
+	
+	/**
+	 * 
+	 * @return le segment dans lequel se trouve l'entité
+	 */
+	public int getSegment()
+	{
+		return (int) (this.getXOnGrid() - 1) / GameConstants.COLS;
 	}
 }

@@ -72,7 +72,7 @@ public class GameScreen implements ScreenPausable{
 	private Level level;
 	private int segment;
 	private InputMultiplexer multiplexer;
-	private boolean done, requestSending;
+	private boolean done, requestSending, displayAbilityZone;
 	private Target gem;
 	private Image goldImage, silverImage, bronzeImage;
 	private Label goldLabel, silverLabel, bronzeLabel;
@@ -107,11 +107,7 @@ public class GameScreen implements ScreenPausable{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		if(!paused){
-			if(cat.getState() == Cat.TELEPORTING)
-				elapsedTime = 0;
-			
 			elapsedTime += delta;
-			gem = Target.getInstance();
 			duration += delta;
 			mc.updateStandTimer();
 			cat.move(stage);
@@ -122,7 +118,10 @@ public class GameScreen implements ScreenPausable{
 			table.draw(batch, 1);
 			batch.end();
 			sr.setProjectionMatrix(stage.getCamera().combined);
-			drawAbilityZone();
+
+			if(displayAbilityZone)
+				drawAbilityZone();
+
 			stage.draw();
 			stage.act(delta);
 			mc.render(sr);
@@ -134,6 +133,7 @@ public class GameScreen implements ScreenPausable{
 				firstBox.render(delta);
 			updateCamPos();
 			mc.addTrackingPoint(delta, segment);
+			gem = Target.getInstance();
 			if(cat.isDone() && gem != null && gem.getActions().size == 0){
 				SoundManager.gameMusicPlay(false);
 				SoundManager.winPlay();
@@ -179,28 +179,29 @@ public class GameScreen implements ScreenPausable{
 			InternetManager.updateLevelStats(patient.getID(), level.getId(), level.getScore(), level.getDuree(), gem.getCouleur());
 			requestSending = false;
 		}
-		
+
 		batch.begin();
 		font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 3, GameConstants.BLOCK_HEIGHT * 2);
 		font.draw(batch, "segment : " + segment, GameConstants.BLOCK_WIDTH * 3, GameConstants.BLOCK_HEIGHT * 3);
 		batch.end();
 
+		if(Gdx.input.isKeyPressed(Keys.ENTER) & elapsedTime > 0.3f)
+		{
+			displayAbilityZone = !displayAbilityZone;
+			elapsedTime = 0;
+		}
 	}
 
 	/**
 	 * gere la position de la camera
 	 */
 	private void updateCamPos() {
-		if(elapsedTime > 0.0f)
-		{
-			stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.DISPLAY_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
-			elapsedTime = 0;
-			box.setEtageAndSegment(cat.getEtage(), segment);
-		}
+		stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.DISPLAY_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
+		box.setEtageAndSegment(cat.getEtage(), segment);
 		box.setX(stage.getCamera().position.x - box.getWidth() / 2);
 		box.setY(stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f);
 		mc.setDecalage(cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
-		segment = (int) ((cat.getXOnGrid() - 1) / GameConstants.COLS);
+		segment = cat.getSegment();
 	}
 
 	@Override
@@ -218,6 +219,8 @@ public class GameScreen implements ScreenPausable{
 		sr = new ShapeRenderer();
 
 		elapsedTime = 3;
+
+		displayAbilityZone = false;
 
 		Gdx.app.log(RollingCat.LOG, "showing");
 		paused = false;
@@ -464,5 +467,4 @@ public class GameScreen implements ScreenPausable{
 		}
 		sr.end();
 	}
-
 }

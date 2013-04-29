@@ -68,6 +68,7 @@
 	tracks : "Tracks",
 	high_score: "Highest score",
 	cadran: "Select the work dials",
-	ready: "I am ready"
+	ready: "I am ready",
+	detail: "Details"
 	
 }
