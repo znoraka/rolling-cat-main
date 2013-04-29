@@ -2,8 +2,12 @@ package fr.lirmm.smile.rollingcat.model.game;
 
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getCatAtlas;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -113,156 +117,158 @@ public class Cat extends Entity {
 				state = FALLING;
 
 			for (Actor actor : stage.getActors()) {
-				if(actor instanceof GroundBlock){
-					if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible() & state != FLYING){
-						state = WALKING;
-						this.actor = actor;
-					}
-					else if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible() & state == FLYING){
-						this.actor = actor;
-						if(this.getActions().size == 0){
-							this.addAction(Actions.sequence(
-									Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 3) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 2),
-									new Action() {
-
-										@Override
-										public boolean act(float delta) {
-											state = FALLING;
-											return true;
-										}
-									}
-									));
+				if(actor instanceof Entity && ((Entity) actor).getEtage() == this.getEtage() && ((Entity) actor).getSegment() == this.getSegment())
+				{
+					if(actor instanceof GroundBlock){
+						if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible() & state != FLYING){
+							state = WALKING;
+							this.actor = actor;
 						}
-					}
-				}
-				if(actor instanceof Dog & state == WALKING)
-					if((((Entity) actor).getBounds().overlaps(right) || ((Entity) actor).getBounds().overlaps(bounds)) & actor.isVisible()){
-						state = HITTING;
-						this.actor = actor;
-					}
-				if(actor instanceof Wasp){
-					if(this.getXOnGrid() == ((Entity) actor).getXOnGrid()){
-						((Wasp) actor).declencher(true);
-						this.actor = actor;
-					}
-					else
-						((Wasp) actor).declencher(false);
-
-					if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
-						state = FALLING;
-				}
-				if(actor instanceof Fan){
-					if(this.getXOnGrid() == ((Entity) actor).getXOnGrid() & this.getEtage() == ((Entity) actor).getEtage()){
-						((Fan) actor).declencher(true);
-					}
-					else
-						((Fan) actor).declencher(false);
-					if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible()){
-						state = FLYING;
-					}
-				}
-				if(actor instanceof Carpet)
-					if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible()){
-						state = HITTING;
-						this.actor = actor;
-					}
-				if(actor instanceof Target){
-					if(((Entity) actor).getBounds().overlaps(bounds)){
-						Target.setInstance((Target) actor);
-						done = true;
-					}
-				}
-
-				if(actor instanceof Coin){
-					if(((Entity) actor).getBounds().overlaps(bounds) & !((Coin) actor).pickedUp()){
-						hasCatchCoin = true;
-						SoundManager.pickupPlay();
-						if(((Coin) actor).getType() == Coin.BRONZE)
-						{
-							bronze++;
-						}
-						else if(((Coin) actor).getType() == Coin.SILVER)
-						{
-							silver++;
-						}
-						else if(((Coin) actor).getType() == Coin.GOLD)
-						{
-							gold++;
-						}
-						((Coin) actor).pickUp();
-					}
-				}
-
-				/**
-				 * si le chat touche une bouee et que success == true 
-				 * 
-				 */
-				if(actor instanceof Door){
-
-					if((((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT))
-					{
-						state = TELEPORTING;
-//						actor.setVisible(false);
-//						actor.setTouchable(Touchable.disabled);
-
-						Gdx.app.log(RollingCat.LOG, "etage du chat : " + this.getEtage());
-						Gdx.app.log(RollingCat.LOG, "nombre d'étages : " + LevelBuilder.getNumberOfEtage());
-
-						if(this.getEtage() == 0)
-						{	
-							if(success)
-								decalage = (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
-							else
-								decalage = 0;
-						}
-						else if(this.getEtage() == LevelBuilder.getNumberOfEtage() - 1)
-						{
-							if(success)
-								decalage = 0;
-							else
-								decalage = - (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
-						}
-						else
-						{
-							if(success)
-								decalage = (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
-							else
-								decalage = - (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
-						}
-
-						door = ((Door) actor).getNextDoor(decalage);
-						this.addAction(
-								Actions.sequence(
-										Actions.delay(0.1f),
-										Actions.moveTo(door.getNextX() * GameConstants.BLOCK_WIDTH, door.getNextY() * GameConstants.BLOCK_HEIGHT),
+						else if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible() & state == FLYING){
+							this.actor = actor;
+							if(this.getActions().size == 0){
+								this.addAction(Actions.sequence(
+										Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 3) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 2),
 										new Action() {
 
 											@Override
 											public boolean act(float delta) {
-												state = HITTING;
-												success = true;
+												state = FALLING;
 												return true;
 											}
 										}
 										));
+							}
+						}
 					}
-
-				}
-
-				if(actor instanceof Gap){
-					if(((Entity) actor).getBounds().overlaps(left)){
-						this.actor = actor;
-						if((! ((Gap) actor).hasGiven())){
+					if(actor instanceof Dog & state == WALKING)
+						if((((Entity) actor).getBounds().overlaps(right) || ((Entity) actor).getBounds().overlaps(bounds)) & actor.isVisible()){
 							state = HITTING;
+							this.actor = actor;
 						}
-						if(((Gap) actor).isReady()){
-							((Gap) actor).setGiven();
-							jump();
+					if(actor instanceof Wasp){
+						if(this.getXOnGrid() == ((Entity) actor).getXOnGrid()){
+							((Wasp) actor).declencher(true);
+							this.actor = actor;
+						}
+						else
+							((Wasp) actor).declencher(false);
+
+						if(((Entity) actor).getBounds().overlaps(top) & actor.isVisible())
+							state = FALLING;
+					}
+					if(actor instanceof Fan){
+						if(this.getXOnGrid() == ((Entity) actor).getXOnGrid() & this.getEtage() == ((Entity) actor).getEtage()){
+							((Fan) actor).declencher(true);
+						}
+						else
+							((Fan) actor).declencher(false);
+						if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible()){
+							state = FLYING;
 						}
 					}
+					if(actor instanceof Carpet)
+						if(((Entity) actor).getBounds().overlaps(bottom) & actor.isVisible()){
+							state = HITTING;
+							this.actor = actor;
+						}
+					if(actor instanceof Target){
+						if(((Entity) actor).getBounds().overlaps(bounds)){
+							Target.setInstance((Target) actor);
+							done = true;
+						}
+					}
+
+					if(actor instanceof Coin){
+						if(((Entity) actor).getBounds().overlaps(bounds) & !((Coin) actor).pickedUp()){
+							hasCatchCoin = true;
+							SoundManager.pickupPlay();
+							if(((Coin) actor).getType() == Coin.BRONZE)
+							{
+								bronze++;
+							}
+							else if(((Coin) actor).getType() == Coin.SILVER)
+							{
+								silver++;
+							}
+							else if(((Coin) actor).getType() == Coin.GOLD)
+							{
+								gold++;
+							}
+							((Coin) actor).pickUp();
+						}
+					}
+
+					/**
+					 * si le chat touche une bouee et que success == true 
+					 * 
+					 */
+					if(actor instanceof Door){
+
+						if((((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT))
+						{
+							state = TELEPORTING;
+							//						actor.setVisible(false);
+							//						actor.setTouchable(Touchable.disabled);
+
+							Gdx.app.log(RollingCat.LOG, "etage du chat : " + this.getEtage());
+							Gdx.app.log(RollingCat.LOG, "nombre d'étages : " + LevelBuilder.getNumberOfEtage());
+
+							if(this.getEtage() == 0)
+							{	
+								if(success)
+									decalage = (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+								else
+									decalage = 0;
+							}
+							else if(this.getEtage() == LevelBuilder.getNumberOfEtage() - 1)
+							{
+								if(success)
+									decalage = 0;
+								else
+									decalage = - (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+							}
+							else
+							{
+								if(success)
+									decalage = (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+								else
+									decalage = - (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+							}
+
+							door = ((Door) actor).getNextDoor(decalage);
+							this.addAction(
+									Actions.sequence(
+											Actions.delay(0.1f),
+											Actions.moveTo(door.getNextX() * GameConstants.BLOCK_WIDTH, door.getNextY() * GameConstants.BLOCK_HEIGHT),
+											new Action() {
+
+												@Override
+												public boolean act(float delta) {
+													state = HITTING;
+													success = true;
+													return true;
+												}
+											}
+											));
+						}
+
+					}
+
+					if(actor instanceof Gap){
+						if(((Entity) actor).getBounds().overlaps(left)){
+							this.actor = actor;
+							if((! ((Gap) actor).hasGiven())){
+								state = HITTING;
+							}
+							if(((Gap) actor).isReady()){
+								((Gap) actor).setGiven();
+								jump();
+							}
+						}
+					}
+
 				}
-
-
 			}
 
 			if(!this.isDone()){
@@ -456,4 +462,5 @@ public class Cat extends Entity {
 	public Actor getLastActorHit() {
 		return actor;
 	}
+
 }

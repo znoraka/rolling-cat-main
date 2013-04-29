@@ -34,7 +34,7 @@ public class RollingCat extends Game {
 
 	@Override
 	public void resize(int width, int height) {
-		super.resize(width, height);
+		super.resize(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package fr.lirmm.smile.rollingcat.screen;
 
 import static fr.lirmm.smile.rollingcat.Localisation._back;
+import static fr.lirmm.smile.rollingcat.Localisation._detail;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getShapeRenderer;
@@ -44,7 +45,7 @@ public class TrackingRecapScreen implements Screen{
 	private Patient patient;
 	private ScrollPane scrollPane;
 	private ArrayList<TextButton> buttons;
-	private Table tableLeft, tableRight;
+	private Table tableLeftUp, tableLeftBottom, tableRight;
 	private SpriteBatch batch;
 	private ShapeRenderer sr;
 	private Track track;
@@ -61,15 +62,19 @@ public class TrackingRecapScreen implements Screen{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		batch.begin();
-		batch.draw(skin.getRegion("backgroundtrack"), 0, 0, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, 1, 1, 0);
-		batch.end();
 		
-		if(track != null)
-			track.render(sr, drawArea, batch);
+		batch.begin();
+		batch.draw(skin.getRegion("black"), 0, 0, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, 1, 1, 0);
+		batch.end();
 		
 		stage.act(delta);
 		stage.draw();
+
+		if(track != null)
+			track.render(sr, drawArea, batch);
+		
+	
+		
 	}
 
 	@Override
@@ -87,7 +92,8 @@ public class TrackingRecapScreen implements Screen{
 		sr = getShapeRenderer();
 		
 		buttons = new ArrayList<TextButton>();
-		tableLeft = new Table();
+		tableLeftUp = new Table();
+		tableLeftBottom = new Table();
 		tableRight = new Table();
 
 		TextButtonStyle style = new TextButtonStyle();
@@ -96,14 +102,14 @@ public class TrackingRecapScreen implements Screen{
 		style.font = font;
 		style.fontColor = Color.BLACK;
 		
-		TextButtonStyle style1 = new TextButtonStyle();
-		style1.up = skin.getDrawable("empty");
-		style1.down = skin.getDrawable("empty");
-		style1.font = font;
-		style1.fontColor = Color.BLACK;
+//		TextButtonStyle style1 = new TextButtonStyle();
+//		style1.up = skin.getDrawable("empty");
+//		style1.down = skin.getDrawable("empty");
+//		style1.font = font;
+//		style1.fontColor = Color.BLACK;
 		
 		ScrollPaneStyle scrollPanelStyle = new ScrollPaneStyle();
-		scrollPanelStyle.background = skin.getDrawable("empty");
+		scrollPanelStyle.background = skin.getDrawable("bottom_green");
 		scrollPanelStyle.vScroll = skin.getDrawable("backgroundtrack");
 		scrollPanelStyle.corner = skin.getDrawable("button_up");
 		scrollPanelStyle.vScrollKnob = skin.getDrawable("button_up");
@@ -123,7 +129,7 @@ public class TrackingRecapScreen implements Screen{
 			}
 		});
 
-		select = new TextButton("", style1);
+		select = new TextButton(localisation(_detail), style);
 		select.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				if(track != null){
@@ -132,29 +138,39 @@ public class TrackingRecapScreen implements Screen{
 			}
 		});
 		
-		tableRight.add(select).fill().expand();
-		tableRight.setY(GameConstants.DISPLAY_HEIGHT * 0.038f);
-		tableRight.setHeight(GameConstants.DISPLAY_HEIGHT * 0.930f);
-		tableRight.setX(GameConstants.DISPLAY_WIDTH*0.315f);
-		tableRight.setWidth(GameConstants.DISPLAY_WIDTH * 0.658f);
-
+		tableRight.setBackground(skin.getDrawable("background_base"));
+		tableRight.setY(GameConstants.DISPLAY_HEIGHT * 0.016f);
+		tableRight.setHeight(GameConstants.DISPLAY_HEIGHT * 0.970f);
+		tableRight.setX(GameConstants.DISPLAY_WIDTH*0.3f);
+		tableRight.setWidth(GameConstants.DISPLAY_WIDTH * 0.689f);
 		
-		scrollPane = new ScrollPane(tableLeft, scrollPanelStyle);
-		scrollPane.setX(GameConstants.DISPLAY_WIDTH*0.025f);
-		scrollPane.setY(GameConstants.DISPLAY_HEIGHT * 0.038f);
-		scrollPane.setHeight(GameConstants.DISPLAY_HEIGHT * 0.930f);
-		scrollPane.setWidth(GameConstants.DISPLAY_WIDTH * 0.262f);
+		tableLeftBottom.setBackground(skin.getDrawable("top_orange"));
+		tableLeftBottom.setY(GameConstants.DISPLAY_HEIGHT * 0.016f);
+		tableLeftBottom.setHeight(GameConstants.DISPLAY_HEIGHT * 0.255f);
+		tableLeftBottom.setX(GameConstants.DISPLAY_WIDTH*0.009f);
+		tableLeftBottom.setWidth(GameConstants.DISPLAY_WIDTH * 0.28f);
+		
+		tableLeftBottom.add(select).pad(GameConstants.DISPLAY_HEIGHT / 100 - 2).fill().expand();
+		tableLeftBottom.row();
+		tableLeftBottom.add(back).pad(GameConstants.DISPLAY_HEIGHT / 100 - 2).fill().expand();
+
+		scrollPane = new ScrollPane(tableLeftUp, scrollPanelStyle);
+		scrollPane.setX(GameConstants.DISPLAY_WIDTH*0.009f);
+		scrollPane.setY(GameConstants.DISPLAY_HEIGHT * 0.286f);
+		scrollPane.setHeight(GameConstants.DISPLAY_HEIGHT * 0.7f);
+		scrollPane.setWidth(GameConstants.DISPLAY_WIDTH * 0.28f);
 		scrollPane.setFadeScrollBars(false);
 		scrollPane.scrollTo(0, 0, 0, 0);
 		
+		
 		createButtons(style);
 		
-		back.setY(GameConstants.DISPLAY_HEIGHT - 50);
-		back.setX(GameConstants.DISPLAY_WIDTH - 130);
+//		back.setY(GameConstants.DISPLAY_HEIGHT * 0.03f);
+//		back.setX(GameConstants.DISPLAY_WIDTH * 0.31f);
 		
 		stage.addActor(scrollPane);
 		stage.addActor(tableRight);
-		stage.addActor(back);
+		stage.addActor(tableLeftBottom);
 		
 		drawArea = new Rectangle(tableRight.getX(), tableRight.getY(), tableRight.getWidth(), tableRight.getHeight());
 	}
@@ -184,8 +200,8 @@ public class TrackingRecapScreen implements Screen{
 			b = new TextButton(patient.getListOfTracks().get(i).getType() + " " + patient.getListOfTracks().get(i).getId(), style);
 			b.setName(""+i);
 			buttons.add(b);
-			tableLeft.add(b).align(Align.right).width(scrollPane.getWidth()*0.85f).height(65).pad(5);
-			tableLeft.row();
+			tableLeftUp.add(b).align(Align.right).width(scrollPane.getWidth()*0.85f).height(65).pad(5);
+			tableLeftUp.row();
 		}
 		addListeners();
 	}
