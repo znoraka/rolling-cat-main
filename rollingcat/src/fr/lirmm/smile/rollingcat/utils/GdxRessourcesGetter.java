@@ -83,16 +83,16 @@ public class GdxRessourcesGetter {
 	 * @return le batch utilisé par les différents screens
 	 */
 	public static SpriteBatch getSpriteBatch(){
-//		if(batch == null){
-//			Gdx.app.log(RollingCat.LOG, "generating batch");
-//			batch = new SpriteBatch();
-//		}
+		if(batch == null){
+			Gdx.app.log(RollingCat.LOG, "generating batch");
+			batch = new SpriteBatch();
+		}
 //		else{
 //			batch.dispose();
 //			batch = new SpriteBatch();
 //		}
-		batch.dispose();
-		batch = new SpriteBatch();
+//		batch.dispose();
+//		batch = new SpriteBatch();
 		return batch;
 	}
 
@@ -127,12 +127,12 @@ public class GdxRessourcesGetter {
 	public static Stage getStage() {
 		if(stage == null){
 			Gdx.app.log(RollingCat.LOG, "generating stage");
-			stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
+			stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true, getSpriteBatch());
 		}
 		else{
 			stage.clear();
 			stage.dispose();
-			stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true);
+			stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, true, getSpriteBatch());
 		}
 		return stage;
 	}

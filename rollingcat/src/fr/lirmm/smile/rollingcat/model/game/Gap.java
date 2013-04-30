@@ -28,6 +28,10 @@ public class Gap extends Entity{
 		return Actions.visible(false);
 	}
 
+	/**
+	 * 
+	 * @return true si le patient est resté sur l'entité jusqu'à la fin du timeout
+	 */
 	public boolean isReady() {
 		return ready;
 	}
@@ -36,6 +40,10 @@ public class Gap extends Entity{
 		this.ready = b;
 	}
 
+	/**
+	 * 
+	 * @return false si le chat n'a pas encore touché le {@link Gap} et que l'{@link Action} n'a pas encore été donnée
+	 */
 	public boolean hasGiven() {
 		return given;
 	}

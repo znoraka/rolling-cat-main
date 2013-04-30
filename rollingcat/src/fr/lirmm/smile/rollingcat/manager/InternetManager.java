@@ -180,7 +180,7 @@ public class InternetManager{
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/gamesession/new");
 		OrderedMap<String, String> map = new OrderedMap<String, String>();
-		map.put("name", gameType);
+		map.put("sessionType", gameType);
 		map.put("comment", "no comment");
 		map.put("patient_id", patientid);
 		map.put("game_id", gameid);
@@ -190,6 +190,7 @@ public class InternetManager{
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "application/json");
 		Gdx.app.log(RollingCat.LOG, "sending new game session retrieve request...");
+
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
 
 			@Override
@@ -256,7 +257,14 @@ public class InternetManager{
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
 		map.put("ImportanceOfEffort", 0.9f);
-		map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
+		{
+			map.put("dials", "0000");
+		}
+		else
+		{
+			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+		}
 		map.put("leftHemiplegia", patient.getLeftHemiplegia());
 
 		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
@@ -264,6 +272,7 @@ public class InternetManager{
 		algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
 		algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
 		algoParameterAZ.put("alpha", GameConstants.alpha);
+		algoParameterAZ.put("assessmentDataOnly", "true");
 		map.put("parameters", algoParameterAZ); 
 
 
@@ -314,12 +323,21 @@ public class InternetManager{
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
 		map.put("ImportanceOfEffort", 0.9f);
+		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
+		{
+			map.put("dials", "0000");
+		}
+		else
+		{
+			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+		}
 
 		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
 		algoParameterAZ.put("range", GameConstants.range);
 		algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
 		algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
 		algoParameterAZ.put("alpha", GameConstants.alpha);
+		algoParameterAZ.put("assessmentDataOnly", "true");
 		map.put("parameters", algoParameterAZ); 
 
 
@@ -482,7 +500,7 @@ public class InternetManager{
 		});
 
 	}
-	
+
 	public static void getAbilityZone(Patient patient) {
 		ability = null;
 		Gdx.app.log(RollingCat.LOG, "preparing get ability zone request...");
@@ -502,6 +520,14 @@ public class InternetManager{
 		map.put("totalWidth", GameConstants.workspaceWidth);
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
+		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
+		{
+			map.put("dials", "0000");
+		}
+		else
+		{
+			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+		}
 		map.put("ImportanceOfEffort", 0.9f);
 
 		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
@@ -509,6 +535,7 @@ public class InternetManager{
 		algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
 		algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
 		algoParameterAZ.put("alpha", GameConstants.alpha);
+		algoParameterAZ.put("assessmentDataOnly", "true");
 		map.put("parameters", algoParameterAZ); 
 
 
@@ -529,19 +556,19 @@ public class InternetManager{
 				String string = httpResponse.getResultAsString();
 				OrderedMap<String, Object>lang = (OrderedMap<String, Object>) new JsonReader().parse(string);
 				ability = json.readValue("content", float[].class, lang);
-//				Gdx.app.log(RollingCat.LOG, Arrays.toString(s));
-//				int a = 0;
-//				ability = new float[GameConstants.ROWS][GameConstants.COLS];
-//				for (int i = 0; i < GameConstants.ROWS; i++) {
-//					for (int j = 0; j < GameConstants.COLS; j++) {
-//						ability[i][j] = s[a];
-//						a++;
-//					}
-//				}
-//				
-//				for (int i = 0; i < ability.length; i++) {
-//					Gdx.app.log(RollingCat.LOG, Arrays.toString(ability[i]));
-//				}
+				//				Gdx.app.log(RollingCat.LOG, Arrays.toString(s));
+				//				int a = 0;
+				//				ability = new float[GameConstants.ROWS][GameConstants.COLS];
+				//				for (int i = 0; i < GameConstants.ROWS; i++) {
+				//					for (int j = 0; j < GameConstants.COLS; j++) {
+				//						ability[i][j] = s[a];
+				//						a++;
+				//					}
+				//				}
+				//				
+				//				for (int i = 0; i < ability.length; i++) {
+				//					Gdx.app.log(RollingCat.LOG, Arrays.toString(ability[i]));
+				//				}
 			}
 
 			@Override

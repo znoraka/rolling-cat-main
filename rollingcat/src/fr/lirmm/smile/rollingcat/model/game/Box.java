@@ -24,11 +24,35 @@ public class Box extends Entity{
 	public static final int FEATHER = 4;
 	public static final int SCISSORS = 5;
 	public static final int EMPTY = 0;
-		
+	
+	/**
+	 * le premier item dans la boite
+	 */
 	private int item;
+	
+	/**
+	 * {@link TextureAtlas} utilisé pour avoir les images des différentes boites
+	 */
 	private TextureAtlas atlas;
-	private OrderedMap<Integer, ArrayList<Integer>> items;
-	private int segment, etage;
+	
+	/**
+	 * {@link OrderedMap} de toutes les boites ({@link ArrayList<Integer>}
+	 * lors de la construction du niveau, l'indice des boites est construit comme suit :
+	 * {@code map.put("" + etage + "" + segment;}
+	 * par exemple la boite etage 0 et segment 1 aura 01 comme key dans la map
+	 * la boite etage 4 et segment 10 aura 410 comme key
+	 */
+	private OrderedMap<String, ArrayList<Integer>> items;
+	
+	/**
+	 * nombre d'écrans parcourus depus le début
+	 */
+	private int segment;
+	
+	/**
+	 * etage de la boite
+	 */
+	private int etage;
 	
 	public Box(float x, float y) {
 		super(x, y, GameConstants.TEXTURE_BOX);
@@ -38,7 +62,7 @@ public class Box extends Entity{
 		this.setZIndex(2);
 	}
 
-	public void setItems(OrderedMap<Integer, ArrayList<Integer>> items)
+	public void setItems(OrderedMap<String, ArrayList<Integer>> items)
 	{
 		this.items = items;
 		this.item = getCurrentBox().get(0);
@@ -132,7 +156,7 @@ public class Box extends Entity{
 	 * @return la box pour l'écran courant
 	 */
 	private ArrayList<Integer> getCurrentBox(){
-		return items.get(Integer.valueOf("" + etage + "" + segment));
+		return items.get("" + etage + "" + segment);
 	}
 	
 	public void setEtageAndSegment(int etage, int segment)

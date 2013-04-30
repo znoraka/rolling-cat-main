@@ -2,12 +2,8 @@ package fr.lirmm.smile.rollingcat.model.game;
 
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getCatAtlas;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -32,7 +28,6 @@ import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
 public class Cat extends Entity {
 
-	private boolean done, requestBoxEmptiing;
 
 	public static final int FALLING = 0;
 	public static final int FLYING = 1;
@@ -41,22 +36,66 @@ public class Cat extends Entity {
 	public static final int WALKING = 4;
 	public static final int TELEPORTING = 5;
 
-	private int state, decalage;
+	/**
+	 * état du chat
+	 */
+	private int state;
+
+	/**
+	 * decalage à avoir pour toucher la prochaine porte au dessus ou en dessous
+	 */
+	private int decalage;
+
+	/**
+	 * nombre de coin de chaque type que le chat a
+	 */
 	private int gold, silver, bronze;
 
+	/**
+	 * ancienne position en x pour savoir si le chat est immobile
+	 */
 	private int oldX;
 
+	/**
+	 * {@link Rectangle} pour les collisions de chaque coté du chat
+	 */
 	private Rectangle top, right, bottom, left;
 
-	SkeletonData skeletonData;
-	Skeleton skeleton;
-	Bone root;
-	Animation walkAnimation, contactAnimation, jumpAnimation, fanAnimation, endAnimation;
-	float time;
-	boolean hasCatchCoin;
+	/**
+	 * pour les animations avec Spine
+	 */
+	private SkeletonData skeletonData;
+	private Skeleton skeleton;
+	private Bone root;
+	private Animation walkAnimation, contactAnimation, jumpAnimation, fanAnimation, endAnimation;
+	private float time;
+
+	/**
+	 * variable de Cédric utilité ???
+	 */
+	private boolean hasCatchedCoin;
+
+	/**
+	 * vrai si le chat réussi la scene et faux si le chat tombe
+	 */
 	private boolean success;
+
+	/**
+	 * variable pour savoir si le chat a touché la cible finale
+	 */
+	private boolean done;
+
+	/**
+	 * variable globale pour les collisions
+	 */
 	private Actor actor;
+
+	/**
+	 * variable globale pour le téléport entre les portes
+	 */
 	private Door door;
+
+
 	/**
 	 * l'acteur principal
 	 * @param x
@@ -68,12 +107,16 @@ public class Cat extends Entity {
 		this.setTouchable(Touchable.disabled);
 		final String name = "cat-skeleton";
 		success = true;
-		requestBoxEmptiing = false;
 
-		TextureAtlas atlas = getCatAtlas();
+//		TextureAtlas atlas = getCatAtlas();
+		TextureAtlas atlas = new TextureAtlas("data/test/hero-skin.atlas");
 		SkeletonBinary binary = new SkeletonBinary(atlas);
-		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/cat/" + name + ".skel"));
+		
+//		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/cat/" + name + ".skel"));
 
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/test/" + name + ".skel"));
+
+		
 		walkAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-walk.anim"), skeletonData);
 		jumpAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-jump.anim"), skeletonData);
 		endAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-levelend.anim"), skeletonData);
@@ -83,6 +126,7 @@ public class Cat extends Entity {
 
 
 		skeleton = new Skeleton(skeletonData);
+		skeleton.setSkin("s1");
 		skeleton.setToBindPose();
 
 		root = skeleton.getRootBone();
@@ -98,11 +142,12 @@ public class Cat extends Entity {
 
 	/**
 	 * methode pour gerer le déplacement
+	 * change l'état du chat selon l'{@link Entity} en contact
 	 * @param stage
 	 */
 	public void move(Stage stage){
 
-		hasCatchCoin = false;
+		hasCatchedCoin = false;
 
 		top.set(this.getX() + GameConstants.BLOCK_WIDTH *0.5f, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
 		bottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), 2, 2);
@@ -181,7 +226,7 @@ public class Cat extends Entity {
 
 					if(actor instanceof Coin){
 						if(((Entity) actor).getBounds().overlaps(bounds) & !((Coin) actor).pickedUp()){
-							hasCatchCoin = true;
+							hasCatchedCoin = true;
 							SoundManager.pickupPlay();
 							if(((Coin) actor).getType() == Coin.BRONZE)
 							{
@@ -208,8 +253,8 @@ public class Cat extends Entity {
 						if((((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT))
 						{
 							state = TELEPORTING;
-							//						actor.setVisible(false);
-							//						actor.setTouchable(Touchable.disabled);
+//							actor.setVisible(false);
+//							actor.setTouchable(Touchable.disabled);
 
 							Gdx.app.log(RollingCat.LOG, "etage du chat : " + this.getEtage());
 							Gdx.app.log(RollingCat.LOG, "nombre d'étages : " + LevelBuilder.getNumberOfEtage());
@@ -285,7 +330,7 @@ public class Cat extends Entity {
 					}
 
 					else if(state == HITTING){
-						this.getActions().clear();
+						this.clearActions();
 					}
 				}
 			}
@@ -296,10 +341,11 @@ public class Cat extends Entity {
 		oldX = this.getXOnGrid();
 	}
 
-	public boolean hasCatchCoin()
+	public boolean hasCatchedCoin()
 	{
-		return hasCatchCoin;
+		return hasCatchedCoin;
 	}
+	
 	/**
 	 * initialise un saut
 	 */
@@ -406,18 +452,12 @@ public class Cat extends Entity {
 
 	/**
 	 * demande un vidage de la box après une chute
-	 * @return true si le vidage est requis
+	 * @return true si le vidage est requis, càd si le chat est tombé (success == false)
 	 */
 	public boolean requestBoxEmptiing(){
-		return requestBoxEmptiing;
+		return !success;
 	}
 
-	/**
-	 * marque la requete de vidage de la box comme traitée
-	 */
-	public void requestOk() {
-		requestBoxEmptiing = false;
-	}
 
 	/**
 	 * 

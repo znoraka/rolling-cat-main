@@ -156,7 +156,6 @@ public class GameScreen implements ScreenPausable{
 
 			if(cat.requestBoxEmptiing()){
 				mc.dropItem();
-				cat.requestOk();
 			}
 
 			setLabelText();

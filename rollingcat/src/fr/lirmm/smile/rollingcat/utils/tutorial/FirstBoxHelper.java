@@ -149,7 +149,7 @@ public class FirstBoxHelper
 	 */
 	private void renderCoins(float delta)
 	{
-		if(cat.hasCatchCoin() && firstCoin)
+		if(cat.hasCatchedCoin() && firstCoin)
 		{
 			label.setText(localisation(_coin_get));
 			ellapsedTimeCoin = 0;

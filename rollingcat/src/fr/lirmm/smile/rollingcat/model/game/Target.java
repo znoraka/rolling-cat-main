@@ -12,7 +12,7 @@ public class Target extends Entity {
 	private static Target instance;
 
 	public Target(float x, float y) {
-		super(x, y, getColor(x, y)+GameConstants.TEXTURE_GEM);
+		super(x, y, setColor(x, y)+GameConstants.TEXTURE_GEM);
 		this.setTouchable(Touchable.disabled);
 	}
 	
@@ -26,7 +26,13 @@ public class Target extends Entity {
 		instance = target;
 	}
 	
-	public static String getColor(float x, float y){
+	/**
+	 * la couleur est choisie en fonction de la position de la {@link Target} selon si son x/y est pair ou pas, cela permet de toujours avoir la même couleur
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public static String setColor(float x, float y){
 		String s = "";
 		if(x % 2 == 0){
 			if(y % 2 == 0)
