@@ -25,7 +25,7 @@ public class Fan extends Entity {
 	private float time;
 	private boolean declenche;
 	private float rotationSpeed;
-	private boolean played;
+	private boolean soundPlayed;
 	
 	/**
 	 * le ventilateur fait deux blocs de large, le chat regarde le bloc en bas à droite de lui lors de ses déplacements
@@ -55,7 +55,7 @@ public class Fan extends Entity {
 		time = new Random().nextFloat();
 		declenche = false;
 		rotationSpeed = 0;
-		played = false;
+		soundPlayed = false;
 	}
 	
 	@Override
@@ -73,8 +73,8 @@ public class Fan extends Entity {
 	
 	public void declencher(boolean b){
 		if(b){
-			if(!played){
-				played = true;
+			if(!soundPlayed){
+				soundPlayed = true;
 				SoundManager.fanPlay();
 			}
 			rotationSpeed = (float) (Math.PI * 2);

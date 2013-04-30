@@ -1,10 +1,10 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 
-public class GroundBlock extends Block {
+public class GroundBlock extends Entity {
 
 	/**
 	 * le bloc qui constitue le sol
@@ -12,7 +12,8 @@ public class GroundBlock extends Block {
 	 * @param y
 	 */
 	public GroundBlock(float x, float y) {
-		super(x, y, new Vector2(1, 0), GameConstants.TEXTURE_GROUNDBLOCK);
+		super(x, y, GameConstants.TEXTURE_GROUNDBLOCK);
+		this.setTouchable(Touchable.disabled);
 	}
 	
 	

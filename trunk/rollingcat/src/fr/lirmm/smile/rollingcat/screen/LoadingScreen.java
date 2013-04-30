@@ -27,6 +27,7 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
+import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.model.world.Level;
 import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
@@ -96,9 +97,7 @@ public class LoadingScreen implements Screen {
 
 		
 		if(ready){
-			batch.begin();
 			stage1.draw();
-			batch.end();
 			stage1.act(delta);
 		}
 
@@ -117,6 +116,7 @@ public class LoadingScreen implements Screen {
 		
 		stage1 = new Stage();
 
+		InternetManager.newGameSession(Track.GAME, patient.getID());
 		InternetManager.getAbilityZone(patient);
 
 		texture = new Texture("data/load.png");

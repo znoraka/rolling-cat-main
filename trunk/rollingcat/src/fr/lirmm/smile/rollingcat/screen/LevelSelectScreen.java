@@ -213,7 +213,6 @@ public class LevelSelectScreen implements Screen {
 	public void show() {
 		if(gen == true){
 			f = 2;
-	        InternetManager.newGameSession(Track.GAME, patient.getID());
 			font = getBigFont();
 			stage = getStage();
 			skin = getSkin();

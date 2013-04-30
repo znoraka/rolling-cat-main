@@ -75,9 +75,7 @@ public class PatientSelectScreen implements Screen{
 
 		stage.act(delta);
 
-		batch.begin();
 		stage.draw();
-		batch.end();
 	}
 
 	@Override

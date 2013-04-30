@@ -178,21 +178,6 @@ public class AssessmentScreen implements Screen {
 			if(InternetManager.sent != 0)
 				game.setScreen(new PatientScreen(game, patient));
 		}
-		
-//		if(Gdx.input.isKeyPressed(Keys.SPACE) & elapsedTime > 1){
-//			if(selected > 0)
-//				selected--;
-//			
-//			if(selected > 0)
-//				selected--;
-//			
-//			triangles.get(selected).clearProgression();
-//			elapsedTime = 0;
-//			
-//			waitingToEnterInArea = false;
-//		}
-//		
-//		elapsedTime += delta;
 	}
 	@Override
 	public void resize(int width, int height) {
@@ -321,8 +306,7 @@ public class AssessmentScreen implements Screen {
 	}
 
 	private void setLabelTextAndPosition(){
-		String s = StringUtils.addEnters(localisation(_assessment_ + help), 20);
-		label.setText(s);
+		label.setText(StringUtils.addEnters(localisation(_assessment_ + help), 20));
 		label.setY(GameConstants.DISPLAY_HEIGHT * 0.85f);
 		label.setX(GameConstants.DISPLAY_WIDTH * 0.5f - 20 * 6);
 	}
