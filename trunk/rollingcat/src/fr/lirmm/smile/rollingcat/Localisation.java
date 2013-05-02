@@ -85,6 +85,8 @@ public class Localisation {
 	public static String _cadran = "cadran";
 	public static String _ready = "ready";
 	public static String _detail = "detail";
+	public static String _skin = "skin";
+	public static String _timeout = "timeout";
 	
 	/**
 	 * charge un langage depuis un fichier de langage
@@ -123,7 +125,8 @@ public class Localisation {
 	/**
 	 * les fichiers de langue sont numérotés de 0 à n
 	 * avec leur correspondance en lettre dans un fichier Json 
-	 * exemple  = 1:"English"
+	 * exemple = 1:"English",
+	 * 			 0:"French"
 	 * on parcours tous ces fichiers et crée une {@link List} des langues disponibles
 	 * @return un {@link List} des langues trouvées
 	 */

@@ -196,6 +196,8 @@ public class GameScreen implements ScreenPausable{
 	 */
 	private void updateCamPos() {
 		stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.DISPLAY_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
+//		stage.getCamera().position.set(cat.getX(), cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
+
 		box.setEtageAndSegment(cat.getEtage(), segment);
 		box.setX(stage.getCamera().position.x - box.getWidth() / 2);
 		box.setY(stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f);

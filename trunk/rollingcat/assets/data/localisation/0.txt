@@ -69,5 +69,7 @@
 	high_score: "Meilleur score",
 	cadran: "Sélectionner les cadrans préférables de travail",
 	ready: "Je suis prêt",
-	detail: "Détail"
+	detail: "Détail", 
+	skin: "Apparence",
+	timeout: "Temps avant échec"
 }

@@ -18,103 +18,103 @@ public class SoundManager {
 	private static Sound bark;
 	private static Sound scissors;
 
-//	public static void pickupPlay(){
-//		coinPickup.play();
-//	}
-//
-//	public static void nextPlay(){
-//		nextButton.play();
-//	}
-//
-//	public static void fallPlay(){
-//		fall.play();
-//	}
-//
-//	public static void jumpPlay(){
-//		jump.play();
-//	}
-//
-//	public static void winPlay(){
-//		win.play();
-//	}
-//
-//	public static void fanPlay(){
-//		fan.play();
-//	}
-//
-//	public static void splashPlay(){
-//		splash.play();
-//	}
-//
-//	public static void barkPlay(){
-//		bark.play();
-//	}
-//
-//	public static void scissorsPlay(){
-//		scissors.play();
-//	}
-//
-//	public static void gameMusicPlay(boolean b){
-//		if(b){
-//			gameMusic.setLooping(true);
-//			gameMusic.play();
-//		}
-//		else
-//			gameMusic.stop();
-//	}
-//
-//	public static void gameMusicPause() {
-//		gameMusic.pause();
-//	}
-//
-//	public static void load(){
-//		coinPickup = Gdx.audio.newSound(Gdx.files.internal("data/sound/coin.ogg"));
-//		nextButton = Gdx.audio.newSound(Gdx.files.internal("data/sound/next.ogg"));
-//		fall = Gdx.audio.newSound(Gdx.files.internal("data/sound/ohno.ogg"));
-//		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sound/game.ogg"));
-//		jump = Gdx.audio.newSound(Gdx.files.internal("data/sound/bigjump.ogg"));
-//		win = Gdx.audio.newSound(Gdx.files.internal("data/sound/gem_1.ogg"));
-//		fan = Gdx.audio.newSound(Gdx.files.internal("data/sound/fan.ogg"));
-//		splash = Gdx.audio.newSound(Gdx.files.internal("data/sound/squish.ogg"));
-//		bark = Gdx.audio.newSound(Gdx.files.internal("data/sound/bark.ogg"));
-//		scissors = Gdx.audio.newSound(Gdx.files.internal("data/sound/scissors.ogg"));
-//	}
-	
 	public static void pickupPlay(){
+		coinPickup.play();
 	}
 
 	public static void nextPlay(){
+		nextButton.play();
 	}
 
 	public static void fallPlay(){
+		fall.play();
 	}
 
 	public static void jumpPlay(){
+		jump.play();
 	}
 
 	public static void winPlay(){
+		win.play();
 	}
 
 	public static void fanPlay(){
+		fan.play();
 	}
 
 	public static void splashPlay(){
+		splash.play();
 	}
 
 	public static void barkPlay(){
+		bark.play();
 	}
 
 	public static void scissorsPlay(){
+		scissors.play();
 	}
 
 	public static void gameMusicPlay(boolean b){
+		if(b){
+			gameMusic.setLooping(true);
+			gameMusic.play();
+		}
+		else
+			gameMusic.stop();
 	}
 
 	public static void gameMusicPause() {
+		gameMusic.pause();
 	}
 
 	public static void load(){
+		coinPickup = Gdx.audio.newSound(Gdx.files.internal("data/sound/coin.ogg"));
+		nextButton = Gdx.audio.newSound(Gdx.files.internal("data/sound/next.ogg"));
+		fall = Gdx.audio.newSound(Gdx.files.internal("data/sound/ohno.ogg"));
+		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("data/sound/game.ogg"));
+		jump = Gdx.audio.newSound(Gdx.files.internal("data/sound/bigjump.ogg"));
+		win = Gdx.audio.newSound(Gdx.files.internal("data/sound/gem_1.ogg"));
+		fan = Gdx.audio.newSound(Gdx.files.internal("data/sound/fan.ogg"));
+		splash = Gdx.audio.newSound(Gdx.files.internal("data/sound/squish.ogg"));
+		bark = Gdx.audio.newSound(Gdx.files.internal("data/sound/bark.ogg"));
+		scissors = Gdx.audio.newSound(Gdx.files.internal("data/sound/scissors.ogg"));
 	}
+//	
+//	public static void pickupPlay(){
+//	}
+//
+//	public static void nextPlay(){
+//	}
+//
+//	public static void fallPlay(){
+//	}
+//
+//	public static void jumpPlay(){
+//	}
+//
+//	public static void winPlay(){
+//	}
+//
+//	public static void fanPlay(){
+//	}
+//
+//	public static void splashPlay(){
+//	}
+//
+//	public static void barkPlay(){
+//	}
+//
+//	public static void scissorsPlay(){
+//	}
+//
+//	public static void gameMusicPlay(boolean b){
+//	}
+//
+//	public static void gameMusicPause() {
+//	}
+//
+//	public static void load(){
+//	}
 
 
 
