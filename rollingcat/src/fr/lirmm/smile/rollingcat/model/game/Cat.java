@@ -108,15 +108,15 @@ public class Cat extends Entity {
 		final String name = "cat-skeleton";
 		success = true;
 
-//		TextureAtlas atlas = getCatAtlas();
+		//		TextureAtlas atlas = getCatAtlas();
 		TextureAtlas atlas = new TextureAtlas("data/test/hero-skin.atlas");
 		SkeletonBinary binary = new SkeletonBinary(atlas);
-		
-//		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/cat/" + name + ".skel"));
+
+		//		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/cat/" + name + ".skel"));
 
 		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/test/" + name + ".skel"));
 
-		
+
 		walkAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-walk.anim"), skeletonData);
 		jumpAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-jump.anim"), skeletonData);
 		endAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-levelend.anim"), skeletonData);
@@ -126,7 +126,7 @@ public class Cat extends Entity {
 
 
 		skeleton = new Skeleton(skeletonData);
-		skeleton.setSkin("s1");
+		skeleton.setSkin("s" + RollingCat.skin);
 		skeleton.setToBindPose();
 
 		root = skeleton.getRootBone();
@@ -253,41 +253,26 @@ public class Cat extends Entity {
 						if((((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT))
 						{
 							state = TELEPORTING;
-//							actor.setVisible(false);
-//							actor.setTouchable(Touchable.disabled);
+							actor.setVisible(false);
+							actor.setTouchable(Touchable.disabled);
 
-							Gdx.app.log(RollingCat.LOG, "etage du chat : " + this.getEtage());
-							Gdx.app.log(RollingCat.LOG, "nombre d'étages : " + LevelBuilder.getNumberOfEtage());
+							//							Gdx.app.log(RollingCat.LOG, "etage du chat : " + this.getEtage());
+							//							Gdx.app.log(RollingCat.LOG, "nombre d'étages : " + LevelBuilder.getNumberOfEtage());
 
-							if(this.getEtage() == 0)
-							{	
-								if(success)
-									decalage = (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
-								else
-									decalage = 0;
-							}
-							else if(this.getEtage() == LevelBuilder.getNumberOfEtage() - 1)
+							if(success)
 							{
-								if(success)
-									decalage = 0;
-								else
-									decalage = - (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+								door = this.nextDoorUp((Door) actor);
 							}
 							else
 							{
-								if(success)
-									decalage = (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
-								else
-									decalage = - (int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+								door = this.nextDoorDown((Door) actor);
 							}
 
-							door = ((Door) actor).getNextDoor(decalage);
 							this.addAction(
 									Actions.sequence(
 											Actions.delay(0.1f),
 											Actions.moveTo(door.getNextX() * GameConstants.BLOCK_WIDTH, door.getNextY() * GameConstants.BLOCK_HEIGHT),
 											new Action() {
-
 												@Override
 												public boolean act(float delta) {
 													state = HITTING;
@@ -295,7 +280,8 @@ public class Cat extends Entity {
 													return true;
 												}
 											}
-											));
+											)
+									);
 						}
 
 					}
@@ -341,11 +327,29 @@ public class Cat extends Entity {
 		oldX = this.getXOnGrid();
 	}
 
+	/**
+	 * retourne la porte au meme emplacement un étage au dessus ou la porte meme si on est au dernier étage
+	 * @param door
+	 * @return Door
+	 */
+	private Door nextDoorUp(Door door) {
+		return door.getNextDoor((this.getEtage() == LevelBuilder.getNumberOfEtage() - 1)?0:(int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT));
+	}
+	
+	/**
+	 * retourne la porte au meme emplacement un étage en dessous ou la porte meme si on est au premier étage
+	 * @param door
+	 * @return Door
+	 */
+	private Door nextDoorDown(Door door) {
+		return door.getNextDoor((this.getEtage() == 0)?0:(int) (- GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT));
+	}
+
 	public boolean hasCatchedCoin()
 	{
 		return hasCatchedCoin;
 	}
-	
+
 	/**
 	 * initialise un saut
 	 */

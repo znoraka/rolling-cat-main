@@ -48,7 +48,7 @@ public class GameConstants {
 	public static final float DELTATRACKINGMILLISEC = 100;
 	
 	public static final float HOVER_TIME = 1f;
-	public static final float TIMEOUT = 10f;
+	public static int TIMEOUT = 10;
 
 	public static final int NB_OF_LEVELS_IN_MENU = 7;
 	//on ajoute le niveau du tuto qui ne compte pas dans la liste de niveaux effective

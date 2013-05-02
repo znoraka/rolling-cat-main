@@ -1,7 +1,7 @@
 package fr.lirmm.smile.rollingcat.screen;
 
 import static fr.lirmm.smile.rollingcat.Localisation.*;
-import static fr.lirmm.smile.rollingcat.Localisation._discard;
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 import static fr.lirmm.smile.rollingcat.Localisation._evaporation_per_day;
 import static fr.lirmm.smile.rollingcat.Localisation._name;
 import static fr.lirmm.smile.rollingcat.Localisation._needsAtLeastOneArea;
@@ -52,12 +52,12 @@ public class SettingsScreen implements Screen {
 	private Table table, zoneTable;
 	private SpriteBatch batch;
 	//	private ImageButton heightPlus, heightMinus, widthPlus, widthMinus;
-	private TextField workspaceHeight, workspaceWidth, range, pathDeltaTime, evaporationPerDay, alpha, numberOfLines, numberOfRows, totalVolume, volumePerLevel;
+	private TextField workspaceHeight, workspaceWidth, range, pathDeltaTime, evaporationPerDay, alpha, numberOfLines, numberOfRows, totalVolume, volumePerLevel, timeout;
 	private Skin skin;
 	private BitmapFont font;
 	//	private float elapsedTime;
 	private RollingCat game;
-	private Label heightLabel, widthLabel, rangeLabel, pathDeltaTimeLabel, evaporationPerDayLabel, alphaLabel, numberOfLinesLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel;
+	private Label heightLabel, widthLabel, rangeLabel, pathDeltaTimeLabel, evaporationPerDayLabel, alphaLabel, numberOfLinesLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel, timeoutLabel;
 	private TextButton save, discard;
 	private Screen oldScreen;
 	private List list;
@@ -73,27 +73,6 @@ public class SettingsScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		//		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		//		Gdx.gl.glEnable(GL10.GL_BLEND);
-		//		Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-
-		//		if(heightMinus.isPressed() & elapsedTime > SPEED)
-		//			heightModify(-1);
-		//		
-		//		if(heightPlus.isPressed() & elapsedTime > SPEED)
-		//			heightModify(1);
-		//		
-		//		if(widthMinus.isPressed() & elapsedTime > SPEED)
-		//			widthModify(-1);
-		//		
-		//		if(widthPlus.isPressed() & elapsedTime > SPEED)
-		//			widthModify(1);
-		//		
-		//		if(widthMinus.isPressed() || widthPlus.isPressed() || heightMinus.isPressed() || heightPlus.isPressed())
-		//			elapsedTime += delta;
-		//		else
-		//			elapsedTime = 0;
-
 		batch.begin();
 		batch.draw(skin.getRegion("background_base"), 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.end();
@@ -107,6 +86,7 @@ public class SettingsScreen implements Screen {
 
 		checkHeightBounds();
 		checkWidthBounds();
+		
 		
 
 	}
@@ -159,6 +139,7 @@ public class SettingsScreen implements Screen {
 		numberOfRowsLabel = new Label(localisation(_number_of_rows)+" :", labelStyle);
 		totalVolumeLabel = new Label(localisation(_total_volume)+" :", labelStyle);
 		volumePerLevelLabel = new Label(localisation(_volume_per_level)+" :", labelStyle);
+		timeoutLabel = new Label(localisation(_timeout)+" :", labelStyle);
 
 		workspaceHeight = new TextField(""+GameConstants.workspaceHeight, textFieldStyle);
 		workspaceWidth = new TextField(""+GameConstants.workspaceWidth, textFieldStyle);
@@ -170,54 +151,8 @@ public class SettingsScreen implements Screen {
 		numberOfRows = new TextField(""+GameConstants.numberOfRows, textFieldStyle);
 		totalVolume = new TextField(""+GameConstants.totalVolume, textFieldStyle);
 		volumePerLevel = new TextField(""+GameConstants.volumePerLevel, textFieldStyle);
+		timeout = new TextField(""+GameConstants.TIMEOUT, textFieldStyle);
 
-		//		heightPlus = new ImageButton(skin.getDrawable("triangle_up"));
-		//		heightPlus.addListener(new InputListener() {
-		//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		//				heightModify(1);
-		//				return true;
-		//			}
-		//			
-		//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-		//				
-		//			}
-		//		});
-		//		
-		//		heightMinus = new ImageButton(skin.getDrawable("triangle_down"));
-		//		heightMinus.addListener(new InputListener() {
-		//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		//				heightModify(-1);
-		//				return true;
-		//			}
-		//			
-		//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-		//				
-		//			}
-		//		});
-		//		
-		//		widthPlus = new ImageButton(skin.getDrawable("triangle_up"));
-		//		widthPlus.addListener(new InputListener() {
-		//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		//				widthModify(1);
-		//				return true;
-		//			}
-		//			
-		//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-		//				
-		//			}
-		//		});
-		//		
-		//		widthMinus = new ImageButton(skin.getDrawable("triangle_down"));
-		//		widthMinus.addListener(new InputListener() {
-		//			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-		//				widthModify(-1);
-		//				return true;
-		//			}
-		//			
-		//			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-		//				
-		//			}
-		//		});
 		zoneTable.setHeight(GameConstants.DISPLAY_HEIGHT * 0.35f);
 		zoneTable.setWidth(GameConstants.DISPLAY_WIDTH * 0.35f);
 		zoneTable.setX(GameConstants.DISPLAY_WIDTH * 0.6f);
@@ -274,8 +209,9 @@ public class SettingsScreen implements Screen {
 				GameConstants.area_2 = area_2.isChecked();
 				GameConstants.area_3 = area_3.isChecked();
 				GameConstants.area_4 = area_4.isChecked();
-				loadLanguage(list.getSelectedIndex());
+				GameConstants.TIMEOUT = Integer.valueOf(timeout.getText());
 				RollingCat.lang = list.getSelectedIndex();
+				loadLanguage(RollingCat.lang);
 				game.setScreen(oldScreen);
 			}
 		});
@@ -285,7 +221,7 @@ public class SettingsScreen implements Screen {
 				game.setScreen(oldScreen);
 			}
 		});
-
+		
 		table.add(heightLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(workspaceHeight).right();
 		//		table.add(heightPlus);
@@ -320,8 +256,12 @@ public class SettingsScreen implements Screen {
 		table.add(volumePerLevelLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(volumePerLevel).right();
 		table.row();
+		table.add(timeoutLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+		table.add(timeout).right();
+		table.row();
 		table.add(save).left();
 		table.add(discard).left();
+		table.row();
 
 		stage.addActor(table);
 		stage.addActor(list);

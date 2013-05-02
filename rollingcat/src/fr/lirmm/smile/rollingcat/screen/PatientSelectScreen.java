@@ -2,7 +2,9 @@ package fr.lirmm.smile.rollingcat.screen;
 
 import static fr.lirmm.smile.rollingcat.Localisation._back;
 import static fr.lirmm.smile.rollingcat.Localisation._select;
+import static fr.lirmm.smile.rollingcat.Localisation._skin;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSettingsButton;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSmallFont;
@@ -22,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -55,6 +59,7 @@ public class PatientSelectScreen implements Screen{
 	private Texture face;
 	private LabelStyle labelStyle;
 	private Doctor doctor;
+	private List esthetique;
 	
 	
 	public PatientSelectScreen(RollingCat game, Doctor doctor){
@@ -76,6 +81,7 @@ public class PatientSelectScreen implements Screen{
 		stage.act(delta);
 
 		stage.draw();
+		
 	}
 
 	@Override
@@ -173,6 +179,7 @@ public class PatientSelectScreen implements Screen{
 			selectPatient.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					InternetManager.needsAssessment(p);
+					RollingCat.skin = esthetique.getSelectedIndex() + 1;
 					game.setScreen(new PatientScreen(game, p));
 				}
 			});
@@ -188,6 +195,21 @@ public class PatientSelectScreen implements Screen{
 			selectPatient.setX(GameConstants.DISPLAY_WIDTH * 0.7f);
 			selectPatient.setY(GameConstants.DISPLAY_HEIGHT * 0.81f);
 			
+			ListStyle ls = new ListStyle();
+			ls.font = getBigFont();
+			ls.fontColorSelected = Color.WHITE;
+			ls.fontColorUnselected = Color.WHITE;
+			ls.selection = getSkin().getDrawable("selection");
+			
+			String skin[] = {localisation(_skin) + "1", localisation(_skin) + "2", localisation(_skin) + "3"};
+			
+			esthetique = new List(skin, ls);
+			esthetique.setX(GameConstants.DISPLAY_WIDTH * 0.85f);
+			esthetique.setY(GameConstants.DISPLAY_HEIGHT * 0.75f);
+			
+			esthetique.setSelectedIndex(RollingCat.skin - 1);
+			
+			stage.addActor(esthetique);
 			stage.addActor(selectPatient);
 		}
 		else 

@@ -11,6 +11,7 @@ public class RollingCat extends Game {
 	public static final String LOG = "RollingCat";
 	public static final String VERSION = "0.1.51a";
 	public static int lang = 0;
+	public static int skin = 1;
 	
 	@Override
 	public void create() {	
