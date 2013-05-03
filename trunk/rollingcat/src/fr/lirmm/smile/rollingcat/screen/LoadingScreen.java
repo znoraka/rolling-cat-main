@@ -43,7 +43,7 @@ public class LoadingScreen implements Screen {
 	private List<String> listOfGem;
 	private float elapsedTime;
 	private ShapeRenderer sr;
-	private boolean building, ready;
+	private boolean building, ready, started;
 	private int time;
 	private TextButton start;
 
@@ -52,11 +52,7 @@ public class LoadingScreen implements Screen {
 		this.patient = patient;
 		this.level = level;
 		this.listOfGem = listOfGem;
-		
-		if(level.getContent() == null)
-			InternetManager.fetchLevel(patient, level.getId()); 
-		else
-			levelAsString = level.getContent();
+
 	}
 
 	@Override
@@ -81,6 +77,15 @@ public class LoadingScreen implements Screen {
 		sr.rect(GameConstants.DISPLAY_WIDTH * 0.1f, GameConstants.DISPLAY_HEIGHT * 0.03f, GameConstants.DISPLAY_WIDTH * 0.8f, GameConstants.BLOCK_HEIGHT);
 		sr.end();
 
+		if(!started & InternetManager.sessionid != null)
+		{
+			started = true;
+			if(level.getContent() == null)
+				InternetManager.fetchLevel(patient, level.getId()); 
+			else
+				levelAsString = level.getContent();
+		}
+
 		levelAsString = (level.getContent() == null)?InternetManager.getLevel():level.getContent();
 
 		if(levelAsString != null & !building)
@@ -95,7 +100,7 @@ public class LoadingScreen implements Screen {
 		}
 
 
-		
+
 		if(ready){
 			stage1.draw();
 			stage1.act(delta);
@@ -113,8 +118,10 @@ public class LoadingScreen implements Screen {
 	public void show() {
 		batch = getSpriteBatch();
 		sr = getShapeRenderer();
-		
+
 		stage1 = new Stage();
+		
+		started = false;
 
 		InternetManager.newGameSession(Track.GAME, patient.getID());
 		InternetManager.getAbilityZone(patient);
@@ -130,21 +137,21 @@ public class LoadingScreen implements Screen {
 		style.down = getSkin().getDrawable("button_down");
 		style.font = getBigFont();
 		style.fontColor = Color.BLACK;
-		
+
 		start = new TextButton(localisation(_ready), style);
 		start.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				game.setScreen(new GameScreen(game, patient, stage, level, listOfGem));
 			}
 		});
-		
+
 		start.setX(GameConstants.DISPLAY_WIDTH * 0.5f - start.getWidth() * 0.5f);
 		start.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - start.getHeight() * 0.5f);
-		
+
 		stage1.addActor(start);
 
 		ready = false;
-		
+
 		Gdx.input.setInputProcessor(stage1);
 
 	}

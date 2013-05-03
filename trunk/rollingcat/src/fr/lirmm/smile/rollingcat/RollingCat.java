@@ -1,6 +1,7 @@
 package fr.lirmm.smile.rollingcat;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 
 import fr.lirmm.smile.rollingcat.screen.LoginScreen;
 
@@ -15,7 +16,13 @@ public class RollingCat extends Game {
 	
 	@Override
 	public void create() {	
-		Localisation.loadLanguage(lang);
+		try {
+			Localisation.loadLanguage(lang);
+		} catch (Exception e) {
+			Gdx.app.log(RollingCat.LOG, "error in lang file");
+			lang = 1;
+			Localisation.loadLanguage(lang);
+		}
 		this.setScreen(new LoginScreen(this));
 //
 

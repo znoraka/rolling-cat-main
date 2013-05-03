@@ -108,13 +108,9 @@ public class Cat extends Entity {
 		final String name = "cat-skeleton";
 		success = true;
 
-		//		TextureAtlas atlas = getCatAtlas();
-		TextureAtlas atlas = new TextureAtlas("data/test/hero-skin.atlas");
+		TextureAtlas atlas = getCatAtlas();
 		SkeletonBinary binary = new SkeletonBinary(atlas);
-
-		//		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/cat/" + name + ".skel"));
-
-		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/test/" + name + ".skel"));
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/cat/" + name + ".skel"));
 
 
 		walkAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-walk.anim"), skeletonData);

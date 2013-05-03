@@ -51,7 +51,7 @@ public class MouseCursorGame implements InputProcessor{
 	private boolean isTrigger;
 	private Rectangle bounds;
 	private int decalage;
-	
+
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
 		batch = stage.getSpriteBatch();
 		hoverTimer = 0;
@@ -176,7 +176,7 @@ public class MouseCursorGame implements InputProcessor{
 			this.fall();
 		}
 	}
-	
+
 	private boolean isFalling;
 	public boolean isFalling()
 	{
@@ -186,7 +186,7 @@ public class MouseCursorGame implements InputProcessor{
 		}
 		return(isFalling);
 	}
-	
+
 	public void fall(){
 		SoundManager.fallPlay();
 		dropItem();
@@ -196,8 +196,11 @@ public class MouseCursorGame implements InputProcessor{
 		cat.getActions().clear();
 		cat.setState(Cat.FALLING);
 		isFalling = true;
-		addEvent(EventManager.pointing_task_end, cat.getLastActorHit().getX(), cat.getLastActorHit().getY());
-		addEvent(EventManager.task_fail, cat.getLastActorHit().getX(), cat.getLastActorHit().getY());
+		if(cat.getLastActorHit() != null)
+		{
+			addEvent(EventManager.pointing_task_end, cat.getLastActorHit().getX(), cat.getLastActorHit().getY());
+			addEvent(EventManager.task_fail, cat.getLastActorHit().getX(), cat.getLastActorHit().getY());
+		}
 	}
 
 	/**
@@ -221,7 +224,7 @@ public class MouseCursorGame implements InputProcessor{
 			sr.rect(cat.getX(), cat.getY(), 70*(standTimer - GameConstants.TIMEOUT / 2) / GameConstants.TIMEOUT * 2, 20);
 		}
 		sr.end();
-		
+
 		sr.begin(ShapeType.Line);
 		sr.rect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 		sr.end();
@@ -337,7 +340,7 @@ public class MouseCursorGame implements InputProcessor{
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	public void dropItem() {
 		item = Box.EMPTY;
 	}
@@ -363,11 +366,11 @@ public class MouseCursorGame implements InputProcessor{
 	{	
 		return isTrigger;
 	}
-	
-//	private void updateBounds() {
-//		bounds.set(x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, GameConstants.BLOCK_WIDTH * 1.5f, GameConstants.BLOCK_HEIGHT * 1.5f);
-//	}
-	
+
+	//	private void updateBounds() {
+	//		bounds.set(x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, GameConstants.BLOCK_WIDTH * 1.5f, GameConstants.BLOCK_HEIGHT * 1.5f);
+	//	}
+
 	public Vector2 getCoordTasks()
 	{
 		if(item == Box.BONE || item == Box.FEATHER)
@@ -387,6 +390,6 @@ public class MouseCursorGame implements InputProcessor{
 
 	public void setDecalage(float f) {
 		decalage = (int) f;
-		
+
 	}
 }
