@@ -1,75 +1,115 @@
 
-wasp.png
+guepe-skin.png
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 aile1
   rotate: false
-  xy: 1, 42
+  xy: 0, 40
   size: 115, 81
   orig: 115, 81
   offset: 0, 0
   index: -1
 path5008
   rotate: false
-  xy: 118, 17
+  xy: 116, 15
   size: 72, 106
   orig: 72, 106
   offset: 0, 0
   index: -1
 aile2
   rotate: false
-  xy: 192, 23
+  xy: 189, 21
   size: 40, 100
   orig: 40, 100
   offset: 0, 0
   index: -1
 torse
   rotate: false
-  xy: 234, 71
+  xy: 230, 69
   size: 83, 52
   orig: 83, 52
   offset: 0, 0
   index: -1
 antenne1
   rotate: false
-  xy: 319, 71
+  xy: 314, 69
   size: 69, 52
   orig: 69, 52
   offset: 0, 0
   index: -1
 patte1
   rotate: false
-  xy: 390, 63
+  xy: 384, 61
   size: 67, 60
   orig: 67, 60
   offset: 0, 0
   index: -1
 antenne2
   rotate: false
-  xy: 234, 23
+  xy: 230, 22
   size: 71, 46
   orig: 71, 46
   offset: 0, 0
   index: -1
 patte2
   rotate: false
-  xy: 307, 11
+  xy: 302, 10
   size: 67, 58
   orig: 67, 58
   offset: 0, 0
   index: -1
 dar
   rotate: false
-  xy: 1, 11
+  xy: 0, 10
   size: 74, 29
   orig: 74, 29
   offset: 0, 0
   index: -1
 tete
   rotate: false
-  xy: 376, 1
+  xy: 370, 0
   size: 64, 60
   orig: 64, 60
+  offset: 0, 0
+  index: -1
+
+guepe-skin2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+eagle/path3827
+  rotate: false
+  xy: 0, 17
+  size: 167, 220
+  orig: 167, 220
+  offset: 0, 0
+  index: -1
+eagle/path3829
+  rotate: false
+  xy: 168, 115
+  size: 234, 122
+  orig: 234, 122
+  offset: 0, 0
+  index: -1
+eagle/g2995
+  rotate: false
+  xy: 168, 0
+  size: 192, 114
+  orig: 192, 114
+  offset: 0, 0
+  index: -1
+eagle/path3897
+  rotate: false
+  xy: 403, 140
+  size: 84, 97
+  orig: 84, 97
+  offset: 0, 0
+  index: -1
+eagle/rect3832
+  rotate: false
+  xy: 361, 20
+  size: 129, 94
+  orig: 129, 94
   offset: 0, 0
   index: -1

@@ -211,7 +211,13 @@ public class SettingsScreen implements Screen {
 				GameConstants.area_4 = area_4.isChecked();
 				GameConstants.TIMEOUT = Integer.valueOf(timeout.getText());
 				RollingCat.lang = list.getSelectedIndex();
-				loadLanguage(RollingCat.lang);
+				try {
+					Localisation.loadLanguage(RollingCat.lang);
+				} catch (Exception e) {
+					Gdx.app.log(RollingCat.LOG, "error in lang file");
+					RollingCat.lang = 1;
+					Localisation.loadLanguage(RollingCat.lang);
+				}
 				game.setScreen(oldScreen);
 			}
 		});

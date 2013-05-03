@@ -39,7 +39,7 @@ public class InternetManager{
 	private static String key = "PLAY_SESSION";
 	private static String gameid;
 	public static String value;
-	private static String sessionid;
+	public static String sessionid;
 	private static String world;
 	private static TextButton okButton;
 	public static int sent = 0;

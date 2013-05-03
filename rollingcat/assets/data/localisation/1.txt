@@ -8,6 +8,7 @@
 	play : "play",
 	assessment : "assessment",
 	upload : "upload",
+	tracks : "Tracks",
 	name : "name",
 	dominant_member : "dominant member",
 	hemiplegia : "hemiplegia",

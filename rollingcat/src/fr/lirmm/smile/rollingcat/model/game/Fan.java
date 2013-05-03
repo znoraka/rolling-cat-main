@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
@@ -40,10 +41,11 @@ public class Fan extends Entity {
 		
 		TextureAtlas atlas = getFanAtlas();
 		SkeletonBinary binary = new SkeletonBinary(atlas);
-		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/fan/fan.skel"));
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/fan/ventilo.skel"));
 		animation = binary.readAnimation(Gdx.files.internal("data/fan/fan-run.anim"), skeletonData);
 		
 		skeleton = new Skeleton(skeletonData);
+		skeleton.setSkin("s" + RollingCat.skin);
 		skeleton.setToBindPose();
 
 		Bone root = skeleton.getRootBone();

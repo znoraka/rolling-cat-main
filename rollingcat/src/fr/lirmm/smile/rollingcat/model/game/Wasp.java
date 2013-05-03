@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
@@ -38,10 +39,11 @@ public class Wasp extends Entity {
 		TextureAtlas atlas = getWaspAtlas();
 		
 		SkeletonBinary binary = new SkeletonBinary(atlas);
-		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/wasp/wasp.skel"));
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/wasp/guepe.skel"));
 		animation = binary.readAnimation(Gdx.files.internal("data/wasp/wasp-fly.anim"), skeletonData);
 
 		skeleton = new Skeleton(skeletonData);
+		skeleton.setSkin("s" + RollingCat.skin);
 		skeleton.setToBindPose();
 
 		Bone root = skeleton.getRootBone();

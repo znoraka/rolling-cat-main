@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.badlogic.gdx.utils.SerializationException;
 
 public class Localisation {
 	private static OrderedMap<String, String> lang;
@@ -95,7 +96,7 @@ public class Localisation {
 	 * @param language
 	 */
 	@SuppressWarnings("unchecked")
-	public static void loadLanguage(int language){
+	public static void loadLanguage(int language) throws SerializationException{
 		Json json = new Json();
 
 		Gdx.app.log(RollingCat.LOG, "retriving langs file...");
@@ -110,7 +111,6 @@ public class Localisation {
 		Gdx.app.log(RollingCat.LOG, json.prettyPrint(lang));
 
 		getAvailableLanguages();
-
 	}	
 
 	/**
