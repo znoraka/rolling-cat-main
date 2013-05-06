@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
@@ -53,12 +54,17 @@ public class Box extends Entity{
 	 */
 	private int etage;
 	
-	public Box(float x, float y) {
+	public Box(float x, float y){
 		super(x, y, GameConstants.TEXTURE_BOX);
 		atlas = getAtlas();
 		this.setHeight(2 * this.getHeight());
 		this.setWidth(2 * this.getWidth());
 		this.setZIndex(2);
+		bounds.height = GameConstants.BLOCK_HEIGHT * 2;
+		bounds.width = GameConstants.BLOCK_WIDTH * 2;
+		bounds.x = x;
+		bounds.y = y;
+		this.setTouchable(Touchable.enabled);
 	}
 
 	public void setItems(OrderedMap<String, ArrayList<Integer>> items)
@@ -69,6 +75,8 @@ public class Box extends Entity{
 	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
+		this.bounds.x = this.getX();
+		this.bounds.y = this.getY();
 		if(!MouseCursorGame.isHoldingItem() & item != EMPTY)
 			batch.draw(getGameSkin().getRegion("green_highlight"), this.getX() - this.getWidth() * 0.25f, this.getY() - this.getHeight() * 0.25f, this.getWidth() * 1.5f, this.getHeight() * 1.5f);
 

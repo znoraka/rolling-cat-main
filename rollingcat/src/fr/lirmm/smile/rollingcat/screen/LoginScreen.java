@@ -61,7 +61,6 @@ public class LoginScreen implements Screen, InputProcessor{
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		stage.act(delta);
-		
 		batch.begin();
 		batch.draw(background, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.draw(region, GameConstants.DISPLAY_WIDTH / 2 - GameConstants.DISPLAY_WIDTH * 0.2f, GameConstants.DISPLAY_HEIGHT * 0.6f, GameConstants.DISPLAY_WIDTH * 0.4f, GameConstants.DISPLAY_HEIGHT * 0.12f);

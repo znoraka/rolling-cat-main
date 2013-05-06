@@ -48,7 +48,7 @@ public class MouseCursorGame implements InputProcessor{
 	private Map<Integer, float []> map;
 	private float elapsedTime;
 	private OrderedMap<String, String> parameters;
-	private boolean isTrigger;
+	private boolean isTrigger, hit;
 	private Rectangle bounds;
 	private int decalage;
 
@@ -66,8 +66,9 @@ public class MouseCursorGame implements InputProcessor{
 		elapsedTime = 0;
 		parameters = new OrderedMap<String, String>();
 		standTimer = 0;
-		bounds = new Rectangle();
+		bounds = new Rectangle(1, 1, 1, 1);
 		decalage = 0;
+		hit = false;
 	}
 
 	/**
@@ -77,53 +78,63 @@ public class MouseCursorGame implements InputProcessor{
 	 */
 	public void updateHoverTimer(){
 		this.isTrigger = false;
-		Actor tmp = stage.hit(x, y, true);
-		if(tmp instanceof Entity)
-		{
-			actor = (Entity) tmp;
-			if(actor != null){
-				if(actor instanceof Box && ((Box) actor).isEmpty())
-					hoverTimer = 0;
-				else if(actor.getItemToAct() != item){
-					actor.requestRedHighlight(true);
-					hoverTimer = 0;
-				}
-				else{
-					hoverTimer += Gdx.graphics.getDeltaTime() * 1;
-				}
-			}
-			if(hoverTimer > GameConstants.HOVER_TIME)
-			{	
-				hoverTimer = 0;
-				if(actor instanceof Gap && item == Box.FEATHER){
-					if(!cat.movedX()){
-						((Gap) actor).setReady(true);
-						this.trigger();
-					}
-				}
+		bounds.x = x;
+		bounds.y = y;
+		hit = false;
 
-				else if(actor instanceof Box){
-					item = box.empty();
-					addEvent(EventManager.pointing_task_start, actor.getX(), 0);
-				}
-				else if(actor instanceof Dog && item == Box.BONE){
-					SoundManager.barkPlay();
-					this.trigger();
-				}
-
-				else if(actor instanceof Wasp && item == Box.SWATTER){
-					SoundManager.splashPlay();
-					this.trigger();
-				}
-
-				else if(actor instanceof Carpet && item == Box.SCISSORS){
-					SoundManager.scissorsPlay();
-					this.trigger();
+		for (int i = 0; i < stage.getActors().size & !hit; i++) {
+			actor = (Entity) stage.getActors().get(i);
+			if(actor instanceof Entity && actor.getTouchable() == Touchable.enabled)
+			{
+				if(actor.getBounds().overlaps(bounds))
+				{
+					hit = true;
 				}
 			}
 		}
-		else
+		if(!hit)
 			hoverTimer = 0;
+		else
+		{
+			if(actor instanceof Box && ((Box) actor).isEmpty())
+				hoverTimer = 0;
+			else if(actor.getItemToAct() != item){
+				actor.requestRedHighlight(true);
+				hoverTimer = 0;
+			}
+			else{
+				hoverTimer += Gdx.graphics.getDeltaTime() * 1;
+			}
+		}
+		if(hoverTimer > GameConstants.HOVER_TIME)
+		{	
+			hoverTimer = 0;
+			if(actor instanceof Gap && item == Box.FEATHER){
+				if(!cat.movedX()){
+					((Gap) actor).setReady(true);
+					this.trigger();
+				}
+			}
+
+			else if(actor instanceof Box){
+				item = box.empty();
+				addEvent(EventManager.pointing_task_start, actor.getX(), 0);
+			}
+			else if(actor instanceof Dog && item == Box.BONE){
+				SoundManager.barkPlay();
+				this.trigger();
+			}
+
+			else if(actor instanceof Wasp && item == Box.SWATTER){
+				SoundManager.splashPlay();
+				this.trigger();
+			}
+
+			else if(actor instanceof Carpet && item == Box.SCISSORS){
+				SoundManager.scissorsPlay();
+				this.trigger();
+			}
+		}
 	}
 	/**
 	 * appelé lorsque l'item et l'entity correspondent
