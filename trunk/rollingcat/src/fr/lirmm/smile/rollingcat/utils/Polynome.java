@@ -48,7 +48,7 @@ public class Polynome {
 	{
 		float diff = 0;
 		float exdiff = 0;
-		int nbRacine = 0;
+//		int nbRacine = 0;
 		while(racines.size() == 0)
 		{
 			diff+=epsilon;

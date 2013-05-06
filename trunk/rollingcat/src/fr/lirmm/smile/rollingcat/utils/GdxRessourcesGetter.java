@@ -146,10 +146,6 @@ public class GdxRessourcesGetter {
 			Gdx.app.log(RollingCat.LOG, "generating shaperenderer");
 			sr = new ShapeRenderer();
 		}
-		else{
-			sr.dispose();
-			sr = new ShapeRenderer();
-		}
 		return sr;
 	}
 	

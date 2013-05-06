@@ -1,6 +1,8 @@
 package fr.lirmm.smile.rollingcat.screen;
 
 import static fr.lirmm.smile.rollingcat.Localisation._back;
+import static fr.lirmm.smile.rollingcat.Localisation._dominant_member;
+import static fr.lirmm.smile.rollingcat.Localisation._hemiplegia;
 import static fr.lirmm.smile.rollingcat.Localisation._select;
 import static fr.lirmm.smile.rollingcat.Localisation._skin;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
@@ -17,9 +19,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -40,6 +42,7 @@ import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
+import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
 public class PatientSelectScreen implements Screen{
 	
@@ -55,8 +58,7 @@ public class PatientSelectScreen implements Screen{
 	private Table tableLeft, tableRight;
 	private ArrayList<Patient> patients;
 	private Patient p;
-	private Label nom, prenom, hemiplegia, dominantMember;
-	private Texture face;
+	private Label nom, prenom, hemiplegia, dominantMember, hempiplegiaLabel, dominantMemberLabel;
 	private LabelStyle labelStyle;
 	private Doctor doctor;
 	private List esthetique;
@@ -75,12 +77,20 @@ public class PatientSelectScreen implements Screen{
 		batch.begin();
 		batch.draw(skin.getRegion("backgroundtrack"), 0, 0, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, 1, 1, 0);
 		batch.draw(skin.getRegion("background_base"), GameConstants.DISPLAY_WIDTH * 0.315f, GameConstants.DISPLAY_HEIGHT * 0.65f, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_HEIGHT * 0.32f);
-		batch.draw(face, GameConstants.DISPLAY_WIDTH * 0.32f, GameConstants.DISPLAY_HEIGHT * 0.66f, GameConstants.DISPLAY_WIDTH * 0.2f, GameConstants.DISPLAY_HEIGHT * 0.30f);
 		batch.end();
-
-		stage.act(delta);
-
+		
 		stage.draw();
+		stage.act(delta);
+		
+		GdxRessourcesGetter.getShapeRenderer().setColor(Color.BLACK);
+		GdxRessourcesGetter.getShapeRenderer().begin(ShapeType.Filled);
+		GdxRessourcesGetter.getShapeRenderer().rect(GameConstants.DISPLAY_WIDTH * 0.315f, GameConstants.DISPLAY_HEIGHT * 0.65f, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_HEIGHT * 0.32f);
+		GdxRessourcesGetter.getShapeRenderer().end();
+		
+		batch.begin();
+		batch.draw(GdxRessourcesGetter.getGameSkin().getRegion("skin" + esthetique.getSelectedIndex()), GameConstants.DISPLAY_WIDTH * 0.315f, GameConstants.DISPLAY_HEIGHT * 0.65f, 0, 0, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_WIDTH * 0.21f, 1, 1, 0);
+		batch.end();
+		
 		
 	}
 
@@ -171,10 +181,11 @@ public class PatientSelectScreen implements Screen{
 			labelStyle.background = skin.getDrawable("button_up");
 			nom = new Label(p.getLastName(), labelStyle);
 			prenom = new Label(p.getFirstName(), labelStyle);
+			hempiplegiaLabel = new Label(localisation(_hemiplegia), labelStyle);
 			hemiplegia = new Label(p.getHemiplegia(), labelStyle);
+			dominantMemberLabel = new Label(localisation(_dominant_member), labelStyle);
 			dominantMember = new Label(p.getDominantMember(), labelStyle);
 			selectPatient = new TextButton(localisation(_select), style);
-			face = p.getFace();
 			
 			selectPatient.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
@@ -187,8 +198,10 @@ public class PatientSelectScreen implements Screen{
 			tableRight.add(prenom).fill().expand();
 			tableRight.add(nom).fill().expand();
 			tableRight.row();
+			tableRight.add(hempiplegiaLabel).fill().expand();
 			tableRight.add(hemiplegia).fill().expand();
 			tableRight.row();
+			tableRight.add(dominantMemberLabel).fill().expand();
 			tableRight.add(dominantMember).fill().expand();
 			tableRight.row();
 			
@@ -199,22 +212,19 @@ public class PatientSelectScreen implements Screen{
 			ls.font = getBigFont();
 			ls.fontColorSelected = Color.WHITE;
 			ls.fontColorUnselected = Color.WHITE;
-			ls.selection = getSkin().getDrawable("selection");
+			ls.selection = getSkin().getDrawable("button_up");
 			
-			String skin[] = {localisation(_skin) + "1", localisation(_skin) + "2", localisation(_skin) + "3"};
+			String skin[] = {"   " + localisation(_skin) + "1", "   " + localisation(_skin) + "2", "   " + localisation(_skin) + "3"};
 			
 			esthetique = new List(skin, ls);
-			esthetique.setX(GameConstants.DISPLAY_WIDTH * 0.85f);
-			esthetique.setY(GameConstants.DISPLAY_HEIGHT * 0.75f);
+			esthetique.setX(GameConstants.DISPLAY_WIDTH * 0.5f);
+			esthetique.setY(GameConstants.DISPLAY_HEIGHT * 0.83f);
 			
 			esthetique.setSelectedIndex(RollingCat.skin - 1);
 			
 			stage.addActor(esthetique);
 			stage.addActor(selectPatient);
 		}
-		else 
-			face = new Texture("data/nopatient.png");
-		
 		back = new TextButton(localisation(_back), style);
 		
 		back.addListener(new ClickListener() {
@@ -259,6 +269,5 @@ public class PatientSelectScreen implements Screen{
 		prenom.setText(patient.getFirstName());
 		hemiplegia.setText(patient.getHemiplegia());
 		dominantMember.setText(patient.getDominantMember());
-		face = patient.getFace();
 	}
 }

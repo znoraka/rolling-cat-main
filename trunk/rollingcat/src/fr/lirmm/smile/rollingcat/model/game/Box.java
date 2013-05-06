@@ -14,7 +14,6 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
-import fr.lirmm.smile.rollingcat.spine.Bone;
 
 public class Box extends Entity{
 

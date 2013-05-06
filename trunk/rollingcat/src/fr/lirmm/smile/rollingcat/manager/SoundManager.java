@@ -13,7 +13,6 @@ public class SoundManager {
 	private static Music gameMusic;
 	private static Sound win;
 	private static Sound fan;
-	private static Sound next;
 	private static Sound splash;
 	private static Sound bark;
 	private static Sound scissors;

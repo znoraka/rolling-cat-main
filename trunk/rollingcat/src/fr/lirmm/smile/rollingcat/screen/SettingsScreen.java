@@ -1,20 +1,19 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.Localisation.*;
-import static fr.lirmm.smile.rollingcat.Localisation.*;
+import static fr.lirmm.smile.rollingcat.Localisation._alpha;
+import static fr.lirmm.smile.rollingcat.Localisation._cadran;
+import static fr.lirmm.smile.rollingcat.Localisation._discard;
 import static fr.lirmm.smile.rollingcat.Localisation._evaporation_per_day;
-import static fr.lirmm.smile.rollingcat.Localisation._name;
-import static fr.lirmm.smile.rollingcat.Localisation._needsAtLeastOneArea;
 import static fr.lirmm.smile.rollingcat.Localisation._number_of_lines;
 import static fr.lirmm.smile.rollingcat.Localisation._number_of_rows;
 import static fr.lirmm.smile.rollingcat.Localisation._path_delta_time;
 import static fr.lirmm.smile.rollingcat.Localisation._range;
 import static fr.lirmm.smile.rollingcat.Localisation._save;
+import static fr.lirmm.smile.rollingcat.Localisation._timeout;
 import static fr.lirmm.smile.rollingcat.Localisation._total_volume;
 import static fr.lirmm.smile.rollingcat.Localisation._volume_per_level;
 import static fr.lirmm.smile.rollingcat.Localisation._workspace_height;
 import static fr.lirmm.smile.rollingcat.Localisation._workspace_width;
-import static fr.lirmm.smile.rollingcat.Localisation.loadLanguage;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
@@ -38,6 +37,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -63,7 +63,6 @@ public class SettingsScreen implements Screen {
 	private List list;
 	private CheckBox area_1, area_2, area_3, area_4;
 	private Label warningMessage;
-
 	//	private final float SPEED = 0.05f;
 
 	public SettingsScreen(RollingCat game, Screen oldScreen){
@@ -87,8 +86,6 @@ public class SettingsScreen implements Screen {
 		checkHeightBounds();
 		checkWidthBounds();
 		
-		
-
 	}
 
 	@Override
@@ -103,7 +100,7 @@ public class SettingsScreen implements Screen {
 		skin = getSkin();
 		font = getBigFont();
 		batch = getSpriteBatch();
-
+		
 		list = Localisation.getAvailableLanguages();
 		list.setX(GameConstants.DISPLAY_WIDTH * 0.75f);
 		list.setY(GameConstants.DISPLAY_HEIGHT * 0.75f);
@@ -140,19 +137,43 @@ public class SettingsScreen implements Screen {
 		totalVolumeLabel = new Label(localisation(_total_volume)+" :", labelStyle);
 		volumePerLevelLabel = new Label(localisation(_volume_per_level)+" :", labelStyle);
 		timeoutLabel = new Label(localisation(_timeout)+" :", labelStyle);
-
+		
+		
 		workspaceHeight = new TextField(""+GameConstants.workspaceHeight, textFieldStyle);
+		workspaceHeight.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		workspaceWidth = new TextField(""+GameConstants.workspaceWidth, textFieldStyle);
+		workspaceWidth.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		range = new TextField(""+GameConstants.range, textFieldStyle);
+		range.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		pathDeltaTime = new TextField(""+GameConstants.pathDeltaTime, textFieldStyle);
+		pathDeltaTime.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		evaporationPerDay = new TextField(""+GameConstants.evaporationPerDay, textFieldStyle);
+		evaporationPerDay.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		alpha = new TextField(""+GameConstants.alpha, textFieldStyle);
+		alpha.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		numberOfLines = new TextField(""+GameConstants.numberOfLines, textFieldStyle);
+		numberOfLines.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		numberOfRows = new TextField(""+GameConstants.numberOfRows, textFieldStyle);
+		numberOfRows.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		totalVolume = new TextField(""+GameConstants.totalVolume, textFieldStyle);
+		totalVolume.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		volumePerLevel = new TextField(""+GameConstants.volumePerLevel, textFieldStyle);
+		volumePerLevel.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		timeout = new TextField(""+GameConstants.TIMEOUT, textFieldStyle);
-
+		timeout.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
+//
+//		textFields.add(workspaceHeight);
+//		textFields.add(workspaceWidth);
+//		textFields.add(range);
+//		textFields.add(pathDeltaTime);
+//		textFields.add(evaporationPerDay);
+//		textFields.add(alpha);
+//		textFields.add(numberOfLines);
+//		textFields.add(numberOfRows);
+//		textFields.add(totalVolume);
+//		textFields.add(volumePerLevel);
+//		textFields.add(timeout);
+		
 		zoneTable.setHeight(GameConstants.DISPLAY_HEIGHT * 0.35f);
 		zoneTable.setWidth(GameConstants.DISPLAY_WIDTH * 0.35f);
 		zoneTable.setX(GameConstants.DISPLAY_WIDTH * 0.6f);
@@ -323,7 +344,7 @@ public class SettingsScreen implements Screen {
 		if(Integer.valueOf(workspaceHeight.getText()) < 2)
 			workspaceHeight.setText(""+1);		
 	}
-
+	
 	//	private void widthModify(int i) {
 	//		elapsedTime = 0;
 	//		workspaceWidth.setText(""+(Integer.valueOf(workspaceWidth.getText()) + i));

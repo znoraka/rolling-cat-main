@@ -3,8 +3,6 @@ package fr.lirmm.smile.rollingcat.manager;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 
-import java.util.Arrays;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpMethods;
@@ -17,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
@@ -246,6 +243,9 @@ public class InternetManager{
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+patient.getID()+"/"+gameid+"/"+sessionid+"/"+numLevel);
+
+//		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+patient.getID()+"/"+gameid+"/"+sessionid+"/"+numLevel+"/"+RollingCat.skin);
+
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
 		map.put("builderId","ant-0.1");

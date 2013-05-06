@@ -124,7 +124,7 @@ public class GameProgressionScreen implements Screen{
 	private void createItemsShape() {
 		entities = new ArrayList<Image>();
 		this.initTrous();
-		float step = 360.0f/GameConstants.NB_OF_LEVELS_IN_GAME;
+//		float step = 360.0f/GameConstants.NB_OF_LEVELS_IN_GAME;
 		for (int i = 0; i < gems.size() ; i++) 
 		{
 			/*int x = (int) (Math.cos(Math.toRadians(i*step)) * rayon) + centerX;

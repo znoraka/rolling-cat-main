@@ -42,11 +42,6 @@ public class Cat extends Entity {
 	private int state;
 
 	/**
-	 * decalage à avoir pour toucher la prochaine porte au dessus ou en dessous
-	 */
-	private int decalage;
-
-	/**
 	 * nombre de coin de chaque type que le chat a
 	 */
 	private int gold, silver, bronze;
@@ -67,7 +62,7 @@ public class Cat extends Entity {
 	private SkeletonData skeletonData;
 	private Skeleton skeleton;
 	private Bone root;
-	private Animation walkAnimation, contactAnimation, jumpAnimation, fanAnimation, endAnimation;
+	private Animation walkAnimation, contactAnimation, fanAnimation;
 	private float time;
 
 	/**
@@ -114,8 +109,6 @@ public class Cat extends Entity {
 
 
 		walkAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-walk.anim"), skeletonData);
-		jumpAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-jump.anim"), skeletonData);
-		endAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-levelend.anim"), skeletonData);
 		fanAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-upstreamwinp.anim"), skeletonData);
 		contactAnimation = binary.readAnimation(Gdx.files.internal("data/cat/" + name + "-contact.anim"), skeletonData);
 
@@ -199,7 +192,7 @@ public class Cat extends Entity {
 							state = FALLING;
 					}
 					if(actor instanceof Fan){
-						if(this.getXOnGrid() == ((Entity) actor).getXOnGrid() & this.getEtage() == ((Entity) actor).getEtage()){
+						if(this.getXOnGrid() == ((Entity) actor).getXOnGrid() && this.getEtage() == ((Entity) actor).getEtage() && this.getY() > actor.getY()){
 							((Fan) actor).declencher(true);
 						}
 						else
@@ -245,15 +238,11 @@ public class Cat extends Entity {
 					 * 
 					 */
 					if(actor instanceof Door){
-
 						if((((Entity) actor).getBounds().overlaps(right) & ((Door) actor).getType() == Door.LEFT))
 						{
 							state = TELEPORTING;
 							actor.setVisible(false);
 							actor.setTouchable(Touchable.disabled);
-
-							//							Gdx.app.log(RollingCat.LOG, "etage du chat : " + this.getEtage());
-							//							Gdx.app.log(RollingCat.LOG, "nombre d'étages : " + LevelBuilder.getNumberOfEtage());
 
 							if(success)
 							{
@@ -279,6 +268,7 @@ public class Cat extends Entity {
 											)
 									);
 						}
+
 
 					}
 
@@ -329,16 +319,22 @@ public class Cat extends Entity {
 	 * @return Door
 	 */
 	private Door nextDoorUp(Door door) {
-		return door.getNextDoor((this.getEtage() == LevelBuilder.getNumberOfEtage() - 1)?0:(int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT));
+		if(this.getSegment() < LevelBuilder.getNumberOfSegment())
+			return door.getNextDoor((this.getEtage() == LevelBuilder.getNumberOfEtage() - 1)?0:(int) (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT));
+		else
+			return door;
 	}
-	
+
 	/**
 	 * retourne la porte au meme emplacement un étage en dessous ou la porte meme si on est au premier étage
 	 * @param door
 	 * @return Door
 	 */
 	private Door nextDoorDown(Door door) {
-		return door.getNextDoor((this.getEtage() == 0)?0:(int) (- GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT));
+		if(this.getSegment() < LevelBuilder.getNumberOfSegment())
+			return door.getNextDoor((this.getEtage() == 0)?0:(int) (- GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT));
+		else
+			return door;
 	}
 
 	public boolean hasCatchedCoin()

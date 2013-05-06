@@ -17,6 +17,7 @@ public class Skeleton {
 	float time;
 	boolean flipX, flipY;
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Skeleton (SkeletonData data) {
 		if (data == null) throw new IllegalArgumentException("data cannot be null.");
 		this.data = data;
@@ -40,6 +41,7 @@ public class Skeleton {
 	}
 
 	/** Copy constructor. */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Skeleton (Skeleton skeleton) {
 		if (skeleton == null) throw new IllegalArgumentException("skeleton cannot be null.");
 		data = skeleton.data;

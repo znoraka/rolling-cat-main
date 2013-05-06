@@ -157,44 +157,72 @@ diamant
   orig: 64, 64
   offset: 0, 0
   index: -1
-coinbronze
+cat
   rotate: false
   xy: 519, 332
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-coingold
+skin0
+  rotate: false
+  xy: 519, 332
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+coinbronze
   rotate: false
   xy: 519, 202
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-coinsilver
+coingold
   rotate: false
   xy: 649, 332
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-feather
+coinsilver
   rotate: false
   xy: 649, 202
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-swatter1
+feather
   rotate: false
   xy: 779, 377
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-wasp
+skin1
   rotate: false
   xy: 779, 247
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+skin2
+  rotate: false
+  xy: 779, 117
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+swatter1
+  rotate: false
+  xy: 519, 72
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+wasp
+  rotate: false
+  xy: 649, 72
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -243,82 +271,33 @@ fan
   index: 2
 fan
   rotate: false
-  xy: 457, 109
+  xy: 779, 51
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 3
 green_gem
   rotate: false
-  xy: 779, 181
+  xy: 845, 51
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 green_highlight
   rotate: false
-  xy: 845, 181
+  xy: 265, 43
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 groundblock
   rotate: false
-  xy: 523, 136
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-ladder
-  rotate: false
-  xy: 589, 136
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-opened_door_l
-  rotate: false
-  xy: 655, 136
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-opened_door_r
-  rotate: false
-  xy: 523, 70
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-purple_gem
-  rotate: false
-  xy: 589, 70
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-red_gem
-  rotate: false
-  xy: 655, 70
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-red_highlight
-  rotate: false
-  xy: 265, 43
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-scissors
-  rotate: false
   xy: 331, 43
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-shit
+ladder
   rotate: false
   xy: 397, 43
   size: 64, 64
@@ -332,39 +311,88 @@ nopatient
   orig: 35, 45
   offset: 0, 0
   index: -1
+trou1
+  rotate: false
+  xy: 519, 465
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+opened_door_l
+  rotate: false
+  xy: 907, 761
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+opened_door_r
+  rotate: false
+  xy: 907, 695
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+purple_gem
+  rotate: false
+  xy: 907, 629
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+red_gem
+  rotate: false
+  xy: 907, 563
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+red_highlight
+  rotate: false
+  xy: 909, 497
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+scissors
+  rotate: false
+  xy: 909, 431
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+shit
+  rotate: false
+  xy: 909, 365
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 spring
   rotate: false
-  xy: 721, 115
+  xy: 909, 299
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 spring
   rotate: false
-  xy: 787, 115
+  xy: 909, 233
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 2
 spring
   rotate: false
-  xy: 853, 115
+  xy: 909, 167
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 3
 yellow_gem
   rotate: false
-  xy: 721, 49
+  xy: 911, 101
   size: 64, 64
   orig: 64, 64
-  offset: 0, 0
-  index: -1
-trou1
-  rotate: false
-  xy: 519, 465
-  size: 32, 32
-  orig: 32, 32
   offset: 0, 0
   index: -1
 cursor

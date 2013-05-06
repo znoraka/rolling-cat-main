@@ -4,7 +4,9 @@ import static fr.lirmm.smile.rollingcat.Localisation._box_point;
 import static fr.lirmm.smile.rollingcat.Localisation._coin_get;
 import static fr.lirmm.smile.rollingcat.Localisation._fall;
 import static fr.lirmm.smile.rollingcat.Localisation._gg;
-import static fr.lirmm.smile.rollingcat.Localisation.*;
+import static fr.lirmm.smile.rollingcat.Localisation._task_point_1;
+import static fr.lirmm.smile.rollingcat.Localisation._task_point_2;
+import static fr.lirmm.smile.rollingcat.Localisation._welcome;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 
 import java.util.ArrayList;
@@ -40,7 +42,6 @@ import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 public class FirstBoxHelper 
 {
 	private static int NB_SECOND_TO_PRINT_TEXT = 4;
-	private ShapeRenderer sr;
 	private Stage stage;
 	private MouseCursorGame mc;
 	private Cat cat;
@@ -58,7 +59,6 @@ public class FirstBoxHelper
 	public FirstBoxHelper(ShapeRenderer sr,Stage stage ,MouseCursorGame mc,Cat cat,Screen screen,Box box) {
 
 		this.box = box;
-		this.sr = sr;
 		this.mc = mc;
 		this.stage = stage;
 		this.cat = cat;
