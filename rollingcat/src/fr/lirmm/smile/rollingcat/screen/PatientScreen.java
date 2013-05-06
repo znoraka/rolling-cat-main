@@ -1,12 +1,12 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.Localisation.*;
+import static fr.lirmm.smile.rollingcat.Localisation._assessment;
 import static fr.lirmm.smile.rollingcat.Localisation._back;
 import static fr.lirmm.smile.rollingcat.Localisation._dominant_member;
 import static fr.lirmm.smile.rollingcat.Localisation._hemiplegia;
 import static fr.lirmm.smile.rollingcat.Localisation._name;
 import static fr.lirmm.smile.rollingcat.Localisation._play;
-import static fr.lirmm.smile.rollingcat.Localisation._upload;
+import static fr.lirmm.smile.rollingcat.Localisation._tracks;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSettingsButton;
@@ -36,8 +36,8 @@ import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
-import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.model.world.World;
+import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
 public class PatientScreen implements Screen {
 	
@@ -63,10 +63,14 @@ public class PatientScreen implements Screen {
 		
 		batch.begin();
 		batch.draw(skin.getRegion("background"), 0, 0, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, 1, 1, 0);
-		batch.draw(patient.getFace(), GameConstants.DISPLAY_WIDTH * 0.078f, GameConstants.DISPLAY_HEIGHT * 0.525f, GameConstants.DISPLAY_WIDTH / 5f, GameConstants.DISPLAY_HEIGHT / 5f * 1.76f);
+//		batch.draw(patient.getFace(), GameConstants.DISPLAY_WIDTH * 0.078f, GameConstants.DISPLAY_HEIGHT * 0.525f, GameConstants.DISPLAY_WIDTH / 5f, GameConstants.DISPLAY_HEIGHT / 5f * 1.76f);
 		batch.end();
 		
 		stage.draw();
+		
+		batch.begin();
+		batch.draw(GdxRessourcesGetter.getGameSkin().getRegion("skin" + (RollingCat.skin - 1)), GameConstants.DISPLAY_WIDTH * 0.078f, GameConstants.DISPLAY_HEIGHT * 0.525f, 0, 0, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_WIDTH * 0.21f, 1, 1, 0);
+		batch.end();
 		
 		if(patient.needsAssessment() != null && patient.needsAssessment().equals("true"))
 			play.setVisible(false);

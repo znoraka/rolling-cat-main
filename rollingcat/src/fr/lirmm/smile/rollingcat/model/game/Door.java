@@ -15,6 +15,8 @@ public class Door extends Entity {
 	private int type;
 
 	private float nextX, nextY;
+	
+	private Door door;
 
 	public Door(float x, float y, int type, float nextX, float nextY) {
 		super(x, y, GameConstants.TEXTURE_BOUEE+"_"+((type == LEFT)?"blue":"red"));
@@ -46,14 +48,14 @@ public class Door extends Entity {
 	}
 
 	public Door getNextDoor(int decalage){
-		Door d = null;
-		for (int i = 0; i < this.getStage().getActors().size & d == null; i++) {
+		door = null;
+		for (int i = 0; i < this.getStage().getActors().size & door == null; i++) {
 			if(this.getStage().getActors().get(i) instanceof Door && this.getStage().getActors().get(i).getX() == this.getX() && this.getStage().getActors().get(i).getY() == (this.getY() + decalage))
 			{
-				d = (Door) this.getStage().getActors().get(i);
+				door = (Door) this.getStage().getActors().get(i);
 			}
 		}
-		return d;
+		return door;
 	}
 
 

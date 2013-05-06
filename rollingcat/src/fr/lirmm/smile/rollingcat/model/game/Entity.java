@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.model.game;
 
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.*;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getGameSkin;
 
 import java.util.Random;
 
@@ -12,12 +12,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
-import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.utils.EntityModel;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;

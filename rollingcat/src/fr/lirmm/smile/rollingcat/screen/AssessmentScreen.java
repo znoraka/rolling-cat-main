@@ -8,7 +8,6 @@ import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getShapeRenderer;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -53,7 +51,7 @@ public class AssessmentScreen implements Screen {
 	private int selected;
 	private Patient patient;
 	private float timeout;
-	private float duration, elapsedTime;
+	private float duration;
 	private boolean waitingToEnterInArea, requestSending;
 	private OrderedMap<String, String> parameters;
 	private boolean done;
@@ -64,7 +62,6 @@ public class AssessmentScreen implements Screen {
 	private Stage pauseStage, stage;
 	private int help;
 	private Label label;
-	private SpriteBatch batch;
 	private Track track;
 
 
@@ -189,10 +186,9 @@ public class AssessmentScreen implements Screen {
 		font = getBigFont();
 		pauseStage = getStage();
 		stage = getStage();
-		batch = getSpriteBatch();
 		EventManager.clear();
+		
 		duration = 0;
-		elapsedTime = 0;
 		help = 1;
 		done = false;
 		requestSending = false;

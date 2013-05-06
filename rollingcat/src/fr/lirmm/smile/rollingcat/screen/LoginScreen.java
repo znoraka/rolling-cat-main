@@ -5,7 +5,6 @@ import static fr.lirmm.smile.rollingcat.Localisation._username;
 import static fr.lirmm.smile.rollingcat.Localisation._wrong_info;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSettingsButton;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
@@ -41,7 +40,7 @@ public class LoginScreen implements Screen, InputProcessor{
 	private RollingCat game;
 	private Stage stage;
 	private Skin skin;
-	private TextButton button, settings;
+	private TextButton button;
 	private TextField loginTextField, passwordTextField;
 	private Table table;
 	private Doctor doctor;
@@ -95,7 +94,6 @@ public class LoginScreen implements Screen, InputProcessor{
 		batch = getSpriteBatch();
 		font = getBigFont();
 		stage = getStage();
-		settings = getSettingsButton(this, game, font);
 		table = new Table();
 		doctor = Doctor.getDoctor();
 		wrong = false;

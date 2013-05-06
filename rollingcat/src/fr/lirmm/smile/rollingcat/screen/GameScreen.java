@@ -114,7 +114,6 @@ public class GameScreen implements ScreenPausable{
 			batch.begin();
 			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 			font.setColor(Color.BLACK);
-			font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 3, GameConstants.BLOCK_HEIGHT * 2);
 			table.draw(batch, 1);
 			batch.end();
 			sr.setProjectionMatrix(stage.getCamera().combined);
@@ -179,10 +178,12 @@ public class GameScreen implements ScreenPausable{
 			requestSending = false;
 		}
 
+		font.setColor(Color.GRAY);
 		batch.begin();
-		font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 3, GameConstants.BLOCK_HEIGHT * 2);
-		font.draw(batch, "segment : " + segment, GameConstants.BLOCK_WIDTH * 3, GameConstants.BLOCK_HEIGHT * 3);
+		font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 0.1f, GameConstants.BLOCK_HEIGHT * 0.7f);
+		font.draw(batch, "segment : " + segment + "/" + LevelBuilder.getNumberOfSegment(), GameConstants.BLOCK_WIDTH * 2.6f, GameConstants.BLOCK_HEIGHT * 0.7f);
 		batch.end();
+		
 
 		if(Gdx.input.isKeyPressed(Keys.ENTER) & elapsedTime > 0.3f)
 		{
