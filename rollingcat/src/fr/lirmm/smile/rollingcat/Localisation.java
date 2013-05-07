@@ -88,6 +88,8 @@ public class Localisation {
 	public static String _detail = "detail";
 	public static String _skin = "skin";
 	public static String _timeout = "timeout";
+	public static String _nbsuccess = "nbsuccess";
+	public static String _more = "more";
 	
 	/**
 	 * charge un langage depuis un fichier de langage

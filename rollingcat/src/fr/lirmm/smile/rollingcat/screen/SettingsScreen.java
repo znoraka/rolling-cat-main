@@ -4,21 +4,20 @@ import static fr.lirmm.smile.rollingcat.Localisation._alpha;
 import static fr.lirmm.smile.rollingcat.Localisation._cadran;
 import static fr.lirmm.smile.rollingcat.Localisation._discard;
 import static fr.lirmm.smile.rollingcat.Localisation._evaporation_per_day;
-import static fr.lirmm.smile.rollingcat.Localisation._number_of_lines;
-import static fr.lirmm.smile.rollingcat.Localisation._number_of_rows;
-import static fr.lirmm.smile.rollingcat.Localisation._path_delta_time;
+import static fr.lirmm.smile.rollingcat.Localisation._nbsuccess;
 import static fr.lirmm.smile.rollingcat.Localisation._range;
 import static fr.lirmm.smile.rollingcat.Localisation._save;
 import static fr.lirmm.smile.rollingcat.Localisation._timeout;
 import static fr.lirmm.smile.rollingcat.Localisation._total_volume;
-import static fr.lirmm.smile.rollingcat.Localisation._volume_per_level;
 import static fr.lirmm.smile.rollingcat.Localisation._workspace_height;
-import static fr.lirmm.smile.rollingcat.Localisation._workspace_width;
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
+
+import javax.swing.event.HyperlinkEvent.EventType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -52,17 +51,18 @@ public class SettingsScreen implements Screen {
 	private Table table, zoneTable;
 	private SpriteBatch batch;
 	//	private ImageButton heightPlus, heightMinus, widthPlus, widthMinus;
-	private TextField workspaceHeight, workspaceWidth, range, pathDeltaTime, evaporationPerDay, alpha, numberOfLines, numberOfRows, totalVolume, volumePerLevel, timeout;
+	private TextField workspaceHeight, workspaceWidth, range, pathDeltaTime, evaporationPerDay, alpha, nbSuccess, numberOfRows, totalVolume, volumePerLevel, timeout;
 	private Skin skin;
 	private BitmapFont font;
 	//	private float elapsedTime;
 	private RollingCat game;
-	private Label heightLabel, widthLabel, rangeLabel, pathDeltaTimeLabel, evaporationPerDayLabel, alphaLabel, numberOfLinesLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel, timeoutLabel;
+	private Label heightLabel, widthLabel, rangeLabel, pathDeltaTimeLabel, evaporationPerDayLabel, alphaLabel, nbSuccessLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel, timeoutLabel;
 	private TextButton save, discard;
 	private Screen oldScreen;
 	private List list;
-	private CheckBox area_1, area_2, area_3, area_4;
+	private CheckBox area_1, area_2, area_3, area_4, avanceCB;
 	private Label warningMessage;
+	private boolean avance;
 	//	private final float SPEED = 0.05f;
 
 	public SettingsScreen(RollingCat game, Screen oldScreen){
@@ -86,6 +86,14 @@ public class SettingsScreen implements Screen {
 		checkHeightBounds();
 		checkWidthBounds();
 		
+		avance = avanceCB.isChecked();
+		
+		range.setVisible(avance);
+		rangeLabel.setVisible(avance);
+		evaporationPerDay.setVisible(avance);
+		evaporationPerDayLabel.setVisible(avance);
+		alpha.setVisible(avance);
+		alphaLabel.setVisible(avance);
 	}
 
 	@Override
@@ -129,13 +137,13 @@ public class SettingsScreen implements Screen {
 		heightLabel = new Label(localisation(_workspace_height)+" :", labelStyle);
 		widthLabel = new Label(localisation(_workspace_width)+" :", labelStyle);
 		rangeLabel = new Label(localisation(_range), labelStyle);
-		pathDeltaTimeLabel = new Label(localisation(_path_delta_time)+" :", labelStyle);
+//		pathDeltaTimeLabel = new Label(localisation(_path_delta_time)+" :", labelStyle);
 		evaporationPerDayLabel = new Label(localisation(_evaporation_per_day)+" :", labelStyle);
 		alphaLabel = new Label(localisation(_alpha) + " :", labelStyle);
-		numberOfLinesLabel = new Label(localisation(_number_of_lines)+" :", labelStyle);
-		numberOfRowsLabel = new Label(localisation(_number_of_rows)+" :", labelStyle);
+		nbSuccessLabel = new Label(localisation(_nbsuccess)+" :", labelStyle);
+//		numberOfRowsLabel = new Label(localisation(_number_of_rows)+" :", labelStyle);
 		totalVolumeLabel = new Label(localisation(_total_volume)+" :", labelStyle);
-		volumePerLevelLabel = new Label(localisation(_volume_per_level)+" :", labelStyle);
+//		volumePerLevelLabel = new Label(localisation(_volume_per_level)+" :", labelStyle);
 		timeoutLabel = new Label(localisation(_timeout)+" :", labelStyle);
 		
 		
@@ -145,20 +153,20 @@ public class SettingsScreen implements Screen {
 		workspaceWidth.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		range = new TextField(""+GameConstants.range, textFieldStyle);
 		range.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		pathDeltaTime = new TextField(""+GameConstants.pathDeltaTime, textFieldStyle);
-		pathDeltaTime.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
+//		pathDeltaTime = new TextField(""+GameConstants.pathDeltaTime, textFieldStyle);
+//		pathDeltaTime.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		evaporationPerDay = new TextField(""+GameConstants.evaporationPerDay, textFieldStyle);
 		evaporationPerDay.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		alpha = new TextField(""+GameConstants.alpha, textFieldStyle);
 		alpha.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		numberOfLines = new TextField(""+GameConstants.numberOfLines, textFieldStyle);
-		numberOfLines.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		numberOfRows = new TextField(""+GameConstants.numberOfRows, textFieldStyle);
-		numberOfRows.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
+		nbSuccess = new TextField(""+GameConstants.SUCCESS, textFieldStyle);
+		nbSuccess.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
+//		numberOfRows = new TextField(""+GameConstants.numberOfRows, textFieldStyle);
+//		numberOfRows.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		totalVolume = new TextField(""+GameConstants.totalVolume, textFieldStyle);
 		totalVolume.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-		volumePerLevel = new TextField(""+GameConstants.volumePerLevel, textFieldStyle);
-		volumePerLevel.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
+//		volumePerLevel = new TextField(""+GameConstants.volumePerLevel, textFieldStyle);
+//		volumePerLevel.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		timeout = new TextField(""+GameConstants.TIMEOUT, textFieldStyle);
 		timeout.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 //
@@ -201,6 +209,8 @@ public class SettingsScreen implements Screen {
 		area_3.setChecked(GameConstants.area_3);
 		area_4.setChecked(GameConstants.area_4);
 		
+		avanceCB = new CheckBox(localisation(_more), cbs);
+		
 		zoneTable.add(area_3).fill().expand();
 		zoneTable.add(area_4).fill().expand();
 		zoneTable.row();
@@ -219,13 +229,13 @@ public class SettingsScreen implements Screen {
 				GameConstants.workspaceHeight = Integer.valueOf(workspaceHeight.getText());
 				GameConstants.workspaceWidth = Integer.valueOf(workspaceWidth.getText());
 				GameConstants.range = Integer.valueOf(range.getText());
-				GameConstants.pathDeltaTime = Float.valueOf(pathDeltaTime.getText());
+//				GameConstants.pathDeltaTime = Float.valueOf(pathDeltaTime.getText());
 				GameConstants.evaporationPerDay = Float.valueOf(evaporationPerDay.getText());
 				GameConstants.alpha = Float.valueOf(alpha.getText());
-				GameConstants.numberOfLines = Integer.valueOf(numberOfLines.getText());
-				GameConstants.numberOfRows = Integer.valueOf(numberOfRows.getText());
+				GameConstants.SUCCESS = Integer.valueOf(nbSuccess.getText());
+//				GameConstants.numberOfRows = Integer.valueOf(numberOfRows.getText());
 				GameConstants.totalVolume = Integer.valueOf(totalVolume.getText());
-				GameConstants.volumePerLevel = Integer.valueOf(volumePerLevel.getText());
+//				GameConstants.volumePerLevel = Integer.valueOf(volumePerLevel.getText());
 				GameConstants.area_1 = area_1.isChecked();
 				GameConstants.area_2 = area_2.isChecked();
 				GameConstants.area_3 = area_3.isChecked();
@@ -259,35 +269,36 @@ public class SettingsScreen implements Screen {
 		//		table.add(widthPlus);
 		//		table.add(widthMinus);
 		table.row();
+		table.add(nbSuccessLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+		table.add(nbSuccess).right();
+//		table.row();
+//		table.add(numberOfRowsLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+//		table.add(numberOfRows).right();
+		table.row();
+		table.add(totalVolumeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+		table.add(totalVolume).right();
+		table.row();
+//		table.add(volumePerLevelLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+//		table.add(volumePerLevel).right();
+//		table.row();
+		table.add(timeoutLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+		table.add(timeout).right();
+		table.row();
 		table.add(rangeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(range).right();
 		table.row();
-		table.add(pathDeltaTimeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
-		table.add(pathDeltaTime).right();
-		table.row();
+//		table.add(pathDeltaTimeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+//		table.add(pathDeltaTime).right();
+//		table.row();
 		table.add(evaporationPerDayLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(evaporationPerDay).right();
 		table.row();
 		table.add(alphaLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(alpha).right();
 		table.row();
-		table.add(numberOfLinesLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
-		table.add(numberOfLines).right();
-		table.row();
-		table.add(numberOfRowsLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
-		table.add(numberOfRows).right();
-		table.row();
-		table.add(totalVolumeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
-		table.add(totalVolume).right();
-		table.row();
-		table.add(volumePerLevelLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
-		table.add(volumePerLevel).right();
-		table.row();
-		table.add(timeoutLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
-		table.add(timeout).right();
-		table.row();
-		table.add(save).left();
-		table.add(discard).left();
+		table.add(save).expand().padTop(GameConstants.BLOCK_HEIGHT * 2);
+		table.add(avanceCB).expand().padTop(GameConstants.BLOCK_HEIGHT * 2);
+		table.add(discard).expand().padTop(GameConstants.BLOCK_HEIGHT * 2);
 		table.row();
 
 		stage.addActor(table);

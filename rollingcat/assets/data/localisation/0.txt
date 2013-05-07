@@ -71,5 +71,7 @@
 	ready: "Je suis prêt",
 	detail: "Détail", 
 	skin: "Apparence",
-	timeout: "Temps avant échec"
+	timeout: "Temps avant échec",
+	nbsuccess: "Fenêtre succès",
+	more: "Plus"
 }

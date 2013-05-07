@@ -202,7 +202,9 @@ public class MouseCursorGame implements InputProcessor{
 		SoundManager.fallPlay();
 		dropItem();
 		box.emptyAfterNotMoving();
-		cat.setSuccess(false);
+		if(cat.getSuccessState() < GameConstants.SUCCESS)
+			cat.setSuccess(false);
+		
 		cat.setY((cat.getEtage()) * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT);
 		cat.getActions().clear();
 		cat.setState(Cat.FALLING);
@@ -226,13 +228,13 @@ public class MouseCursorGame implements InputProcessor{
 			sr.setColor(Color.RED);
 			sr.rect(x, y, 70, 20);
 			sr.setColor(Color.BLUE);
-			sr.rect(x, y, 70*hoverTimer, 20);
+			sr.rect(x, y, 70*hoverTimer / GameConstants.HOVER_TIME, 20);
 		}
-		if (standTimer > GameConstants.TIMEOUT / 2){
+		if (standTimer > GameConstants.TIMEOUT * 0.5f){
 			sr.setColor(Color.GREEN);
 			sr.rect(cat.getX(), cat.getY(), 70, 20);
 			sr.setColor(Color.ORANGE);
-			sr.rect(cat.getX(), cat.getY(), 70*(standTimer - GameConstants.TIMEOUT / 2) / GameConstants.TIMEOUT * 2, 20);
+			sr.rect(cat.getX(), cat.getY(), 70 * standTimer / GameConstants.TIMEOUT, 20);
 		}
 		sr.end();
 
