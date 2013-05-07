@@ -45,8 +45,11 @@ public class Fan extends Entity {
 		animation = binary.readAnimation(Gdx.files.internal("data/fan/fan-run.anim"), skeletonData);
 		
 		skeleton = new Skeleton(skeletonData);
-		skeleton.setSkin("s" + RollingCat.skin);
-		skeleton.setToBindPose();
+		try {
+			skeleton.setSkin("s" + RollingCat.skin);
+		} catch (Exception e) {
+			skeleton.setSkin("s1");
+		}		skeleton.setToBindPose();
 
 		Bone root = skeleton.getRootBone();
 		root.setScaleX(0.15f * GameConstants.SCALE);

@@ -49,7 +49,7 @@ public class InternetManager{
 	 * @param password
 	 * @return true si tout s'est bien passé
 	 */
-	public static boolean login(String username, String password) {
+	public static void login(String username, String password) {
 
 		Gdx.app.log(RollingCat.LOG, "preparing login request...");
 
@@ -79,7 +79,6 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, "something went wrong, could not login");
 			}});
 
-		return true;
 	}
 
 	/**
@@ -242,13 +241,12 @@ public class InternetManager{
 		json.setOutputType(JsonWriter.OutputType.json);
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
+		
 		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+patient.getID()+"/"+gameid+"/"+sessionid+"/"+numLevel);
-
-//		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+patient.getID()+"/"+gameid+"/"+sessionid+"/"+numLevel+"/"+RollingCat.skin);
 
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
-		map.put("builderId","ant-0.1");
+		map.put("builderId",GameConstants.getAlgo());
 		map.put("patientId", patient.getID());
 		map.put("numberOfLines", GameConstants.numberOfLines);
 		map.put("numberOfRows", GameConstants.numberOfRows);
@@ -257,6 +255,7 @@ public class InternetManager{
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
 		map.put("ImportanceOfEffort", 0.9f);
+		
 		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
 		{
 			map.put("dials", "0000");
@@ -314,7 +313,7 @@ public class InternetManager{
 		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/"+patient.getID()+"/needsassessment");
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
-		map.put("builderId","ant-0.1");
+		map.put("builderId",GameConstants.getAlgo());
 		map.put("patientId", patient.getID());
 		map.put("numberOfLines", GameConstants.numberOfLines);
 		map.put("numberOfRows", GameConstants.numberOfRows);
@@ -323,6 +322,7 @@ public class InternetManager{
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
 		map.put("ImportanceOfEffort", 0.9f);
+		
 		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
 		{
 			map.put("dials", "0000");
@@ -512,7 +512,7 @@ public class InternetManager{
 		httpGet.setUrl("http://" + hostName + ":" + port + "/abilityzone/"+patient.getID()+"/get");
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
-		map.put("builderId","ant-0.1");
+		map.put("builderId",GameConstants.getAlgo());
 		map.put("patientId", patient.getID());
 		map.put("numberOfLines", GameConstants.numberOfLines);
 		map.put("numberOfRows", GameConstants.numberOfRows);
@@ -520,6 +520,7 @@ public class InternetManager{
 		map.put("totalWidth", GameConstants.workspaceWidth);
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
+		
 		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
 		{
 			map.put("dials", "0000");
@@ -556,19 +557,6 @@ public class InternetManager{
 				String string = httpResponse.getResultAsString();
 				OrderedMap<String, Object>lang = (OrderedMap<String, Object>) new JsonReader().parse(string);
 				ability = json.readValue("content", float[].class, lang);
-				//				Gdx.app.log(RollingCat.LOG, Arrays.toString(s));
-				//				int a = 0;
-				//				ability = new float[GameConstants.ROWS][GameConstants.COLS];
-				//				for (int i = 0; i < GameConstants.ROWS; i++) {
-				//					for (int j = 0; j < GameConstants.COLS; j++) {
-				//						ability[i][j] = s[a];
-				//						a++;
-				//					}
-				//				}
-				//				
-				//				for (int i = 0; i < ability.length; i++) {
-				//					Gdx.app.log(RollingCat.LOG, Arrays.toString(ability[i]));
-				//				}
 			}
 
 			@Override

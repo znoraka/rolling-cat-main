@@ -182,6 +182,7 @@ public class GameScreen implements ScreenPausable{
 		batch.begin();
 		font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 0.1f, GameConstants.BLOCK_HEIGHT * 0.7f);
 		font.draw(batch, "segment : " + segment + "/" + LevelBuilder.getNumberOfSegment(), GameConstants.BLOCK_WIDTH * 2.6f, GameConstants.BLOCK_HEIGHT * 0.7f);
+		font.draw(batch, "success : " + cat.getSuccessState(), GameConstants.BLOCK_WIDTH * 6.2f, GameConstants.BLOCK_HEIGHT * 0.7f);
 		batch.end();
 		
 

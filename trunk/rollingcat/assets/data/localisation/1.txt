@@ -72,6 +72,8 @@
 	ready: "I am ready",
 	detail: "Details",
 	skin: "Skin",
-	timeout: "Timeout before failure"
+	timeout: "Timeout before failure",
+	nbsuccess: "Success window",
+	more: "More"
 	
 }

@@ -89,6 +89,11 @@ public class Cat extends Entity {
 	 * variable globale pour le téléport entre les portes
 	 */
 	private Door door;
+	
+	/**
+	 * etat du succes, de -{@link GameConstants#SUCCESS} à {@link GameConstants#SUCCESS}
+	 */
+	private int nbSuccess ;
 
 
 	/**
@@ -115,7 +120,11 @@ public class Cat extends Entity {
 
 
 		skeleton = new Skeleton(skeletonData);
-		skeleton.setSkin("s" + RollingCat.skin);
+		try {
+			skeleton.setSkin("s" + RollingCat.skin);
+		} catch (Exception e) {
+			skeleton.setSkin("s1");
+		}
 		skeleton.setToBindPose();
 
 		root = skeleton.getRootBone();
@@ -127,6 +136,8 @@ public class Cat extends Entity {
 		bottom = new Rectangle();
 		right = new Rectangle();
 		left = new Rectangle();
+		
+		nbSuccess  = 0;
 	}
 
 	/**
@@ -243,19 +254,29 @@ public class Cat extends Entity {
 							state = TELEPORTING;
 							actor.setVisible(false);
 							actor.setTouchable(Touchable.disabled);
-
+							
 							if(success)
-							{
+								nbSuccess ++;
+							else
+								nbSuccess --;
+
+							if(nbSuccess == GameConstants.SUCCESS)
+							{	
+								nbSuccess = 0;
 								door = this.nextDoorUp((Door) actor);
 							}
-							else
-							{
+							else if(nbSuccess == -GameConstants.SUCCESS)
+							{	
+								nbSuccess = 0;
 								door = this.nextDoorDown((Door) actor);
 							}
+							else
+								door = (Door) actor;
+							
 
 							this.addAction(
 									Actions.sequence(
-											Actions.delay(0.1f),
+											Actions.delay(0.5f),
 											Actions.moveTo(door.getNextX() * GameConstants.BLOCK_WIDTH, door.getNextY() * GameConstants.BLOCK_HEIGHT),
 											new Action() {
 												@Override
@@ -497,6 +518,14 @@ public class Cat extends Entity {
 	 */
 	public Actor getLastActorHit() {
 		return actor;
+	}
+	
+	/**
+	 * 
+	 * @return l'état du success/echec du chat
+	 */
+	public int getSuccessState() {
+		return nbSuccess;
 	}
 
 }

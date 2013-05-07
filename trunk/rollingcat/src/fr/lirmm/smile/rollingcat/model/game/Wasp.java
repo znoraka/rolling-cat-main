@@ -43,7 +43,11 @@ public class Wasp extends Entity {
 		animation = binary.readAnimation(Gdx.files.internal("data/wasp/wasp-fly.anim"), skeletonData);
 
 		skeleton = new Skeleton(skeletonData);
-		skeleton.setSkin("s" + RollingCat.skin);
+		try {
+			skeleton.setSkin("s" + RollingCat.skin);
+		} catch (Exception e) {
+			skeleton.setSkin("s1");
+		}
 		skeleton.setToBindPose();
 
 		Bone root = skeleton.getRootBone();

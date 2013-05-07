@@ -54,6 +54,8 @@ public class GameConstants {
 	//on ajoute le niveau du tuto qui ne compte pas dans la liste de niveaux effective
 	public static final int NB_OF_LEVELS_IN_GAME = 20 + 1;
 	
+	public static int SUCCESS = 2;
+	
 	
 	/**
 	 * variables pour le serveur
@@ -62,7 +64,7 @@ public class GameConstants {
 	public static int workspaceHeight = 50;
 	public static int range = 2;
 	public static float pathDeltaTime = 0.001f;
-	public static float evaporationPerDay = 0;;
+	public static float evaporationPerDay = 0;
 	public static float alpha = 0.5f;
 	public static int numberOfLines = 20;
 	public static int numberOfRows = 20;
@@ -73,6 +75,21 @@ public class GameConstants {
 	public static boolean area_3 = false;
 	public static boolean area_4 = false;
 	
+	
+	/**
+	 * 
+	 * @return l'algo de génération en fonction de la skin
+	 */
+	public static String getAlgo(){
+		switch (RollingCat.skin)
+		{
+		case 1: return "ant-0.1";
+		case 2: return "incremental";
+		case 3: return "random";
+		default: return "";
+		}
+	}
+
 	/**
 	 * initialise la taille de la fenetre et des entités
 	 */
