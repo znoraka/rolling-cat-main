@@ -61,7 +61,6 @@ public class PatientSelectScreen implements Screen{
 	private Label nom, prenom, hemiplegia, dominantMember, hempiplegiaLabel, dominantMemberLabel;
 	private LabelStyle labelStyle;
 	private Doctor doctor;
-	private List esthetique;
 	
 	
 	public PatientSelectScreen(RollingCat game, Doctor doctor){
@@ -88,9 +87,8 @@ public class PatientSelectScreen implements Screen{
 		GdxRessourcesGetter.getShapeRenderer().end();
 		
 		batch.begin();
-		batch.draw(GdxRessourcesGetter.getGameSkin().getRegion("skin" + esthetique.getSelectedIndex()), GameConstants.DISPLAY_WIDTH * 0.315f, GameConstants.DISPLAY_HEIGHT * 0.65f, 0, 0, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_WIDTH * 0.21f, 1, 1, 0);
+		batch.draw(GdxRessourcesGetter.getGameSkin().getRegion("skin" + (RollingCat.skin - 1)), GameConstants.DISPLAY_WIDTH * 0.315f, GameConstants.DISPLAY_HEIGHT * 0.65f, 0, 0, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_WIDTH * 0.21f, 1, 1, 0);
 		batch.end();
-		
 		
 	}
 
@@ -190,7 +188,6 @@ public class PatientSelectScreen implements Screen{
 			selectPatient.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					InternetManager.needsAssessment(p);
-					RollingCat.skin = esthetique.getSelectedIndex() + 1;
 					game.setScreen(new PatientScreen(game, p));
 				}
 			});
@@ -208,21 +205,6 @@ public class PatientSelectScreen implements Screen{
 			selectPatient.setX(GameConstants.DISPLAY_WIDTH * 0.7f);
 			selectPatient.setY(GameConstants.DISPLAY_HEIGHT * 0.81f);
 			
-			ListStyle ls = new ListStyle();
-			ls.font = getBigFont();
-			ls.fontColorSelected = Color.WHITE;
-			ls.fontColorUnselected = Color.WHITE;
-			ls.selection = getSkin().getDrawable("button_up");
-			
-			String skin[] = {"   " + localisation(_skin) + "1", "   " + localisation(_skin) + "2", "   " + localisation(_skin) + "3"};
-			
-			esthetique = new List(skin, ls);
-			esthetique.setX(GameConstants.DISPLAY_WIDTH * 0.5f);
-			esthetique.setY(GameConstants.DISPLAY_HEIGHT * 0.83f);
-			
-			esthetique.setSelectedIndex(RollingCat.skin - 1);
-			
-			stage.addActor(esthetique);
 			stage.addActor(selectPatient);
 		}
 		back = new TextButton(localisation(_back), style);

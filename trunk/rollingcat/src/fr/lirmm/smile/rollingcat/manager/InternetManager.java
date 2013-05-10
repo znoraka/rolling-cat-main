@@ -118,7 +118,8 @@ public class InternetManager{
 
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 
-		httpGet.setUrl("http://" + hostName + ":" + port + "/game/"+RollingCat.LOG+"/getid");
+		httpGet.setUrl("http://" + hostName + ":" + port + "/game/"+RollingCat.getCurrentGameName()+"/getid");
+
 		httpGet.setHeader(key, value);
 		Gdx.app.log(RollingCat.LOG, "sending game id retrieve request...");
 
@@ -452,7 +453,7 @@ public class InternetManager{
 	public static void updateLevelStats(String patientid, int levelID, int score, int duration,String color_gem) {
 		Gdx.app.log(RollingCat.LOG, "preparing send score update request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+levelID+"/"+score+"/"+duration+"/"+color_gem);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid+"/"+levelID+"/"+score+"/"+duration+"/"+color_gem);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "text/plain");
 
