@@ -14,6 +14,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -183,6 +184,7 @@ public class GameScreen implements ScreenPausable{
 		font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 0.1f, GameConstants.BLOCK_HEIGHT * 0.7f);
 		font.draw(batch, "segment : " + segment + "/" + LevelBuilder.getNumberOfSegment(), GameConstants.BLOCK_WIDTH * 2.6f, GameConstants.BLOCK_HEIGHT * 0.7f);
 		font.draw(batch, "success : " + cat.getSuccessState(), GameConstants.BLOCK_WIDTH * 6.2f, GameConstants.BLOCK_HEIGHT * 0.7f);
+		font.draw(batch, "fps : " + Gdx.graphics.getFramesPerSecond(), GameConstants.DISPLAY_WIDTH - 100, GameConstants.DISPLAY_HEIGHT - 20);
 		batch.end();
 		
 
@@ -199,6 +201,7 @@ public class GameScreen implements ScreenPausable{
 	private void updateCamPos() {
 		stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.DISPLAY_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
 //		stage.getCamera().position.set(cat.getX(), cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
+//		stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
 
 		box.setEtageAndSegment(cat.getEtage(), segment);
 		box.setX(stage.getCamera().position.x - box.getWidth() / 2);
@@ -224,7 +227,7 @@ public class GameScreen implements ScreenPausable{
 		elapsedTime = 3;
 
 		displayAbilityZone = false;
-
+		
 		Gdx.app.log(RollingCat.LOG, "showing");
 		paused = false;
 		//		elapsedTimeDuringPause = 0;
@@ -244,11 +247,12 @@ public class GameScreen implements ScreenPausable{
 		Gdx.input.setInputProcessor(multiplexer);
 		duration = 0;
 		parameters = new OrderedMap<String, String>();
-		parameters.put("game", RollingCat.LOG);
+		parameters.put("game", RollingCat.getCurrentGameName());
 		parameters.put("version", RollingCat.VERSION);
 		EventManager.create(EventManager.game_info_event_type, parameters);
 		parameters = new OrderedMap<String, String>();
 		parameters.put("session_type", Track.GAME);
+		parameters.put("level_id", ""+level.getId());
 		parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
 		parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
 		EventManager.create(EventManager.start_game_event_type, parameters);

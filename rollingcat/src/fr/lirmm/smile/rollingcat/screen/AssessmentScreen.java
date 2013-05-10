@@ -199,7 +199,7 @@ public class AssessmentScreen implements Screen {
 		waitingToEnterInArea = false;
 		timeout = 0;
 		parameters = new OrderedMap<String, String>();
-		parameters.put("game", RollingCat.LOG);
+		parameters.put("game", RollingCat.getCurrentGameName());
 		parameters.put("version", RollingCat.VERSION);
 		EventManager.create(EventManager.game_info_event_type, parameters);
 		parameters = new OrderedMap<String, String>();

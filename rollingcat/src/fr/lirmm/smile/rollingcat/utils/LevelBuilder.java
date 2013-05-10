@@ -35,7 +35,7 @@ public class LevelBuilder {
 	 * @param s la string du niveau
 	 */
 	public static Stage build(String s) {
-//		Stage stage = new Stage(GameConstants.DISPLAY_WIDTH * 8, GameConstants.DISPLAY_HEIGHT, true);
+//		Stage stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT * 3, true);
 		Stage stage = getStage();
 		map = new OrderedMap<String, ArrayList<Integer>>();
 		items = new ArrayList<Integer>();
@@ -45,7 +45,7 @@ public class LevelBuilder {
 
 		s = s.replace("\"", "");
 //		s = s.replace(".0", "");
-		Gdx.app.log(RollingCat.LOG, s);
+//		Gdx.app.log(RollingCat.LOG, s);
 		String tab [] = s.split("/");
 		String[] subtab;
 		float x;
@@ -147,7 +147,7 @@ public class LevelBuilder {
 				segment = 0;
 			}
 
-			Gdx.app.log(RollingCat.LOG, "new "+subtab[0]+ " added in " + x + ", " + y + decalage + " !");
+//			Gdx.app.log(RollingCat.LOG, "new "+subtab[0]+ " added in " + x + ", " + y + decalage + " !");
 		}
 
 

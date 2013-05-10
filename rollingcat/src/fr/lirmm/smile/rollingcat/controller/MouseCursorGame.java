@@ -31,6 +31,7 @@ import fr.lirmm.smile.rollingcat.model.game.Cat;
 import fr.lirmm.smile.rollingcat.model.game.Dog;
 import fr.lirmm.smile.rollingcat.model.game.Entity;
 import fr.lirmm.smile.rollingcat.model.game.Gap;
+import fr.lirmm.smile.rollingcat.model.game.GroundBlock;
 import fr.lirmm.smile.rollingcat.model.game.Wasp;
 
 public class MouseCursorGame implements InputProcessor{
@@ -51,6 +52,7 @@ public class MouseCursorGame implements InputProcessor{
 	private boolean isTrigger, hit;
 	private Rectangle bounds;
 	private int decalage;
+	private int task_id;
 
 	public MouseCursorGame (Stage stage, Cat cat, Box box){
 		batch = stage.getSpriteBatch();
@@ -69,6 +71,7 @@ public class MouseCursorGame implements InputProcessor{
 		bounds = new Rectangle(1, 1, 1, 1);
 		decalage = 0;
 		hit = false;
+		task_id = 0;
 	}
 
 	/**
@@ -83,7 +86,15 @@ public class MouseCursorGame implements InputProcessor{
 		hit = false;
 
 		for (int i = 0; i < stage.getActors().size & !hit; i++) {
-			actor = (Entity) stage.getActors().get(i);
+			try {
+				actor = (Entity) stage.getActors().get(i);
+			} catch (Exception e) {
+				continue;
+			}
+			
+			if(actor instanceof GroundBlock)
+				continue;
+			
 			if(actor instanceof Entity && actor.getTouchable() == Touchable.enabled)
 			{
 				if(actor.getBounds().overlaps(bounds))
@@ -118,7 +129,8 @@ public class MouseCursorGame implements InputProcessor{
 
 			else if(actor instanceof Box){
 				item = box.empty();
-				addEvent(EventManager.pointing_task_start, actor.getX(), 0);
+				task_id++;
+				addEvent(EventManager.pointing_task_start, actor.getX(), 0, task_id);
 			}
 			else if(actor instanceof Dog && item == Box.BONE){
 				SoundManager.barkPlay();
@@ -129,7 +141,7 @@ public class MouseCursorGame implements InputProcessor{
 				SoundManager.splashPlay();
 				this.trigger();
 			}
-
+//			session_start
 			else if(actor instanceof Carpet && item == Box.SCISSORS){
 				SoundManager.scissorsPlay();
 				this.trigger();
@@ -147,8 +159,8 @@ public class MouseCursorGame implements InputProcessor{
 		box.fill();
 		item = 0;
 		actor.setTouchable(Touchable.disabled);
-		addEvent(EventManager.pointing_task_end, actor.getX() + actor.getWidth() * 0.5f, actor.getY() + actor.getHeight() * 0.5f);
-		addEvent(EventManager.task_success, actor.getX() + actor.getWidth() * 0.5f, actor.getY() + actor.getHeight() * 0.5f);
+		addEvent(EventManager.pointing_task_end, actor.getX() + actor.getWidth() * 0.5f, actor.getY() + actor.getHeight() * 0.5f, task_id);
+		addEvent(EventManager.task_success, actor.getX() + actor.getWidth() * 0.5f, actor.getY() + actor.getHeight() * 0.5f, task_id);
 		this.isTrigger = true;
 	}
 
@@ -157,13 +169,14 @@ public class MouseCursorGame implements InputProcessor{
 	 * appelé lorsque le patient réussi une tache de pointage
 	 * @param pointingTaskEnd 
 	 */
-	private void addEvent(String eventType, float x, float y){
+	private void addEvent(String eventType, float x, float y, int id){
 		Gdx.app.log(RollingCat.LOG, "x : " + x(x));
 		Gdx.app.log(RollingCat.LOG, "y : " + y(y));
 		parameters = new OrderedMap<String, String>();
 		parameters.put("x", ""+ x(x));
 		parameters.put("y", ""+ y(y));
 		parameters.put("z", ""+0);
+		parameters.put("id", ""+id);
 		EventManager.create(eventType, parameters);
 	}
 
@@ -211,8 +224,8 @@ public class MouseCursorGame implements InputProcessor{
 		isFalling = true;
 		if(cat.getLastActorHit() != null)
 		{
-			addEvent(EventManager.pointing_task_end, cat.getLastActorHit().getX(), cat.getLastActorHit().getY());
-			addEvent(EventManager.task_fail, cat.getLastActorHit().getX(), cat.getLastActorHit().getY());
+			addEvent(EventManager.pointing_task_end, cat.getLastActorHit().getX(), cat.getLastActorHit().getY(), task_id);
+			addEvent(EventManager.task_fail, cat.getLastActorHit().getX(), cat.getLastActorHit().getY(), task_id);
 		}
 	}
 
@@ -271,6 +284,7 @@ public class MouseCursorGame implements InputProcessor{
 				parameters.put("x", ""+x(x));
 				parameters.put("y", ""+y(y));
 				parameters.put("z", ""+0);
+				parameters.put("id", ""+task_id);
 				EventManager.create(EventManager.player_cursor_event_type, parameters);
 			}
 			elapsedTime = 0;

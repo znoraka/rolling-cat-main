@@ -1,6 +1,7 @@
 package fr.lirmm.smile.rollingcat.screen;
 
 import static fr.lirmm.smile.rollingcat.Localisation._password;
+import static fr.lirmm.smile.rollingcat.Localisation._skin;
 import static fr.lirmm.smile.rollingcat.Localisation._username;
 import static fr.lirmm.smile.rollingcat.Localisation._wrong_info;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
@@ -21,6 +22,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -34,6 +37,7 @@ import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
+import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
 public class LoginScreen implements Screen, InputProcessor{
 	
@@ -49,6 +53,7 @@ public class LoginScreen implements Screen, InputProcessor{
 	private static boolean wrong;
 	private TextureRegion region, background;
 	private InputMultiplexer multiplexer;
+	private List esthetique;
 	
 	
 	public LoginScreen(RollingCat game){
@@ -78,6 +83,10 @@ public class LoginScreen implements Screen, InputProcessor{
 			game.setScreen(new PatientSelectLoadingScreen(game));
 		
 		stage.draw();
+		
+		batch.begin();
+		batch.draw(GdxRessourcesGetter.getGameSkin().getRegion("skin" + esthetique.getSelectedIndex()), GameConstants.DISPLAY_WIDTH * 0.315f, GameConstants.DISPLAY_HEIGHT * 0.65f, 0, 0, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_WIDTH * 0.21f, 1, 1, 0);
+		batch.end();
 
 	}
 
@@ -115,6 +124,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		button.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				wrong = false;
+				RollingCat.skin = esthetique.getSelectedIndex() + 1;
 				doctor.login(loginTextField.getText(), passwordTextField.getText());
 			}
 		});
@@ -151,6 +161,22 @@ public class LoginScreen implements Screen, InputProcessor{
 		table.setHeight(GameConstants.DISPLAY_HEIGHT);
 		
 		table.add(button).padTop(GameConstants.DISPLAY_HEIGHT * 0.3f).padRight(10);
+		
+		ListStyle ls = new ListStyle();
+		ls.font = getBigFont();
+		ls.fontColorSelected = Color.WHITE;
+		ls.fontColorUnselected = Color.WHITE;
+		ls.selection = getSkin().getDrawable("button_up");
+		
+		String skin[] = {"   " + localisation(_skin) + "1", "   " + localisation(_skin) + "2", "   " + localisation(_skin) + "3"};
+		
+		esthetique = new List(skin, ls);
+		esthetique.setX(GameConstants.DISPLAY_WIDTH * 0.5f);
+		esthetique.setY(GameConstants.DISPLAY_HEIGHT * 0.83f);
+		
+		esthetique.setSelectedIndex(RollingCat.skin - 1);
+		
+		stage.addActor(esthetique);
 		
 		stage.addActor(loginTextField);
 		stage.addActor(passwordTextField);
@@ -189,6 +215,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		if(keycode == Keys.ENTER){			
 			wrong = false;
 			doctor.login(loginTextField.getText(), passwordTextField.getText());
+			RollingCat.skin = esthetique.getSelectedIndex() + 1;
 		}
 		return true;
 	}
