@@ -41,15 +41,17 @@ public class Fan extends Entity {
 		
 		TextureAtlas atlas = getFanAtlas();
 		SkeletonBinary binary = new SkeletonBinary(atlas);
-		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/fan/ventilo.skel"));
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/fan/ventilo-skeleton.skel"));
 		animation = binary.readAnimation(Gdx.files.internal("data/fan/fan-run.anim"), skeletonData);
 		
 		skeleton = new Skeleton(skeletonData);
 		try {
 			skeleton.setSkin("s" + RollingCat.skin);
 		} catch (Exception e) {
+			Gdx.app.log(RollingCat.LOG, "skin + " + RollingCat.skin + "not found");
 			skeleton.setSkin("s1");
-		}		skeleton.setToBindPose();
+		}
+		skeleton.setToBindPose();
 
 		Bone root = skeleton.getRootBone();
 		root.setScaleX(0.15f * GameConstants.SCALE);
@@ -82,7 +84,7 @@ public class Fan extends Entity {
 				soundPlayed = true;
 				SoundManager.fanPlay();
 			}
-			rotationSpeed = (float) (Math.PI * 2);
+			rotationSpeed = (float) (Math.PI);
 		}
 		declenche = b;
 	}

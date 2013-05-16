@@ -454,7 +454,7 @@ public class InternetManager{
 		Gdx.app.log(RollingCat.LOG, "preparing send score update request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid+"/"+levelID+"/"+score+"/"+duration+"/"+color_gem);
-		httpGet.setHeader(key, value);
+		httpGet.setHeader(key, value);	
 		httpGet.setHeader("Content-Type", "text/plain");
 
 		Gdx.app.log(RollingCat.LOG, "sending score update request...");

@@ -43,7 +43,7 @@ public class Door extends Entity {
 
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
-//		if(type == LEFT)
+		if(type == LEFT)
 			super.draw(batch, deltaParent);
 	}
 

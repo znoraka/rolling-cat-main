@@ -39,7 +39,7 @@ public class Wasp extends Entity {
 		TextureAtlas atlas = getWaspAtlas();
 		
 		SkeletonBinary binary = new SkeletonBinary(atlas);
-		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/wasp/guepe.skel"));
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/wasp/guepe-skeleton.skel"));
 		animation = binary.readAnimation(Gdx.files.internal("data/wasp/wasp-fly.anim"), skeletonData);
 
 		skeleton = new Skeleton(skeletonData);

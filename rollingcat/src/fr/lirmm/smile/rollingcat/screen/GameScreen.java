@@ -113,7 +113,7 @@ public class GameScreen implements ScreenPausable{
 			mc.updateStandTimer();
 			cat.move(stage);
 			batch.begin();
-//			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 			font.setColor(Color.BLACK);
 			table.draw(batch, 1);
 			batch.end();
@@ -232,8 +232,11 @@ public class GameScreen implements ScreenPausable{
 		paused = false;
 		//		elapsedTimeDuringPause = 0;
 		parameters = new OrderedMap<String, String>();
-		backgroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND);
+		
+		backgroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND + RollingCat.skin + ".png");
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		
 		cat = (Cat) stage.getActors().get(0);
 		box = new Box(GameConstants.COLS / 2, -2);
 		box.setItems(LevelBuilder.getItems());

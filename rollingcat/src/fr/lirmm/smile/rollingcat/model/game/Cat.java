@@ -123,6 +123,7 @@ public class Cat extends Entity {
 		try {
 			skeleton.setSkin("s" + RollingCat.skin);
 		} catch (Exception e) {
+			Gdx.app.log(RollingCat.LOG, "skin + " + RollingCat.skin + "not found");
 			skeleton.setSkin("s1");
 		}
 		skeleton.setToBindPose();
@@ -423,7 +424,12 @@ public class Cat extends Entity {
 		time += Gdx.graphics.getDeltaTime();
 		skeleton.updateWorldTransform();
 		skeleton.update(time);
-		skeleton.draw(batch);
+		try {
+			
+			skeleton.draw(batch);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	/**
