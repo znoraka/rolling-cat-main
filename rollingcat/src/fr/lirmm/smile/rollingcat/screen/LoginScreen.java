@@ -54,7 +54,6 @@ public class LoginScreen implements Screen, InputProcessor{
 	private static boolean wrong;
 	private TextureRegion region, background;
 	private InputMultiplexer multiplexer;
-	private List esthetique;
 	private ImageButton est1, est2, est3;
 	
 	
@@ -213,16 +212,6 @@ public class LoginScreen implements Screen, InputProcessor{
 		ls.fontColorUnselected = Color.WHITE;
 		ls.selection = getSkin().getDrawable("button_up");
 		
-		String skin[] = {"   " + localisation(_skin) + "1", "   " + localisation(_skin) + "2", "   " + localisation(_skin) + "3"};
-		
-		esthetique = new List(skin, ls);
-		esthetique.setX(GameConstants.DISPLAY_WIDTH * 0.5f);
-		esthetique.setY(GameConstants.DISPLAY_HEIGHT * 0.83f);
-		
-		esthetique.setSelectedIndex(RollingCat.skin - 1);
-		
-//		stage.addActor(esthetique);
-		
 		stage.addActor(loginTextField);
 		stage.addActor(passwordTextField);
 		stage.addActor(table);
@@ -261,7 +250,6 @@ public class LoginScreen implements Screen, InputProcessor{
 		if(keycode == Keys.ENTER){			
 			wrong = false;
 			doctor.login(loginTextField.getText(), passwordTextField.getText());
-			RollingCat.skin = esthetique.getSelectedIndex() + 1;
 		}
 		return true;
 	}

@@ -280,10 +280,10 @@ public class MouseCursorGame implements InputProcessor{
 				parameters = new OrderedMap<String, String>();
 				oldX = x;
 				oldY = y;
-				map.put(map.size(), new float[] {x, y%GameConstants.DISPLAY_HEIGHT, segment});
-				parameters.put("x", ""+x(x));
-				parameters.put("y", ""+y(y));
-				parameters.put("z", ""+0);
+				map.put(map.size(), new float[] {x%GameConstants.DISPLAY_WIDTH, y%GameConstants.DISPLAY_HEIGHT, segment});
+				parameters.put("x", "" + x(x));
+				parameters.put("y", "" + y(y));
+				parameters.put("z", "" + 0);
 				parameters.put("id", ""+task_id);
 				EventManager.create(EventManager.player_cursor_event_type, parameters);
 			}
