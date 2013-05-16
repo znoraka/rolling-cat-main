@@ -39,7 +39,7 @@ public class EventManager {
 //	}
 	
 	/**
-	 * vide la liste en la retournant sous forme de String
+	 * 
 	 * @return la liste sous forme de String Json
 	 */
 	public static String[] getListAsJsonString(){

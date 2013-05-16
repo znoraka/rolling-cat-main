@@ -113,7 +113,7 @@ public class GameScreen implements ScreenPausable{
 			mc.updateStandTimer();
 			cat.move(stage);
 			batch.begin();
-			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+//			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 			font.setColor(Color.BLACK);
 			table.draw(batch, 1);
 			batch.end();
