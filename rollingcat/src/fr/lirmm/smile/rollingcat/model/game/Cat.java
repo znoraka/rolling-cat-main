@@ -422,7 +422,7 @@ public class Cat extends Entity {
 
 		time += Gdx.graphics.getDeltaTime();
 		skeleton.updateWorldTransform();
-		//		skeleton.update(time);
+		skeleton.update(time);
 		skeleton.draw(batch);
 	}
 

@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -46,7 +47,7 @@ public class LoginScreen implements Screen, InputProcessor{
 	private Skin skin;
 	private TextButton button;
 	private TextField loginTextField, passwordTextField;
-	private Table table;
+	private Table table, tableTop;
 	private Doctor doctor;
 	private BitmapFont font;
 	private SpriteBatch batch;
@@ -54,6 +55,7 @@ public class LoginScreen implements Screen, InputProcessor{
 	private TextureRegion region, background;
 	private InputMultiplexer multiplexer;
 	private List esthetique;
+	private ImageButton est1, est2, est3;
 	
 	
 	public LoginScreen(RollingCat game){
@@ -65,12 +67,22 @@ public class LoginScreen implements Screen, InputProcessor{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+		
+		
 		stage.act(delta);
 		batch.begin();
 		batch.draw(background, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.draw(region, GameConstants.DISPLAY_WIDTH / 2 - GameConstants.DISPLAY_WIDTH * 0.2f, GameConstants.DISPLAY_HEIGHT * 0.6f, GameConstants.DISPLAY_WIDTH * 0.4f, GameConstants.DISPLAY_HEIGHT * 0.12f);
 		batch.draw(region, GameConstants.DISPLAY_WIDTH / 2 - GameConstants.DISPLAY_WIDTH * 0.2f, GameConstants.DISPLAY_HEIGHT * 0.45f, GameConstants.DISPLAY_WIDTH * 0.4f, GameConstants.DISPLAY_HEIGHT * 0.12f);
 		font.draw(batch, "version " + RollingCat.VERSION, 10, 30);
+		
+		if(RollingCat.skin == 1)
+			batch.draw(GdxRessourcesGetter.getSkin().getRegion("bottom_green"), est1.getX() + tableTop.getX(), est1.getY() + tableTop.getY(), 0, 0, est1.getWidth(), est1.getHeight(), 1, 1, 0);
+		else if(RollingCat.skin == 2)
+			batch.draw(GdxRessourcesGetter.getSkin().getRegion("bottom_green"), est2.getX() + tableTop.getX(), est2.getY() + tableTop.getY(), 0, 0, est2.getWidth(), est2.getHeight(), 1, 1, 0);
+		else if(RollingCat.skin == 3)
+			batch.draw(GdxRessourcesGetter.getSkin().getRegion("bottom_green"), est3.getX() + tableTop.getX(), est3.getY() + tableTop.getY(), 0, 0, est3.getWidth(), est3.getHeight(), 1, 1, 0);
+		
 		batch.end();
 		
 		if(wrong){
@@ -84,9 +96,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		
 		stage.draw();
 		
-		batch.begin();
-		batch.draw(GdxRessourcesGetter.getGameSkin().getRegion("skin" + esthetique.getSelectedIndex()), GameConstants.DISPLAY_WIDTH * 0.315f, GameConstants.DISPLAY_HEIGHT * 0.65f, 0, 0, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_WIDTH * 0.21f, 1, 1, 0);
-		batch.end();
+		
 
 	}
 
@@ -124,8 +134,32 @@ public class LoginScreen implements Screen, InputProcessor{
 		button.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				wrong = false;
-				RollingCat.skin = esthetique.getSelectedIndex() + 1;
 				doctor.login(loginTextField.getText(), passwordTextField.getText());
+			}
+		});
+		
+		est1 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin0"));
+		est2 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin1"));
+		est3 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin2"));
+		
+		est1.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				RollingCat.skin = 1;
+				Gdx.app.log(RollingCat.LOG, "skin 1 selected");
+			}
+		});
+		
+		est2.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				RollingCat.skin = 2;
+				Gdx.app.log(RollingCat.LOG, "skin 2 selected");
+			}
+		});
+		
+		est3.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				RollingCat.skin = 3;
+				Gdx.app.log(RollingCat.LOG, "skin 3 selected");
 			}
 		});
 		
@@ -160,6 +194,17 @@ public class LoginScreen implements Screen, InputProcessor{
 		table.setWidth(GameConstants.DISPLAY_WIDTH);
 		table.setHeight(GameConstants.DISPLAY_HEIGHT);
 		
+		tableTop = new Table();
+//		tableTop.setBackground(GdxRessourcesGetter.getSkin().getDrawable("top_orange"));
+		tableTop.setWidth(GameConstants.DISPLAY_WIDTH * 0.51f);
+		tableTop.setHeight(GameConstants.DISPLAY_HEIGHT * 0.2f);
+		tableTop.setY(GameConstants.DISPLAY_HEIGHT * 0.76f);
+		tableTop.setX(GameConstants.DISPLAY_WIDTH * 0.5f - tableTop.getWidth() * 0.5f);
+		
+		tableTop.add(est1).fill().expand().pad(5);
+		tableTop.add(est2).fill().expand().pad(5);
+		tableTop.add(est3).fill().expand().pad(5);
+		
 		table.add(button).padTop(GameConstants.DISPLAY_HEIGHT * 0.3f).padRight(10);
 		
 		ListStyle ls = new ListStyle();
@@ -176,11 +221,12 @@ public class LoginScreen implements Screen, InputProcessor{
 		
 		esthetique.setSelectedIndex(RollingCat.skin - 1);
 		
-		stage.addActor(esthetique);
+//		stage.addActor(esthetique);
 		
 		stage.addActor(loginTextField);
 		stage.addActor(passwordTextField);
 		stage.addActor(table);
+		stage.addActor(tableTop);
 		
 	}
 
