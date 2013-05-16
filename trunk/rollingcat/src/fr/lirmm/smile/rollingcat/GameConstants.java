@@ -10,7 +10,7 @@ public class GameConstants {
 	public static final String TEXTURE_CAT = "cat";
 	public static final String TEXTURE_BONE = "bone";
 	public static final String TEXTURE_GROUNDBLOCK = "groundblock";
-	public static final String TEXTURE_BACKGROUND = "data/desert-background.png";
+	public static final String TEXTURE_BACKGROUND = "data/background";
 	public static final String TEXTURE_SPLASHSCREEN = "data/splashscreen.png";
 	public static final String TEXTURE_MOUSE = "mouse";
 	public static final String TEXTURE_DOG = "dog";
@@ -54,7 +54,10 @@ public class GameConstants {
 	//on ajoute le niveau du tuto qui ne compte pas dans la liste de niveaux effective
 	public static final int NB_OF_LEVELS_IN_GAME = 20 + 1;
 	
-	public static int SUCCESS = 2;
+	/**
+	 * nombre de succes/echec pour changer d'etage
+	 */
+	public static int SUCCESS = 1;
 	
 	
 	/**
@@ -77,15 +80,15 @@ public class GameConstants {
 	
 	
 	/**
-	 * 
-	 * @return l'algo de génération en fonction de la skin
+	 * l'algo de génération en fonction de la skin
+	 * @return String
 	 */
 	public static String getAlgo(){
 		switch (RollingCat.skin)
 		{
-		case 1: return "ant-0.1";
+		case 1: return "random";
 		case 2: return "incremental";
-		case 3: return "random";
+		case 3: return "ant-0.1";
 		default: return "";
 		}
 	}
@@ -103,7 +106,7 @@ public class GameConstants {
 		BLOCK_WIDTH = DISPLAY_WIDTH / (COLS);
 		BLOCK_HEIGHT = DISPLAY_HEIGHT / (ROWS);
 
-		SCALE = (width / 800f);
+		SCALE = ((float) width / 800f);
 		
 		numberOfLines = ROWS - 2;
 		numberOfRows = COLS;

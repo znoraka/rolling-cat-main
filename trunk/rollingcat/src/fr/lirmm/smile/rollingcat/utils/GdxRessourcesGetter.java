@@ -165,7 +165,7 @@ public class GdxRessourcesGetter {
 	 */
 	public static TextureAtlas getWaspAtlas(){
 		if(waspAtlas == null)
-			waspAtlas = new TextureAtlas("data/wasp/guepe-skin.atlas");
+			waspAtlas = new TextureAtlas("data/wasp/fly.atlas");
 		return waspAtlas;
 	}
 	
@@ -195,7 +195,7 @@ public class GdxRessourcesGetter {
 	 */
 	public static TextureAtlas getFanAtlas(){
 		if(fanAtlas == null)
-			fanAtlas = new TextureAtlas("data/fan/ventilo-skin.atlas");
+			fanAtlas = new TextureAtlas("data/fan/fan.atlas");
 		return fanAtlas;
 	}
 	

@@ -1,7 +1,7 @@
 
 cat.png
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 g4031
   rotate: false
@@ -80,30 +80,16 @@ path3961
   orig: 52, 78
   offset: 0, 0
   index: -1
-path3906
-  rotate: false
-  xy: 416, 206
-  size: 87, 22
-  orig: 87, 22
-  offset: 0, 0
-  index: -1
-path3914
-  rotate: false
-  xy: 198, 3
-  size: 64, 40
-  orig: 64, 40
-  offset: 0, 0
-  index: -1
 moustacheG2
   rotate: false
-  xy: 266, 58
+  xy: 416, 215
   size: 80, 13
   orig: 80, 13
   offset: 0, 0
   index: -1
 path3788
   rotate: false
-  xy: 642, 370
+  xy: 198, 1
   size: 47, 42
   orig: 47, 42
   offset: 0, 0
@@ -111,7 +97,7 @@ path3788
 
 cat2.png
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 s2/g4004
   rotate: false
@@ -153,5 +139,45 @@ s2/path3971
   xy: 743, 202
   size: 30, 26
   orig: 30, 26
+  offset: 0, 0
+  index: -1
+
+cat3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+s3/g3927
+  rotate: false
+  xy: 1, 88
+  size: 265, 146
+  orig: 265, 146
+  offset: 0, 0
+  index: -1
+s3/path3873
+  rotate: false
+  xy: 268, 43
+  size: 213, 191
+  orig: 213, 191
+  offset: 0, 0
+  index: -1
+s3/path3947
+  rotate: false
+  xy: 1, 1
+  size: 48, 85
+  orig: 48, 85
+  offset: 0, 0
+  index: -1
+s3/path3952
+  rotate: false
+  xy: 51, 28
+  size: 65, 58
+  orig: 65, 58
+  offset: 0, 0
+  index: -1
+s3/path3956
+  rotate: false
+  xy: 118, 43
+  size: 35, 43
+  orig: 35, 43
   offset: 0, 0
   index: -1

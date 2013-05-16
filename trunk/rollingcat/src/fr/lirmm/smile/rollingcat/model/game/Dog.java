@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.spine.Animation;
 import fr.lirmm.smile.rollingcat.spine.Bone;
 import fr.lirmm.smile.rollingcat.spine.Skeleton;
@@ -37,10 +38,18 @@ public class Dog extends Entity {
 		TextureAtlas atlas = getDogAtlas();
 		
 		SkeletonBinary binary = new SkeletonBinary(atlas);
-		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/dog/dog.skel"));
+		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/dog/dog-skeleton.skel"));
 		animation = binary.readAnimation(Gdx.files.internal("data/dog/dog-stand.anim"), skeletonData);
 
 		skeleton = new Skeleton(skeletonData);
+		
+		try {
+			skeleton.setSkin("s" + RollingCat.skin);
+		} catch (Exception e) {
+			Gdx.app.log(RollingCat.LOG, "skin + " + RollingCat.skin + " not found");
+			skeleton.setSkin("s1");
+		}
+		
 		skeleton.setToBindPose();
 
 		Bone root = skeleton.getRootBone();

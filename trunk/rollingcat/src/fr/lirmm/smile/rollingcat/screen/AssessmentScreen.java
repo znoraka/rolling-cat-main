@@ -198,15 +198,18 @@ public class AssessmentScreen implements Screen {
 		selected = -1;
 		waitingToEnterInArea = false;
 		timeout = 0;
+		
 		parameters = new OrderedMap<String, String>();
 		parameters.put("game", RollingCat.getCurrentGameName());
 		parameters.put("version", RollingCat.VERSION);
 		EventManager.create(EventManager.game_info_event_type, parameters);
+		
 		parameters = new OrderedMap<String, String>();
 		parameters.put("session_type", Track.ASSESSEMENT);
 		parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
 		parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
 		EventManager.create(EventManager.start_game_event_type, parameters); 
+		
 		InternetManager.newGameSession(Track.ASSESSEMENT, patient.getID());
 
 		TextButtonStyle style = new TextButtonStyle();
