@@ -38,7 +38,7 @@ public class LoadingScreen implements Screen {
 	private Stage stage, stage1;
 	private Texture texture;
 	private SpriteBatch batch;
-	private String levelAsString;
+//	private String levelAsString;
 	private Level level;
 	private List<String> listOfGem;
 	private float elapsedTime;
@@ -80,22 +80,18 @@ public class LoadingScreen implements Screen {
 		if(!started & InternetManager.sessionid != null)
 		{
 			started = true;
-			if(level.getContent() == null)
-				InternetManager.fetchLevel(patient, level.getId()); 
-			else
-				levelAsString = level.getContent();
+			InternetManager.fetchLevel(patient, level.getId()); 
 		}
 
-		levelAsString = (level.getContent() == null)?InternetManager.getLevel():level.getContent();
+//		levelAsString = Level.getContent();
 
-		if(levelAsString != null & !building)
+		if(Level.getContent() != null & !building)
 		{
 			building = true;
-			this.stage = LevelBuilder.build(levelAsString);
-			level.setContent(levelAsString);
+			this.stage = LevelBuilder.build(Level.getContent());
 		}
 
-		if(levelAsString != null & elapsedTime > time & InternetManager.ability != null){
+		if(Level.getContent() != null & elapsedTime > time & InternetManager.ability != null){
 			ready = true;
 		}
 

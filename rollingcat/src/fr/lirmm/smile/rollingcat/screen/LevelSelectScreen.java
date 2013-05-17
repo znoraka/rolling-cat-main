@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -90,7 +91,7 @@ public class LevelSelectScreen implements Screen {
 
 		if(gen){
 			if(f > 0)
-			{
+			{	
 				changeTablesSize();
 				f -= delta;
 			}
@@ -182,6 +183,7 @@ public class LevelSelectScreen implements Screen {
 	 * changement de la taille des {@link Table}s en fonction de la table selectionnée
 	 */
 	private void changeTablesSize() {
+		System.out.println("auie");
 		for(int i = 0 ; i < this.sizeH.length ; i++)
 		{
 			int index = (currentButton + i + tables.size() - sizeH.length /2 )%tables.size(); 
@@ -192,9 +194,12 @@ public class LevelSelectScreen implements Screen {
 				table.setVisible(true);
 			else
 				table.setVisible(false);
+			
+			table.invalidate();
+			
 			table.addAction(Actions.parallel(Actions.moveTo(posW[i],posH[i], SPEED, Interpolation.pow2Out)));
 			table.addAction(Actions.parallel(Actions.sizeTo(sizeW[i], sizeH[i], SPEED, Interpolation.pow2Out)));
-			table.invalidate();
+			table.validate();
 		}
 		tables.get(currentButton).setColor(1, 1, 1, 1);
 	}
@@ -208,7 +213,7 @@ public class LevelSelectScreen implements Screen {
 	@Override
 	public void show() {
 		if(gen == true){
-			f = 2;
+			f = SPEED;
 			font = getBigFont();
 			stage = getStage();
 			skin = getSkin();
@@ -385,7 +390,7 @@ public class LevelSelectScreen implements Screen {
 		else
 		{
 			if((index < numberOfLevels)){
-				if(world.get(index).getContent() == null){
+				if(index == numberOfLevels - 1 & index != GameConstants.NB_OF_LEVELS_IN_GAME - 1){
 					style.fontColor = Color.RED;
 					table.add(new Label(localisation(_new_level), style)).colspan(2).expand().center();
 					table.row();
