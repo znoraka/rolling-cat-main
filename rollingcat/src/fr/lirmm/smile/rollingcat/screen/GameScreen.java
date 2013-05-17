@@ -249,9 +249,13 @@ public class GameScreen implements ScreenPausable{
 		multiplexer = new InputMultiplexer(stage, mc, pauseStage);
 		Gdx.input.setInputProcessor(multiplexer);
 		duration = 0;
+		
 		parameters = new OrderedMap<String, String>();
 		parameters.put("game", RollingCat.getCurrentGameName());
 		parameters.put("version", RollingCat.VERSION);
+		parameters.put("timeout", ""+GameConstants.TIMEOUT);
+		parameters.put("sucess_window", ""+GameConstants.SUCCESS);
+		
 		EventManager.create(EventManager.game_info_event_type, parameters);
 		parameters = new OrderedMap<String, String>();
 		parameters.put("session_type", Track.GAME);
