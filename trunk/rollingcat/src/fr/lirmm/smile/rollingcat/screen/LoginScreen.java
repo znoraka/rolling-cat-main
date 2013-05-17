@@ -226,7 +226,7 @@ public class LoginScreen implements Screen, InputProcessor{
 
 		Gdx.app.log(RollingCat.LOG, "retriving config file...");
 
-		FileHandle file = Gdx.files.internal("data/config.json");
+		FileHandle file = Gdx.files.internal("data/config/config.json");
 		Gdx.app.log(RollingCat.LOG, "done.");
 		Gdx.app.log(RollingCat.LOG, "parsing config file...");
 
