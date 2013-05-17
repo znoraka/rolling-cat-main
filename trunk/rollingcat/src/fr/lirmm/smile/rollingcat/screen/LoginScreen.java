@@ -15,6 +15,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -32,6 +33,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
@@ -217,6 +221,22 @@ public class LoginScreen implements Screen, InputProcessor{
 		stage.addActor(table);
 		stage.addActor(tableTop);
 		
+		
+		Json json = new Json();
+
+		Gdx.app.log(RollingCat.LOG, "retriving config file...");
+
+		FileHandle file = Gdx.files.internal("data/config.json");
+		Gdx.app.log(RollingCat.LOG, "done.");
+		Gdx.app.log(RollingCat.LOG, "parsing config file...");
+
+		String jsonData = file.readString();
+
+		@SuppressWarnings("unchecked")
+		OrderedMap<String, String> config = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
+		Gdx.app.log(RollingCat.LOG, json.prettyPrint(config));
+		
+		InternetManager.config(config.get("server"), config.get("port"));
 	}
 
 	@Override

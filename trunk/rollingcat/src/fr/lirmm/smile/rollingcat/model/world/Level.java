@@ -3,16 +3,17 @@ package fr.lirmm.smile.rollingcat.model.world;
 
 public class Level {
 
+	private static String content;
+
 	private int id;
-	private String content;
 	private String gameId;
 	private int score;
 	private int duree;
 	private String gem;
 	
-	public Level(int id, String content, String gameId, int score, int duree, String gem) {
+	public Level(int id, String gameId, int score, int duree, String gem) {
 		this.id = id;
-		this.content = content;
+//		this.content = content;
 		this.gameId = gameId;
 		this.score = score;
 		this.duree = (duree > 0)?score:Integer.MAX_VALUE;
@@ -23,7 +24,7 @@ public class Level {
 		return id;
 	}
 
-	public String getContent() {
+	public static String getContent() {
 		return content;
 	}
 
@@ -56,11 +57,11 @@ public class Level {
 		this.duree = Math.min(this.duree, duration);
 		this.gem = couleur;
 		if(World.getInstance().needsNewLevel())
-			World.getInstance().add(new Level(World.getInstance().getNumberOfLevels(), null, null, 0, 0, null));
+			World.getInstance().add(new Level(World.getInstance().getNumberOfLevels(), null, 0, 0, null));
 	}
 
-	public void setContent(String levelAsString) {
-		this.content = levelAsString;
+	public static void setContent(String levelAsString) {
+		content = levelAsString;
 	}
 	
 	

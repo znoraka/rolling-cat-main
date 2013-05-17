@@ -24,6 +24,7 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
+import fr.lirmm.smile.rollingcat.model.world.Level;
 import fr.lirmm.smile.rollingcat.model.world.World;
 import fr.lirmm.smile.rollingcat.screen.LoginScreen;
 
@@ -42,6 +43,15 @@ public class InternetManager{
 	public static int sent = 0;
 	public static float [] ability;
 
+	/**
+	 * set l'adresse et le port du serveur
+	 * @param server
+	 * @param serverPort
+	 */
+	public static void config(String server, String serverPort) {
+		hostName = server;
+		port = Integer.valueOf(serverPort);
+	}
 
 	/**
 	 * envoie la requete pour récupérer une clé de connexion
@@ -290,6 +300,7 @@ public class InternetManager{
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				level = httpResponse.getResultAsString();
+				Level.setContent(level);
 				Gdx.app.log(RollingCat.LOG, "success");
 			}
 
