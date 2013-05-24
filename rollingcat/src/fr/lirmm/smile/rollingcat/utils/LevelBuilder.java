@@ -45,7 +45,7 @@ public class LevelBuilder {
 
 		s = s.replace("\"", "");
 //		s = s.replace(".0", "");
-//		Gdx.app.log(RollingCat.LOG, s);
+//		Gdx.app.log(RollingCat.LOG,"level : " + s);
 		String tab [] = s.split("/");
 		String[] subtab;
 		float x;
