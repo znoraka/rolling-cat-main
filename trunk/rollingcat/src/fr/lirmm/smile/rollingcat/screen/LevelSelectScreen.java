@@ -45,6 +45,7 @@ import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
+import fr.lirmm.smile.rollingcat.model.world.Level;
 import fr.lirmm.smile.rollingcat.model.world.World;
 import fr.lirmm.smile.rollingcat.utils.Polynome;
 import fr.lirmm.smile.rollingcat.utils.WorldBuilder;
@@ -88,12 +89,12 @@ public class LevelSelectScreen implements Screen {
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		
 		if(gen){
 			if(f > 0)
 			{	
 				changeTablesSize();
-				f -= delta;
+//				f -= delta;
 			}
 			if(next.isPressed() & elapsedTime > 0.6f)
 				next();
@@ -121,6 +122,7 @@ public class LevelSelectScreen implements Screen {
 			gen = true;
 			show();
 		}
+		
 	}
 
 	/**
@@ -183,7 +185,6 @@ public class LevelSelectScreen implements Screen {
 	 * changement de la taille des {@link Table}s en fonction de la table selectionnée
 	 */
 	private void changeTablesSize() {
-		System.out.println("auie");
 		for(int i = 0 ; i < this.sizeH.length ; i++)
 		{
 			int index = (currentButton + i + tables.size() - sizeH.length /2 )%tables.size(); 
@@ -197,11 +198,15 @@ public class LevelSelectScreen implements Screen {
 			
 			table.invalidate();
 			
-			table.addAction(Actions.parallel(Actions.moveTo(posW[i],posH[i], SPEED, Interpolation.pow2Out)));
-			table.addAction(Actions.parallel(Actions.sizeTo(sizeW[i], sizeH[i], SPEED, Interpolation.pow2Out)));
-			table.validate();
+			if(table.getHeight() != sizeH[i])
+			{
+				table.addAction(Actions.parallel(Actions.moveTo(posW[i],posH[i], SPEED, Interpolation.pow2Out)));
+				table.addAction(Actions.parallel(Actions.sizeTo(sizeW[i], sizeH[i], SPEED, Interpolation.pow2Out)));
+//				table.validate();
+			}
 		}
 		tables.get(currentButton).setColor(1, 1, 1, 1);
+		tables.get(currentButton).toFront();
 	}
 
 	@Override
@@ -213,7 +218,7 @@ public class LevelSelectScreen implements Screen {
 	@Override
 	public void show() {
 		if(gen == true){
-			f = SPEED;
+			f = 2;
 			font = getBigFont();
 			stage = getStage();
 			skin = getSkin();
@@ -345,6 +350,7 @@ public class LevelSelectScreen implements Screen {
 			tables.add(table);
 			stage.addActor(table);
 			table.setVisible(true);
+			table.setClip(true);
 		}
 		currentButton = numberOfLevels - 1;
 	}
@@ -380,8 +386,8 @@ public class LevelSelectScreen implements Screen {
 	 */
 	private void addLabelsToTable(LabelStyle style, int index){
 		table = new Table();
-		table.setX(GameConstants.DISPLAY_WIDTH * 2);
-		table.setY(GameConstants.DISPLAY_HEIGHT * 2);
+		table.setX(GameConstants.DISPLAY_WIDTH * 0.5f - table.getWidth() * 0.5f);
+		table.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - table.getHeight());
 		table.setBackground(skin.getDrawable("button_up"));
 		style.background = skin.getDrawable("empty");
 		if(index == 0){
@@ -399,7 +405,8 @@ public class LevelSelectScreen implements Screen {
 				table.add(new Label(localisation(_level)+" " + (index), style)).left().expand();
 				table.add(new Label(localisation(_high_score) + " : " + world.get(index).getScore(), style)).right().expand();
 				table.row();
-				table.add(new Label(localisation(_duration) + " : " + ((world.get(index).getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
+				world.get(index);
+				table.add(new Label(localisation(_duration) + " : " + ((Level.getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
 				table.add(new Label(localisation(_gem) + " " + ((world.get(index).getGem() == null)?localisation(_not_found):(world.get(index).getGem().equals("empty"))?localisation(_not_found):localisation(_found)), style)).right().expand();
 			}	
 			else{
