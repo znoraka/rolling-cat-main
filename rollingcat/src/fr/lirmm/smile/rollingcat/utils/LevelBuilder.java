@@ -35,7 +35,7 @@ public class LevelBuilder {
 	 * @param s la string du niveau
 	 */
 	public static Stage build(String s) {
-//		Stage stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT * 3, true);
+//		Stage stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT * 5, true);
 		Stage stage = getStage();
 		map = new OrderedMap<String, ArrayList<Integer>>();
 		items = new ArrayList<Integer>();
@@ -60,11 +60,11 @@ public class LevelBuilder {
 			x = Float.valueOf(subtab[1]);
 			y = Float.valueOf(subtab[2]);
 
-			if(subtab[0].equals("cat"))
-			{
-				stage.addActor(new Cat(x, y + decalage));
-			}
-			else if(subtab[0].equals("wasp"))
+//			if(subtab[0].equals("cat"))
+//			{
+//				stage.addActor(new Cat(x, y + decalage));
+//			}
+			if(subtab[0].equals("wasp"))
 			{
 				stage.addActor(new Wasp(x, y + decalage));
 				if(isFirstOfScreen(x))
@@ -155,7 +155,7 @@ public class LevelBuilder {
 		//		stage.addActor(new Cat(10, 10));
 		//		stage.addActor(new Dog(5, 5));
 		//		((Box)stage.getActors().get(1)).setItems(items);
-		cat.setY(getNumberOfEtage() * GameConstants.DISPLAY_HEIGHT - GameConstants.BLOCK_HEIGHT);
+		cat.setY(getNumberOfEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT * 0.5f);
 		return stage;
 	}
 

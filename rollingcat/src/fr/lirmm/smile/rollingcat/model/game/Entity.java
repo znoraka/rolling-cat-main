@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.utils.EntityModel;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
@@ -122,7 +123,7 @@ public class Entity extends Image implements EntityModel {
 	 * @return l'étage auquel se trouve l'entité
 	 */
 	public int getEtage(){
-		return (this.getYOnGrid() / (GameConstants.DECALAGE));
+		return (int) (Math.floor((this.getY() / (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT))));
 	}
 	
 	/**
