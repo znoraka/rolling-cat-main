@@ -15,6 +15,7 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
+import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
 public class Box extends Entity{
 
@@ -168,7 +169,8 @@ public class Box extends Entity{
 	
 	public void setEtageAndSegment(int etage, int segment)
 	{	
-		this.etage = etage;
+		if(etage < LevelBuilder.getNumberOfEtage())
+			this.etage = etage;
 		this.segment = segment;
 //		Gdx.app.log(RollingCat.LOG, "etage : " + etage);
 //		Gdx.app.log(RollingCat.LOG, "segment + " + segment);
