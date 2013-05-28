@@ -3,6 +3,8 @@ package fr.lirmm.smile.rollingcat.manager;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 
+import java.io.StringWriter;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpMethods;
@@ -11,17 +13,24 @@ import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.badlogic.gdx.utils.JsonValue.ValueType;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.message.AntParameterMessage;
+import fr.lirmm.smile.rollingcat.manager.message.DDAParametersMessage;
+import fr.lirmm.smile.rollingcat.manager.message.NewGameSessionMessage;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.model.world.Level;
@@ -74,12 +83,22 @@ public class InternetManager{
 
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
+				if(httpResponse.getStatus().getStatusCode()==HttpStatus.SC_OK)
+				{
 				Json json = new Json();
+				Gdx.app.log(RollingCat.LOG, "httpResponse status"+httpResponse.getStatus().getStatusCode());
+				Gdx.app.log(RollingCat.LOG, "httpResponse input stream"+httpResponse.getResultAsStream());
 				String s = httpResponse.getResultAsString();
 				value = json.readValue(key, String.class, new JsonReader().parse(s));
 				Gdx.app.log(RollingCat.LOG, value);
 				Gdx.app.log(RollingCat.LOG, "login ok");
-
+				}
+				else
+				{
+					LoginScreen.setWrong();
+					Gdx.app.log(RollingCat.LOG, "something went wrong, could not login");
+				}
+				
 			}
 
 			@Override
@@ -178,6 +197,7 @@ public class InternetManager{
 			}});
 	}
 
+	
 	/**
 	 * set la date dans la track
 	 * @param track
@@ -186,25 +206,40 @@ public class InternetManager{
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/gamesession/new");
-		OrderedMap<String, String> map = new OrderedMap<String, String>();
-		map.put("sessionType", gameType);
-		map.put("comment", "no comment");
-		map.put("patient_id", patientid);
-		map.put("game_id", gameid);
+		//GOUAICH
+		NewGameSessionMessage map = new NewGameSessionMessage();
+		map.sessionType = gameType;
+		map.comment = "no comment";
+		map.patient_id = patientid;
+		map.game_id = gameid;
 		Json json = new Json();
 		json.setOutputType(JsonWriter.OutputType.json);
-		httpGet.setContent(json.toJson(map));
+		String content  = json.toJson( map);
+		Gdx.app.log(RollingCat.LOG, "request content is:"+content);
+		httpGet.setContent(content);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "application/json");
 		Gdx.app.log(RollingCat.LOG, "sending new game session retrieve request...");
-
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
 
 			@Override
-			public void handleHttpResponse(HttpResponse httpResponse) {
+			public void handleHttpResponse(HttpResponse httpResponse) 
+			{
+				if(httpResponse.getStatus().getStatusCode() == HttpStatus.SC_OK)
+				{
 				sessionid = httpResponse.getResultAsString();
 				Gdx.app.log(RollingCat.LOG, "game session : " + sessionid);
 				Gdx.app.log(RollingCat.LOG, "success");
+				}
+				else
+				{
+					sessionid = null;
+					if(httpResponse.getResultAsStream()!=null) 
+						{
+						Gdx.app.log(RollingCat.LOG, "reason : " + httpResponse.getResultAsString());
+						}
+					Gdx.app.log(RollingCat.LOG, "something went wrong");
+				}
 			}
 
 			@Override
@@ -241,6 +276,38 @@ public class InternetManager{
 			}});
 	}
 
+	
+	public static DDAParametersMessage createDDAMessage(Patient patient, Json json)
+	{
+		DDAParametersMessage map = new DDAParametersMessage();	
+		map.builderId=GameConstants.getAlgo();
+		map.patientId=patient.getID();
+		map.numberOfLines= GameConstants.numberOfLines;
+		map.numberOfRows= GameConstants.numberOfRows;
+		map.totalHeight= GameConstants.workspaceHeight;
+		map.totalWidth= GameConstants.workspaceWidth;
+		map.totalVolume= GameConstants.totalVolume;
+		map.volumePerLevel= GameConstants.volumePerLevel;
+		map.ImportanceOfEffort= 0.9f;
+		
+		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
+		{
+			map.dials= "0000";
+		}
+		else
+		{
+			map.dials= "" + ((GameConstants.area_1)?"1":"0") + ((GameConstants.area_2)?"1":"0") + ((GameConstants.area_3)?"1":"0") + ((GameConstants.area_4)?"1":"0");
+		}
+		map.leftHemiplegia = patient.getLeftHemiplegia();
+		AntParameterMessage algoParameterAZ =  new AntParameterMessage();		
+		algoParameterAZ.range = GameConstants.range;
+		algoParameterAZ.pathDeltaTime= GameConstants.pathDeltaTime;
+		algoParameterAZ.evaporationRatioPerDay = GameConstants.evaporationPerDay;
+		algoParameterAZ.alpha = GameConstants.alpha;
+		algoParameterAZ.assessmentDataOnly= true;
+		map.parameters = algoParameterAZ; 
+		return map;
+	}
 	/**
 	 * récupère le level sur le serveur
 	 * @param IDpatient
@@ -255,41 +322,10 @@ public class InternetManager{
 		
 		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+patient.getID()+"/"+gameid+"/"+sessionid+"/"+numLevel);
 
-		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
-
-		map.put("builderId",GameConstants.getAlgo());
-		map.put("patientId", patient.getID());
-		map.put("numberOfLines", GameConstants.numberOfLines);
-		map.put("numberOfRows", GameConstants.numberOfRows);
-		map.put("totalHeight", GameConstants.workspaceHeight);
-		map.put("totalWidth", GameConstants.workspaceWidth);
-		map.put("totalVolume", GameConstants.totalVolume);
-		map.put("volumePerLevel", GameConstants.volumePerLevel);
-		map.put("ImportanceOfEffort", 0.9f);
-		
-		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
-		{
-			map.put("dials", "0000");
-		}
-		else
-		{
-			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
-		}
-		map.put("leftHemiplegia", patient.getLeftHemiplegia());
-
-		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
-		algoParameterAZ.put("range", GameConstants.range);
-		algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
-		algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
-		algoParameterAZ.put("alpha", GameConstants.alpha);
-		algoParameterAZ.put("assessmentDataOnly", "true");
-		map.put("parameters", algoParameterAZ); 
-
-
-		httpGet.setContent(json.toJson(map));
-
+		//OrderedMap<String, Object> map = new OrderedMap<String, Object>();
+		DDAParametersMessage map = createDDAMessage(patient, json);
+		httpGet.setContent(map.toJson());
 		Gdx.app.log(RollingCat.LOG, httpGet.getContent());	
-
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "application/json");
 
@@ -298,10 +334,18 @@ public class InternetManager{
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
 
 			@Override
-			public void handleHttpResponse(HttpResponse httpResponse) {
+			public void handleHttpResponse(HttpResponse httpResponse) 
+			{
+				if(httpResponse.getStatus().getStatusCode()==HttpStatus.SC_OK)
+				{
 				level = httpResponse.getResultAsString();
 				Level.setContent(level);
 				Gdx.app.log(RollingCat.LOG, "success");
+				}
+				else
+				{
+					Gdx.app.log(RollingCat.LOG, "something went wrong");
+				}
 			}
 
 			@Override
@@ -317,24 +361,21 @@ public class InternetManager{
 		world = null;
 		World.clearInstance();
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
-
 		Json json = new Json();
 		json.setOutputType(JsonWriter.OutputType.json);
-
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/"+patient.getID()+"/needsassessment");
-		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
-
+		/*
+		ObjectMap<String, String> map = new ObjectMap<String, String>();
 		map.put("builderId",GameConstants.getAlgo());
 		map.put("patientId", patient.getID());
-		map.put("numberOfLines", GameConstants.numberOfLines);
-		map.put("numberOfRows", GameConstants.numberOfRows);
-		map.put("totalHeight", GameConstants.workspaceHeight);
-		map.put("totalWidth", GameConstants.workspaceWidth);
-		map.put("totalVolume", GameConstants.totalVolume);
-		map.put("volumePerLevel", GameConstants.volumePerLevel);
-		map.put("ImportanceOfEffort", 0.9f);
-		
+		map.put("numberOfLines", GameConstants.numberOfLines+"");
+		map.put("numberOfRows", GameConstants.numberOfRows+"");
+		map.put("totalHeight", GameConstants.workspaceHeight+"");
+		map.put("totalWidth", GameConstants.workspaceWidth+"");
+		map.put("totalVolume", GameConstants.totalVolume+"");
+		map.put("volumePerLevel", GameConstants.volumePerLevel+"");
+		map.put("ImportanceOfEffort", "0.9f");
 		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
 		{
 			map.put("dials", "0000");
@@ -343,30 +384,37 @@ public class InternetManager{
 		{
 			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
 		}
-
-		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
-		algoParameterAZ.put("range", GameConstants.range);
-		algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime);
-		algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay);
-		algoParameterAZ.put("alpha", GameConstants.alpha);
+		ObjectMap<String,String> algoParameterAZ =  new ObjectMap<String,String>();
+		algoParameterAZ.put("range", GameConstants.range+"");
+		algoParameterAZ.put("pathDeltaTime", GameConstants.pathDeltaTime+"");
+		algoParameterAZ.put("evaporationRatioPerDay", GameConstants.evaporationPerDay+"");
+		algoParameterAZ.put("alpha", GameConstants.alpha+"");
 		algoParameterAZ.put("assessmentDataOnly", "true");
-		map.put("parameters", algoParameterAZ); 
-
-
-		httpGet.setContent(json.toJson(map));
-
+		map.put("parameters", json.toJson(algoParameterAZ)); 
+		String content = json.toJson(map);
+		*/
+		
+		DDAParametersMessage map = createDDAMessage(patient, json);
+		String content = map.toJson(); //json.toJson(map);
+		
+		Gdx.app.log(RollingCat.LOG,"Json content: "+content);	
+		httpGet.setContent(content);
 		Gdx.app.log(RollingCat.LOG, httpGet.getContent());	
-
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "application/json");
-
 		Gdx.app.log(RollingCat.LOG, "sending level request...");
-
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-
 			@Override
-			public void handleHttpResponse(HttpResponse httpResponse) {
+			public void handleHttpResponse(HttpResponse httpResponse) 
+			{
+				if(httpResponse.getStatus().getStatusCode()==HttpStatus.SC_OK)
+				{
 				patient.setNeedsAssessment(httpResponse.getResultAsString());
+				}
+				else
+				{
+					Gdx.app.log(RollingCat.LOG, "Error status code is:"+httpResponse.getStatus().getStatusCode());
+				}
 			}
 
 			@Override
@@ -381,34 +429,44 @@ public class InternetManager{
 	 * envoie les events au serveur dda
 	 * @param events les events sous forme de string formatée en JSON
 	 */
-	public static void sendEvents(String[] events){
+	public static void sendEvents(String[] events)
+	{
 		Gdx.app.log(RollingCat.LOG, "preparing send list event request...");
 		okButton.setVisible(true);
 		okButton.setText("en attente");
-
 		for (String event : events) {
 			HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 			httpGet.setUrl("http://" + hostName + ":" + port + "/event/"+sessionid+"/newList");
+			Gdx.app.log(RollingCat.LOG, "UR="+"http://" + hostName + ":" + port + "/event/"+sessionid+"/newList");
 			httpGet.setContent(event);
 			httpGet.setHeader(key, value);
 			httpGet.setHeader("Content-Type", "application/json");
 			sent = 0;
-
-
 			Gdx.app.log(RollingCat.LOG, "sending list event request...");
-
-			Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-
+			Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() 
+			{
 				@Override
-				public void handleHttpResponse(HttpResponse httpResponse) {
+				public void handleHttpResponse(HttpResponse httpResponse) 
+				{
+					if(httpResponse.getStatus().getStatusCode()==HttpStatus.SC_OK)
+					{
+					Gdx.app.log(RollingCat.LOG,"status code is "+httpResponse.getStatus().getStatusCode());
 					Gdx.app.log(RollingCat.LOG, httpResponse.getResultAsString());
 					okButton.setText("envoi réussi");
 					sent = 1;
 					Gdx.app.log(RollingCat.LOG, "list event request success");
-				}
+					}
+					else
+					{
+						okButton.setText("erreur");
+						sent = -1;
+						Gdx.app.log(RollingCat.LOG, "something went wrong");
+					}
+					}
 
 				@Override
-				public void failed(Throwable t) {	
+				public void failed(Throwable t) 
+				{	
 					okButton.setText("erreur");
 					sent = -1;
 					Gdx.app.log(RollingCat.LOG, t.toString());
@@ -474,7 +532,14 @@ public class InternetManager{
 
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				Gdx.app.log(RollingCat.LOG, "score update request success");
+				if(httpResponse.getStatus().getStatusCode()==HttpStatus.SC_OK)
+				{
+					Gdx.app.log(RollingCat.LOG, "score update request success");
+				}
+				else
+				{
+					Gdx.app.log(RollingCat.LOG, "score update request failed");
+				}
 			}
 
 			@Override
@@ -500,8 +565,17 @@ public class InternetManager{
 
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				world = httpResponse.getResultAsString();
-				Gdx.app.log(RollingCat.LOG, "get world request success");
+				if(httpResponse.getStatus().getStatusCode()==HttpStatus.SC_OK)
+				{
+					world = httpResponse.getResultAsString();
+					Gdx.app.log(RollingCat.LOG, "get world request success");
+				}
+				else
+				{
+					Gdx.app.log(RollingCat.LOG, "get world request failed");
+				}
+				
+				
 			}
 
 			@Override
@@ -522,8 +596,8 @@ public class InternetManager{
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setUrl("http://" + hostName + ":" + port + "/abilityzone/"+patient.getID()+"/get");
+		/*
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
-
 		map.put("builderId",GameConstants.getAlgo());
 		map.put("patientId", patient.getID());
 		map.put("numberOfLines", GameConstants.numberOfLines);
@@ -531,8 +605,7 @@ public class InternetManager{
 		map.put("totalHeight", GameConstants.workspaceHeight);
 		map.put("totalWidth", GameConstants.workspaceWidth);
 		map.put("totalVolume", GameConstants.totalVolume);
-		map.put("volumePerLevel", GameConstants.volumePerLevel);
-		
+		map.put("volumePerLevel", GameConstants.volumePerLevel);		
 		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
 		{
 			map.put("dials", "0000");
@@ -550,25 +623,29 @@ public class InternetManager{
 		algoParameterAZ.put("alpha", GameConstants.alpha);
 		algoParameterAZ.put("assessmentDataOnly", "true");
 		map.put("parameters", algoParameterAZ); 
-
-
-		httpGet.setContent(json.toJson(map));
-
+*/
+		DDAParametersMessage map = createDDAMessage(patient, json);
+		httpGet.setContent(map.toJson());
 		Gdx.app.log(RollingCat.LOG, httpGet.getContent());	
-
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "application/json");
-
 		Gdx.app.log(RollingCat.LOG, "sending level request...");
-
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
-
 			@SuppressWarnings("unchecked")
 			@Override
-			public void handleHttpResponse(HttpResponse httpResponse) {
+			public void handleHttpResponse(HttpResponse httpResponse) 
+			{
+				if(httpResponse.getStatus().getStatusCode()==HttpStatus.SC_OK)
+				{
 				String string = httpResponse.getResultAsString();
-				OrderedMap<String, Object>lang = (OrderedMap<String, Object>) new JsonReader().parse(string);
+				Gdx.app.log(RollingCat.LOG,"String = "+string);
+				JsonValue lang = new JsonReader().parse(string);
 				ability = json.readValue("content", float[].class, lang);
+				}
+				else
+				{
+					Gdx.app.log(RollingCat.LOG, "something went wrong");
+				}
 			}
 
 			@Override

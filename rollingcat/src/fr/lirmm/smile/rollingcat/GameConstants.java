@@ -67,7 +67,7 @@ public class GameConstants {
 	public static int workspaceHeight = 50;
 	public static int range = 2;
 	public static float pathDeltaTime = 0.001f;
-	public static float evaporationPerDay = 0;
+	public static float evaporationPerDay = 0.f;
 	public static float alpha = 0.5f;
 	public static int numberOfLines = 20;
 	public static int numberOfRows = 20;

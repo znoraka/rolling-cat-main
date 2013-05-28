@@ -1,14 +1,19 @@
 package fr.lirmm.smile.rollingcat.manager;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.ObjectMap.Entries;
+import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.message.EventMessage;
 import fr.lirmm.smile.rollingcat.screen.GameScreen;
 
 public class EventManager {
@@ -28,7 +33,7 @@ public class EventManager {
 	private static String type = "event_type";
 	private static String data = "parameters";		
 	
-	private static ArrayList<Array<OrderedMap<String, Object>>> listOfEvents;
+	private static ArrayList<Array< EventMessage >> listOfEvents;
 
 //	/**
 //	 * ajoute un event à la liste d'events
@@ -42,34 +47,53 @@ public class EventManager {
 	 * 
 	 * @return la liste sous forme de String Json
 	 */
+	
 	public static String[] getListAsJsonString(){
-		Json json = new Json();
-		json.setOutputType(JsonWriter.OutputType.json);
+		//gouaich
 		String[] s = new String[listOfEvents.size()];
 		
 		for (int i = 0; i < s.length; i++) {
-			s[i] = json.toJson(listOfEvents.get(i));
-			Gdx.app.log(RollingCat.LOG, json.prettyPrint(s[i]));
+			s[i] = EventMessage.toJson( listOfEvents.get(i) );
+			Gdx.app.log(RollingCat.LOG, s[i]);
 		}
 		Gdx.app.log(RollingCat.LOG, ""+listOfEvents.size());
 		return s;
 	}
 	
+	public static void create(String event_type, OrderedMap<String,String> map){
+		String s="";	
+		int size = map.size;
+		if (size > 0)
+		{
+			for(
+					Entries<String, String> it = map.entries();
+					it.hasNext();
+			)
+			{
+				Entry<String, String> entry = it.next();
+				s += "\""+entry.key+"\""+": " + "\""+entry.value+"\"";
+				if(it.hasNext()) s += ",";
+			}
+				
+	
+		}
+		create(event_type,"{"+s+"}");
+		}
 	/**
 	 * crée un event
 	 * @param event_type
 	 * @param parameters
 	 * @return
 	 */
-	public static void create(String event_type, Object parameters){
-		OrderedMap<String, Object> event = new OrderedMap<String, Object>();
+	public static void create(String event_type, String parameters){
+		EventMessage event = new EventMessage();
 		Long l = new Long(System.currentTimeMillis() - GameScreen.getElapsedTimeDuringPause());
-		event.put(timestamp, l.toString());
-		event.put(type, event_type);
-		event.put(data, parameters);
+		event.timestamp= l.longValue();
+		event.event_type =event_type;
+		event.parameters = parameters ;
 		listOfEvents.get(listOfEvents.size() - 1).add(event);
 		if(listOfEvents.get(listOfEvents.size() - 1).size > 200)
-			listOfEvents.add(new Array<OrderedMap<String, Object>>());
+			listOfEvents.add(new Array<EventMessage>());
 	}
 	
 	/**
@@ -77,7 +101,7 @@ public class EventManager {
 	 * devrait être appelé à chaque écran de chargement
 	 */
 	public static void clear(){
-		listOfEvents = new ArrayList<Array<OrderedMap<String, Object>>>();
-		listOfEvents.add(new Array<OrderedMap<String, Object>>());
+		listOfEvents = new ArrayList<Array<EventMessage>>();
+		listOfEvents.add(new Array<EventMessage>());
 	}
 }

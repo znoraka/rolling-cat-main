@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 
@@ -21,8 +22,8 @@ public class PatientsManager {
 	public static ArrayList<Patient> getPatientsFromJson(String jsonString){
 		ArrayList<Patient> patients = new ArrayList<Patient>();
 		if(jsonString.length() > 10){
-			Array<Object> arrayOfPatients = (Array<Object>) new JsonReader().parse(jsonString);
-			for (int i = 0; i < arrayOfPatients.size; i++) {
+			JsonValue arrayOfPatients =  new JsonReader().parse(jsonString);
+			for (int i = 0; i < arrayOfPatients.size(); i++) {
 				patients.add(patientFactory(arrayOfPatients.get(i)));
 			}
 		}
@@ -35,7 +36,7 @@ public class PatientsManager {
 	 * @param id
 	 * @return un patient
 	 */
-	private static Patient patientFactory(Object jsonData) {
+	private static Patient patientFactory(JsonValue jsonData) {
 		Json json = new Json();
 		String firstName, lastName, hemiplegia, dominantMember, id, s;
 		
