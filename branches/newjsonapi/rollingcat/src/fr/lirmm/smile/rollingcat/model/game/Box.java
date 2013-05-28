@@ -15,6 +15,7 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
+import fr.lirmm.smile.rollingcat.utils.LevelBuilder;
 
 public class Box extends Entity{
 
@@ -81,15 +82,15 @@ public class Box extends Entity{
 //			batch.draw(getGameSkin().getRegion("green_highlight"), this.getX() - this.getWidth() * 0.25f, this.getY() - this.getHeight() * 0.25f, this.getWidth() * 1.5f, this.getHeight() * 1.5f);
 
 		if(item == BONE)
-			batch.draw(atlas.findRegion("box_bone"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
+			batch.draw(atlas.findRegion("box_bone" + RollingCat.skin), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
 		else if(item == SPRING)
-			batch.draw(atlas.findRegion("box_spring"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
+			batch.draw(atlas.findRegion("box_spring" + RollingCat.skin), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
 		else if(item == SWATTER)
-			batch.draw(atlas.findRegion("box_swatter"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
+			batch.draw(atlas.findRegion("box_swatter" + RollingCat.skin), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
 		else if(item == FEATHER)
-			batch.draw(atlas.findRegion("box_feather"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
+			batch.draw(atlas.findRegion("box_feather" + RollingCat.skin), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
 		else if(item == SCISSORS)
-			batch.draw(atlas.findRegion("box_scissors"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
+			batch.draw(atlas.findRegion("box_scissors" + RollingCat.skin), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
 		else
 			batch.draw(atlas.findRegion("box"), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
 	}
@@ -168,7 +169,8 @@ public class Box extends Entity{
 	
 	public void setEtageAndSegment(int etage, int segment)
 	{	
-		this.etage = etage;
+		if(etage < LevelBuilder.getNumberOfEtage())
+			this.etage = etage;
 		this.segment = segment;
 //		Gdx.app.log(RollingCat.LOG, "etage : " + etage);
 //		Gdx.app.log(RollingCat.LOG, "segment + " + segment);

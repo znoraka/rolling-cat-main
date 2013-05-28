@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.SerializationException;
 
@@ -93,8 +94,8 @@ public class Localisation {
 	
 	/**
 	 * charge un langage depuis un fichier de langage
-	 * les fichiers de langage sont nommés de 0 à n pour être plus simples à trouver
-	 * la correspondance numéro/langage est dans un fichier Json à part
+	 * les fichiers de langage sont nomms de 0  n pour tre plus simples  trouver
+	 * la correspondance numro/langage est dans un fichier Json part
 	 * @param language
 	 */
 	@SuppressWarnings("unchecked")
@@ -106,31 +107,35 @@ public class Localisation {
 		FileHandle file = Gdx.files.internal("data/localisation/"+language+".txt");
 		Gdx.app.log(RollingCat.LOG, "done.");
 		Gdx.app.log(RollingCat.LOG, "parsing level file...");
-
+//gouaich
+		lang = new OrderedMap<String,String>();
 		String jsonData = file.readString();
-
-		lang = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
+		JsonValue value = new JsonReader().parse(jsonData);
+		for (JsonValue entry = value.child(); entry != null; entry = entry.next())
+		{
+			lang.put(entry.name(), entry.asString());
+		}
+//---
 		Gdx.app.log(RollingCat.LOG, json.prettyPrint(lang));
-
 		getAvailableLanguages();
 	}	
 
 	/**
 	 * 
 	 * @param field
-	 * @return la valeur correspondant à la clé donnée en parametre
+	 * @return la valeur correspondant  la cl donn��e en parametre
 	 */
 	public static String localisation(String field){
 		return lang.get(field);
 	}
 	
 	/**
-	 * les fichiers de langue sont numérotés de 0 à n
+	 * les fichiers de langue sont num��rot��s de 0 �� n
 	 * avec leur correspondance en lettre dans un fichier Json 
 	 * exemple = 1:"English",
 	 * 			 0:"French"
-	 * on parcours tous ces fichiers et crée une {@link List} des langues disponibles
-	 * @return un {@link List} des langues trouvées
+	 * on parcours tous ces fichiers et cr��e une {@link List} des langues disponibles
+	 * @return un {@link List} des langues trouv��es
 	 */
 	@SuppressWarnings("unchecked")
 	public static List getAvailableLanguages(){
@@ -145,10 +150,16 @@ public class Localisation {
 			Gdx.app.log(RollingCat.LOG, "parsing lang file...");
 
 			String jsonData = file.readString();
-
-			langs = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
+			//gouaich
+			//gouaich
+			langs = new OrderedMap<String,String>();
+			JsonValue value = new JsonReader().parse(jsonData);
+			for (JsonValue entry = value.child(); entry != null; entry = entry.next())
+			{
+				langs.put(entry.name(), entry.asString());
+			}
+			//---
 			Gdx.app.log(RollingCat.LOG, json.prettyPrint(langs));
-
 			ArrayList<String> fileNames = new ArrayList<String>();
 			int i = 0;
 

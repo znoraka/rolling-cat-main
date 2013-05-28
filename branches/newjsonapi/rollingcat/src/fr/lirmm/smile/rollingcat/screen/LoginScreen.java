@@ -35,6 +35,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
@@ -233,9 +234,18 @@ public class LoginScreen implements Screen, InputProcessor{
 		String jsonData = file.readString();
 
 		@SuppressWarnings("unchecked")
-		OrderedMap<String, String> config = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
+		//OrderedMap<String, String> config = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
+		//gouaich
+		OrderedMap<String, String> config = new OrderedMap<String,String>();
+		JsonValue value = new JsonReader().parse(jsonData);
+		for (JsonValue entry = value.child(); entry != null; entry = entry.next())
+		{
+			config.put(entry.name(), entry.asString());
+		}
+		//---
 		Gdx.app.log(RollingCat.LOG, json.prettyPrint(config));
-		
+		Gdx.app.log(RollingCat.LOG, "server ="+config.get("server"));
+		Gdx.app.log(RollingCat.LOG, "port ="+config.get("port"));
 		InternetManager.config(config.get("server"), config.get("port"));
 	}
 

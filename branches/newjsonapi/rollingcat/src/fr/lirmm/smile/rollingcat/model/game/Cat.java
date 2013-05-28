@@ -533,5 +533,5 @@ public class Cat extends Entity {
 	public int getSuccessState() {
 		return nbSuccess;
 	}
-
+	
 }

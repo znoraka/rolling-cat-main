@@ -3,7 +3,7 @@ atlas.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-swatter
+swatter1
   rotate: false
   xy: 1, 583
   size: 380, 440
@@ -19,53 +19,18 @@ dog
   index: -1
 mouse
   rotate: false
-  xy: 383, 767
+  xy: 1, 67
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
-mouse
-  rotate: false
-  xy: 383, 767
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: 2
 mouse
   rotate: false
   xy: 1, 67
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
-  index: 1
-woodCircle
-  rotate: false
-  xy: 641, 767
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-genie
-  rotate: false
-  xy: 383, 565
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: -1
-bulle
-  rotate: false
-  xy: 585, 592
-  size: 190, 173
-  orig: 190, 173
-  offset: 0, 0
-  index: -1
-bone
-  rotate: false
-  xy: 777, 637
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
+  index: 2
 carpet
   rotate: false
   xy: 1, 1
@@ -94,311 +59,449 @@ cat
   orig: 64, 64
   offset: 0, 0
   index: 2
-bouee_blue
+mouse
   rotate: false
-  xy: 777, 507
-  size: 128, 128
-  orig: 128, 128
+  xy: 259, 325
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
-  index: -1
-bouee_red
+  index: 1
+woodCircle
   rotate: false
-  xy: 585, 462
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-box
-  rotate: false
-  xy: 259, 435
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-box_bone
-  rotate: false
-  xy: 259, 305
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-box_feather
-  rotate: false
-  xy: 389, 435
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-box_scissors
-  rotate: false
-  xy: 259, 175
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-box_spring
-  rotate: false
-  xy: 389, 305
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-box_swatter
-  rotate: false
-  xy: 389, 175
-  size: 128, 128
-  orig: 128, 128
+  xy: 259, 67
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
 diamant
   rotate: false
-  xy: 519, 499
+  xy: 265, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-cat
-  rotate: false
-  xy: 519, 332
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-skin0
-  rotate: false
-  xy: 519, 332
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-coinbronze
-  rotate: false
-  xy: 519, 202
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-coingold
-  rotate: false
-  xy: 649, 332
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-coinsilver
-  rotate: false
-  xy: 649, 202
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-feather
-  rotate: false
-  xy: 779, 377
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-skin1
-  rotate: false
-  xy: 779, 247
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-skin2
-  rotate: false
-  xy: 779, 117
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-swatter1
-  rotate: false
-  xy: 519, 72
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-wasp
-  rotate: false
-  xy: 649, 72
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
 dog
   rotate: false
-  xy: 899, 959
+  xy: 331, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 dog
   rotate: false
-  xy: 259, 109
+  xy: 397, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 2
 earthblock
   rotate: false
-  xy: 899, 893
+  xy: 463, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-empty
+bone2
   rotate: false
-  xy: 325, 109
-  size: 64, 64
-  orig: 64, 64
+  xy: 383, 775
+  size: 248, 248
+  orig: 248, 248
   offset: 0, 0
   index: -1
-fan
+bulle
   rotate: false
-  xy: 899, 827
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: 1
-fan
-  rotate: false
-  xy: 391, 109
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: 2
-fan
-  rotate: false
-  xy: 779, 51
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: 3
-green_gem
-  rotate: false
-  xy: 845, 51
-  size: 64, 64
-  orig: 64, 64
+  xy: 383, 600
+  size: 190, 173
+  orig: 190, 173
   offset: 0, 0
   index: -1
-green_highlight
+genie
   rotate: false
-  xy: 265, 43
-  size: 64, 64
-  orig: 64, 64
+  xy: 633, 823
+  size: 200, 200
+  orig: 200, 200
   offset: 0, 0
   index: -1
-groundblock
+bone3
   rotate: false
-  xy: 331, 43
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-ladder
-  rotate: false
-  xy: 397, 43
-  size: 64, 64
-  orig: 64, 64
+  xy: 835, 873
+  size: 150, 150
+  orig: 150, 150
   offset: 0, 0
   index: -1
 nopatient
   rotate: false
-  xy: 715, 545
+  xy: 987, 978
   size: 35, 45
   orig: 35, 45
   offset: 0, 0
   index: -1
 trou1
   rotate: false
-  xy: 519, 465
+  xy: 987, 944
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
+cursor
+  rotate: false
+  xy: 987, 926
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+swatter2
+  rotate: false
+  xy: 835, 724
+  size: 128, 147
+  orig: 128, 147
+  offset: 0, 0
+  index: -1
+feather2
+  rotate: false
+  xy: 633, 687
+  size: 128, 134
+  orig: 128, 134
+  offset: 0, 0
+  index: -1
+empty
+  rotate: false
+  xy: 763, 757
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+fan
+  rotate: false
+  xy: 763, 691
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+bone1
+  rotate: false
+  xy: 829, 594
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+fan
+  rotate: false
+  xy: 763, 625
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 2
+fan
+  rotate: false
+  xy: 959, 658
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 3
+green_gem
+  rotate: false
+  xy: 959, 592
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+bouee_blue
+  rotate: false
+  xy: 575, 557
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+green_highlight
+  rotate: false
+  xy: 705, 559
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+bouee_red
+  rotate: false
+  xy: 771, 464
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+groundblock
+  rotate: false
+  xy: 705, 493
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+box
+  rotate: false
+  xy: 529, 427
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ladder
+  rotate: false
+  xy: 659, 427
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 opened_door_l
   rotate: false
-  xy: 907, 761
+  xy: 901, 526
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 opened_door_r
   rotate: false
-  xy: 907, 695
+  xy: 901, 460
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+box_bone1
+  rotate: false
+  xy: 725, 334
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+box_bone2
+  rotate: false
+  xy: 855, 330
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+box_bone3
+  rotate: false
+  xy: 529, 297
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 purple_gem
   rotate: false
-  xy: 907, 629
+  xy: 659, 361
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 red_gem
   rotate: false
-  xy: 907, 563
+  xy: 659, 295
   size: 64, 64
   orig: 64, 64
+  offset: 0, 0
+  index: -1
+box_feather1
+  rotate: false
+  xy: 529, 167
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+box_feather2
+  rotate: false
+  xy: 725, 204
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: -1
 red_highlight
   rotate: false
-  xy: 909, 497
+  xy: 659, 229
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-scissors
+scissors1
   rotate: false
-  xy: 909, 431
+  xy: 659, 163
   size: 64, 64
   orig: 64, 64
+  offset: 0, 0
+  index: -1
+scissors2
+  rotate: false
+  xy: 659, 163
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+scissors3
+  rotate: false
+  xy: 659, 163
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+box_feather3
+  rotate: false
+  xy: 529, 37
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+box_scissors1
+  rotate: false
+  xy: 659, 33
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+box_scissors2
+  rotate: false
+  xy: 659, 33
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+box_scissors3
+  rotate: false
+  xy: 659, 33
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+box_swatter1
+  rotate: false
+  xy: 855, 200
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: -1
 shit
   rotate: false
-  xy: 909, 365
+  xy: 789, 138
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+box_swatter2
+  rotate: false
+  xy: 789, 8
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 spring
   rotate: false
-  xy: 909, 299
+  xy: 919, 134
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 spring
   rotate: false
-  xy: 909, 233
+  xy: 919, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 2
 spring
   rotate: false
-  xy: 909, 167
+  xy: 919, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 3
-yellow_gem
+
+atlas2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+box_swatter3
   rotate: false
-  xy: 911, 101
-  size: 64, 64
-  orig: 64, 64
+  xy: 1, 381
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: -1
-cursor
+cat
   rotate: false
-  xy: 259, 565
-  size: 16, 16
-  orig: 16, 16
+  xy: 1, 251
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+skin0
+  rotate: false
+  xy: 1, 251
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+coinbronze
+  rotate: false
+  xy: 131, 381
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+coingold
+  rotate: false
+  xy: 1, 121
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+coinsilver
+  rotate: false
+  xy: 131, 251
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+feather1
+  rotate: false
+  xy: 261, 381
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+feather3
+  rotate: false
+  xy: 131, 121
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+skin1
+  rotate: false
+  xy: 261, 251
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+skin2
+  rotate: false
+  xy: 391, 381
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+wasp
+  rotate: false
+  xy: 261, 121
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+swatter3
+  rotate: false
+  xy: 1, 1
+  size: 128, 118
+  orig: 128, 118
+  offset: 0, 0
+  index: -1
+yellow_gem
+  rotate: false
+  xy: 391, 315
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
