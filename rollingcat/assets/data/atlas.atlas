@@ -227,7 +227,7 @@ bouee_red
   orig: 128, 128
   offset: 0, 0
   index: -1
-groundblock
+groundblock1
   rotate: false
   xy: 705, 493
   size: 64, 64
@@ -241,21 +241,21 @@ box
   orig: 128, 128
   offset: 0, 0
   index: -1
-ladder
+groundblock2
   rotate: false
   xy: 659, 427
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-opened_door_l
+groundblock3
   rotate: false
   xy: 901, 526
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-opened_door_r
+ladder
   rotate: false
   xy: 901, 460
   size: 64, 64
@@ -283,14 +283,14 @@ box_bone3
   orig: 128, 128
   offset: 0, 0
   index: -1
-purple_gem
+opened_door_l
   rotate: false
   xy: 659, 361
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-red_gem
+opened_door_r
   rotate: false
   xy: 659, 295
   size: 64, 64
@@ -311,28 +311,14 @@ box_feather2
   orig: 128, 128
   offset: 0, 0
   index: -1
-red_highlight
+purple_gem
   rotate: false
   xy: 659, 229
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-scissors1
-  rotate: false
-  xy: 659, 163
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-scissors2
-  rotate: false
-  xy: 659, 163
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-scissors3
+red_gem
   rotate: false
   xy: 659, 163
   size: 64, 64
@@ -374,7 +360,7 @@ box_swatter1
   orig: 128, 128
   offset: 0, 0
   index: -1
-shit
+red_highlight
   rotate: false
   xy: 789, 138
   size: 64, 64
@@ -388,27 +374,41 @@ box_swatter2
   orig: 128, 128
   offset: 0, 0
   index: -1
-spring
+scissors1
   rotate: false
   xy: 919, 134
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: 1
-spring
+  index: -1
+scissors2
+  rotate: false
+  xy: 919, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+scissors3
+  rotate: false
+  xy: 919, 134
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+shit
   rotate: false
   xy: 919, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: 2
+  index: -1
 spring
   rotate: false
   xy: 919, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: 3
+  index: 1
 
 atlas2.png
 format: RGBA8888
@@ -498,9 +498,30 @@ swatter3
   orig: 128, 118
   offset: 0, 0
   index: -1
-yellow_gem
+spring
   rotate: false
   xy: 391, 315
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 2
+spring
+  rotate: false
+  xy: 521, 445
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 3
+tree_side
+  rotate: false
+  xy: 131, 55
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+yellow_gem
+  rotate: false
+  xy: 391, 249
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
