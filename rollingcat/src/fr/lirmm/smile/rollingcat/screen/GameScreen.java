@@ -199,13 +199,16 @@ public class GameScreen implements ScreenPausable{
 	 * gere la position de la camera
 	 */
 	private void updateCamPos() {
-		stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.DISPLAY_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
+		if((cat.getY() - (cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT)) > (GameConstants.DISPLAY_HEIGHT - GameConstants.BLOCK_HEIGHT))
+			stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.DISPLAY_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f + ((cat.getY() - (cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT)) - (GameConstants.DISPLAY_HEIGHT - GameConstants.BLOCK_HEIGHT)), 0);
+		else
+			stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.DISPLAY_WIDTH * 0.5f + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
 //		stage.getCamera().position.set(cat.getX(), cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
 //		stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
 
 		box.setEtageAndSegment(cat.getEtage(), segment);
 		box.setX(stage.getCamera().position.x - box.getWidth() / 2);
-		box.setY(stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f);
+		box.setY(cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
 		mc.setDecalage(cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
 		segment = cat.getSegment();
 	}
