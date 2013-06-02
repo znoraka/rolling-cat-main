@@ -1,10 +1,11 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation._ready;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getShapeRenderer;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
-import static fr.lirmm.smile.rollingcat.Localisation.*;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class LoadingScreen implements Screen {
 	private RollingCat game;
 	private Patient patient;
 	private Stage stage, stage1;
-	private Texture texture;
+	private Texture texture, backGroundTexture;
 	private SpriteBatch batch;
 //	private String levelAsString;
 	private Level level;
@@ -64,6 +65,7 @@ public class LoadingScreen implements Screen {
 			elapsedTime += delta;
 
 		batch.begin();
+		batch.draw(backGroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.draw(texture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.end();
 
@@ -101,7 +103,7 @@ public class LoadingScreen implements Screen {
 			stage1.draw();
 			stage1.act(delta);
 		}
-
+		
 	}
 
 	@Override
@@ -122,8 +124,11 @@ public class LoadingScreen implements Screen {
 		InternetManager.newGameSession(Track.GAME, patient.getID());
 		InternetManager.getAbilityZone(patient);
 
-		texture = new Texture("data/load.png");
+		texture = new Texture("data/loading"+RollingCat.skin+".png");
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		backGroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND + RollingCat.skin + ".png");
+		backGroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
 		elapsedTime = 0;
 		building = false;
 		time = 5;
@@ -145,10 +150,12 @@ public class LoadingScreen implements Screen {
 		start.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - start.getHeight() * 0.5f);
 
 		stage1.addActor(start);
-
+		
+		
 		ready = false;
 
 		Gdx.input.setInputProcessor(stage1);
+		
 
 	}
 
