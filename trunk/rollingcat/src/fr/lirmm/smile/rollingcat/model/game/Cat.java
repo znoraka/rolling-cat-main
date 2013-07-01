@@ -94,19 +94,29 @@ public class Cat extends Entity {
 	 * etat du succes, de -{@link GameConstants#SUCCESS} à {@link GameConstants#SUCCESS}
 	 */
 	private int nbSuccess ;
-
+	
+	/**
+	 * segment courant du chat, pour le highlight des entités
+	 */
+	private static int segment;
+	
+	/**
+	 * pour savoir dans quel sens vas le chat : 1 = vers la droite, -1 = vers la gauche
+	 */
+	private int sens;
 
 	/**
 	 * l'acteur principal
 	 * @param x
 	 * @param y
 	 */
-	public Cat(float x, float y){
+	public Cat(float x, float y, int sens){
 		super(x, y, GameConstants.TEXTURE_CAT);
 		done = false;
 		this.setTouchable(Touchable.disabled);
 		final String name = "cat-skeleton";
 		success = true;
+		this.sens = sens;
 
 		TextureAtlas atlas = getCatAtlas();
 		SkeletonBinary binary = new SkeletonBinary(atlas);
@@ -149,6 +159,8 @@ public class Cat extends Entity {
 	public void move(Stage stage){
 
 		hasCatchedCoin = false;
+		
+		segment = this.getSegment();
 
 		top.set(this.getX() + GameConstants.BLOCK_WIDTH *0.5f, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
 		bottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), 2, 2);
@@ -320,7 +332,7 @@ public class Cat extends Entity {
 						this.addAction(Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 0.75f));
 
 					else if(state == WALKING & this.getActions().size == 0){
-						this.addAction(Actions.moveTo((this.getXOnGrid() + 1) * GameConstants.BLOCK_WIDTH, (this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
+						this.addAction(Actions.moveTo((this.getXOnGrid() + sens) * GameConstants.BLOCK_WIDTH, (this.getYOnGrid()) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED));
 					}
 
 					else if(state == HITTING){
@@ -373,7 +385,7 @@ public class Cat extends Entity {
 			state = JUMPING;
 			this.getActions().clear();
 			SoundManager.jumpPlay();
-			final float xDest = (this.getXOnGrid() + 2) * GameConstants.BLOCK_WIDTH;
+			final float xDest = (this.getXOnGrid() + 2 * sens) * GameConstants.BLOCK_WIDTH;
 			final float yDest = this.getYOnGrid() * GameConstants.BLOCK_HEIGHT;
 			this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, GameConstants.SPEED * 2)));
 			this.addAction(Actions.parallel(Actions.sequence(
@@ -533,5 +545,8 @@ public class Cat extends Entity {
 	public int getSuccessState() {
 		return nbSuccess;
 	}
-	
+
+	public static boolean isSameSegment(int entitySegment) {
+		return segment == entitySegment;
+	}	
 }

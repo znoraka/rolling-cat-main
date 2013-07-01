@@ -88,8 +88,8 @@ public class GameScreen implements ScreenPausable{
 	private Track track;
 
 
-	public static Vector2 gold = new Vector2(GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT * 0.92f);
-	public static Vector2 silver = new Vector2(GameConstants.BLOCK_WIDTH * 3, GameConstants.DISPLAY_HEIGHT * 0.92f);
+	public static Vector2 gold = new Vector2(GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT * 0.2f);
+	public static Vector2 silver = new Vector2(GameConstants.BLOCK_WIDTH * 3, GameConstants.DISPLAY_HEIGHT * 0.2f);
 	public static Vector2 bronze = new Vector2(GameConstants.BLOCK_WIDTH * 5, GameConstants.DISPLAY_HEIGHT * 0.92f);
 
 
@@ -101,12 +101,14 @@ public class GameScreen implements ScreenPausable{
 		elapsedTimeDuringPause = 0;
 		beginPause = 0;
 		this.listOfGems = listOfGems;
+		Gdx.input.setCursorCatched(true);
 	}
 
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
 		if(!paused){
 			elapsedTime += delta;
 			duration += delta;
@@ -115,7 +117,6 @@ public class GameScreen implements ScreenPausable{
 			batch.begin();
 			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 			font.setColor(Color.BLACK);
-			table.draw(batch, 1);
 			batch.end();
 			sr.setProjectionMatrix(stage.getCamera().combined);
 
@@ -124,6 +125,11 @@ public class GameScreen implements ScreenPausable{
 
 			stage.draw();
 			stage.act(delta);
+
+			batch.begin();
+			table.draw(batch, 1);
+			batch.end();
+			
 			mc.render(sr);
 			//			cat.render(sr);
 			//        for (Actor a: stage.getActors()) {
@@ -171,6 +177,7 @@ public class GameScreen implements ScreenPausable{
 		}
 
 		if(requestSending && track.getListOfEvents() != null){
+			Gdx.input.setCursorCatched(false);
 			InternetManager.sendEvents(track.getListOfEvents());
 			Gdx.app.log(RollingCat.LOG,"Client sauvegarde des données : " + gem.getCouleur());
 			level.updateStats(getScore(), (int) duration, gem.getCouleur());
@@ -179,13 +186,13 @@ public class GameScreen implements ScreenPausable{
 			requestSending = false;
 		}
 
-		font.setColor(Color.GRAY);
-		batch.begin();
-		font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 0.1f, GameConstants.BLOCK_HEIGHT * 0.7f);
-		font.draw(batch, "segment : " + segment + "/" + LevelBuilder.getNumberOfSegment(), GameConstants.BLOCK_WIDTH * 2.6f, GameConstants.BLOCK_HEIGHT * 0.7f);
-		font.draw(batch, "success : " + cat.getSuccessState(), GameConstants.BLOCK_WIDTH * 6.2f, GameConstants.BLOCK_HEIGHT * 0.7f);
-		font.draw(batch, "fps : " + Gdx.graphics.getFramesPerSecond(), GameConstants.DISPLAY_WIDTH - 100, GameConstants.DISPLAY_HEIGHT - 20);
-		batch.end();
+//		font.setColor(Color.GRAY);
+//		batch.begin();
+//		font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 0.1f, GameConstants.BLOCK_HEIGHT * 0.7f);
+//		font.draw(batch, "segment : " + segment + "/" + LevelBuilder.getNumberOfSegment(), GameConstants.BLOCK_WIDTH * 2.6f, GameConstants.BLOCK_HEIGHT * 0.7f);
+//		font.draw(batch, "success : " + cat.getSuccessState(), GameConstants.BLOCK_WIDTH * 6.2f, GameConstants.BLOCK_HEIGHT * 0.7f);
+//		font.draw(batch, "fps : " + Gdx.graphics.getFramesPerSecond(), GameConstants.DISPLAY_WIDTH - 100, GameConstants.DISPLAY_HEIGHT - 20);
+//		batch.end();
 		
 
 		if(Gdx.input.isKeyPressed(Keys.ENTER) & elapsedTime > 0.3f)
@@ -272,7 +279,7 @@ public class GameScreen implements ScreenPausable{
 		silverImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.SILVER));
 		bronzeImage = new Image(getAtlas().findRegion(GameConstants.TEXTURE_COIN+Coin.BRONZE));
 
-		LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
+		LabelStyle labelStyle = new LabelStyle(font, Color.WHITE);
 		labelStyle.background = getSkin().getDrawable("empty");
 
 		goldLabel = new Label("", labelStyle);
@@ -360,7 +367,7 @@ public class GameScreen implements ScreenPausable{
 
 		table = new Table();
 		table.setX(GameConstants.DISPLAY_WIDTH * 0.16f);
-		table.setY(GameConstants.DISPLAY_HEIGHT * 0.95f);
+		table.setY(GameConstants.DISPLAY_HEIGHT * 0.04f);
 
 		table.add(goldLabel).padLeft(GameConstants.BLOCK_WIDTH * 0.25f);
 		table.add(goldImage).height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
@@ -381,6 +388,7 @@ public class GameScreen implements ScreenPausable{
 				if(keycode == Keys.ESCAPE){
 					paused = !paused;
 					handleElapsedTime();
+					Gdx.input.setCursorCatched(!paused);
 				}
 				if(keycode == Keys.SPACE)
 					mc.fall();
@@ -451,10 +459,10 @@ public class GameScreen implements ScreenPausable{
 
 	private void setVectorCoordinates(){
 		gold.x = table.getX() + goldImage.getX();
-		gold.y = table.getY() + goldImage.getY() + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f;
+		gold.y = table.getY() + goldImage.getY() + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.9f;
 
 		silver.x = table.getX() + silverImage.getX();
-		silver.y = table.getY() + silverImage.getY() + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f;
+		silver.y = table.getY() + silverImage.getY() + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.1f;
 
 		bronze.x = table.getX() + bronzeImage.getX();
 		bronze.y = table.getY() + bronzeImage.getY() + stage.getCamera().position.y - GameConstants.DISPLAY_HEIGHT * 0.5f;

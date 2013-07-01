@@ -153,8 +153,8 @@ cursor
 swatter2
   rotate: false
   xy: 835, 724
-  size: 128, 147
-  orig: 128, 147
+  size: 147, 147
+  orig: 147, 147
   offset: 0, 0
   index: -1
 feather2

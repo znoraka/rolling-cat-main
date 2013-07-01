@@ -1,4 +1,4 @@
 {
-	0:"FranÃ§ais",
+	0:"Français",
 	1:"English"
 }
