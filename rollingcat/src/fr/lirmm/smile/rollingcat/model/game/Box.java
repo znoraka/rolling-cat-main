@@ -78,8 +78,8 @@ public class Box extends Entity{
 	public void draw(SpriteBatch batch, float deltaParent){
 		this.bounds.x = this.getX();
 		this.bounds.y = this.getY();
-//		if(!MouseCursorGame.isHoldingItem() & item != EMPTY)
-//			batch.draw(getGameSkin().getRegion("green_highlight"), this.getX() - this.getWidth() * 0.25f, this.getY() - this.getHeight() * 0.25f, this.getWidth() * 1.5f, this.getHeight() * 1.5f);
+		if(!MouseCursorGame.isHoldingItem() & item != EMPTY)
+			batch.draw(getGameSkin().getRegion("green_highlight"), this.getX() - this.getWidth() * 0.25f, this.getY() - this.getHeight() * 0.25f, this.getWidth() * 1.5f, this.getHeight() * 1.5f);
 
 		if(item == BONE)
 			batch.draw(atlas.findRegion("box_bone" + RollingCat.skin), this.getX(), this.getY(), this.getX(), this.getY(), this.getWidth(), this.getHeight(), 1, 1, 0);
@@ -177,5 +177,4 @@ public class Box extends Entity{
 		if(getCurrentBox().get(0) != EMPTY)
 			item = getCurrentBox().get(0);
 	}
-
 }

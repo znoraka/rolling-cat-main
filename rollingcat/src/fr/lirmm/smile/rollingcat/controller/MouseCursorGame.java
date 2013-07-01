@@ -16,7 +16,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -97,7 +96,7 @@ public class MouseCursorGame implements InputProcessor{
 			
 			if(actor instanceof Entity && actor.getTouchable() == Touchable.enabled)
 			{
-				if(actor.getBounds().overlaps(bounds))
+				if(actor.getBounds().overlaps(bounds) & Cat.isSameSegment(actor.getSegment()))
 				{
 					hit = true;
 				}
@@ -268,6 +267,8 @@ public class MouseCursorGame implements InputProcessor{
 			batch.draw(atlas.findRegion("swatter" + RollingCat.skin), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
 		else if(item == Box.SCISSORS)
 			batch.draw(atlas.findRegion("scissors" + RollingCat.skin), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT * 1.5f, 1, 1, 0);
+		else
+			batch.draw(atlas.findRegion("shit"), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT * 1.5f, 1, 1, 0);
 		batch.end();
 
 	}

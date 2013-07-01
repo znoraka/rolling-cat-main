@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<languages>
+
+	<language name="Français" >
+		<string key="wrong_info" value="Informations incorrectes" />
+		<string key="How to play" value="How to play" />
+		<string key="Exit" value="Exit" />
+		<string key="wrong_info " value= "informations incorrectes" />
+		<string key="username " value= "nom d'utilisateur" />
+		<string key="password " value= "mot de passe" />
+		<string key="settings " value= "Configuration" />
+		<string key="back " value= "Retour" />
+		<string key="select " value= "Début session" />
+		<string key="play " value= "Jouer" />
+		<string key="assessment " value= "Évaluation" />
+		<string key="upload " value= "Envoyer" />
+		<string key="tracks " value= "Traces" />
+		<string key="name " value= "Nom" />
+		<string key="dominant_member " value= "Gaucher ou droitier" />
+		<string key="hemiplegia " value= "Hémiplégie" />
+		<string key="previous " value= "Précédent" />
+		<string key="start " value= "Start" />
+		<string key="next " value= "Suivant" />
+		<string key="gems " value= "Gemmes" />
+		<string key="gem " value= "Gemme" />
+		<string key="new_level " value= "Nouveau niveau !" />
+		<string key="level " value= "niveau" />
+		<string key="score " value= "Score" />
+		<string key="duration " value= "Durée" />
+		<string key="locked " value= "Verrouillé" />
+		<string key="not_found " value= "inconnue" />
+		<string key="found " value= "trouvée" />
+		<string key="resume " value= "Reprendre" />
+		<string key="quit " value= "Quitter" />
+		<string key="range " value= "Range" />
+		<string key="workspace_width " value= "Largeur du plan de travail" />
+		<string key="workspace_height " value= "Hauteur de plan de travail" />
+		<string key="path_delta_time " value= "Path delta time" />
+		<string key="evaporation_per_day " value= "Evaporation par jour" />
+		<string key="alpha " value= "Alpha" />
+		<string key="number_of_lines " value= "Nombre de lignes" />
+		<string key="number_of_rows " value= "Nombre de colonnes" />
+		<string key="total_volume " value= "Volume total" />
+		<string key="volume_per_level " value= "Volume par niveau" />
+		<string key="delete " value= "Supprimer" />
+		<string key="save" value= "Sauvegarder" />
+		<string key="discard" value= "Annuler" />
+		<string key="tutorial" value= "Tutoriel" />
+		<string key="welcome" value= "Bienvenue dans\n le tutoriel \nRolling Cat" />
+		<string key="box_point" value= "Attrapez l'objet dans la caisse" />
+		<string key="task_point_1" value= "Utilisez" />
+		<string key="feather" value= "la plume" />
+		<string key="bone" value= "l' os" />
+		<string key="swatter" value= "la tapette" />
+		<string key="scissors" value= "les ciseaux" />
+		<string key="task_point_2" value= "sur" />
+		<string key="dog" value= "le chien" />
+		<string key="wasp" value= "la guêpe" />
+		<string key="cat" value= "le chat" />
+		<string key="carpet" value= "le tapis" />
+		<string key="coin_get" value= "Vous avez gagné une piece.\n Ces pieces vous permettent \n d'augmenter votre scoore" />
+		<string key="gg" value= "Bien joué" />
+		<string key="fall" value= "Oups ce n'est pas grave vous pourrez bientot recommencer" />
+		<string key="assessment_1" value= "Placez votre curseur dans la zone rouge jusqu'à ce qu'elle devienne entièrement blanche" />
+		<string key="assessment_2" value= "Vous venez de selectionner la première zone la zone colorée en bleu. Essayez de la recouvrir avec un maximum de vert" />
+		<string key="assessment_3" value= "Lorsque vous êtes à votre maximum placez votre curseur dans la zone rouge jusqu'à ce qu'elle devienne entièrement rose" />
+		<string key="assessment_4" value= "Vous avez sélectionné la zone suivante essayez à nouveau de la recouvrir de vert" />
+		<string key="assessment_5" value= "Répetez l'opération jusqu'à avoir recouvert toutes les zones" />
+		<string key="assessment_6" value= "Une fois que vous avez complété toutes les zones retournez dans la zone rouge" />
+		<string key="needsAtLeastOneArea" value= "Impossible de desélectionner toutes les zones" />
+		<string key="right" value= "Droite" />
+		<string key="left" value= "Gauche" />
+		<string key="right_handed" value= "Droitier" />
+		<string key="left_handed" value= "Gaucher" />
+		<string key="high_score" value= "Meilleur score" />
+		<string key="cadran" value= "Sélectionner les cadrans préférables de travail" />
+		<string key="ready" value= "Je suis prêt" />
+		<string key="detail" value= "Détail"  />
+		<string key="skin" value= "Apparence" />
+		<string key="timeout" value= "Temps avant échec" />
+		<string key="nbsuccess" value= "Fenêtre succès" />
+		<string key="more" value= "Plus" />
+	</language>
+	   
+	<language name="English" >
+		<string key="wrong_info " value= "wrong information" />
+		<string key="username " value= "username" />
+		<string key="password " value= "password" />
+		<string key="settings " value= "Settings" />
+		<string key="back " value= "Back" />
+		<string key="select " value= "Select" />
+		<string key="play " value= "play" />
+		<string key="assessment " value= "assessment" />
+		<string key="upload " value= "upload" />
+		<string key="tracks " value= "Tracks" />
+		<string key="name " value= "name" />
+		<string key="dominant_member " value= "dominant member" />
+		<string key="hemiplegia " value= "hemiplegia" />
+		<string key="previous " value= "previous" />
+		<string key="start " value= "start" />
+		<string key="next " value= "next" />
+		<string key="gems " value= "gems" />
+		<string key="gem " value= "gem" />
+		<string key="new_level " value= "new level!" />
+		<string key="level " value= "level" />
+		<string key="score " value= "score" />
+		<string key="duration " value= "duration" />
+		<string key="locked " value= "locked" />
+		<string key="not_found " value= "not found" />
+		<string key="found " value= "found" />
+		<string key="resume " value= "resume" />
+		<string key="quit " value= "quit" />
+		<string key="range " value= "range" />
+		<string key="path_delta_time " value= "path delta time" />
+		<string key="evaporation_per_day " value= "evaporation per day" />
+		<string key="alpha " value= "alpha" />
+		<string key="workspace_height " value= "workspace height" />
+		<string key="workspace_width " value= "workspace width" />
+		<string key="number_of_lines " value= "number of lines" />
+		<string key="number_of_rows " value= "number of rows" />
+		<string key="total_volume " value= "total volume" />
+		<string key="volume_per_level " value= "volume per level" />
+		<string key="delete " value= "delete" />
+		<string key="save" value= "save" />
+		<string key="discard" value= "discard" />
+		<string key="tutorial" value= "Tutorial" />
+		<string key="welcome" value= "Welcome to\n the Rolling Cat \ntutorial" />
+		<string key="box_point" value= "Grab the item in the box" />
+		<string key="task_point_1" value= "Use" />
+		<string key="feather" value= "the feather" />
+		<string key="bone" value= "the bone" />
+		<string key="swatter" value= "the swatter" />
+		<string key="scissors" value= "the scissors" />
+		<string key="task_point_2" value= "on" />
+		<string key="dog" value= "the dog" />
+		<string key="wasp" value= "the wasp" />
+		<string key="cat" value= "the cat" />
+		<string key="carpet" value= "the carpet" />
+		<string key="coin_get" value= "You picked up a coin\n These coins increase \n your score" />
+		<string key="gg" value= "Well played" />
+		<string key="fall" value= "Woops! But it's ok you will start over soon" />
+		<string key="assessment_1" value= "Place your cursor in the red area until it becomes complitely white" />
+		<string key="assessment_2" value= "You selected the first area the blue one. Try to fill it up with as much green as possible" />
+		<string key="assessment_3" value= "Once you reached your maximum place your cursor in the red area until it becomes complitely white" />
+		<string key="assessment_4" value= "You selected the next area try to fill it up with as much green as possible" />
+		<string key="assessment_5" value= "Repeat until you filled all the areas" />
+		<string key="assessment_6" value= "Once you filled all the areas go back to the red area" />
+		<string key="needsAtLeastOneArea" value= "At least one area has to be checked" />
+		<string key="right" value= "Right" />
+		<string key="left" value= "Left" />
+		<string key="right_handed" value= "Right handed" />
+		<string key="left_handed" value= "Left handed" />
+		<string key="tracks " value= "Tracks" />
+		<string key="high_score" value= "Highest score" />
+		<string key="cadran" value= "Select the work dials" />
+		<string key="ready" value= "I am ready" />
+		<string key="detail" value= "Details" />
+		<string key="skin" value= "Skin" />
+		<string key="timeout" value= "Timeout before failure" />
+		<string key="nbsuccess" value= "Success window" />
+		<string key="more" value= "More" />
+	</language>
+   
+</languages>
+
+

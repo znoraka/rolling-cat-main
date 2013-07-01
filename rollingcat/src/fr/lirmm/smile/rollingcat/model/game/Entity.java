@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
-import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.controller.MouseCursorGame;
 import fr.lirmm.smile.rollingcat.utils.EntityModel;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
@@ -65,7 +64,7 @@ public class Entity extends Image implements EntityModel {
 	 * @param batch
 	 */
 	protected void highlight(SpriteBatch batch){
-		if(MouseCursorGame.isHoldingItem() & MouseCursorGame.getItem() == this.getItemToAct()){
+		if(MouseCursorGame.isHoldingItem() & MouseCursorGame.getItem() == this.getItemToAct() & Cat.isSameSegment(this.getSegment())){
 			batch.draw(getGameSkin().getRegion("green_highlight"), this.getX() - this.getWidth() * 0.25f, this.getY() - this.getHeight() * 0.25f, this.getWidth() * 1.5f, this.getHeight() * 1.5f);
 		}
 		if(requestRedHighlight){

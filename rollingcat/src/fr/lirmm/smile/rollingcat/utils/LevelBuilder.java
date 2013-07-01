@@ -30,6 +30,7 @@ public class LevelBuilder {
 	private static OrderedMap<String, ArrayList<Integer>> map;
 	private static int decalage;
 	private static int oldSegment;
+	private static int sens;
 	/**
 	 * ajoute les acteurs au stage
 	 * @param s la string du niveau
@@ -42,7 +43,8 @@ public class LevelBuilder {
 		segment = 0;
 		oldSegment = 0;
 
-
+		sens = (s.startsWith("<")?-1:1);
+		
 		s = s.replace("\"", "");
 //		s = s.replace(".0", "");
 //		Gdx.app.log(RollingCat.LOG,"level : " + s);
@@ -52,7 +54,7 @@ public class LevelBuilder {
 		float y;
 		decalage = 0;
 		
-		Cat cat = new Cat(1, 0);
+		Cat cat = new Cat(1, 0, sens);
 		stage.addActor(cat);
 		
 		for (int i = 0; i < tab.length; i++) {
