@@ -42,7 +42,6 @@ public class TrackingRecapScreen implements Screen{
 	private Stage stage;
 	private TextButton back, b, select;
 	private BitmapFont font;
-	private Patient patient;
 	private ScrollPane scrollPane;
 	private ArrayList<TextButton> buttons;
 	private Table tableLeftUp, tableLeftBottom, tableRight;
@@ -52,9 +51,8 @@ public class TrackingRecapScreen implements Screen{
 	private Rectangle drawArea;
 
 	
-	public TrackingRecapScreen(RollingCat game, Patient patient){
+	public TrackingRecapScreen(RollingCat game){
 		this.game = game;
-		this.patient = patient;
 	}
 	
 	@Override
@@ -125,7 +123,7 @@ public class TrackingRecapScreen implements Screen{
 		back = new TextButton(localisation(_back), style);
 		back.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				game.setScreen(new PatientScreen(game, patient));
+				game.setScreen(new PatientScreen(game));
 			}
 		});
 
@@ -133,7 +131,7 @@ public class TrackingRecapScreen implements Screen{
 		select.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				if(track != null){
-					game.setScreen(new UploadScreen(game, patient, track));
+					game.setScreen(new UploadScreen(game, track));
 					}
 			}
 		});
@@ -196,8 +194,8 @@ public class TrackingRecapScreen implements Screen{
 	}
 	
 	private void createButtons(TextButtonStyle style) {
-		for (int i = 0; i < patient.getListOfTracks().size(); i++) {
-			b = new TextButton(patient.getListOfTracks().get(i).getType() + " " + patient.getListOfTracks().get(i).getId(), style);
+		for (int i = 0; i < Patient.getInstance().getListOfTracks().size(); i++) {
+			b = new TextButton(Patient.getInstance().getListOfTracks().get(i).getType() + " " + Patient.getInstance().getListOfTracks().get(i).getId(), style);
 			b.setName(""+i);
 			buttons.add(b);
 			tableLeftUp.add(b).align(Align.right).width(scrollPane.getWidth()*0.85f).height(65).pad(5);
@@ -211,7 +209,7 @@ public class TrackingRecapScreen implements Screen{
 			b = buttons.get(i);
 			b.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					track = patient.getListOfTracks().get(Integer.valueOf(event.getListenerActor().getName()));
+					track = Patient.getInstance().getListOfTracks().get(Integer.valueOf(event.getListenerActor().getName()));
 				}
 			});
 		}

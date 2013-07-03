@@ -245,20 +245,22 @@ public class InternetManager{
 	 * récupère le level sur le serveur
 	 * @param IDpatient
 	 */
-	public static void fetchLevel(Patient patient, int numLevel){
+	public static void fetchLevel(int numLevel){
 		level = null;
+		Level.clearContent();
+		
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		Json json = new Json();
 		json.setOutputType(JsonWriter.OutputType.json);
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		
-		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+patient.getID()+"/"+gameid+"/"+sessionid+"/"+numLevel);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+Patient.getInstance().getID()+"/"+gameid+"/"+sessionid+"/"+numLevel);
 
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
 		map.put("builderId",GameConstants.getAlgo());
-		map.put("patientId", patient.getID());
+		map.put("patientId", Patient.getInstance().getID());
 		map.put("numberOfLines", GameConstants.numberOfLines);
 		map.put("numberOfRows", GameConstants.numberOfRows);
 		map.put("totalHeight", GameConstants.workspaceHeight);
@@ -275,7 +277,9 @@ public class InternetManager{
 		{
 			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
 		}
-		map.put("leftHemiplegia", patient.getLeftHemiplegia());
+		
+		map.put("leftHemiplegia", Patient.getInstance().isLeftHemiplegia());
+		Gdx.app.log(RollingCat.LOG, "reversed level : " + Patient.getInstance().isLeftHemiplegia());
 
 		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
 		algoParameterAZ.put("range", GameConstants.range);
@@ -313,7 +317,7 @@ public class InternetManager{
 		//		level = "cat;0.0;8.0/groundBlock;0.0;7.0/groundBlock;1.0;7.0/groundBlock;2.0;7.0/gap;2.0;8.0/groundBlock;4.0;6.0/groundBlock;5.0;6.0/groundBlock;6.0;7.0";
 	}
 
-	public static void needsAssessment(final Patient patient){
+	public static void needsAssessment(){
 		world = null;
 		World.clearInstance();
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
@@ -322,11 +326,11 @@ public class InternetManager{
 		json.setOutputType(JsonWriter.OutputType.json);
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/"+patient.getID()+"/needsassessment");
+		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/"+Patient.getInstance().getID()+"/needsassessment");
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
 		map.put("builderId",GameConstants.getAlgo());
-		map.put("patientId", patient.getID());
+		map.put("patientId", Patient.getInstance().getID());
 		map.put("numberOfLines", GameConstants.numberOfLines);
 		map.put("numberOfRows", GameConstants.numberOfRows);
 		map.put("totalHeight", GameConstants.workspaceHeight);
@@ -343,6 +347,9 @@ public class InternetManager{
 		{
 			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
 		}
+		
+		map.put("leftHemiplegia", Patient.getInstance().isLeftHemiplegia());
+		Gdx.app.log(RollingCat.LOG, "reversed level : " + Patient.getInstance().isLeftHemiplegia());
 
 		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
 		algoParameterAZ.put("range", GameConstants.range);
@@ -366,7 +373,7 @@ public class InternetManager{
 
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				patient.setNeedsAssessment(httpResponse.getResultAsString());
+				Patient.getInstance().setNeedsAssessment(httpResponse.getResultAsString());
 			}
 
 			@Override
@@ -513,7 +520,7 @@ public class InternetManager{
 
 	}
 
-	public static void getAbilityZone(Patient patient) {
+	public static void getAbilityZone() {
 		ability = null;
 		Gdx.app.log(RollingCat.LOG, "preparing get ability zone request...");
 
@@ -521,11 +528,11 @@ public class InternetManager{
 		json.setOutputType(JsonWriter.OutputType.json);
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/abilityzone/"+patient.getID()+"/get");
+		httpGet.setUrl("http://" + hostName + ":" + port + "/abilityzone/"+Patient.getInstance().getID()+"/get");
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
 		map.put("builderId",GameConstants.getAlgo());
-		map.put("patientId", patient.getID());
+		map.put("patientId", Patient.getInstance().getID());
 		map.put("numberOfLines", GameConstants.numberOfLines);
 		map.put("numberOfRows", GameConstants.numberOfRows);
 		map.put("totalHeight", GameConstants.workspaceHeight);
@@ -542,6 +549,9 @@ public class InternetManager{
 			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
 		}
 		map.put("ImportanceOfEffort", 0.9f);
+		
+		map.put("leftHemiplegia", Patient.getInstance().isLeftHemiplegia());
+		Gdx.app.log(RollingCat.LOG, "reversed level : " + Patient.getInstance().isLeftHemiplegia());
 
 		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
 		algoParameterAZ.put("range", GameConstants.range);
@@ -599,6 +609,12 @@ public class InternetManager{
 		});
 		return okButton;
 
+	}
+	
+	public static void clearLevel()
+	{
+		Gdx.app.log(RollingCat.LOG, "level cleared");
+		level = null;
 	}
 
 }

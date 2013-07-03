@@ -64,7 +64,7 @@ public class Entity extends Image implements EntityModel {
 	 * @param batch
 	 */
 	protected void highlight(SpriteBatch batch){
-		if(MouseCursorGame.isHoldingItem() & MouseCursorGame.getItem() == this.getItemToAct() & Cat.isSameSegment(this.getSegment())){
+		if(MouseCursorGame.isHoldingItem() & MouseCursorGame.getItem() == this.getItemToAct() & Cat.getInstance().getSegment() == this.getSegment() & Cat.getInstance().getEtage() == this.getEtage()){
 			batch.draw(getGameSkin().getRegion("green_highlight"), this.getX() - this.getWidth() * 0.25f, this.getY() - this.getHeight() * 0.25f, this.getWidth() * 1.5f, this.getHeight() * 1.5f);
 		}
 		if(requestRedHighlight){
@@ -93,7 +93,7 @@ public class Entity extends Image implements EntityModel {
 	 * @return la case en x dans laquelle se trouve le chat
 	 */
 	public int getXOnGrid(){
-		return (int) ((this.getX() + GameConstants.BLOCK_WIDTH / 2)/GameConstants.BLOCK_WIDTH);
+		return (int) ((this.getX() + GameConstants.BLOCK_WIDTH  * 0.5f * Cat.getInstance().getSens())/GameConstants.BLOCK_WIDTH);
 	}
 	
 	/**
@@ -131,6 +131,6 @@ public class Entity extends Image implements EntityModel {
 	 */
 	public int getSegment()
 	{
-		return (int) (this.getXOnGrid() - 1) / GameConstants.COLS;
+		return (int) (this.getXOnGrid() - 1 * Cat.getInstance().getSens()) / GameConstants.COLS;
 	}
 }

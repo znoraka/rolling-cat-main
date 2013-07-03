@@ -42,6 +42,7 @@ import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
+import fr.lirmm.smile.rollingcat.model.world.World;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
 public class PatientSelectScreen implements Screen{
@@ -66,6 +67,9 @@ public class PatientSelectScreen implements Screen{
 	public PatientSelectScreen(RollingCat game, Doctor doctor){
 		this.game = game;
 		this.doctor = doctor;
+		World.clearInstance();
+		Patient.clearInstance();
+		InternetManager.clearLevel();
 	}
 	
 	@Override
@@ -187,8 +191,9 @@ public class PatientSelectScreen implements Screen{
 			
 			selectPatient.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					InternetManager.needsAssessment(p);
-					game.setScreen(new PatientScreen(game, p));
+					Patient.setCurrentPatient(p);
+					InternetManager.needsAssessment();
+					game.setScreen(new PatientScreen(game));
 				}
 			});
 			

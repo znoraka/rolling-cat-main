@@ -246,7 +246,7 @@ public class SettingsScreen implements Screen {
 					Localisation.loadLanguage(RollingCat.lang);
 				} catch (Exception e) {
 					Gdx.app.log(RollingCat.LOG, "error in lang file");
-					RollingCat.lang = 1;
+					RollingCat.lang = 0;
 					Localisation.loadLanguage(RollingCat.lang);
 				}
 				game.setScreen(oldScreen);

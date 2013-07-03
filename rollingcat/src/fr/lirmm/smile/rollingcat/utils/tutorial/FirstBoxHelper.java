@@ -44,7 +44,6 @@ public class FirstBoxHelper
 	private static int NB_SECOND_TO_PRINT_TEXT = 4;
 	private Stage stage;
 	private MouseCursorGame mc;
-	private Cat cat;
 	private boolean first;
 	private boolean firstCoin;
 	private boolean hasCollideWasp;
@@ -56,12 +55,11 @@ public class FirstBoxHelper
 	private BitmapFont font;
 	private boolean geniousDirectionChange;
 
-	public FirstBoxHelper(ShapeRenderer sr,Stage stage ,MouseCursorGame mc,Cat cat,Screen screen,Box box) {
+	public FirstBoxHelper(ShapeRenderer sr,Stage stage ,MouseCursorGame mc, Screen screen,Box box) {
 
 		this.box = box;
 		this.mc = mc;
 		this.stage = stage;
-		this.cat = cat;
 		first = true;
 		font = GdxRessourcesGetter.getSmallFont();
 		LabelStyle style = new LabelStyle();
@@ -149,7 +147,7 @@ public class FirstBoxHelper
 	 */
 	private void renderCoins(float delta)
 	{
-		if(cat.hasCatchedCoin() && firstCoin)
+		if(Cat.getInstance().hasCatchedCoin() && firstCoin)
 		{
 			label.setText(localisation(_coin_get));
 			ellapsedTimeCoin = 0;
@@ -221,7 +219,7 @@ public class FirstBoxHelper
 	 */
 	private boolean isBlockInX()
 	{
-		return( !cat.isMoving() || hasCollideWasp());		
+		return( !Cat.getInstance().isMoving() || hasCollideWasp());		
 	}
 
 	/**
@@ -230,7 +228,7 @@ public class FirstBoxHelper
 	 */
 	private boolean hasCollideWasp()
 	{
-		Actor a = stage.hit(cat.getX(), cat.getY() + GameConstants.BLOCK_HEIGHT, false);
+		Actor a = stage.hit(Cat.getInstance().getX(), Cat.getInstance().getY() + GameConstants.BLOCK_HEIGHT, false);
 		if(a instanceof Wasp)
 		{
 			hasCollideWasp = true;

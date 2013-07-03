@@ -35,6 +35,8 @@ public class Cat extends Entity {
 	public static final int HITTING = 3;
 	public static final int WALKING = 4;
 	public static final int TELEPORTING = 5;
+	
+	public static Cat instance;
 
 	/**
 	 * état du chat
@@ -96,22 +98,28 @@ public class Cat extends Entity {
 	private int nbSuccess ;
 	
 	/**
-	 * segment courant du chat, pour le highlight des entités
-	 */
-	private static int segment;
-	
-	/**
 	 * pour savoir dans quel sens vas le chat : 1 = vers la droite, -1 = vers la gauche
 	 */
 	private int sens;
+	
 
+	public static void create(float x, float y, int sens)
+	{
+		instance = new Cat(x, y, sens);
+	}
+	
+	public static Cat getInstance()
+	{
+		return instance;
+	}
+	
 	/**
 	 * l'acteur principal
 	 * @param x
 	 * @param y
 	 */
-	public Cat(float x, float y, int sens){
-		super(x, y, GameConstants.TEXTURE_CAT);
+	private Cat(float x, float y, int sens){
+		super(x + sens, y, GameConstants.TEXTURE_CAT);
 		done = false;
 		this.setTouchable(Touchable.disabled);
 		final String name = "cat-skeleton";
@@ -157,15 +165,12 @@ public class Cat extends Entity {
 	 * @param stage
 	 */
 	public void move(Stage stage){
-
 		hasCatchedCoin = false;
 		
-		segment = this.getSegment();
-
 		top.set(this.getX() + GameConstants.BLOCK_WIDTH *0.5f, this.getY() + GameConstants.BLOCK_HEIGHT, 2, 2);
 		bottom.set(this.getX() + GameConstants.BLOCK_WIDTH / 2, this.getY(), 2, 2);
-		right.set(this.getX() + GameConstants.BLOCK_WIDTH, this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
-		left.set(this.getX(), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
+		right.set(this.getX() + ((sens == 1)?GameConstants.BLOCK_WIDTH:0), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
+		left.set(this.getX() + ((sens == -1)?GameConstants.BLOCK_WIDTH:0), this.getY() + GameConstants.BLOCK_HEIGHT / 2, 2, 2);
 		this.bounds.set(this.getX() + GameConstants.BLOCK_WIDTH / 4, this.getY() + GameConstants.BLOCK_HEIGHT / 4, this.getWidth() / 2, this.getHeight() / 2);
 
 
@@ -186,12 +191,13 @@ public class Cat extends Entity {
 							this.actor = actor;
 							if(this.getActions().size == 0){
 								this.addAction(Actions.sequence(
-										Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 3) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 2),
+										Actions.moveTo(this.getXOnGrid() * GameConstants.BLOCK_WIDTH, (this.getYOnGrid() + 3) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 3f, Interpolation.pow2Out),
 										new Action() {
 
 											@Override
 											public boolean act(float delta) {
-												state = FALLING;
+												getInstance().addAction(Actions.moveTo(getInstance().getXOnGrid() * GameConstants.BLOCK_WIDTH, (getInstance().getYOnGrid() - 1) * GameConstants.BLOCK_HEIGHT, GameConstants.SPEED * 2f, Interpolation.pow2In));
+												state = WALKING;
 												return true;
 											}
 										}
@@ -387,7 +393,7 @@ public class Cat extends Entity {
 			SoundManager.jumpPlay();
 			final float xDest = (this.getXOnGrid() + 2 * sens) * GameConstants.BLOCK_WIDTH;
 			final float yDest = this.getYOnGrid() * GameConstants.BLOCK_HEIGHT;
-			this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2, 0, GameConstants.SPEED * 2)));
+			this.addAction(Actions.parallel(Actions.moveBy(GameConstants.BLOCK_WIDTH * 2 * sens, 0, GameConstants.SPEED * 2)));
 			this.addAction(Actions.parallel(Actions.sequence(
 					Actions.moveBy(0, GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2Out),
 					Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT, GameConstants.SPEED, Interpolation.pow2In),
@@ -434,6 +440,7 @@ public class Cat extends Entity {
 			fanAnimation.apply(skeleton, time, true);
 
 		time += Gdx.graphics.getDeltaTime();
+		skeleton.setFlipX((sens == 1)?false:true);
 		skeleton.updateWorldTransform();
 		skeleton.update(time);
 		try {
@@ -458,7 +465,6 @@ public class Cat extends Entity {
 		sr.rect(right.x, right.y, right.width, right.height);
 		sr.setColor(Color.BLACK);
 		sr.end();
-
 	}
 
 	/**
@@ -545,8 +551,9 @@ public class Cat extends Entity {
 	public int getSuccessState() {
 		return nbSuccess;
 	}
-
-	public static boolean isSameSegment(int entitySegment) {
-		return segment == entitySegment;
-	}	
+	
+	public int getSens()
+	{
+		return sens;
+	}
 }

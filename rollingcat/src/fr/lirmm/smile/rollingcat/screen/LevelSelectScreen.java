@@ -53,7 +53,6 @@ import fr.lirmm.smile.rollingcat.utils.WorldBuilder;
 public class LevelSelectScreen implements Screen {
 
 	private RollingCat game;
-	private Patient patient;
 	private BitmapFont font;
 	private Stage stage;
 	private Skin skin;
@@ -78,9 +77,8 @@ public class LevelSelectScreen implements Screen {
 	private int numberOfLevels;
 	private int numberOfLevelsDisplayed;
 
-	public LevelSelectScreen(RollingCat game, Patient patient){
+	public LevelSelectScreen(RollingCat game){
 		this.game = game;
-		this.patient = patient;
 		this.numberOfLevelsDisplayed = GameConstants.NB_OF_LEVELS_IN_MENU;
 	}
 
@@ -252,14 +250,14 @@ public class LevelSelectScreen implements Screen {
 			start.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					Gdx.app.log(RollingCat.LOG, "level selected : "+currentButton);
-					game.setScreen(new LoadingScreen(game, patient, world.get(currentButton), world.getGems()));
+					game.setScreen(new LoadingScreen(game, Patient.getInstance(), world.get(currentButton), world.getGems()));
 				}
 			});
 
 			back = new TextButton(localisation(_back), style);
 			back.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new PatientScreen(game, patient));
+					game.setScreen(new PatientScreen(game));
 				}
 			});
 			
@@ -289,7 +287,7 @@ public class LevelSelectScreen implements Screen {
 			score = new ImageButton(getGameSkin().getDrawable("red_gem"));
 			score.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new GameProgressionScreen(game, patient, world.getGems(), null, 0));
+					game.setScreen(new GameProgressionScreen(game, world.getGems(), null, 0));
 				}
 			});
 

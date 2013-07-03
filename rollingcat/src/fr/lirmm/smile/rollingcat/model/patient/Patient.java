@@ -15,6 +15,23 @@ public class Patient {
 	private String id;
 	private String needsAssessment;
 	
+	public static Patient instance;
+	
+	public static void setCurrentPatient(Patient patient)
+	{
+		instance = patient;
+	}
+	
+	public static Patient getInstance()
+	{
+		return instance;
+	}
+	
+	public static void clearInstance() 
+	{
+		instance = null;
+	}
+	
 	public Patient(String nom, String prenom, String hemiplegia, String dominantMember, String id, Texture face) {
 		this.nom = nom;
 		this.prenom = prenom;
@@ -57,8 +74,8 @@ public class Patient {
 	}
 	
 
-	public boolean getLeftHemiplegia() {
-		return hemiplegia.equals("R");
+	public boolean isLeftHemiplegia() {
+		return hemiplegia.equals("L");
 	}
 	
 	public String getDominantMember() {
@@ -103,5 +120,7 @@ public class Patient {
 	public String needsAssessment(){
 		return needsAssessment;
 	}
+
+
 	
 }

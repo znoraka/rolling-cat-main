@@ -49,7 +49,6 @@ public class AssessmentScreen implements Screen {
 	private ArrayList<Triangle> triangles;
 	private MouseCursorAssessment mc;
 	private int selected;
-	private Patient patient;
 	private float timeout;
 	private float duration;
 	private boolean waitingToEnterInArea, requestSending;
@@ -65,9 +64,8 @@ public class AssessmentScreen implements Screen {
 	private Track track;
 
 
-	public AssessmentScreen(RollingCat game, Patient patient){
+	public AssessmentScreen(RollingCat game){
 		this.game = game;
-		this.patient = patient;
 	}
 
 	@Override
@@ -163,17 +161,17 @@ public class AssessmentScreen implements Screen {
 			InternetManager.endGameSession();
 			EventManager.create(EventManager.end_game_event_type, parameters);
 			track = new Track(mc.getMap(), Track.ASSESSEMENT, duration);
-			patient.addTrack(track);
+			Patient.getInstance().addTrack(track);
 			requestSending = true;
 			pauseStage.clear();
-			upload = InternetManager.getOkButton(new PatientScreen(game, patient), game);
+			upload = InternetManager.getOkButton(new PatientScreen(game), game);
 			pauseStage.addActor(upload);
 			upload.setX(GameConstants.DISPLAY_WIDTH * 0.5f - upload.getWidth() * 0.5f);
 			upload.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - upload.getHeight() * 0.5f);
 			done = false;
 			}
 			if(InternetManager.sent != 0)
-				game.setScreen(new PatientScreen(game, patient));
+				game.setScreen(new PatientScreen(game));
 		}
 	}
 	@Override
@@ -210,7 +208,7 @@ public class AssessmentScreen implements Screen {
 		parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
 		EventManager.create(EventManager.start_game_event_type, parameters); 
 		
-		InternetManager.newGameSession(Track.ASSESSEMENT, patient.getID());
+		InternetManager.newGameSession(Track.ASSESSEMENT, Patient.getInstance().getID());
 
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = getSkin().getDrawable("button_up");
@@ -234,10 +232,10 @@ public class AssessmentScreen implements Screen {
 					InternetManager.endGameSession();
 					EventManager.create(EventManager.end_game_event_type, parameters);
 					track = new Track(mc.getMap(), Track.ASSESSEMENT, duration);
-					patient.addTrack(track);
+					Patient.getInstance().addTrack(track);
 					requestSending = true;
 					pauseStage.clear();
-					upload = InternetManager.getOkButton(new PatientScreen(game, patient), game);
+					upload = InternetManager.getOkButton(new PatientScreen(game), game);
 					pauseStage.addActor(upload);
 					upload.setX(GameConstants.DISPLAY_WIDTH * 0.5f - upload.getWidth() * 0.5f);
 					upload.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - upload.getHeight() * 0.5f);
@@ -251,7 +249,7 @@ public class AssessmentScreen implements Screen {
 		quit.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				if(mc.isPaused())
-					game.setScreen(new PatientScreen(game, patient));
+					game.setScreen(new PatientScreen(game));
 			}
 		});
 
