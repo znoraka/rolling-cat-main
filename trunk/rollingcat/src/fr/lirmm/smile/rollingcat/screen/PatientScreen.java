@@ -42,7 +42,6 @@ import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 public class PatientScreen implements Screen {
 	
 	private RollingCat game;
-	private Patient patient;
 	private Table tableLeft, tableRight;
 	private Label cellName, name, cellHemiplegia, hemiplegia, cellDominantMember, dominantMember;
 	private BitmapFont font;
@@ -51,9 +50,9 @@ public class PatientScreen implements Screen {
 	private TextButton play, assessment, upload, back, settings;
 	private SpriteBatch batch;
 	
-	public PatientScreen(RollingCat game, Patient patient){
+	public PatientScreen(RollingCat game){
 		this.game = game;
-		this.patient = patient;
+		InternetManager.clearLevel();
 	}
 
 	@Override
@@ -72,8 +71,9 @@ public class PatientScreen implements Screen {
 		batch.draw(GdxRessourcesGetter.getGameSkin().getRegion("skin" + (RollingCat.skin - 1)), GameConstants.DISPLAY_WIDTH * 0.078f, GameConstants.DISPLAY_HEIGHT * 0.525f, 0, 0, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_WIDTH * 0.21f, 1, 1, 0);
 		batch.end();
 		
-		if(patient.needsAssessment() != null && patient.needsAssessment().equals("true"))
+		if(Patient.getInstance().needsAssessment() != null && Patient.getInstance().needsAssessment().equals("true"))
 			play.setVisible(false);
+		
 	}
 
 	@Override
@@ -90,8 +90,8 @@ public class PatientScreen implements Screen {
 		stage = getStage();
 		settings = getSettingsButton(this, game, font);
 		
-		patient.setNeedsAssessment(null);
-		InternetManager.needsAssessment(patient);
+		Patient.getInstance().setNeedsAssessment(null);
+		InternetManager.needsAssessment();
 		
 		tableLeft = new Table();
 		tableRight = new Table();
@@ -118,22 +118,22 @@ public class PatientScreen implements Screen {
 		play.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 		        if(!World.getInstance().hasBeenGenerated())
-		        	InternetManager.getWorld(patient.getID());
-				game.setScreen(new LevelSelectScreen(game, patient));
+		        	InternetManager.getWorld(Patient.getInstance().getID());
+				game.setScreen(new LevelSelectScreen(game));
 			}
 		});
 		
 		assessment = new TextButton(localisation(_assessment), style);
 		assessment.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				game.setScreen(new AssessmentScreen(game, patient));
+				game.setScreen(new AssessmentScreen(game));
 			}
 		});
 		
 		upload = new TextButton(localisation(_tracks), style);
 		upload.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				game.setScreen(new TrackingRecapScreen(game, patient));
+				game.setScreen(new TrackingRecapScreen(game));
 			}
 		});
 		
@@ -154,9 +154,9 @@ public class PatientScreen implements Screen {
 		cellHemiplegia = new Label(localisation(_hemiplegia), labelStyle);
 		hemiplegia = new Label("", labelStyle);
 		
-		name.setText(patient.getFirstName() + " " + patient.getLastName());
-		hemiplegia.setText(patient.getHemiplegia());
-		dominantMember.setText(patient.getDominantMember());
+		name.setText(Patient.getInstance().getFirstName() + " " + Patient.getInstance().getLastName());
+		hemiplegia.setText(Patient.getInstance().getHemiplegia());
+		dominantMember.setText(Patient.getInstance().getDominantMember());
 		
 		cellName.setAlignment(Align.center);
 		cellDominantMember.setAlignment(Align.center);

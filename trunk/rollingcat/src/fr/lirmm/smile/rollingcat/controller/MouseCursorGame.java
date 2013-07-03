@@ -40,7 +40,6 @@ public class MouseCursorGame implements InputProcessor{
 	private float y, oldY;
 	private Entity actor;
 	private Stage stage;
-	private Cat cat;
 	private Box box;
 	private static int item;
 	private TextureAtlas atlas;
@@ -53,13 +52,12 @@ public class MouseCursorGame implements InputProcessor{
 	private int decalage;
 	private int task_id;
 
-	public MouseCursorGame (Stage stage, Cat cat, Box box){
+	public MouseCursorGame (Stage stage, Box box){
 		batch = stage.getSpriteBatch();
 		hoverTimer = 0;
 		x = GameConstants.DISPLAY_WIDTH / 2;
 		y = GameConstants.DISPLAY_HEIGHT / 2;
 		this.stage = stage;
-		this.cat = cat;
 		this.box = box;
 		item = 0;
 		atlas = getAtlas();
@@ -96,7 +94,10 @@ public class MouseCursorGame implements InputProcessor{
 			
 			if(actor instanceof Entity && actor.getTouchable() == Touchable.enabled)
 			{
-				if(actor.getBounds().overlaps(bounds) & Cat.isSameSegment(actor.getSegment()))
+				if(actor.getBounds().overlaps(bounds) &&
+						Cat.getInstance().getSegment() == actor.getSegment() &&
+						Cat.getInstance().getEtage() == actor.getEtage()
+						)
 				{
 					hit = true;
 				}
@@ -120,7 +121,7 @@ public class MouseCursorGame implements InputProcessor{
 		{	
 			hoverTimer = 0;
 			if(actor instanceof Gap && item == Box.FEATHER){
-				if(!cat.movedX()){
+				if(!Cat.getInstance().movedX()){
 					((Gap) actor).setReady(true);
 					this.trigger();
 				}
@@ -184,7 +185,7 @@ public class MouseCursorGame implements InputProcessor{
 	 * @param stage
 	 */
 	public void updateStandTimer(){
-		if((oldX ==  x || oldY == y) & item != Box.EMPTY & !cat.movedX()){
+		if((oldX ==  x || oldY == y) & item != Box.EMPTY & !Cat.getInstance().movedX()){
 			standTimer += Gdx.graphics.getDeltaTime() * 1;
 		}
 		else {
@@ -194,7 +195,7 @@ public class MouseCursorGame implements InputProcessor{
 		if(standTimer > GameConstants.TIMEOUT){
 			standTimer = 0;
 			Gdx.app.log(RollingCat.LOG, "Not moving for too long");
-			cat.getActions().clear();
+			Cat.getInstance().getActions().clear();
 			item = Box.EMPTY;
 			this.fall();
 		}
@@ -214,17 +215,18 @@ public class MouseCursorGame implements InputProcessor{
 		SoundManager.fallPlay();
 		dropItem();
 		box.emptyAfterNotMoving();
-		if(cat.getSuccessState() < GameConstants.SUCCESS)
-			cat.setSuccess(false);
+		if(Cat.getInstance().getSuccessState() < GameConstants.SUCCESS)
+			Cat.getInstance().setSuccess(false);
 		
-		cat.setY((cat.getEtage()) * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT);
-		cat.getActions().clear();
-		cat.setState(Cat.FALLING);
+		Cat.getInstance().setY((Cat.getInstance().getEtage()) * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT);
+		Cat.getInstance().getActions().clear();
+		Cat.getInstance().setState(Cat.FALLING);
 		isFalling = true;
-		if(cat.getLastActorHit() != null)
+		
+		if(Cat.getInstance().getLastActorHit() != null)
 		{
-			addEvent(EventManager.pointing_task_end, cat.getLastActorHit().getX(), cat.getLastActorHit().getY(), task_id);
-			addEvent(EventManager.task_fail, cat.getLastActorHit().getX(), cat.getLastActorHit().getY(), task_id);
+			addEvent(EventManager.pointing_task_end, Cat.getInstance().getLastActorHit().getX(), Cat.getInstance().getLastActorHit().getY(), task_id);
+			addEvent(EventManager.task_fail, Cat.getInstance().getLastActorHit().getX(), Cat.getInstance().getLastActorHit().getY(), task_id);
 		}
 	}
 
@@ -244,9 +246,9 @@ public class MouseCursorGame implements InputProcessor{
 		}
 		if (standTimer > GameConstants.TIMEOUT * 0.5f){
 			sr.setColor(Color.GREEN);
-			sr.rect(cat.getX(), cat.getY(), 70, 20);
+			sr.rect(Cat.getInstance().getX(), Cat.getInstance().getY(), 70, 20);
 			sr.setColor(Color.ORANGE);
-			sr.rect(cat.getX(), cat.getY(), 70 * standTimer / GameConstants.TIMEOUT, 20);
+			sr.rect(Cat.getInstance().getX(), Cat.getInstance().getY(), 70 * standTimer / GameConstants.TIMEOUT, 20);
 		}
 		sr.end();
 
@@ -403,15 +405,15 @@ public class MouseCursorGame implements InputProcessor{
 	{
 		if(item == Box.BONE || item == Box.FEATHER)
 		{	
-			return new Vector2(cat.getX() + GameConstants.BLOCK_WIDTH,cat.getY());
+			return new Vector2(Cat.getInstance().getX() + GameConstants.BLOCK_WIDTH,Cat.getInstance().getY());
 		}
 		else if(item == Box.SCISSORS)
 		{
-			return new Vector2(cat.getX(),cat.getY()- GameConstants.BLOCK_HEIGHT);
+			return new Vector2(Cat.getInstance().getX(),Cat.getInstance().getY()- GameConstants.BLOCK_HEIGHT);
 		}
 		else if(item == Box.SWATTER)
 		{
-			return new Vector2(cat.getX(),cat.getY()+ GameConstants.BLOCK_HEIGHT);
+			return new Vector2(Cat.getInstance().getX(),Cat.getInstance().getY()+ GameConstants.BLOCK_HEIGHT);
 		}
 		else return null;
 	}

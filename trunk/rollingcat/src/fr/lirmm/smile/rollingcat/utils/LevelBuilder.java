@@ -43,29 +43,34 @@ public class LevelBuilder {
 		segment = 0;
 		oldSegment = 0;
 
-		sens = (s.startsWith("<")?-1:1);
+		Gdx.app.log(RollingCat.LOG,"level : " + s);
 		
+		sens = (s.contains("</")?-1:1);
+		
+		s = s.replace("</", "");
+		s = s.replace(">/", "");
 		s = s.replace("\"", "");
-//		s = s.replace(".0", "");
-//		Gdx.app.log(RollingCat.LOG,"level : " + s);
+		
 		String tab [] = s.split("/");
+		
+		Gdx.app.log(RollingCat.LOG,"level : " + s);
+
 		String[] subtab;
 		float x;
 		float y;
 		decalage = 0;
-		
-		Cat cat = new Cat(1, 0, sens);
-		stage.addActor(cat);
-		
-		for (int i = 0; i < tab.length; i++) {
+
+		for (int i = 1; i < tab.length; i++) 
+		{
 			subtab = tab[i].split(";");
 			x = Float.valueOf(subtab[1]);
 			y = Float.valueOf(subtab[2]);
 
-//			if(subtab[0].equals("cat"))
-//			{
-//				stage.addActor(new Cat(x, y + decalage));
-//			}
+			if(subtab[0].equals("cat"))
+			{
+				Cat.create(x, y + decalage, sens);
+				stage.addActor(Cat.getInstance());
+			}
 			if(subtab[0].equals("wasp"))
 			{
 				stage.addActor(new Wasp(x, y + decalage));
@@ -86,7 +91,7 @@ public class LevelBuilder {
 			}
 			else if(subtab[0].equals("groundBlock"))
 			{
-				stage.getActors().insert(1, new GroundBlock(x, y + decalage));
+				stage.getActors().insert(0, new GroundBlock(x, y + decalage));
 				//				stage.addActor(new GroundBlock(x, y + decalage));
 			}
 			//			else if(subtab[0].equals("empty + decalage"))
@@ -142,7 +147,7 @@ public class LevelBuilder {
 			else if(subtab[0].equals("target")){
 				stage.addActor(new Target(x, y + decalage));
 				items.add(Box.EMPTY);
-				addItemsInBox(segment, decalage / (GameConstants.DECALAGE));
+				addItemsInBox(segment * sens, decalage / (GameConstants.DECALAGE));
 				decalage += GameConstants.DECALAGE;
 				items = new ArrayList<Integer>();
 				oldSegment = segment;
@@ -157,7 +162,7 @@ public class LevelBuilder {
 		//		stage.addActor(new Cat(10, 10));
 		//		stage.addActor(new Dog(5, 5));
 		//		((Box)stage.getActors().get(1)).setItems(items);
-		cat.setY(getNumberOfEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT * 0.5f);
+//		Cat.getInstance().setY(getNumberOfEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT * 0.5f);
 		return stage;
 	}
 
@@ -183,8 +188,8 @@ public class LevelBuilder {
 	 * @return true si l'entité est la première de l'écran
 	 */
 	private static boolean isFirstOfScreen(float x){
-		if(Math.floor(x / (GameConstants.COLS)) > segment){
-			addItemsInBox(segment, decalage / (GameConstants.DECALAGE));
+		if(Math.floor(Math.abs(x) / (GameConstants.COLS)) > segment){
+			addItemsInBox(segment * sens, decalage / (GameConstants.DECALAGE));
 			segment ++;
 			
 			return false;

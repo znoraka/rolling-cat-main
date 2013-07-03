@@ -64,5 +64,10 @@ public class Level {
 		content = levelAsString;
 	}
 	
+	public static void clearContent()
+	{
+		content = null;
+	}
+	
 	
 }

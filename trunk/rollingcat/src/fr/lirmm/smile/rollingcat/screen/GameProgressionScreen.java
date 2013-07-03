@@ -49,7 +49,6 @@ public class GameProgressionScreen implements Screen{
 	private Skin skin;	
 	private BitmapFont font;
 	private RollingCat game;
-	private Patient patient;
 
 	private Vector2 centralDiamond;
 	private float sizeCentralDiamond;
@@ -62,12 +61,11 @@ public class GameProgressionScreen implements Screen{
 
 
 
-	public GameProgressionScreen(RollingCat game, Patient patient, List<String> gems, Target gem, int level)
+	public GameProgressionScreen(RollingCat game, List<String> gems, Target gem, int level)
 	{
 		this.gems = gems;
 		this.bossWin = (gems.size() == GameConstants.NB_OF_LEVELS_IN_GAME);
 
-		this.patient = patient;
 		this.game = game;
 
 		this.centerX = GameConstants.DISPLAY_WIDTH / 2 ;
@@ -241,7 +239,7 @@ public class GameProgressionScreen implements Screen{
 			back = new TextButton(localisation(_back), style);
 			back.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new LevelSelectScreen(game, patient));
+					game.setScreen(new LevelSelectScreen(game));
 				}
 			});
 

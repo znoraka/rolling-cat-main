@@ -82,7 +82,7 @@ public class LoadingScreen implements Screen {
 		if(!started & InternetManager.sessionid != null)
 		{
 			started = true;
-			InternetManager.fetchLevel(patient, level.getId()); 
+			InternetManager.fetchLevel(level.getId()); 
 		}
 
 //		levelAsString = Level.getContent();
@@ -122,7 +122,7 @@ public class LoadingScreen implements Screen {
 		started = false;
 
 		InternetManager.newGameSession(Track.GAME, patient.getID());
-		InternetManager.getAbilityZone(patient);
+		InternetManager.getAbilityZone();
 
 		texture = new Texture("data/loading"+RollingCat.skin+".png");
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -142,7 +142,7 @@ public class LoadingScreen implements Screen {
 		start = new TextButton(localisation(_ready), style);
 		start.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				game.setScreen(new GameScreen(game, patient, stage, level, listOfGem));
+				game.setScreen(new GameScreen(game, stage, level, listOfGem));
 			}
 		});
 

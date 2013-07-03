@@ -21,13 +21,7 @@ public class RollingCat extends Game {
 	
 	@Override
 	public void create() {	
-		try {
-			Localisation.loadLanguage(lang);
-		} catch (Exception e) {
-			Gdx.app.log(RollingCat.LOG, "error in lang file");
-			lang = 1;
-			Localisation.loadLanguage(lang);
-		}
+		Localisation.initLanguage();
 		this.setScreen(new LoginScreen(this));
 	}
 

@@ -39,7 +39,6 @@ import fr.lirmm.smile.rollingcat.model.patient.Track;
 public class UploadScreen implements Screen {
 
 	private RollingCat game;
-	private Patient patient;
 	private Track track;
 	private Skin skin;
 	private Stage stage;
@@ -52,9 +51,8 @@ public class UploadScreen implements Screen {
 	private Label date, duration, dateValue, durationValue;
 
 	
-	public UploadScreen(RollingCat game, Patient patient, Track track){
+	public UploadScreen(RollingCat game, Track track){
 		this.game = game;
-		this.patient = patient;
 		this.track = track;
 	}
 	
@@ -141,7 +139,7 @@ public class UploadScreen implements Screen {
 		back.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				track.reset();
-				game.setScreen(new TrackingRecapScreen(game, patient));
+				game.setScreen(new TrackingRecapScreen(game));
 			}
 		});
 		
@@ -155,9 +153,9 @@ public class UploadScreen implements Screen {
 		delete = new TextButton(localisation(_delete), style);
 		delete.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				patient.getListOfTracks().remove(track);
+				Patient.getInstance().getListOfTracks().remove(track);
 				Gdx.app.log(RollingCat.LOG, "one track removed");
-				game.setScreen(new TrackingRecapScreen(game, patient));
+				game.setScreen(new TrackingRecapScreen(game));
 			}
 		});
 		
