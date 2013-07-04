@@ -53,7 +53,6 @@ public class LoadingScreen implements Screen {
 		this.patient = patient;
 		this.level = level;
 		this.listOfGem = listOfGem;
-
 	}
 
 	@Override

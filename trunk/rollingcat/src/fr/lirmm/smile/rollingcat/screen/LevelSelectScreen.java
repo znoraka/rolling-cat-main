@@ -87,12 +87,12 @@ public class LevelSelectScreen implements Screen {
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
+
 		if(gen){
 			if(f > 0)
 			{	
 				changeTablesSize();
-//				f -= delta;
+				//				f -= delta;
 			}
 			if(next.isPressed() & elapsedTime > 0.6f)
 				next();
@@ -112,7 +112,7 @@ public class LevelSelectScreen implements Screen {
 				start.setTouchable(Touchable.disabled);
 			else
 				start.setTouchable(Touchable.enabled);
-			
+
 			if(currentButton == GameConstants.NB_OF_LEVELS_IN_GAME)
 				start.setTouchable(Touchable.enabled);
 		}
@@ -120,7 +120,7 @@ public class LevelSelectScreen implements Screen {
 			gen = true;
 			show();
 		}
-		
+
 	}
 
 	/**
@@ -193,14 +193,14 @@ public class LevelSelectScreen implements Screen {
 				table.setVisible(true);
 			else
 				table.setVisible(false);
-			
+
 			table.invalidate();
-			
+
 			if(table.getHeight() != sizeH[i])
 			{
 				table.addAction(Actions.parallel(Actions.moveTo(posW[i],posH[i], SPEED, Interpolation.pow2Out)));
 				table.addAction(Actions.parallel(Actions.sizeTo(sizeW[i], sizeH[i], SPEED, Interpolation.pow2Out)));
-//				table.validate();
+				//				table.validate();
 			}
 		}
 		tables.get(currentButton).setColor(1, 1, 1, 1);
@@ -250,6 +250,7 @@ public class LevelSelectScreen implements Screen {
 			start.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					Gdx.app.log(RollingCat.LOG, "level selected : "+currentButton);
+					//					InternetManager.nblevels[RollingCat.skin - 1] ++;
 					game.setScreen(new LoadingScreen(game, Patient.getInstance(), world.get(currentButton), world.getGems()));
 				}
 			});
@@ -257,11 +258,11 @@ public class LevelSelectScreen implements Screen {
 			back = new TextButton(localisation(_back), style);
 			back.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new PatientScreen(game));
+					game.setScreen(new CharacterSelectScreen(game));
 				}
 			});
-			
-			
+
+
 			previous = new ImageButton(skin.getDrawable("triangle_up"));
 			previous.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -336,7 +337,7 @@ public class LevelSelectScreen implements Screen {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	/**
 	 * création des {@link Table}s contenant les informations sur le niveau
 	 * @param style
@@ -352,7 +353,7 @@ public class LevelSelectScreen implements Screen {
 		}
 		currentButton = numberOfLevels - 1;
 	}
-	
+
 	/**
 	 * on passe au niveau suivant
 	 */
@@ -374,7 +375,7 @@ public class LevelSelectScreen implements Screen {
 		elapsedTime = 0;
 		SoundManager.nextPlay();
 	}
-	
+
 	/**
 	 * on ajoute les valeurs du niveau à la {@link Table}
 	 * avec en niveau 0 le tutoriel 
@@ -388,32 +389,26 @@ public class LevelSelectScreen implements Screen {
 		table.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - table.getHeight());
 		table.setBackground(skin.getDrawable("button_up"));
 		style.background = skin.getDrawable("empty");
-		if(index == 0){
-			table.add(new Label(localisation(_tutorial), style)).expand().center();
-		}
-		else
-		{
-			if((index < numberOfLevels)){
-				if(index == numberOfLevels - 1 & index != GameConstants.NB_OF_LEVELS_IN_GAME - 1){
-					style.fontColor = Color.RED;
-					table.add(new Label(localisation(_new_level), style)).colspan(2).expand().center();
-					table.row();
-				}	
-				style.fontColor = Color.BLACK;
-				table.add(new Label(localisation(_level)+" " + (index), style)).left().expand();
-				table.add(new Label(localisation(_high_score) + " : " + world.get(index).getScore(), style)).right().expand();
+		if((index < numberOfLevels)){
+			if(index == numberOfLevels - 1 & index != GameConstants.NB_OF_LEVELS_IN_GAME - 1){
+				style.fontColor = Color.RED;
+				table.add(new Label(localisation(_new_level), style)).colspan(2).expand().center();
 				table.row();
-				world.get(index);
-				table.add(new Label(localisation(_duration) + " : " + ((Level.getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
-				table.add(new Label(localisation(_gem) + " " + ((world.get(index).getGem() == null)?localisation(_not_found):(world.get(index).getGem().equals("empty"))?localisation(_not_found):localisation(_found)), style)).right().expand();
 			}	
-			else{
-				table.add(new Label(localisation(_level) + " " + (index), style)).left().expand();
-				table.row();
-				table.add(new Label(localisation(_locked), style)).center();
-				table.row();
-				table.add(new Label(" ", style));
-			}
+			style.fontColor = Color.BLACK;
+			table.add(new Label(localisation(_level)+" " + (index + 1), style)).left().expand();
+			table.add(new Label(localisation(_high_score) + " : " + world.get(index).getScore(), style)).right().expand();
+			table.row();
+			world.get(index);
+			table.add(new Label(localisation(_duration) + " : " + ((Level.getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
+			table.add(new Label(localisation(_gem) + " " + ((world.get(index).getGem() == null)?localisation(_not_found):(world.get(index).getGem().equals("empty"))?localisation(_not_found):localisation(_found)), style)).right().expand();
+		}	
+		else{
+			table.add(new Label(localisation(_level) + " " + (index), style)).left().expand();
+			table.row();
+			table.add(new Label(localisation(_locked), style)).center();
+			table.row();
+			table.add(new Label(" ", style));
 		}
 	}
 }

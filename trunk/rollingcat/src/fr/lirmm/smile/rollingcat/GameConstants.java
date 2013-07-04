@@ -52,7 +52,7 @@ public class GameConstants {
 
 	public static final int NB_OF_LEVELS_IN_MENU = 7;
 	//on ajoute le niveau du tuto qui ne compte pas dans la liste de niveaux effective
-	public static final int NB_OF_LEVELS_IN_GAME = 20 + 1;
+	public static final int NB_OF_LEVELS_IN_GAME = 20;
 	
 	/**
 	 * nombre de succes/echec pour changer d'etage

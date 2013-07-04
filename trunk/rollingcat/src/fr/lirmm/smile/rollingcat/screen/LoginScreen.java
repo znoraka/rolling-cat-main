@@ -79,13 +79,13 @@ public class LoginScreen implements Screen, InputProcessor{
 		batch.draw(region, GameConstants.DISPLAY_WIDTH / 2 - GameConstants.DISPLAY_WIDTH * 0.2f, GameConstants.DISPLAY_HEIGHT * 0.45f, GameConstants.DISPLAY_WIDTH * 0.4f, GameConstants.DISPLAY_HEIGHT * 0.12f);
 		font.draw(batch, "version " + RollingCat.VERSION, 10, 30);
 		
-		if(RollingCat.skin == 1)
-			batch.draw(GdxRessourcesGetter.getSkin().getRegion("bottom_green"), est1.getX() + tableTop.getX(), est1.getY() + tableTop.getY(), 0, 0, est1.getWidth(), est1.getHeight(), 1, 1, 0);
-		else if(RollingCat.skin == 2)
-			batch.draw(GdxRessourcesGetter.getSkin().getRegion("bottom_green"), est2.getX() + tableTop.getX(), est2.getY() + tableTop.getY(), 0, 0, est2.getWidth(), est2.getHeight(), 1, 1, 0);
-		else if(RollingCat.skin == 3)
-			batch.draw(GdxRessourcesGetter.getSkin().getRegion("bottom_green"), est3.getX() + tableTop.getX(), est3.getY() + tableTop.getY(), 0, 0, est3.getWidth(), est3.getHeight(), 1, 1, 0);
-		
+//		if(RollingCat.skin == 1)
+//			batch.draw(GdxRessourcesGetter.getSkin().getRegion("bottom_green"), est1.getX() + tableTop.getX(), est1.getY() + tableTop.getY(), 0, 0, est1.getWidth(), est1.getHeight(), 1, 1, 0);
+//		else if(RollingCat.skin == 2)
+//			batch.draw(GdxRessourcesGetter.getSkin().getRegion("bottom_green"), est2.getX() + tableTop.getX(), est2.getY() + tableTop.getY(), 0, 0, est2.getWidth(), est2.getHeight(), 1, 1, 0);
+//		else if(RollingCat.skin == 3)
+//			batch.draw(GdxRessourcesGetter.getSkin().getRegion("bottom_green"), est3.getX() + tableTop.getX(), est3.getY() + tableTop.getY(), 0, 0, est3.getWidth(), est3.getHeight(), 1, 1, 0);
+//		
 		batch.end();
 		
 		if(wrong){
@@ -141,31 +141,31 @@ public class LoginScreen implements Screen, InputProcessor{
 			}
 		});
 		
-		est1 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin0"));
-		est2 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin1"));
-		est3 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin2"));
-		
-		est1.addListener(new ClickListener() {
-			public void clicked (InputEvent event, float x, float y) {
-				RollingCat.skin = 1;
-				Gdx.app.log(RollingCat.LOG, "skin 1 selected");
-			}
-		});
-		
-		est2.addListener(new ClickListener() {
-			public void clicked (InputEvent event, float x, float y) {
-				RollingCat.skin = 2;
-				Gdx.app.log(RollingCat.LOG, "skin 2 selected");
-			}
-		});
-		
-		est3.addListener(new ClickListener() {
-			public void clicked (InputEvent event, float x, float y) {
-				RollingCat.skin = 3;
-				Gdx.app.log(RollingCat.LOG, "skin 3 selected");
-			}
-		});
-		
+//		est1 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin0"));
+//		est2 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin1"));
+//		est3 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin2"));
+//		
+//		est1.addListener(new ClickListener() {
+//			public void clicked (InputEvent event, float x, float y) {
+//				RollingCat.skin = 1;
+//				Gdx.app.log(RollingCat.LOG, "skin 1 selected");
+//			}
+//		});
+//		
+//		est2.addListener(new ClickListener() {
+//			public void clicked (InputEvent event, float x, float y) {
+//				RollingCat.skin = 2;
+//				Gdx.app.log(RollingCat.LOG, "skin 2 selected");
+//			}
+//		});
+//		
+//		est3.addListener(new ClickListener() {
+//			public void clicked (InputEvent event, float x, float y) {
+//				RollingCat.skin = 3;
+//				Gdx.app.log(RollingCat.LOG, "skin 3 selected");
+//			}
+//		});
+//		
 		
 		TextFieldStyle s = new TextFieldStyle();
 		s.font = font;
