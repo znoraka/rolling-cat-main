@@ -42,6 +42,7 @@ public class InternetManager{
 	private static TextButton okButton;
 	public static int sent = 0;
 	public static float [] ability;
+	public static int [] nblevels = new int[3];
 
 	/**
 	 * set l'adresse et le port du serveur
@@ -128,7 +129,7 @@ public class InternetManager{
 
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 
-		httpGet.setUrl("http://" + hostName + ":" + port + "/game/"+RollingCat.getCurrentGameName()+"/getid");
+		httpGet.setUrl("http://" + hostName + ":" + port + "/game/"+RollingCat.rollingCat+"/getid");
 
 		httpGet.setHeader(key, value);
 		Gdx.app.log(RollingCat.LOG, "sending game id retrieve request...");
@@ -248,14 +249,14 @@ public class InternetManager{
 	public static void fetchLevel(int numLevel){
 		level = null;
 		Level.clearContent();
-		
+
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		Json json = new Json();
 		json.setOutputType(JsonWriter.OutputType.json);
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		
-		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+Patient.getInstance().getID()+"/"+gameid+"/"+sessionid+"/"+numLevel);
+
+		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+Patient.getInstance().getID()+"/"+gameid+"/"+sessionid+"/"+numLevel+"/"+(RollingCat.skin - 1));
 
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
@@ -268,7 +269,7 @@ public class InternetManager{
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
 		map.put("ImportanceOfEffort", 0.9f);
-		
+
 		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
 		{
 			map.put("dials", "0000");
@@ -277,7 +278,7 @@ public class InternetManager{
 		{
 			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
 		}
-		
+
 		map.put("leftHemiplegia", Patient.getInstance().isLeftHemiplegia());
 		Gdx.app.log(RollingCat.LOG, "reversed level : " + Patient.getInstance().isLeftHemiplegia());
 
@@ -338,7 +339,7 @@ public class InternetManager{
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
 		map.put("ImportanceOfEffort", 0.9f);
-		
+
 		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
 		{
 			map.put("dials", "0000");
@@ -347,7 +348,7 @@ public class InternetManager{
 		{
 			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
 		}
-		
+
 		map.put("leftHemiplegia", Patient.getInstance().isLeftHemiplegia());
 		Gdx.app.log(RollingCat.LOG, "reversed level : " + Patient.getInstance().isLeftHemiplegia());
 
@@ -468,10 +469,10 @@ public class InternetManager{
 		world = null;
 	}
 
-	public static void updateLevelStats(String patientid, int levelID, int score, int duration,String color_gem) {
+	public static void updateLevelStats(String patientid, int levelID, int score, int duration,String color_gem, int worldid) {
 		Gdx.app.log(RollingCat.LOG, "preparing send score update request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid+"/"+levelID+"/"+score+"/"+duration+"/"+color_gem);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid+"/"+levelID+"/"+score+"/"+duration+"/"+color_gem+"/"+worldid);
 		httpGet.setHeader(key, value);	
 		httpGet.setHeader("Content-Type", "text/plain");
 
@@ -493,15 +494,15 @@ public class InternetManager{
 
 	}
 
-	public static void getWorld(String patientid) {
+	public static void getWorld(String patientid, int skinid) {
 		world = null;
 		Gdx.app.log(RollingCat.LOG, "preparing get world request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid);
+		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid+"/"+skinid);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "text/plain");
 
-		Gdx.app.log(RollingCat.LOG, "sending get world request...");
+		Gdx.app.log(RollingCat.LOG, "getting world : " + skinid);
 
 		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
 
@@ -539,7 +540,7 @@ public class InternetManager{
 		map.put("totalWidth", GameConstants.workspaceWidth);
 		map.put("totalVolume", GameConstants.totalVolume);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
-		
+
 		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
 		{
 			map.put("dials", "0000");
@@ -549,7 +550,7 @@ public class InternetManager{
 			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
 		}
 		map.put("ImportanceOfEffort", 0.9f);
-		
+
 		map.put("leftHemiplegia", Patient.getInstance().isLeftHemiplegia());
 		Gdx.app.log(RollingCat.LOG, "reversed level : " + Patient.getInstance().isLeftHemiplegia());
 
@@ -610,11 +611,43 @@ public class InternetManager{
 		return okButton;
 
 	}
-	
+
 	public static void clearLevel()
 	{
 		Gdx.app.log(RollingCat.LOG, "level cleared");
 		level = null;
+	}
+
+	public static void getNumberOfLevels(String patientid){
+		Gdx.app.log(RollingCat.LOG, "preparing game id retrieve request...");
+
+		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
+
+		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid);
+
+		httpGet.setHeader(key, value);
+		Gdx.app.log(RollingCat.LOG, "sending game id retrieve request...");
+
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				String s = httpResponse.getResultAsString();
+				s = s.replace("\"", "");
+				String s1[] = s.split("-");
+				for (int i = 0; i < s1.length; i++) {
+					nblevels[i] = Integer.valueOf(s1[i]);
+				}
+				Gdx.app.log(RollingCat.LOG, "game id : " + gameid);
+				Gdx.app.log(RollingCat.LOG, "retrieving complete");
+
+			}
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
+				Gdx.app.log(RollingCat.LOG, "something went wrong, could not retrieve number of levels");
+			}});
 	}
 
 }

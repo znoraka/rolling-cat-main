@@ -85,7 +85,6 @@ public class GameScreen implements ScreenPausable{
 	private CheckBox music;
 	private Track track;
 
-
 	public static Vector2 gold = new Vector2(GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT * 0.92f);
 	public static Vector2 silver = new Vector2(GameConstants.BLOCK_WIDTH * 3, GameConstants.DISPLAY_HEIGHT * 0.92f);
 	public static Vector2 bronze = new Vector2(GameConstants.BLOCK_WIDTH * 5, GameConstants.DISPLAY_HEIGHT * 0.92f);
@@ -179,7 +178,7 @@ public class GameScreen implements ScreenPausable{
 			Gdx.app.log(RollingCat.LOG,"Client sauvegarde des données : " + gem.getCouleur());
 			level.updateStats(getScore(), (int) duration, gem.getCouleur());
 			Gdx.app.log(RollingCat.LOG, gem.getCouleur());
-			InternetManager.updateLevelStats(Patient.getInstance().getID(), level.getId(), level.getScore(), level.getDuree(), gem.getCouleur());
+			InternetManager.updateLevelStats(Patient.getInstance().getID(), level.getId(), level.getScore(), level.getDuree(), gem.getCouleur(), RollingCat.skin - 1);
 			requestSending = false;
 		}
 

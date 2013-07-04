@@ -15,9 +15,9 @@ public class RollingCat extends Game {
 	public static final String VERSION = "0.1.52";
 	public static int lang = 0;
 	public static int skin = 1;
-	private static String rollingCat = "RollingCat";
-	private static String jumpingRabbit = "JumpingRabbit";
-	private static String swimmingTurtule = "SwimmingTurtle";
+	public static final String rollingCat = "RollingCat";
+	public static final String jumpingRabbit = "JumpingRabbit";
+	public static final String swimmingTurtule = "SwimmingTurtle";
 	
 	@Override
 	public void create() {	

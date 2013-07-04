@@ -108,8 +108,16 @@ public class Localisation {
 
 		XmlReader reader = new XmlReader();
 
-		XmlReader.Element langs = reader.parse(file.readString());
-		elem = langs.getChildrenByName("language");
+		XmlReader.Element langs;
+		
+		try {
+			langs = reader.parse(file);
+			elem = langs.getChildrenByName("language");
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		for (Element e : elem) {
 			languages.add(e.getAttributes().values().next().toString());
@@ -132,20 +140,7 @@ public class Localisation {
 	 * la correspondance numéro/langage est dans un fichier Json à part
 	 * @param language
 	 */
-	@SuppressWarnings("unchecked")
 	public static void loadLanguage(int language) throws SerializationException{
-		//		Json json = new Json();
-		//
-		//		Gdx.app.log(RollingCat.LOG, "retriving langs file...");
-		//
-		//		FileHandle file = Gdx.files.internal("data/localisation/"+language+".txt");
-		//		Gdx.app.log(RollingCat.LOG, "done.");
-		//		Gdx.app.log(RollingCat.LOG, "parsing level file...");
-		//
-		//		String jsonData = file.readString();
-		//
-		//		lang = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
-		//		Gdx.app.log(RollingCat.LOG, json.prettyPrint(lang));
 		lang = elem.get(language);
 	}	
 
