@@ -1,23 +1,22 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.Localisation._alpha;
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 import static fr.lirmm.smile.rollingcat.Localisation._cadran;
 import static fr.lirmm.smile.rollingcat.Localisation._discard;
 import static fr.lirmm.smile.rollingcat.Localisation._evaporation_per_day;
+import static fr.lirmm.smile.rollingcat.Localisation._more;
 import static fr.lirmm.smile.rollingcat.Localisation._nbsuccess;
 import static fr.lirmm.smile.rollingcat.Localisation._range;
 import static fr.lirmm.smile.rollingcat.Localisation._save;
 import static fr.lirmm.smile.rollingcat.Localisation._timeout;
 import static fr.lirmm.smile.rollingcat.Localisation._total_volume;
 import static fr.lirmm.smile.rollingcat.Localisation._workspace_height;
-import static fr.lirmm.smile.rollingcat.Localisation.*;
+import static fr.lirmm.smile.rollingcat.Localisation._workspace_width;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSpriteBatch;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
-
-import javax.swing.event.HyperlinkEvent.EventType;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -51,16 +50,16 @@ public class SettingsScreen implements Screen {
 	private Table table, zoneTable;
 	private SpriteBatch batch;
 	//	private ImageButton heightPlus, heightMinus, widthPlus, widthMinus;
-	private TextField workspaceHeight, workspaceWidth, range, pathDeltaTime, evaporationPerDay, alpha, nbSuccess, numberOfRows, totalVolume, volumePerLevel, timeout;
+	private TextField workspaceHeight, workspaceWidth, range, evaporationPerDay, alpha, nbSuccess, numberOfRows, totalVolume, volumePerLevel, timeout;
 	private Skin skin;
 	private BitmapFont font;
 	//	private float elapsedTime;
 	private RollingCat game;
-	private Label heightLabel, widthLabel, rangeLabel, pathDeltaTimeLabel, evaporationPerDayLabel, alphaLabel, nbSuccessLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel, timeoutLabel;
+	private Label heightLabel, widthLabel, rangeLabel, reversedLevelLabel, evaporationPerDayLabel, alphaLabel, nbSuccessLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel, timeoutLabel;
 	private TextButton save, discard;
 	private Screen oldScreen;
 	private List list;
-	private CheckBox area_1, area_2, area_3, area_4, avanceCB;
+	private CheckBox area_1, area_2, area_3, area_4, avanceCB, reversedLevel;
 	private Label warningMessage;
 	private boolean avance;
 	//	private final float SPEED = 0.05f;
@@ -145,6 +144,7 @@ public class SettingsScreen implements Screen {
 		totalVolumeLabel = new Label(localisation(_total_volume)+" :", labelStyle);
 //		volumePerLevelLabel = new Label(localisation(_volume_per_level)+" :", labelStyle);
 		timeoutLabel = new Label(localisation(_timeout)+" :", labelStyle);
+		reversedLevelLabel = new Label(localisation(_reversed)+ " :", labelStyle);
 		
 		
 		workspaceHeight = new TextField(""+GameConstants.workspaceHeight, textFieldStyle);
@@ -169,6 +169,7 @@ public class SettingsScreen implements Screen {
 //		volumePerLevel.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
 		timeout = new TextField(""+GameConstants.TIMEOUT, textFieldStyle);
 		timeout.setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
+		
 //
 //		textFields.add(workspaceHeight);
 //		textFields.add(workspaceWidth);
@@ -203,11 +204,13 @@ public class SettingsScreen implements Screen {
 		area_2 = new CheckBox("2", cbs);
 		area_3 = new CheckBox("3", cbs);
 		area_4 = new CheckBox("4", cbs);
+		reversedLevel = new CheckBox("", cbs);
 		
 		area_1.setChecked(GameConstants.area_1);
 		area_2.setChecked(GameConstants.area_2);
 		area_3.setChecked(GameConstants.area_3);
 		area_4.setChecked(GameConstants.area_4);
+		reversedLevel.setChecked(GameConstants.reveredLevel);
 		
 		avanceCB = new CheckBox(localisation(_more), cbs);
 		
@@ -240,6 +243,7 @@ public class SettingsScreen implements Screen {
 				GameConstants.area_2 = area_2.isChecked();
 				GameConstants.area_3 = area_3.isChecked();
 				GameConstants.area_4 = area_4.isChecked();
+				GameConstants.reveredLevel = reversedLevel.isChecked();
 				GameConstants.TIMEOUT = Integer.valueOf(timeout.getText());
 				RollingCat.lang = list.getSelectedIndex();
 				try {
@@ -284,6 +288,11 @@ public class SettingsScreen implements Screen {
 		table.add(timeoutLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(timeout).right();
 		table.row();
+		
+		table.add(reversedLevelLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+		table.add(reversedLevel).right().padRight(GameConstants.BLOCK_WIDTH * 1.5f);
+		table.row();
+		
 		table.add(rangeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 		table.add(range).right();
 		table.row();

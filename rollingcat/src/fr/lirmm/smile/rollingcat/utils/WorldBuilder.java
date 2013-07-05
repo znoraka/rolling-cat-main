@@ -1,11 +1,9 @@
 package fr.lirmm.smile.rollingcat.utils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 
-import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.model.world.Level;
 import fr.lirmm.smile.rollingcat.model.world.World;
 

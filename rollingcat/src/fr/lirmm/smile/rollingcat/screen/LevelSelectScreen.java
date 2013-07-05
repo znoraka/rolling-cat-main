@@ -400,7 +400,8 @@ public class LevelSelectScreen implements Screen {
 			table.add(new Label(localisation(_high_score) + " : " + world.get(index).getScore(), style)).right().expand();
 			table.row();
 			world.get(index);
-			table.add(new Label(localisation(_duration) + " : " + ((Level.getContent() != null)?world.get(index).getDuree():"?") + " s", style)).left().expand();
+			table.add(new Label(localisation(_duration) + " : " + ((world.get(index).getDuree() != 0)?world.get(index).getDuree():"?") + " s", style)).left().expand();
+			System.out.println(world.get(index).getGem());
 			table.add(new Label(localisation(_gem) + " " + ((world.get(index).getGem() == null)?localisation(_not_found):(world.get(index).getGem().equals("empty"))?localisation(_not_found):localisation(_found)), style)).right().expand();
 		}	
 		else{

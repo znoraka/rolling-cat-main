@@ -77,6 +77,7 @@ public class GameConstants {
 	public static boolean area_2 = false;
 	public static boolean area_3 = false;
 	public static boolean area_4 = false;
+	public static boolean reveredLevel = false;
 	
 	
 	/**

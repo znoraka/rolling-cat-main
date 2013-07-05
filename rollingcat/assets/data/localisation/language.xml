@@ -1,21 +1,21 @@
-<?xml version=1.0 encoding=iso-8859-15?>
+<?xml version=1.0 encoding=UTF-8?>
 <languages>
 
-	<language name="Français">
+	<language name="FranÃ§ais">
 		<wrong_info>Informations incorrectes</wrong_info>
 		<username>nom d'utilisateur</username>
 		<password>mot de passe</password>
 		<settings>Configuration</settings>
 		<back>Retour</back>
-		<select>Début session</select>
+		<select>DÃ©but session</select>
 		<play>Jouer</play>
-		<assessment>Évaluation</assessment>
+		<assessment>Ã‰valuation</assessment>
 		<upload>Envoyer</upload>
 		<tracks>Traces</tracks>
 		<name>Nom</name>
 		<dominant_member>Gaucher ou droitier</dominant_member>
-		<hemiplegia>Hémiplégie</hemiplegia>
-		<previous>Précédent</previous>
+		<hemiplegia>HÃ©miplÃ©gie</hemiplegia>
+		<previous>PrÃ©cÃ©dent</previous>
 		<start>Start</start>
 		<next>Suivant</next>
 		<gems>Gemmes</gems>
@@ -23,10 +23,10 @@
 		<new_level>Nouveau niveau !</new_level>
 		<level>niveau</level>
 		<score>Score</score>
-		<duration>Durée</duration>
-		<locked>Verrouillé</locked>
+		<duration>DurÃ©e</duration>
+		<locked>VerrouillÃ©</locked>
 		<not_found>inconnue</not_found>
-		<found>trouvée</found>
+		<found>trouvÃ©e</found>
 		<resume>Reprendre</resume>
 		<quit>Quitter</quit>
 		<range>Range</range>
@@ -52,30 +52,31 @@
 		<scissors>les ciseaux</scissors>
 		<task_point_2>sur</task_point_2>
 		<dog>le chien</dog>
-		<wasp>la guêpe</wasp>
+		<wasp>la guÃªpe</wasp>
 		<cat>le chat</cat>
 		<carpet>le tapis</carpet>
-		<coin_get>Vous avez gagné une piece.\n Ces pieces vous permettent \n d'augmenter votre scoore</coin_get>
-		<gg>Bien joué</gg>
+		<coin_get>Vous avez gagnÃ© une piece.\n Ces pieces vous permettent \n d'augmenter votre scoore</coin_get>
+		<gg>Bien jouÃ©</gg>
 		<fall>Oups ce n'est pas grave vous pourrez bientot recommencer</fall>
-		<assessment_1>Placez votre curseur dans la zone rouge jusqu'à ce qu'elle devienne entièrement blanche</assessment_1>
-		<assessment_2>Vous venez de selectionner la première zone la zone colorée en bleu. Essayez de la recouvrir avec un maximum de vert</assessment_2>
-		<assessment_3>Lorsque vous êtes à votre maximum placez votre curseur dans la zone rouge jusqu'à ce qu'elle devienne entièrement rose</assessment_3>
-		<assessment_4>Vous avez sélectionné la zone suivante essayez à nouveau de la recouvrir de vert</assessment_4>
-		<assessment_5>Répetez l'opération jusqu'à avoir recouvert toutes les zones</assessment_5>
-		<assessment_6>Une fois que vous avez complété toutes les zones retournez dans la zone rouge</assessment_6>
-		<needsAtLeastOneArea>Impossible de desélectionner toutes les zones</needsAtLeastOneArea>
+		<assessment_1>Placez votre curseur dans la zone rouge jusqu'Ã  ce qu'elle devienne entÃ¨rement blanche</assessment_1>
+		<assessment_2>Vous venez de selectionner la premiÃ¨re zone la zone colorÃ©e en bleu. Essayez de la recouvrir avec un maximum de vert</assessment_2>
+		<assessment_3>Lorsque vous Ãªtes Ã  votre maximum placez votre curseur dans la zone rouge jusqu'Ã  ce qu'elle devienne entiÃ¨rement rose</assessment_3>
+		<assessment_4>Vous avez sÃ©lectionnÃ© la zone suivante essayez Ã  nouveau de la recouvrir de vert</assessment_4>
+		<assessment_5>RÃ©petez l'opÃ©ration jusqu'Ã  avoir recouvert toutes les zones</assessment_5>
+		<assessment_6>Une fois que vous avez complÃ©tÃ© toutes les zones retournez dans la zone rouge</assessment_6>
+		<needsAtLeastOneArea>Impossible de desÃ©lectionner toutes les zones</needsAtLeastOneArea>
 		<right>Droite</right>
 		<left>Gauche</left>
 		<right_handed>Droitier</right_handed>
 		<left_handed>Gaucher</left_handed>
 		<high_score>Meilleur score</high_score>
-		<cadran>Sélectionner les cadrans préférables de travail</cadran>
-		<ready>Je suis prêt</ready>
-		<detail>Détail </detail>
+		<cadran>SÃ©lectionner les cadrans prÃ©fÃ©rables de travail</cadran>
+		<ready>Je suis prÃªt</ready>
+		<detail>DÃ©tail </detail>
 		<skin>Apparence</skin>
-		<timeout>Temps avant échec</timeout>
-		<nbsuccess>Fenêtre succès</nbsuccess>
+		<timeout>Temps avant Ã©chec</timeout>
+		<nbsuccess>FenÃªtre succÃ¨s</nbsuccess>
+		<reversed>Niveau inversÃ©</reversed>
 		<more>Plus</more>
 	</language>
 	
@@ -156,6 +157,7 @@
 		<timeout>Timeout before failure</timeout>
 		<nbsuccess>Success window</nbsuccess>
 		<more>More</more>
+		<reversed>Reversed Level</reversed>
 	</language>
 	   
 	
