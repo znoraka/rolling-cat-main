@@ -280,6 +280,7 @@ public class InternetManager{
 		}
 
 		map.put("leftHemiplegia", Patient.getInstance().isLeftHemiplegia());
+		map.put("reversed", GameConstants.reveredLevel);
 		Gdx.app.log(RollingCat.LOG, "reversed level : " + Patient.getInstance().isLeftHemiplegia());
 
 		OrderedMap<String,Object> algoParameterAZ =  new OrderedMap<String,Object>();
@@ -638,6 +639,10 @@ public class InternetManager{
 				for (int i = 0; i < s1.length; i++) {
 					nblevels[i] = Integer.valueOf(s1[i]);
 				}
+//				nblevels[0] = 20;
+//				nblevels[1] = 20;
+//				nblevels[2] = 20;
+				
 				Gdx.app.log(RollingCat.LOG, "game id : " + gameid);
 				Gdx.app.log(RollingCat.LOG, "retrieving complete");
 

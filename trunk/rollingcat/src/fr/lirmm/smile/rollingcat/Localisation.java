@@ -97,6 +97,7 @@ public class Localisation {
 	public static String _timeout = "timeout";
 	public static String _nbsuccess = "nbsuccess";
 	public static String _more = "more";
+	public static String _reversed = "reversed";
 
 	public static void initLanguage()
 	{
@@ -109,15 +110,9 @@ public class Localisation {
 		XmlReader reader = new XmlReader();
 
 		XmlReader.Element langs;
-		
-		try {
-			langs = reader.parse(file);
-			elem = langs.getChildrenByName("language");
-			
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
+		langs = reader.parse(file.readString());
+		elem = langs.getChildrenByName("language");
 
 		for (Element e : elem) {
 			languages.add(e.getAttributes().values().next().toString());

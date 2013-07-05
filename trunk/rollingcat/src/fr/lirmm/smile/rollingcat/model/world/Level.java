@@ -16,7 +16,7 @@ public class Level {
 //		this.content = content;
 		this.gameId = gameId;
 		this.score = score;
-		this.duree = (duree > 0)?score:Integer.MAX_VALUE;
+		this.duree = (duree > 0)?duree:Integer.MAX_VALUE;
 		this.gem = gem;
 	}
 
