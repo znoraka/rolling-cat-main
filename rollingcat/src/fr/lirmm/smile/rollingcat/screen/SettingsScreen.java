@@ -210,7 +210,7 @@ public class SettingsScreen implements Screen {
 		area_2.setChecked(GameConstants.area_2);
 		area_3.setChecked(GameConstants.area_3);
 		area_4.setChecked(GameConstants.area_4);
-		reversedLevel.setChecked(GameConstants.reveredLevel);
+		reversedLevel.setChecked(GameConstants.reversedLevel);
 		
 		avanceCB = new CheckBox(localisation(_more), cbs);
 		
@@ -243,7 +243,7 @@ public class SettingsScreen implements Screen {
 				GameConstants.area_2 = area_2.isChecked();
 				GameConstants.area_3 = area_3.isChecked();
 				GameConstants.area_4 = area_4.isChecked();
-				GameConstants.reveredLevel = reversedLevel.isChecked();
+				GameConstants.reversedLevel = reversedLevel.isChecked();
 				GameConstants.TIMEOUT = Integer.valueOf(timeout.getText());
 				RollingCat.lang = list.getSelectedIndex();
 				try {

@@ -64,7 +64,6 @@ public class GameScreen implements ScreenPausable{
 	private SpriteBatch batch;
 	private ShapeRenderer sr;
 	private MouseCursorGame mc;
-	private Box box;
 	private float duration, elapsedTime;
 	private BitmapFont font;
 	private OrderedMap<String, String> parameters;
@@ -97,14 +96,14 @@ public class GameScreen implements ScreenPausable{
 		elapsedTimeDuringPause = 0;
 		beginPause = 0;
 		this.listOfGems = listOfGems;
-		Gdx.input.setCursorCatched(true);
+//		Gdx.input.setCursorCatched(true);
 	}
 
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		
 		if(!paused){
 			elapsedTime += delta;
 			duration += delta;
@@ -137,7 +136,7 @@ public class GameScreen implements ScreenPausable{
 			mc.addTrackingPoint(delta, segment);
 			gem = Target.getInstance();
 			if(Cat.getInstance().isDone() && gem != null && gem.getActions().size == 0){
-				Gdx.input.setCursorCatched(false);
+//				Gdx.input.setCursorCatched(false);
 				SoundManager.gameMusicPlay(false);
 				SoundManager.winPlay();
 				gem.addAction(Actions.parallel(Actions.sequence(
@@ -183,12 +182,12 @@ public class GameScreen implements ScreenPausable{
 		}
 
 		//		font.setColor(Color.GRAY);
-		//		batch.begin();
+				batch.begin();
 		//		font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 0.1f, GameConstants.BLOCK_HEIGHT * 0.7f);
 		//		font.draw(batch, "segment : " + segment + "/" + LevelBuilder.getNumberOfSegment(), GameConstants.BLOCK_WIDTH * 2.6f, GameConstants.BLOCK_HEIGHT * 0.7f);
 		//		font.draw(batch, "success : " + cat.getSuccessState(), GameConstants.BLOCK_WIDTH * 6.2f, GameConstants.BLOCK_HEIGHT * 0.7f);
-		//		font.draw(batch, "fps : " + Gdx.graphics.getFramesPerSecond(), GameConstants.DISPLAY_WIDTH - 100, GameConstants.DISPLAY_HEIGHT - 20);
-		//		batch.end();
+				font.draw(batch, "fps : " + Gdx.graphics.getFramesPerSecond(), GameConstants.DISPLAY_WIDTH - 100, GameConstants.DISPLAY_HEIGHT - 20);
+				batch.end();
 
 
 		if(Gdx.input.isKeyPressed(Keys.ENTER) & elapsedTime > 0.3f)
@@ -209,9 +208,9 @@ public class GameScreen implements ScreenPausable{
 		//		stage.getCamera().position.set(cat.getX(), cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
 		//		stage.getCamera().position.set(segment * GameConstants.BLOCK_WIDTH * GameConstants.COLS + GameConstants.BLOCK_WIDTH, cat.getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT + GameConstants.DISPLAY_HEIGHT * 0.5f, 0);
 
-		box.setEtageAndSegment(Cat.getInstance().getEtage(), segment);
-		box.setX(stage.getCamera().position.x - box.getWidth() / 2);
-		box.setY(Cat.getInstance().getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
+		Box.getInstance().setEtageAndSegment(Cat.getInstance().getEtage(), segment);
+		Box.getInstance().setX(stage.getCamera().position.x - Box.getInstance().getWidth() / 2);
+		Box.getInstance().setY(Cat.getInstance().getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
 		mc.setDecalage(Cat.getInstance().getEtage() * GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT);
 		segment = Cat.getInstance().getSegment();
 	}
@@ -242,14 +241,14 @@ public class GameScreen implements ScreenPausable{
 		backgroundTexture = new Texture(GameConstants.TEXTURE_BACKGROUND + RollingCat.skin + ".png");
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
-		box = new Box(GameConstants.COLS / 2, -2);
-		box.setItems(LevelBuilder.getItems());
+		Box.create(GameConstants.COLS / 2, -2);
+		Box.getInstance().setItems(LevelBuilder.getItems());
 
 		stage.getActors().removeValue(Cat.getInstance(), true);
 		stage.addActor(Cat.getInstance());
-		stage.addActor(box);
+		stage.addActor(Box.getInstance());
 
-		mc = new MouseCursorGame(stage, box);
+		mc = new MouseCursorGame(stage);
 		multiplexer = new InputMultiplexer(stage, mc, pauseStage);
 		Gdx.input.setInputProcessor(multiplexer);
 		duration = 0;
@@ -290,7 +289,7 @@ public class GameScreen implements ScreenPausable{
 		resume.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				paused = false;
-				Gdx.input.setCursorCatched(!paused);
+//				Gdx.input.setCursorCatched(!paused);
 				handleElapsedTime();
 			}
 		});
@@ -383,7 +382,7 @@ public class GameScreen implements ScreenPausable{
 				if(keycode == Keys.ESCAPE){
 					paused = !paused;
 					handleElapsedTime();
-					Gdx.input.setCursorCatched(!paused);
+//					Gdx.input.setCursorCatched(!paused);
 				}
 				if(keycode == Keys.SPACE)
 					mc.fall();
@@ -407,7 +406,7 @@ public class GameScreen implements ScreenPausable{
 		});
 
 		if(level.getId() == 0)
-			firstBox = new FirstBoxHelper(sr,stage,mc,this,box);	
+			firstBox = new FirstBoxHelper(sr,stage,mc,this,Box.getInstance());	
 
 		SoundManager.gameMusicPlay(true);
 		music.setChecked(true);

@@ -19,6 +19,10 @@ public class Gap extends Entity{
 	
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
+		batch.end();
+		drawAllowedArea();
+		batch.begin();
+
 		highlight(batch);
 	}
 	

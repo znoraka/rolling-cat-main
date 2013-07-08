@@ -40,7 +40,6 @@ public class MouseCursorGame implements InputProcessor{
 	private float y, oldY;
 	private Entity actor;
 	private Stage stage;
-	private Box box;
 	private static int item;
 	private TextureAtlas atlas;
 	private SpriteBatch batch;
@@ -52,13 +51,12 @@ public class MouseCursorGame implements InputProcessor{
 	private int decalage;
 	private int task_id;
 
-	public MouseCursorGame (Stage stage, Box box){
+	public MouseCursorGame (Stage stage){
 		batch = stage.getSpriteBatch();
 		hoverTimer = 0;
 		x = GameConstants.DISPLAY_WIDTH / 2;
 		y = GameConstants.DISPLAY_HEIGHT / 2;
 		this.stage = stage;
-		this.box = box;
 		item = 0;
 		atlas = getAtlas();
 		map = new HashMap<Integer, float []>();
@@ -128,7 +126,7 @@ public class MouseCursorGame implements InputProcessor{
 			}
 
 			else if(actor instanceof Box){
-				item = box.empty();
+				item = Box.getInstance().empty();
 				task_id++;
 				addEvent(EventManager.pointing_task_start, actor.getX(), 0, task_id);
 			}
@@ -156,7 +154,7 @@ public class MouseCursorGame implements InputProcessor{
 	 */
 	private void trigger(){
 		actor.addAction(actor.getAction());
-		box.fill();
+		Box.getInstance().fill();
 		item = 0;
 		actor.setTouchable(Touchable.disabled);
 		addEvent(EventManager.pointing_task_end, actor.getX() + actor.getWidth() * 0.5f, actor.getY() + actor.getHeight() * 0.5f, task_id);
@@ -204,7 +202,7 @@ public class MouseCursorGame implements InputProcessor{
 	private boolean isFalling;
 	public boolean isFalling()
 	{
-		if(!box.isEmpty())
+		if(!Box.getInstance().isEmpty())
 		{
 			isFalling = false;
 		}
@@ -214,7 +212,7 @@ public class MouseCursorGame implements InputProcessor{
 	public void fall(){
 		SoundManager.fallPlay();
 		dropItem();
-		box.emptyAfterNotMoving();
+		Box.getInstance().emptyAfterNotMoving();
 		if(Cat.getInstance().getSuccessState() < GameConstants.SUCCESS)
 			Cat.getInstance().setSuccess(false);
 		
@@ -236,6 +234,14 @@ public class MouseCursorGame implements InputProcessor{
 	 * @param sr
 	 */
 	public void render(ShapeRenderer sr){
+		sr.begin(ShapeType.Line);
+		for (int i = 0; i < GameConstants.COLS; i++) {
+			for (int j = 0; j < GameConstants.ROWS; j++) {
+				sr.rect(Cat.getInstance().getSegment() * GameConstants.BLOCK_WIDTH * GameConstants.COLS + (i + 1)* GameConstants.BLOCK_WIDTH, j * GameConstants.BLOCK_HEIGHT + Cat.getInstance().getEtage() * (GameConstants.DECALAGE) * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+			}
+		}
+		sr.end();
+		
 		sr.begin(ShapeType.Filled);
 		if(hoverTimer > 0)
 		{	

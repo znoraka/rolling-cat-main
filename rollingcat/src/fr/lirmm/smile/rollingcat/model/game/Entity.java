@@ -25,6 +25,7 @@ public class Entity extends Image implements EntityModel {
 	private String name;
 	protected Rectangle bounds;
 	protected boolean requestRedHighlight;
+	protected ShapeRenderer sr;
 	
 	/**
 	 * 
@@ -42,12 +43,16 @@ public class Entity extends Image implements EntityModel {
         this.bounds = new Rectangle(x * GameConstants.BLOCK_WIDTH, (y + 2) * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
         this.d = new Random().nextFloat();
         this.requestRedHighlight = false;
+		sr = GdxRessourcesGetter.getShapeRenderer();
 	}
 
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
-		d += Gdx.graphics.getDeltaTime();
-		batch.draw(anim.getKeyFrame(d, true), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		if(this.getEtage() == Cat.getInstance().getEtage() && this.getSegment() == Cat.getInstance().getSegment())
+		{
+			d += Gdx.graphics.getDeltaTime();
+			batch.draw(anim.getKeyFrame(d, true), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		}
 	}
 	
 	
@@ -87,7 +92,7 @@ public class Entity extends Image implements EntityModel {
 	public Action getAction() {
 		return null;
 	}
-	
+
 	/**
 	 * donne la position dans la grille et blocs pas en pixels
 	 * @return la case en x dans laquelle se trouve le chat
@@ -132,5 +137,18 @@ public class Entity extends Image implements EntityModel {
 	public int getSegment()
 	{
 		return (int) (this.getXOnGrid() - 1 * Cat.getInstance().getSens()) / GameConstants.COLS;
+	}
+	
+	public void drawAllowedArea()
+	{
+		sr.setColor(Color.BLACK);
+		sr.begin(ShapeType.Line);
+		sr.line(
+				this.getX() % GameConstants.DISPLAY_WIDTH, 
+				this.getY() % (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT),
+				Box.getInstance().getX() % GameConstants.DISPLAY_WIDTH,
+				Box.getInstance().getY() % (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT)
+				);
+		sr.end();
 	}
 }
