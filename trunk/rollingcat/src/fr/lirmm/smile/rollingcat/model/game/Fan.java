@@ -27,7 +27,7 @@ public class Fan extends Entity {
 	private boolean declenche;
 	private float rotationSpeed;
 	private boolean soundPlayed;
-	
+
 	/**
 	 * le ventilateur fait deux blocs de large, le chat regarde le bloc en bas à droite de lui lors de ses déplacements
 	 * il faut donc que le chat puisse taper le ventilateur lors d'aller retours verticaux
@@ -38,12 +38,12 @@ public class Fan extends Entity {
 		super(x, y, "fan");
 		this.setWidth(GameConstants.BLOCK_WIDTH * 2);
 		this.setTouchable(Touchable.disabled);
-		
+
 		TextureAtlas atlas = getFanAtlas();
 		SkeletonBinary binary = new SkeletonBinary(atlas);
 		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/fan/ventilo-skeleton.skel"));
 		animation = binary.readAnimation(Gdx.files.internal("data/fan/fan-run.anim"), skeletonData);
-		
+
 		skeleton = new Skeleton(skeletonData);
 		try {
 			skeleton.setSkin("s" + RollingCat.skin);
@@ -58,26 +58,29 @@ public class Fan extends Entity {
 		root.setScaleY(0.15f * GameConstants.SCALE);
 		root.setX(getX() + GameConstants.BLOCK_WIDTH * 0.5f);
 		root.setY(getY() - GameConstants.BLOCK_HEIGHT * 0.4f);
-		
+
 		time = new Random().nextFloat();
 		declenche = false;
 		rotationSpeed = 0;
 		soundPlayed = false;
 	}
-	
+
 	@Override
 	public void draw(SpriteBatch batch, float deltaParent){
-		if(!declenche){
-			if(rotationSpeed > 0)
-				rotationSpeed -= deltaParent * (rotationSpeed * 0.03f);
+		if(this.getEtage() == Cat.getInstance().getEtage() && this.getSegment() == Cat.getInstance().getSegment())
+		{
+			if(!declenche){
+				if(rotationSpeed > 0)
+					rotationSpeed -= deltaParent * (rotationSpeed * 0.03f);
+			}
+			time += Gdx.graphics.getDeltaTime() * rotationSpeed;
+			animation.apply(skeleton, time, true);
+			skeleton.updateWorldTransform();
+			skeleton.update(Gdx.graphics.getDeltaTime());
+			skeleton.draw(batch);
 		}
-		time += Gdx.graphics.getDeltaTime() * rotationSpeed;
-		animation.apply(skeleton, time, true);
-		skeleton.updateWorldTransform();
-		skeleton.update(Gdx.graphics.getDeltaTime());
-		skeleton.draw(batch);
 	}
-	
+
 	public void declencher(boolean b){
 		if(b){
 			if(!soundPlayed){
@@ -88,14 +91,14 @@ public class Fan extends Entity {
 		}
 		declenche = b;
 	}
-	
-//	/**
-//	 * le chemin assistance est en haut et le chemin challenge est en bas
-//	 * si le chat est en bas (y < {@link GameConstants#VIEWPORT_HEIGHT} alors il est en mode challenge
-//	 * @return le mode
-//	 */
-//	public String getMode(){
-//		return (this.getY() < GameConstants.VIEWPORT_HEIGHT * 1.5f)?GameConstants.CHALLENGE:GameConstants.ASSISTANCE;
-//	}
-	
+
+	//	/**
+	//	 * le chemin assistance est en haut et le chemin challenge est en bas
+	//	 * si le chat est en bas (y < {@link GameConstants#VIEWPORT_HEIGHT} alors il est en mode challenge
+	//	 * @return le mode
+	//	 */
+	//	public String getMode(){
+	//		return (this.getY() < GameConstants.VIEWPORT_HEIGHT * 1.5f)?GameConstants.CHALLENGE:GameConstants.ASSISTANCE;
+	//	}
+
 }

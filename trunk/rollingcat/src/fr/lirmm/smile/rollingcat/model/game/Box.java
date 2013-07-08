@@ -26,6 +26,18 @@ public class Box extends Entity{
 	public static final int SCISSORS = 5;
 	public static final int EMPTY = 0;
 	
+	private static Box instance;
+	
+	public static void create(float x, float y)
+	{
+		instance = new Box(x, y);
+	}
+	
+	public static Box getInstance()
+	{
+		return instance;
+	}
+	
 	/**
 	 * le premier item dans la boite
 	 */
@@ -55,7 +67,7 @@ public class Box extends Entity{
 	 */
 	private int etage;
 	
-	public Box(float x, float y){
+	private Box(float x, float y){
 		super(x, y, GameConstants.TEXTURE_BOX);
 		atlas = getAtlas();
 		this.setHeight(2 * this.getHeight());

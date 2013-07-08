@@ -24,7 +24,6 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 public class Localisation {
 	private static Element lang;
 	private static Array<Element> elem;
-
 	private static List list;
 
 	public static String _wrong_info = "wrong_info";
@@ -111,7 +110,16 @@ public class Localisation {
 
 		XmlReader.Element langs;
 
-		langs = reader.parse(file.readString());
+		String s = file.readString();
+		
+		s = s.replace("agrave;", "à");
+		s = s.replace("&egrave;", "è");
+		s = s.replace("&eacute;", "é");
+		s = s.replace("&Eacute;", "É");
+		s = s.replace("&ecirc;", "ê");
+		s = s.replace("&ccedil;", "ç");
+		
+		langs = reader.parse(s);
 		elem = langs.getChildrenByName("language");
 
 		for (Element e : elem) {

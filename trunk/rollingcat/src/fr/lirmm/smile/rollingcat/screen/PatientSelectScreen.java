@@ -62,6 +62,7 @@ public class PatientSelectScreen implements Screen{
 	private Label nom, prenom, hemiplegia, dominantMember, hempiplegiaLabel, dominantMemberLabel;
 	private LabelStyle labelStyle;
 	private Doctor doctor;
+	private int selectedButton;
 	
 	
 	public PatientSelectScreen(RollingCat game, Doctor doctor){
@@ -77,6 +78,8 @@ public class PatientSelectScreen implements Screen{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	
+		buttons.get(selectedButton).setColor(Color.GREEN);
+		
 		batch.begin();
 		batch.draw(skin.getRegion("backgroundtrack"), 0, 0, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT, 1, 1, 0);
 		batch.draw(skin.getRegion("background_base"), GameConstants.DISPLAY_WIDTH * 0.315f, GameConstants.DISPLAY_HEIGHT * 0.65f, GameConstants.DISPLAY_WIDTH * 0.21f, GameConstants.DISPLAY_HEIGHT * 0.32f);
@@ -118,6 +121,10 @@ public class PatientSelectScreen implements Screen{
 			b = buttons.get(i);
 			b.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
+					for (TextButton button : buttons) {
+						button.setColor(1, 1, 1, 1);
+					}
+					selectedButton = Integer.valueOf(event.getListenerActor().getName());
 					setPatient(patients.get(Integer.valueOf(event.getListenerActor().getName())));
 				}
 			});

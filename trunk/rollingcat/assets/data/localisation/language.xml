@@ -1,21 +1,21 @@
 <?xml version=1.0 encoding=UTF-8?>
 <languages>
 
-	<language name="Français">
+	<language name="Fran&ccedil;ais">
 		<wrong_info>Informations incorrectes</wrong_info>
 		<username>nom d'utilisateur</username>
-		<password>mot de passe</password>
+		<password>mot de passe &eacute; </password>
 		<settings>Configuration</settings>
 		<back>Retour</back>
-		<select>Début session</select>
+		<select>D&eacute;but session</select>
 		<play>Jouer</play>
-		<assessment>Évaluation</assessment>
+		<assessment>&Eacute;valuation</assessment>
 		<upload>Envoyer</upload>
 		<tracks>Traces</tracks>
 		<name>Nom</name>
 		<dominant_member>Gaucher ou droitier</dominant_member>
-		<hemiplegia>Hémiplégie</hemiplegia>
-		<previous>Précédent</previous>
+		<hemiplegia>H&eacute;mipl&eacute;gie</hemiplegia>
+		<previous>Pr&eacute;c&eacute;dent</previous>
 		<start>Start</start>
 		<next>Suivant</next>
 		<gems>Gemmes</gems>
@@ -23,10 +23,10 @@
 		<new_level>Nouveau niveau !</new_level>
 		<level>niveau</level>
 		<score>Score</score>
-		<duration>Durée</duration>
-		<locked>Verrouillé</locked>
+		<duration>Dur&eacute;e</duration>
+		<locked>Verrouill&eacute;</locked>
 		<not_found>inconnue</not_found>
-		<found>trouvée</found>
+		<found>trouv&eacute;e</found>
 		<resume>Reprendre</resume>
 		<quit>Quitter</quit>
 		<range>Range</range>
@@ -52,31 +52,31 @@
 		<scissors>les ciseaux</scissors>
 		<task_point_2>sur</task_point_2>
 		<dog>le chien</dog>
-		<wasp>la guêpe</wasp>
+		<wasp>la gu&ecirc;pe</wasp>
 		<cat>le chat</cat>
 		<carpet>le tapis</carpet>
-		<coin_get>Vous avez gagné une piece.\n Ces pieces vous permettent \n d'augmenter votre scoore</coin_get>
-		<gg>Bien joué</gg>
+		<coin_get>Vous avez gagn&eacute; une piece.\n Ces pieces vous permettent \n d'augmenter votre scoore</coin_get>
+		<gg>Bien jou&eacute;</gg>
 		<fall>Oups ce n'est pas grave vous pourrez bientot recommencer</fall>
-		<assessment_1>Placez votre curseur dans la zone rouge jusqu'à ce qu'elle devienne entèrement blanche</assessment_1>
-		<assessment_2>Vous venez de selectionner la première zone la zone colorée en bleu. Essayez de la recouvrir avec un maximum de vert</assessment_2>
-		<assessment_3>Lorsque vous êtes à votre maximum placez votre curseur dans la zone rouge jusqu'à ce qu'elle devienne entièrement rose</assessment_3>
-		<assessment_4>Vous avez sélectionné la zone suivante essayez à nouveau de la recouvrir de vert</assessment_4>
-		<assessment_5>Répetez l'opération jusqu'à avoir recouvert toutes les zones</assessment_5>
-		<assessment_6>Une fois que vous avez complété toutes les zones retournez dans la zone rouge</assessment_6>
-		<needsAtLeastOneArea>Impossible de desélectionner toutes les zones</needsAtLeastOneArea>
+		<assessment_1>Placez votre curseur dans la zone rouge jusqu'&agrave; ce qu'elle devienne ent&egrave;rement blanche</assessment_1>
+		<assessment_2>Vous venez de selectionner la premi&egrave;re zone la zone color&eacute;e en bleu. Essayez de la recouvrir avec un maximum de vert</assessment_2>
+		<assessment_3>Lorsque vous &ecirc;tes &agrave; votre maximum placez votre curseur dans la zone rouge jusqu'&agrave; ce qu'elle devienne enti&egrave;rement rose</assessment_3>
+		<assessment_4>Vous avez s&eacute;lectionn&eacute; la zone suivante essayez &agrave; nouveau de la recouvrir de vert</assessment_4>
+		<assessment_5>R&eacute;petez l'op&eacute;ration jusqu'&agrave; avoir recouvert toutes les zones</assessment_5>
+		<assessment_6>Une fois que vous avez compl&eacute;t&eacute; toutes les zones retournez dans la zone rouge</assessment_6>
+		<needsAtLeastOneArea>Impossible de des&eacute;lectionner toutes les zones</needsAtLeastOneArea>
 		<right>Droite</right>
 		<left>Gauche</left>
 		<right_handed>Droitier</right_handed>
 		<left_handed>Gaucher</left_handed>
 		<high_score>Meilleur score</high_score>
-		<cadran>Sélectionner les cadrans préférables de travail</cadran>
-		<ready>Je suis prêt</ready>
-		<detail>Détail </detail>
+		<cadran>S&eacute;lectionner les cadrans pr&eacute;f&eacute;rables de travail</cadran>
+		<ready>Je suis pr&ecirc;t</ready>
+		<detail>D&eacute;tail </detail>
 		<skin>Apparence</skin>
-		<timeout>Temps avant échec</timeout>
-		<nbsuccess>Fenêtre succès</nbsuccess>
-		<reversed>Niveau inversé</reversed>
+		<timeout>Temps avant &eacute;chec</timeout>
+		<nbsuccess>Fen&ecirc;tre succ&egrave;s</nbsuccess>
+		<reversed>Niveau invers&eacute;</reversed>
 		<more>Plus</more>
 	</language>
 	
