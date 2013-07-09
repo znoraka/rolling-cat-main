@@ -36,7 +36,7 @@ public class PatientSelectLoadingScreen implements Screen {
 		if(patients != null)
 		{
 			doctor.setPatients(PatientsManager.getPatientsFromJson(patients));
-			game.setScreen(new PatientSelectScreen(game, doctor));
+			game.setScreen(new PatientSelectScreen(game));
 		}
 	}
 

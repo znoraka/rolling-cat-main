@@ -320,7 +320,7 @@ public class GameScreen implements ScreenPausable{
 		quit.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				if(paused){
-					game.setScreen(new PatientScreen(game));
+					game.setScreen(new PatientSelectScreen(game));
 					SoundManager.gameMusicPlay(false);
 				}
 			}

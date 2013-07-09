@@ -112,7 +112,7 @@ public class Localisation {
 
 		String s = file.readString();
 		
-		s = s.replace("agrave;", "à");
+		s = s.replace("&agrave;", "à");
 		s = s.replace("&egrave;", "è");
 		s = s.replace("&eacute;", "é");
 		s = s.replace("&Eacute;", "É");

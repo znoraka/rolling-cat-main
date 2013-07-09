@@ -5,126 +5,133 @@ filter: Nearest,Nearest
 repeat: none
 textfield
   rotate: false
-  xy: 1, 374
+  xy: 1, 373
   size: 574, 133
   orig: 574, 133
   offset: 0, 0
   index: -1
+background_patientselectscreen
+  rotate: false
+  xy: 1, 204
+  size: 267, 167
+  orig: 267, 167
+  offset: 0, 0
+  index: -1
 backgroundtrack
   rotate: false
-  xy: 1, 205
+  xy: 1, 35
   size: 267, 167
   orig: 267, 167
   offset: 0, 0
   index: -1
 background
   rotate: false
-  xy: 1, 53
+  xy: 270, 221
   size: 200, 150
   orig: 200, 150
   offset: 0, 0
   index: -1
 background_base
   rotate: false
-  xy: 270, 222
+  xy: 270, 69
   size: 200, 150
   orig: 200, 150
   offset: 0, 0
   index: -1
 backgroundupload
   rotate: false
-  xy: 577, 357
+  xy: 577, 356
   size: 200, 150
   orig: 200, 150
   offset: 0, 0
   index: -1
 green_background
   rotate: false
-  xy: 779, 382
+  xy: 779, 381
   size: 200, 125
   orig: 200, 125
   offset: 0, 0
   index: -1
 button_down
   rotate: false
-  xy: 1, 9
+  xy: 270, 25
   size: 122, 42
   orig: 122, 42
   offset: 0, 0
   index: -1
 button_up
   rotate: false
-  xy: 779, 338
+  xy: 779, 337
   size: 122, 42
   orig: 122, 42
   offset: 0, 0
   index: -1
 checked
   rotate: false
-  xy: 203, 139
+  xy: 472, 307
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 triangle_down
   rotate: false
-  xy: 472, 308
+  xy: 472, 241
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 triangle_up
   rotate: false
-  xy: 203, 73
+  xy: 472, 175
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 unchecked
   rotate: false
-  xy: 472, 242
+  xy: 472, 109
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 bottom_green
   rotate: false
-  xy: 125, 1
+  xy: 394, 17
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 top_orange
   rotate: false
-  xy: 903, 330
+  xy: 903, 329
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 cursor
   rotate: false
-  xy: 981, 475
+  xy: 981, 474
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 selection
   rotate: false
-  xy: 538, 340
+  xy: 1, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 black
   rotate: false
-  xy: 1015, 499
+  xy: 1015, 498
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 empty
   rotate: false
-  xy: 270, 219
+  xy: 538, 370
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

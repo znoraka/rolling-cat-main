@@ -38,6 +38,7 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.Localisation;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.SoundManager;
@@ -51,15 +52,14 @@ public class LoginScreen implements Screen, InputProcessor{
 	private Skin skin;
 	private TextButton button;
 	private TextField loginTextField, passwordTextField;
-	private Table table, tableTop;
+	private Table table;
 	private Doctor doctor;
 	private BitmapFont font;
 	private SpriteBatch batch;
 	private static boolean wrong;
 	private TextureRegion region, background;
 	private InputMultiplexer multiplexer;
-	private ImageButton est1, est2, est3;
-	
+	private List list;
 	
 	public LoginScreen(RollingCat game){
 		this.game = game;
@@ -70,7 +70,8 @@ public class LoginScreen implements Screen, InputProcessor{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		
+		list.setX(GameConstants.DISPLAY_WIDTH * 0.5f - list.getWidth() * 0.5f);
+		list.setY(GameConstants.DISPLAY_HEIGHT * 0.17f);
 		
 		stage.act(delta);
 		batch.begin();
@@ -125,6 +126,26 @@ public class LoginScreen implements Screen, InputProcessor{
 		multiplexer.addProcessor(this);
 		multiplexer.addProcessor(stage);
 		
+		list = Localisation.getAvailableLanguages();
+		
+		list.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				System.out.println("changing language");
+				RollingCat.lang = list.getSelectedIndex();
+				try {
+					Localisation.loadLanguage(RollingCat.lang);
+				} catch (Exception e) {
+					Gdx.app.log(RollingCat.LOG, "error in lang file");
+					RollingCat.lang = 0;
+					Localisation.loadLanguage(RollingCat.lang);
+				}
+				loginTextField.setMessageText(localisation(_username));
+				passwordTextField.setMessageText(localisation(_password));
+			}
+		});
+		
+		stage.addActor(list);
+		
 		Gdx.input.setInputProcessor(multiplexer);
 		
 		TextButtonStyle style = new TextButtonStyle();
@@ -140,32 +161,6 @@ public class LoginScreen implements Screen, InputProcessor{
 				doctor.login(loginTextField.getText(), passwordTextField.getText());
 			}
 		});
-		
-//		est1 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin0"));
-//		est2 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin1"));
-//		est3 = new ImageButton(GdxRessourcesGetter.getGameSkin().getDrawable("skin2"));
-//		
-//		est1.addListener(new ClickListener() {
-//			public void clicked (InputEvent event, float x, float y) {
-//				RollingCat.skin = 1;
-//				Gdx.app.log(RollingCat.LOG, "skin 1 selected");
-//			}
-//		});
-//		
-//		est2.addListener(new ClickListener() {
-//			public void clicked (InputEvent event, float x, float y) {
-//				RollingCat.skin = 2;
-//				Gdx.app.log(RollingCat.LOG, "skin 2 selected");
-//			}
-//		});
-//		
-//		est3.addListener(new ClickListener() {
-//			public void clicked (InputEvent event, float x, float y) {
-//				RollingCat.skin = 3;
-//				Gdx.app.log(RollingCat.LOG, "skin 3 selected");
-//			}
-//		});
-//		
 		
 		TextFieldStyle s = new TextFieldStyle();
 		s.font = font;
@@ -192,21 +187,8 @@ public class LoginScreen implements Screen, InputProcessor{
 		passwordTextField.setWidth(GameConstants.DISPLAY_WIDTH * 0.37f);
 		passwordTextField.setHeight(GameConstants.DISPLAY_WIDTH * 0.07f);
 		
-		
-		
 		table.setWidth(GameConstants.DISPLAY_WIDTH);
 		table.setHeight(GameConstants.DISPLAY_HEIGHT);
-		
-		tableTop = new Table();
-//		tableTop.setBackground(GdxRessourcesGetter.getSkin().getDrawable("top_orange"));
-		tableTop.setWidth(GameConstants.DISPLAY_WIDTH * 0.51f);
-		tableTop.setHeight(GameConstants.DISPLAY_HEIGHT * 0.2f);
-		tableTop.setY(GameConstants.DISPLAY_HEIGHT * 0.76f);
-		tableTop.setX(GameConstants.DISPLAY_WIDTH * 0.5f - tableTop.getWidth() * 0.5f);
-		
-		tableTop.add(est1).fill().expand().pad(5);
-		tableTop.add(est2).fill().expand().pad(5);
-		tableTop.add(est3).fill().expand().pad(5);
 		
 		table.add(button).padTop(GameConstants.DISPLAY_HEIGHT * 0.3f).padRight(10);
 		
@@ -219,8 +201,6 @@ public class LoginScreen implements Screen, InputProcessor{
 		stage.addActor(loginTextField);
 		stage.addActor(passwordTextField);
 		stage.addActor(table);
-		stage.addActor(tableTop);
-		
 		
 		Json json = new Json();
 

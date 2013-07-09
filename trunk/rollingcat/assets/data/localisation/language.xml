@@ -4,7 +4,7 @@
 	<language name="Fran&ccedil;ais">
 		<wrong_info>Informations incorrectes</wrong_info>
 		<username>nom d'utilisateur</username>
-		<password>mot de passe &eacute; </password>
+		<password>mot de passe</password>
 		<settings>Configuration</settings>
 		<back>Retour</back>
 		<select>D&eacute;but session</select>
@@ -70,7 +70,8 @@
 		<right_handed>Droitier</right_handed>
 		<left_handed>Gaucher</left_handed>
 		<high_score>Meilleur score</high_score>
-		<cadran>S&eacute;lectionner les cadrans pr&eacute;f&eacute;rables de travail</cadran>
+		<cadran>S&eacute;lectionnez les cadrans 
+		pr&eacute;f&eacute;rables de travail : </cadran>
 		<ready>Je suis pr&ecirc;t</ready>
 		<detail>D&eacute;tail </detail>
 		<skin>Apparence</skin>

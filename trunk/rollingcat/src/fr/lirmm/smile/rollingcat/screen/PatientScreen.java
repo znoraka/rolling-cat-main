@@ -139,7 +139,7 @@ public class PatientScreen implements Screen {
 		back = new TextButton(localisation(_back), style);
 		back.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				game.setScreen(new PatientSelectScreen(game, Doctor.getDoctor()));
+				game.setScreen(new PatientSelectScreen(game));
 			}
 		});
 		

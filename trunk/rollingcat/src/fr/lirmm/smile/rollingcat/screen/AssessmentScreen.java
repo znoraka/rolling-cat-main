@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -62,6 +63,9 @@ public class AssessmentScreen implements Screen {
 	private int help;
 	private Label label;
 	private Track track;
+	private Vector2 mouseAngle;
+	private int angleBetweenTriangles;
+	private float elapsedTime;
 
 
 	public AssessmentScreen(RollingCat game){
@@ -73,12 +77,17 @@ public class AssessmentScreen implements Screen {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+		elapsedTime += delta;
+
+		mouseAngle.set(Gdx.input.getX() - GameConstants.DISPLAY_WIDTH * 0.5f, GameConstants.DISPLAY_HEIGHT - Gdx.input.getY());
+
 		/**
 		 * dessin des triangles
 		 */
 		for (Triangle triangle : triangles) {
-			triangle.render(sr, this);
-			triangle.setProgression(mc.getX(), mc.getY(), this);
+			triangle.render(sr, this, !mc.isInArea() & !mc.isPaused());
+			if(!mc.isPaused())
+				triangle.setProgression(mc.getX(), mc.getY(), this);
 		}
 		/**
 		 * dessin du cercle central
@@ -88,6 +97,7 @@ public class AssessmentScreen implements Screen {
 			sr.setColor(Color.WHITE);
 		else
 			sr.setColor(Color.DARK_GRAY);
+
 		sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, 100);
 		sr.setColor(Color.RED);
 		float f = (100 - timeout * 100);
@@ -97,22 +107,28 @@ public class AssessmentScreen implements Screen {
 		if(!mc.isPaused()){
 			mc.addTrackingPoint(delta);
 
-			if(selected == triangles.size()){
-				done = true;
-				upload.setVisible(true);
-				resume.setVisible(false);
-				mc.pause();
-			}
+			//			if(selected == triangles.size()){
+			//				done = true;
+			//				upload.setVisible(true);
+			//				resume.setVisible(false);
+			//				mc.pause();
+			//			}
 
 			if(canStart() & !mc.isStarted()){
 				mc.start();
 			}
 
+			if(mc.isInArea() & waitingToEnterInArea)
+			{
+				selected = (int)(mouseAngle.angle()) / angleBetweenTriangles;
+			}
+
 			if(mc.isInArea() & mc.isStarted() & !waitingToEnterInArea){
+
+
 				if(timeout < GameConstants.HOVER_TIME )
 					timeout += delta;
 				else{
-					selected++;
 					if(help == 1)
 						help = 2;
 					if(help == 3)
@@ -148,31 +164,41 @@ public class AssessmentScreen implements Screen {
 			pauseStage.act(delta);
 			pauseStage.draw();
 		}
-		
+
 		if(requestSending && track.getListOfEvents() != null){
 			requestSending = false;
 			InternetManager.sendEvents(track.getListOfEvents());
 		}
-		
+
 		if(Gdx.input.isKeyPressed(Keys.ENTER)){
 			if(done){
-			parameters = new OrderedMap<String, String>();
-			parameters.put("duration", ""+(int)duration);
-			InternetManager.endGameSession();
-			EventManager.create(EventManager.end_game_event_type, parameters);
-			track = new Track(mc.getMap(), Track.ASSESSEMENT, duration);
-			Patient.getInstance().addTrack(track);
-			requestSending = true;
-			pauseStage.clear();
-			upload = InternetManager.getOkButton(new PatientScreen(game), game);
-			pauseStage.addActor(upload);
-			upload.setX(GameConstants.DISPLAY_WIDTH * 0.5f - upload.getWidth() * 0.5f);
-			upload.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - upload.getHeight() * 0.5f);
-			done = false;
+				parameters = new OrderedMap<String, String>();
+				parameters.put("duration", ""+(int)duration);
+				InternetManager.endGameSession();
+				EventManager.create(EventManager.end_game_event_type, parameters);
+				track = new Track(mc.getMap(), Track.ASSESSEMENT, duration);
+				Patient.getInstance().addTrack(track);
+				requestSending = true;
+				pauseStage.clear();
+				upload = InternetManager.getOkButton(new PatientSelectScreen(game), game);
+				pauseStage.addActor(upload);
+				upload.setX(GameConstants.DISPLAY_WIDTH * 0.5f - upload.getWidth() * 0.5f);
+				upload.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - upload.getHeight() * 0.5f);
+				done = false;
 			}
 			if(InternetManager.sent != 0)
-				game.setScreen(new PatientScreen(game));
+				game.setScreen(new PatientSelectScreen(game));
 		}
+
+		if(Gdx.input.isKeyPressed(Keys.ESCAPE) & elapsedTime > 0.3f){
+			done = !done;
+			if(mc.isPaused())
+				mc.unPause();
+			else
+				mc.pause();
+			elapsedTime = 0;
+		}
+
 	}
 	@Override
 	public void resize(int width, int height) {
@@ -185,29 +211,33 @@ public class AssessmentScreen implements Screen {
 		pauseStage = getStage();
 		stage = getStage();
 		EventManager.clear();
-		
+
+		mouseAngle = new Vector2(0, 0);
+
 		duration = 0;
 		help = 1;
 		done = false;
 		requestSending = false;
-		triangles = VectorManager.getVectorsFromAreas(9);
+		int numberOfTriangles = 9;
+		angleBetweenTriangles = 180 / numberOfTriangles;
+		triangles = VectorManager.getVectorsFromAreas(numberOfTriangles);
 		mc = new MouseCursorAssessment();
 		multiplexer = new InputMultiplexer(mc, pauseStage);
 		selected = -1;
 		waitingToEnterInArea = false;
 		timeout = 0;
-		
+
 		parameters = new OrderedMap<String, String>();
 		parameters.put("game", RollingCat.getCurrentGameName());
 		parameters.put("version", RollingCat.VERSION);
 		EventManager.create(EventManager.game_info_event_type, parameters);
-		
+
 		parameters = new OrderedMap<String, String>();
 		parameters.put("session_type", Track.ASSESSEMENT);
 		parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
 		parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
 		EventManager.create(EventManager.start_game_event_type, parameters); 
-		
+
 		InternetManager.newGameSession(Track.ASSESSEMENT, Patient.getInstance().getID());
 
 		TextButtonStyle style = new TextButtonStyle();
@@ -235,21 +265,21 @@ public class AssessmentScreen implements Screen {
 					Patient.getInstance().addTrack(track);
 					requestSending = true;
 					pauseStage.clear();
-					upload = InternetManager.getOkButton(new PatientScreen(game), game);
+					upload = InternetManager.getOkButton(new PatientSelectScreen(game), game);
 					pauseStage.addActor(upload);
 					upload.setX(GameConstants.DISPLAY_WIDTH * 0.5f - upload.getWidth() * 0.5f);
 					upload.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - upload.getHeight() * 0.5f);
 				}
 			}
 		});
-		
+
 		upload.setVisible(false);
 
 		quit = new TextButton(localisation(_quit), style);
 		quit.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				if(mc.isPaused())
-					game.setScreen(new PatientScreen(game));
+					game.setScreen(new PatientSelectScreen(game));
 			}
 		});
 
@@ -271,6 +301,10 @@ public class AssessmentScreen implements Screen {
 		label = new Label(localisation(_assessment_ + help), labelStyle);
 		stage.addActor(label);
 		setLabelTextAndPosition();
+
+		//		done = true;
+		upload.setVisible(true);
+		//		mc.pause();
 	}
 
 	@Override
@@ -307,5 +341,4 @@ public class AssessmentScreen implements Screen {
 		label.setY(GameConstants.DISPLAY_HEIGHT * 0.85f);
 		label.setX(GameConstants.DISPLAY_WIDTH * 0.5f - 20 * 6);
 	}
-
 }

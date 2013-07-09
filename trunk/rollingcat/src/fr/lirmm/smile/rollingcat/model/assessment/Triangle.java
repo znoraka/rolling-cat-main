@@ -18,7 +18,7 @@ public class Triangle {
 
 	
 	/**
-	 * peut être changer le viewport est-il plus simple que de retrancher la moitié de la largeur de l'écran à chaque fois
+	 * 
 	 * @param angle l'angle du vecteur par rapport à l'horizontale
 	 * @param degree l'angle entre chaque vecteur
 	 */
@@ -36,10 +36,16 @@ public class Triangle {
 	/**
 	 * dessine la zone en rouge avec ses limites en noir et son avancement en vert
 	 * @param sr le shaperender utilisé dans le screen
+	 * @param b 
 	 */
-	public void render(ShapeRenderer sr, AssessmentScreen as){
+	public void render(ShapeRenderer sr, AssessmentScreen as, boolean mustChangeColor){
 		if(as.getSelected() == id)
-			sr.setColor(0, 0.22f, 1f, 1);
+		{
+			if(mustChangeColor)
+				sr.setColor(0, 0.22f, 1f, 1);
+			else
+				sr.setColor(1, 0.22f, 1f, 1);
+		}
 		
 		else
 			sr.setColor(Color.GRAY);
@@ -102,5 +108,4 @@ public class Triangle {
 	public void clearProgression() {
 		percentage = 0;
 	}
-		
 }

@@ -47,8 +47,8 @@ public class MouseCursorAssessment implements InputProcessor{
 
 	@Override
 	public boolean keyUp(int keycode) {
-		if(keycode == Keys.ESCAPE)
-			paused = !paused;
+//		if(keycode == Keys.ESCAPE)
+//			paused = !paused;
 		return true;
 	}
 
