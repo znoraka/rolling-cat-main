@@ -15,11 +15,13 @@ public class Patient {
 	private String id;
 	private String needsAssessment;
 	
-	public static Patient instance;
+	private static Patient instance;
+	private static int index;
 	
-	public static void setCurrentPatient(Patient patient)
+	public static void setCurrentPatient(Patient patient, int indexPatient)
 	{
 		instance = patient;
+		index = indexPatient;
 	}
 	
 	public static Patient getInstance()
@@ -119,6 +121,10 @@ public class Patient {
 	 */
 	public String needsAssessment(){
 		return needsAssessment;
+	}
+
+	public static int getIndex() {
+		return index;
 	}
 
 

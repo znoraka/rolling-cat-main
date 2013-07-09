@@ -75,7 +75,7 @@ public class PauseScreen implements Screen{
 		quit = new TextButton("Quit", style);
 		quit.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				game.setScreen(new PatientScreen(game));
+				game.setScreen(new PatientSelectScreen(game));
 			}
 		});
 		

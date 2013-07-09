@@ -1,5 +1,7 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation._back;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getGameSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getShapeRenderer;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getStage;
@@ -17,13 +19,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
+import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.world.World;
+import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
 public class CharacterSelectScreen implements Screen {
 
@@ -37,20 +43,20 @@ public class CharacterSelectScreen implements Screen {
 	private float loadingHeight, loadingWidth;
 	private float originX;
 	private boolean catReachedHisGoal, rabbitReachedHisGoal, turtleReachedHisGoal;
-
+	private TextButton back;
+	
 	public CharacterSelectScreen(RollingCat game){
 		this.game = game;
 		World.clearInstance();
 		InternetManager.clearLevel();
 		InternetManager.getNumberOfLevels(Patient.getInstance().getID());
-
 	}
 
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		
 		loadingWidth = goBoss.getX() - temple.getX() - GameConstants.BLOCK_WIDTH * 4 - GameConstants.BLOCK_HEIGHT * 0.5f;
 
 		if(cat.getActions().size == 0 && !catReachedHisGoal)
@@ -258,6 +264,22 @@ public class CharacterSelectScreen implements Screen {
 		stage.addActor(rabbit);
 		stage.addActor(cat);
 		stage.addActor(turtle);
+		
+		TextButtonStyle style = new TextButtonStyle();
+		style.up = GdxRessourcesGetter.getSkin().getDrawable("button_up");
+		style.down = GdxRessourcesGetter.getSkin().getDrawable("button_down");
+		style.font = GdxRessourcesGetter.getBigFont();
+		style.fontColor = Color.BLACK;
+		
+		back = new TextButton(localisation(_back), style);
+		back.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				InternetManager.reset();
+				game.setScreen(new PatientSelectScreen(game));
+			}
+		});
+		
+		stage.addActor(back);
 
 		Gdx.input.setInputProcessor(stage);
 
