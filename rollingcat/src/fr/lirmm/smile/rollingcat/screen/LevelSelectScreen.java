@@ -10,7 +10,6 @@ import static fr.lirmm.smile.rollingcat.Localisation._locked;
 import static fr.lirmm.smile.rollingcat.Localisation._new_level;
 import static fr.lirmm.smile.rollingcat.Localisation._not_found;
 import static fr.lirmm.smile.rollingcat.Localisation._start;
-import static fr.lirmm.smile.rollingcat.Localisation._tutorial;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getGameSkin;
@@ -25,12 +24,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -45,8 +44,8 @@ import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.manager.SoundManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
-import fr.lirmm.smile.rollingcat.model.world.Level;
 import fr.lirmm.smile.rollingcat.model.world.World;
+import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 import fr.lirmm.smile.rollingcat.utils.Polynome;
 import fr.lirmm.smile.rollingcat.utils.WorldBuilder;
 
@@ -65,6 +64,7 @@ public class LevelSelectScreen implements Screen {
 	private String worldAsString;
 	private boolean gen;
 	private World world;
+	private Image charImage;
 
 	private float elapsedTime, f;
 
@@ -115,11 +115,15 @@ public class LevelSelectScreen implements Screen {
 
 			if(currentButton == GameConstants.NB_OF_LEVELS_IN_GAME)
 				start.setTouchable(Touchable.enabled);
+			
+		
+			
 		}
 		if(gen == false & InternetManager.getWorld() != null){
 			gen = true;
 			show();
 		}
+		
 
 	}
 
@@ -221,6 +225,9 @@ public class LevelSelectScreen implements Screen {
 			stage = getStage();
 			skin = getSkin();
 			world = World.getInstance();
+			
+			charImage = new Image(GdxRessourcesGetter.getGameSkin().getRegion("skin"+(RollingCat.skin - 1)));
+			
 			if(!world.hasBeenGenerated()){
 				worldAsString = InternetManager.getWorld();
 				WorldBuilder.build(worldAsString);
@@ -295,13 +302,17 @@ public class LevelSelectScreen implements Screen {
 			createLabels(labelStyle);
 
 			Gdx.input.setInputProcessor(stage);
+			
+			charImage.setWidth(GameConstants.BLOCK_WIDTH * 2);
+			charImage.setHeight(GameConstants.BLOCK_WIDTH * 2);
 
 			stage.addActor(previous);
 			stage.addActor(next);
 			stage.addActor(start);
 			stage.addActor(back);
 			stage.addActor(score);
-
+			stage.addActor(charImage);
+			
 			changeTablesSize();
 
 			start.setX(GameConstants.DISPLAY_WIDTH - start.getWidth());
@@ -311,6 +322,8 @@ public class LevelSelectScreen implements Screen {
 			next.setY(0); 
 			score.setX(0);
 			score.setY(GameConstants.DISPLAY_HEIGHT - score.getHeight());
+			charImage.setX(GameConstants.DISPLAY_WIDTH - charImage.getWidth());
+			charImage.setY(GameConstants.DISPLAY_HEIGHT - charImage.getHeight());
 		}
 	}
 
@@ -401,7 +414,6 @@ public class LevelSelectScreen implements Screen {
 			table.row();
 			world.get(index);
 			table.add(new Label(localisation(_duration) + " : " + ((world.get(index).getDuree() != 0)?world.get(index).getDuree():"?") + " s", style)).left().expand();
-//			System.out.println(world.get(index).getGem());
 			table.add(new Label(localisation(_gem) + " " + ((world.get(index).getGem() == null)?localisation(_not_found):(world.get(index).getGem().equals("empty"))?localisation(_not_found):localisation(_found)), style)).right().expand();
 		}	
 		else{

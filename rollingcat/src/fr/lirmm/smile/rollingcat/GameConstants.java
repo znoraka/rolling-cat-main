@@ -93,6 +93,11 @@ public class GameConstants {
 		default: return "";
 		}
 	}
+	
+	public static String getDDAAlgo()
+	{
+		return "ant-0.1";
+	}
 
 	/**
 	 * initialise la taille de la fenetre et des entités
