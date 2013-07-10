@@ -5,133 +5,161 @@ filter: Nearest,Nearest
 repeat: none
 textfield
   rotate: false
-  xy: 1, 373
+  xy: 1, 371
+  size: 574, 133
+  orig: 574, 133
+  offset: 0, 0
+  index: -1
+textfield1
+  rotate: false
+  xy: 1, 236
   size: 574, 133
   orig: 574, 133
   offset: 0, 0
   index: -1
 background_patientselectscreen
   rotate: false
-  xy: 1, 204
+  xy: 577, 337
   size: 267, 167
   orig: 267, 167
   offset: 0, 0
   index: -1
 backgroundtrack
   rotate: false
-  xy: 1, 35
+  xy: 1, 67
   size: 267, 167
   orig: 267, 167
   offset: 0, 0
   index: -1
 background
   rotate: false
-  xy: 270, 221
+  xy: 270, 84
   size: 200, 150
   orig: 200, 150
   offset: 0, 0
   index: -1
 background_base
   rotate: false
-  xy: 270, 69
+  xy: 577, 185
   size: 200, 150
   orig: 200, 150
   offset: 0, 0
   index: -1
+checked1
+  rotate: false
+  xy: 846, 369
+  size: 128, 135
+  orig: 128, 135
+  offset: 0, 0
+  index: -1
 backgroundupload
   rotate: false
-  xy: 577, 356
+  xy: 779, 185
   size: 200, 150
   orig: 200, 150
   offset: 0, 0
   index: -1
 green_background
   rotate: false
-  xy: 779, 381
+  xy: 472, 58
   size: 200, 125
   orig: 200, 125
   offset: 0, 0
   index: -1
+unchecked1
+  rotate: false
+  xy: 674, 48
+  size: 128, 135
+  orig: 128, 135
+  offset: 0, 0
+  index: -1
 button_down
   rotate: false
-  xy: 270, 25
+  xy: 1, 23
   size: 122, 42
   orig: 122, 42
   offset: 0, 0
   index: -1
 button_up
   rotate: false
-  xy: 779, 337
+  xy: 804, 141
   size: 122, 42
   orig: 122, 42
   offset: 0, 0
   index: -1
 checked
   rotate: false
-  xy: 472, 307
+  xy: 804, 75
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 triangle_down
   rotate: false
-  xy: 472, 241
+  xy: 870, 75
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 triangle_up
   rotate: false
-  xy: 472, 175
+  xy: 125, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 unchecked
   rotate: false
-  xy: 472, 109
+  xy: 191, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 bottom_green
   rotate: false
-  xy: 394, 17
+  xy: 804, 23
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 top_orange
   rotate: false
-  xy: 903, 329
+  xy: 856, 23
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 cursor
   rotate: false
-  xy: 981, 474
+  xy: 976, 472
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 selection
   rotate: false
-  xy: 1, 1
+  xy: 472, 202
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+square
+  rotate: false
+  xy: 928, 151
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 black
   rotate: false
-  xy: 1015, 498
+  xy: 928, 141
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 empty
   rotate: false
-  xy: 538, 370
+  xy: 846, 366
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

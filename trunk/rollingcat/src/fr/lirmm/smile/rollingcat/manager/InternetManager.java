@@ -331,7 +331,7 @@ public class InternetManager{
 		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/"+Patient.getInstance().getID()+"/needsassessment");
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
-		map.put("builderId",GameConstants.getAlgo());
+		map.put("builderId",GameConstants.getDDAAlgo());
 		map.put("patientId", Patient.getInstance().getID());
 		map.put("numberOfLines", GameConstants.numberOfLines);
 		map.put("numberOfRows", GameConstants.numberOfRows);
@@ -375,7 +375,9 @@ public class InternetManager{
 
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
-				Patient.getInstance().setNeedsAssessment(httpResponse.getResultAsString());
+				String s = httpResponse.getResultAsString();
+				Gdx.app.log(RollingCat.LOG, "needs assessment : " + s);
+				Patient.getInstance().setNeedsAssessment(s);
 			}
 
 			@Override

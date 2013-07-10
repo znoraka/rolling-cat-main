@@ -48,8 +48,6 @@ public class CharacterSelectScreen implements Screen {
 	public CharacterSelectScreen(RollingCat game){
 		this.game = game;
 		World.clearInstance();
-		InternetManager.clearLevel();
-		InternetManager.getNumberOfLevels(Patient.getInstance().getID());
 	}
 
 	@Override
