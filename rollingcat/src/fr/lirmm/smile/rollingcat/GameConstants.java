@@ -85,13 +85,14 @@ public class GameConstants {
 	 * @return String
 	 */
 	public static String getAlgo(){
-		switch (RollingCat.skin)
-		{
-		case 1: return "random";
-		case 2: return "incremental";
-		case 3: return "ant-0.1";
-		default: return "";
-		}
+//		switch (RollingCat.skin)
+//		{
+//		case 1: return "random";
+//		case 2: return "incremental";
+//		case 3: return "ant-0.1";
+//		default: return "";
+//		}
+		return "ant-0.1";
 	}
 	
 	public static String getDDAAlgo()

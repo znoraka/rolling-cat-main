@@ -234,21 +234,21 @@ public class MouseCursorGame implements InputProcessor{
 	 * @param sr
 	 */
 	public void render(ShapeRenderer sr){
-		sr.begin(ShapeType.Line);
-		for (int i = 0; i < GameConstants.COLS; i++) {
-			for (int j = 0; j < GameConstants.ROWS; j++) {
-				sr.rect(Cat.getInstance().getSegment() * GameConstants.BLOCK_WIDTH * GameConstants.COLS + (i + 1)* GameConstants.BLOCK_WIDTH, j * GameConstants.BLOCK_HEIGHT + Cat.getInstance().getEtage() * (GameConstants.DECALAGE) * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
-			}
-		}
-		sr.end();
+//		sr.begin(ShapeType.Line);
+//		for (int i = 0; i < GameConstants.COLS; i++) {
+//			for (int j = 0; j < GameConstants.ROWS; j++) {
+//				sr.rect(Cat.getInstance().getSegment() * GameConstants.BLOCK_WIDTH * GameConstants.COLS + (i + 1)* GameConstants.BLOCK_WIDTH, j * GameConstants.BLOCK_HEIGHT + Cat.getInstance().getEtage() * (GameConstants.DECALAGE) * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+//			}
+//		}
+//		sr.end();
 		
 		sr.begin(ShapeType.Filled);
 		if(hoverTimer > 0)
 		{	
 			sr.setColor(Color.RED);
-			sr.rect(x, y, 70, 20);
+			sr.rect(x, y - GameConstants.BLOCK_HEIGHT, 70, 20);
 			sr.setColor(Color.BLUE);
-			sr.rect(x, y, 70*hoverTimer / GameConstants.HOVER_TIME, 20);
+			sr.rect(x, y - GameConstants.BLOCK_HEIGHT, 70*hoverTimer / GameConstants.HOVER_TIME, 20);
 		}
 		if (standTimer > GameConstants.TIMEOUT * 0.5f){
 			sr.setColor(Color.GREEN);
@@ -276,7 +276,7 @@ public class MouseCursorGame implements InputProcessor{
 		else if(item == Box.SCISSORS)
 			batch.draw(atlas.findRegion("scissors" + RollingCat.skin), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT * 1.5f, 1, 1, 0);
 		else
-			batch.draw(atlas.findRegion("shit"), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT * 1.5f, 1, 1, 0);
+			batch.draw(atlas.findRegion("hand"), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT * 1.5f, 1, 1, 0);
 		batch.end();
 
 	}
