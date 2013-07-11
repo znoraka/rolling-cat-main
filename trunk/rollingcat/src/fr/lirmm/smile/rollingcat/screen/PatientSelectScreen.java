@@ -66,7 +66,7 @@ public class PatientSelectScreen implements Screen{
 	private Table tableLeft, tableRightBottom, tableRightTop, zoneTable;
 	private ArrayList<Patient> patients;
 	private Patient p;
-	private Label nom, prenom, hemiplegia, dominantMember, hempiplegiaLabel, dominantMemberLabel, config;
+	private Label labelPatients, config;
 	private LabelStyle labelStyle;
 	private Doctor doctor;
 	private int selectedButton;
@@ -112,6 +112,9 @@ public class PatientSelectScreen implements Screen{
 
 		avanceCB.setX(GameConstants.DISPLAY_WIDTH * 0.325f);
 		avanceCB.setY(GameConstants.DISPLAY_HEIGHT * 0.16f);
+		
+		
+
 	}
 
 	@Override
@@ -143,7 +146,7 @@ public class PatientSelectScreen implements Screen{
 					p = patients.get(selectedButton);
 					Patient.setCurrentPatient(p, selectedButton);
 
-					setPatient(patients.get(Integer.valueOf(event.getListenerActor().getName())));
+//					setPatient(patients.get(Integer.valueOf(event.getListenerActor().getName())));
 					InternetManager.needsAssessment();
 					InternetManager.clearLevel();
 					InternetManager.getNumberOfLevels(Patient.getInstance().getID());
@@ -218,17 +221,21 @@ public class PatientSelectScreen implements Screen{
 
 			createButtons(style);
 
-			labelStyle = new LabelStyle(font, Color.BLACK);
-			labelStyle.background = skin.getDrawable("textfield");
+			labelStyle = new LabelStyle(font, Color.WHITE);
+			labelStyle.background = skin.getDrawable("button_up");
 
+
+//			nom = new Label(p.getLastName(), labelStyle);
+//			prenom = new Label(p.getFirstName(), labelStyle);
+//			hemiplegia = new Label(p.getHemiplegia(), labelStyle);
+//			dominantMember = new Label(p.getDominantMember(), labelStyle);
+			
+			labelPatients = new Label(localisation(_patients), labelStyle);
 			config = new Label(localisation(_settings), labelStyle);
-
-			nom = new Label(p.getLastName(), labelStyle);
-			prenom = new Label(p.getFirstName(), labelStyle);
-			hempiplegiaLabel = new Label(localisation(_hemiplegia), labelStyle);
-			hemiplegia = new Label(p.getHemiplegia(), labelStyle);
-			dominantMemberLabel = new Label(localisation(_dominant_member), labelStyle);
-			dominantMember = new Label(p.getDominantMember(), labelStyle);
+			
+//			labelPatients.setColor(Color.MAGENTA);
+			
+			
 			selectPatient = new TextButton(localisation(_select), style);
 
 			selectPatient.addListener(new ClickListener() {
@@ -273,8 +280,6 @@ public class PatientSelectScreen implements Screen{
 			tableRightBottom.add(assessment).pad(GameConstants.BLOCK_HEIGHT * 0.07f);
 			tableRightBottom.add(tracks).pad(GameConstants.BLOCK_HEIGHT * 0.07f);
 			tableRightBottom.add(back).pad(GameConstants.BLOCK_HEIGHT * 0.07f);
-
-			stage.addActor(config);
 
 			zoneTable = new Table();
 
@@ -415,7 +420,11 @@ public class PatientSelectScreen implements Screen{
 			stage.addActor(zoneTable);
 
 			Gdx.input.setInputProcessor(stage);
+			
 
+			stage.addActor(labelPatients);
+			stage.addActor(config);
+			
 			stage.addActor(avanceCB);
 
 			tableRightBottom.setY(GameConstants.DISPLAY_HEIGHT * 0.038f);
@@ -430,16 +439,25 @@ public class PatientSelectScreen implements Screen{
 			tableRightTop.setWidth(GameConstants.DISPLAY_WIDTH * 0.66f);
 			tableRightTop.invalidate();
 
-			config.setX(GameConstants.DISPLAY_WIDTH * 0.315f);
-			config.setY(GameConstants.DISPLAY_HEIGHT * 0.888f);
-			config.setHeight(GameConstants.DISPLAY_HEIGHT * 0.08f);
-			config.setWidth(GameConstants.DISPLAY_WIDTH * 0.2f);
-
 			zoneTable.setHeight(GameConstants.DISPLAY_HEIGHT * 0.3f);
 			zoneTable.setWidth(GameConstants.DISPLAY_WIDTH * 0.3f);
 			zoneTable.setX(GameConstants.DISPLAY_WIDTH * 0.662f);
 			zoneTable.setY(GameConstants.DISPLAY_HEIGHT * 0.16f);
 			zoneTable.invalidate();
+			
+			config.setColor(Color.MAGENTA);
+			labelPatients.setColor(Color.MAGENTA);
+			
+			config.setX(GameConstants.DISPLAY_WIDTH * 0.55f);
+			config.setY(GameConstants.DISPLAY_HEIGHT * 0.94f);
+			config.setHeight(GameConstants.DISPLAY_HEIGHT * 0.08f);
+			
+			labelPatients.setX(GameConstants.DISPLAY_WIDTH * 0.0355f);
+			labelPatients.setY(GameConstants.DISPLAY_HEIGHT * 0.94f);
+			labelPatients.setHeight(GameConstants.DISPLAY_HEIGHT * 0.08f);
+			
+			tableLeft.setColor(1, 1, 1, 1);
+			
 		}
 
 	}
@@ -465,13 +483,13 @@ public class PatientSelectScreen implements Screen{
 		Gdx.app.log(RollingCat.LOG, "disposing...");
 	}
 
-	private void setPatient(Patient patient) {
-		p = patient;
-		nom.setText(patient.getLastName());
-		prenom.setText(patient.getFirstName());
-		hemiplegia.setText(patient.getHemiplegia());
-		dominantMember.setText(patient.getDominantMember());
-	}
+//	private void setPatient(Patient patient) {
+//		p = patient;
+//		nom.setText(patient.getLastName());
+//		prenom.setText(patient.getFirstName());
+//		hemiplegia.setText(patient.getHemiplegia());
+//		dominantMember.setText(patient.getDominantMember());
+//	}
 
 	private void saveConfig()
 	{

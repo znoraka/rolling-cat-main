@@ -79,6 +79,13 @@
 		<nbsuccess>Fen&ecirc;tre succ&egrave;s</nbsuccess>
 		<reversed>Niveau invers&eacute;</reversed>
 		<more>Plus</more>
+		<patients>Liste des patients</patients>
+		<yes>Oui</yes>
+		<no>Non</no>
+		<win>Bravo, vous avez gagné, 
+		pour faire de nouveaux niveaux,
+		vous pouvez réinitialiser les mondes.
+		Réinitialiser les mondes ?</win>
 	</language>
 	
 	<language name="English">
@@ -159,6 +166,13 @@
 		<nbsuccess>Success window</nbsuccess>
 		<more>More</more>
 		<reversed>Reversed Level</reversed>
+		<patients>Patients list</patients>
+		<yes>Yes</yes>
+		<no>No</no>
+		<win>Congratulations, you win, 
+		to play new levels,
+		you can reset the worlds.
+		Reset the worlds?</win>
 	</language>
 	   
 	

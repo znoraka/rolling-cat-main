@@ -141,14 +141,14 @@ public class Entity extends Image implements EntityModel {
 	
 	public void drawAllowedArea()
 	{
-		sr.setColor(Color.BLACK);
-		sr.begin(ShapeType.Line);
-		sr.line(
-				this.getX() % GameConstants.DISPLAY_WIDTH, 
-				this.getY() % (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT),
-				Box.getInstance().getX() % GameConstants.DISPLAY_WIDTH,
-				Box.getInstance().getY() % (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT)
-				);
-		sr.end();
+//		sr.setColor(Color.BLACK);
+//		sr.begin(ShapeType.Line);
+//		sr.line(
+//				this.getX() % GameConstants.DISPLAY_WIDTH, 
+//				this.getY() % (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT),
+//				Box.getInstance().getX() % GameConstants.DISPLAY_WIDTH,
+//				Box.getInstance().getY() % (GameConstants.DECALAGE * GameConstants.BLOCK_HEIGHT)
+//				);
+//		sr.end();
 	}
 }

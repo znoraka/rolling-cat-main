@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.Localisation._back;
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getGameSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getShapeRenderer;
@@ -18,15 +18,18 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
-import fr.lirmm.smile.rollingcat.model.doctor.Doctor;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.world.World;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
@@ -43,11 +46,14 @@ public class CharacterSelectScreen implements Screen {
 	private float loadingHeight, loadingWidth;
 	private float originX;
 	private boolean catReachedHisGoal, rabbitReachedHisGoal, turtleReachedHisGoal;
-	private TextButton back;
+	private TextButton back, yes, no;
+	private Window win;
+	private Label windowText;
 	
 	public CharacterSelectScreen(RollingCat game){
 		this.game = game;
 		World.clearInstance();
+		InternetManager.getNumberOfLevels(Patient.getInstance().getID());
 	}
 
 	@Override
@@ -140,6 +146,7 @@ public class CharacterSelectScreen implements Screen {
 				sr.setColor(Color.GREEN);
 				sr.rect(originX + loadingWidth + GameConstants.DISPLAY_WIDTH * 0.015f, water.getY(), loadingHeight, -water.getY() + turtle.getY() + loadingHeight * 0.8f);
 			}
+			goBoss.setVisible(true);
 		}
 
 		sr.end();
@@ -149,6 +156,17 @@ public class CharacterSelectScreen implements Screen {
 
 		if(Gdx.input.isKeyPressed(Keys.ENTER))
 			show();
+		
+		win.setX(GameConstants.DISPLAY_WIDTH * 0.25f);
+		win.setY(GameConstants.DISPLAY_HEIGHT * 0.25f);
+		win.setWidth(GameConstants.DISPLAY_WIDTH * 0.5f);
+		win.setHeight(GameConstants.DISPLAY_HEIGHT * 0.5f);
+		
+		yes.setX(win.getWidth() * 0.1f);
+		yes.setY(win.getHeight() * 0.1f);
+		no.setX(win.getWidth() * 0.9f - no.getWidth());
+		no.setY(win.getHeight() * 0.1f);
+		
 	}
 
 	@Override
@@ -159,7 +177,48 @@ public class CharacterSelectScreen implements Screen {
 	public void show() {
 		stage = getStage();
 		sr = getShapeRenderer();
+		
+		WindowStyle ws = new WindowStyle();
+		ws.titleFont = GdxRessourcesGetter.getBigFont();
+		ws.background = GdxRessourcesGetter.getSkin().getDrawable("background_base");
 
+		win = new Window("Victoire", ws);
+		
+		stage.addActor(win);
+		win.setVisible(false);
+		
+		TextButtonStyle style = new TextButtonStyle();
+		style.up = GdxRessourcesGetter.getSkin().getDrawable("button_up");
+		style.down = GdxRessourcesGetter.getSkin().getDrawable("button_down");
+		style.font = GdxRessourcesGetter.getBigFont();
+		style.fontColor = Color.BLACK;
+		
+		yes = new TextButton(localisation(_yes), style);
+		yes.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				InternetManager.requestWorldClear();
+				game.setScreen(new PatientSelectLoadingScreen(game));
+			}
+		});
+		
+		no = new TextButton(localisation(_no), style);
+		no.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				Gdx.app.log(RollingCat.LOG, "no boss yet");
+				win.setVisible(false);
+				win.toBack();
+			}
+		});
+		
+		win.addActor(yes);
+		win.addActor(no);
+		
+		LabelStyle labelStyle = new LabelStyle(GdxRessourcesGetter.getBigFont(), Color.WHITE);
+		labelStyle.background = GdxRessourcesGetter.getSkin().getDrawable("empty");
+		
+		windowText = new Label(localisation(_win), labelStyle);
+		win.add(windowText);
+		
 		catReachedHisGoal = false;
 		turtleReachedHisGoal = false;
 		rabbitReachedHisGoal = false;
@@ -177,15 +236,18 @@ public class CharacterSelectScreen implements Screen {
 		turtle = new Image(getGameSkin().getDrawable("skin2"));
 		turtle.setSize(GameConstants.BLOCK_HEIGHT * 1.5f, GameConstants.BLOCK_HEIGHT * 1.5f);
 
-		temple = new Image(getGameSkin().getDrawable("shit"));
+		temple = new Image(getGameSkin().getDrawable("pyramid"));
 		temple.setHeight(GameConstants.BLOCK_HEIGHT);
-		tree = new Image(getGameSkin().getDrawable("shit"));
-		water = new Image(getGameSkin().getDrawable("shit"));
+		tree = new Image(getGameSkin().getDrawable("tree"));
+		water = new Image(getGameSkin().getDrawable("waves"));
 		goBoss = new Image(getGameSkin().getDrawable("shit"));
+		goBoss.setVisible(true);
 		
 		goBoss.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				Gdx.app.log(RollingCat.LOG, "no boss yet");
+				win.setVisible(true);
+				win.toFront();
 			}
 		});
 
@@ -234,12 +296,12 @@ public class CharacterSelectScreen implements Screen {
 			}
 		});
 
-		table.add(temple).padRight(GameConstants.DISPLAY_WIDTH * 0.65f).padBottom(GameConstants.BLOCK_HEIGHT);
+		table.add(temple).padRight(GameConstants.DISPLAY_WIDTH * 0.65f).padBottom(GameConstants.BLOCK_HEIGHT).height(GameConstants.BLOCK_HEIGHT * 2).width(GameConstants.BLOCK_HEIGHT * 2);
 		table.row();
-		table.add(tree).left().padBottom(GameConstants.BLOCK_HEIGHT);
-		table.add(goBoss).right().padBottom(GameConstants.BLOCK_HEIGHT);
+		table.add(tree).left().padBottom(GameConstants.BLOCK_HEIGHT).height(GameConstants.BLOCK_HEIGHT * 2).width(GameConstants.BLOCK_HEIGHT * 2);
+		table.add(goBoss).right().padBottom(GameConstants.BLOCK_HEIGHT).height(GameConstants.BLOCK_HEIGHT * 2).width(GameConstants.BLOCK_HEIGHT * 2);
 		table.row();
-		table.add(water).left();
+		table.add(water).left().height(GameConstants.BLOCK_HEIGHT * 2).width(GameConstants.BLOCK_HEIGHT * 2);
 
 		loadingHeight = GameConstants.BLOCK_HEIGHT * 0.7f;
 
@@ -262,12 +324,6 @@ public class CharacterSelectScreen implements Screen {
 		stage.addActor(rabbit);
 		stage.addActor(cat);
 		stage.addActor(turtle);
-		
-		TextButtonStyle style = new TextButtonStyle();
-		style.up = GdxRessourcesGetter.getSkin().getDrawable("button_up");
-		style.down = GdxRessourcesGetter.getSkin().getDrawable("button_down");
-		style.font = GdxRessourcesGetter.getBigFont();
-		style.fontColor = Color.BLACK;
 		
 		back = new TextButton(localisation(_back), style);
 		back.addListener(new ClickListener() {

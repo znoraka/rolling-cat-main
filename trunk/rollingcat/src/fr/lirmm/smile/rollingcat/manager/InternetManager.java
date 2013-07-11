@@ -276,8 +276,13 @@ public class InternetManager{
 		}
 		else
 		{
-			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+			if(!GameConstants.reversedLevel)
+				map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+			else
+				map.put("dials", "" + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0"));
 		}
+		System.out.println(map.get("dials"));
+
 
 		map.put("leftHemiplegia", Patient.getInstance().isLeftHemiplegia());
 		map.put("reversed", GameConstants.reversedLevel);
@@ -347,8 +352,13 @@ public class InternetManager{
 		}
 		else
 		{
-			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+			if(!GameConstants.reversedLevel)
+				map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+			else
+				map.put("dials", "" + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0"));
 		}
+		
+		System.out.println(map.get("dials"));
 
 		map.put("leftHemiplegia", Patient.getInstance().isLeftHemiplegia());
 		Gdx.app.log(RollingCat.LOG, "reversed level : " + Patient.getInstance().isLeftHemiplegia());
@@ -550,8 +560,13 @@ public class InternetManager{
 		}
 		else
 		{
-			map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+			if(!GameConstants.reversedLevel)
+				map.put("dials", "" + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0"));
+			else
+				map.put("dials", "" + ((GameConstants.area_2 == true)?"1":"0") + ((GameConstants.area_1 == true)?"1":"0") + ((GameConstants.area_4 == true)?"1":"0") + ((GameConstants.area_3 == true)?"1":"0"));
 		}
+
+
 		map.put("ImportanceOfEffort", 0.9f);
 
 		map.put("leftHemiplegia", Patient.getInstance().isLeftHemiplegia());
@@ -644,7 +659,7 @@ public class InternetManager{
 //				nblevels[0] = 20;
 //				nblevels[1] = 20;
 //				nblevels[2] = 20;
-				
+//				
 				Gdx.app.log(RollingCat.LOG, "game id : " + gameid);
 				Gdx.app.log(RollingCat.LOG, "retrieving complete");
 
@@ -655,6 +670,31 @@ public class InternetManager{
 				Gdx.app.log(RollingCat.LOG, t.toString());
 				Gdx.app.log(RollingCat.LOG, "something went wrong, could not retrieve number of levels");
 			}});
+	}
+
+	public static void requestWorldClear() {
+		Gdx.app.log(RollingCat.LOG, "preparing world clear request...");
+
+		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
+
+		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/"+Patient.getInstance().getID()+"/"+gameid+"/reset");
+
+		httpGet.setHeader(key, value);
+		Gdx.app.log(RollingCat.LOG, "sending world clear request...");
+
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				Gdx.app.log(RollingCat.LOG, "worlds cleared");
+			}
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
+				Gdx.app.log(RollingCat.LOG, "something went wrong, could not clear worlds");
+			}});
+		
 	}
 
 }
