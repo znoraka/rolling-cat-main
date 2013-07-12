@@ -64,8 +64,10 @@ public class AssessmentScreen implements Screen {
 	private Label label;
 	private Track track;
 	private Vector2 mouseAngle;
-	private int angleBetweenTriangles;
+	private int angleBetweenTriangles, trianglesDone;
 	private float elapsedTime;
+	private boolean wentInSelectedArea;
+	private boolean readyToFillArea;
 
 
 	public AssessmentScreen(RollingCat game){
@@ -104,54 +106,101 @@ public class AssessmentScreen implements Screen {
 		sr.circle(GameConstants.DISPLAY_WIDTH / 2, 0, (f > 1)?(f):1);
 		sr.end();
 		duration += delta;
+
 		if(!mc.isPaused()){
 			mc.addTrackingPoint(delta);
 
-			//			if(selected == triangles.size()){
-			//				done = true;
-			//				upload.setVisible(true);
-			//				resume.setVisible(false);
-			//				mc.pause();
+			if(trianglesDone - 1 == triangles.size()){
+				done = true;
+				upload.setVisible(true);
+				resume.setVisible(false);
+				mc.pause();
+			}
+			//
+			//			if(canStart() & !mc.isStarted()){
+			//				mc.start();
+			//			}
+			//
+			//			if(mc.isInArea() & waitingToEnterInArea)
+			//			{
+			//				if(triangles.get((int)(mouseAngle.angle()) / angleBetweenTriangles).getProgression() < 1f)
+			//				{
+			//					selected = (int)(mouseAngle.angle()) / angleBetweenTriangles;
+			//				}
+			//			}
+			//
+			//			if(mc.isInArea() & mc.isStarted() & !waitingToEnterInArea & wentInSelectedArea)
+			//			{
+			//				if(timeout < GameConstants.HOVER_TIME )
+			//					timeout += delta;
+			//				else{
+			//					selected = -1;
+			//					wentInSelectedArea = false;
+			//					trianglesDone++;
+			//					if(help == 1)
+			//						help = 2;
+			//					if(help == 3)
+			//						help = 4;
+			//					timeout = 0;
+			//					waitingToEnterInArea = true;
+			//					mc.stop();
+			//				}
+			//			}
+			//			else{
+			//				timeout = 0;
+			//			}
+			//
+			//			if(!mc.isInArea()){
+			//				if(help == 2)
+			//					help = 3;
+			//
+			//				if(help == 4)
+			//					help = 5;
+			//
+			//				if(selected == triangles.size() - 1)
+			//					help = 6;
+			//				waitingToEnterInArea = false;
 			//			}
 
-			if(canStart() & !mc.isStarted()){
-				mc.start();
-			}
-
-			if(mc.isInArea() & waitingToEnterInArea)
+			if(mc.isInArea())
 			{
-				selected = (int)(mouseAngle.angle()) / angleBetweenTriangles;
-			}
+				if(!readyToFillArea)
+				{
+					if(timeout < GameConstants.HOVER_TIME )
+						timeout += delta;
+					else
+					{
+						readyToFillArea = true;
+						//						mc.stop();
+						mc.start();
+						timeout = 0;
+						trianglesDone++;
 
-			if(mc.isInArea() & mc.isStarted() & !waitingToEnterInArea){
+						if(help == 1)
+							help = 2;
+						if(help == 3)
+							help = 4;
 
 
-				if(timeout < GameConstants.HOVER_TIME )
-					timeout += delta;
-				else{
-					if(help == 1)
-						help = 2;
-					if(help == 3)
-						help = 4;
-					timeout = 0;
-					waitingToEnterInArea = true;
-					mc.stop();
+					}
+				}
+
+				if(readyToFillArea && triangles.get((int)(mouseAngle.angle()) / angleBetweenTriangles).getProgression() < 1f)
+				{
+					selected = (int)(mouseAngle.angle()) / angleBetweenTriangles;
 				}
 			}
-			else{
-				timeout = 0;
-			}
-
-			if(!mc.isInArea()){
+			else if(isInSelectedTriangle())
+			{
+				readyToFillArea = false;
 				if(help == 2)
 					help = 3;
 
 				if(help == 4)
 					help = 5;
 
-				if(selected == triangles.size() - 1)
+				if(trianglesDone == triangles.size())
 					help = 6;
-				waitingToEnterInArea = false;
 			}
 
 			setLabelTextAndPosition();
@@ -200,6 +249,14 @@ public class AssessmentScreen implements Screen {
 		}
 
 	}
+
+	private boolean isInSelectedTriangle() {
+		if(selected >= 0)
+			return (triangles.get(selected).getProgression() > 2);
+		else
+			return false;
+	}
+
 	@Override
 	public void resize(int width, int height) {
 	}
@@ -211,6 +268,10 @@ public class AssessmentScreen implements Screen {
 		pauseStage = getStage();
 		stage = getStage();
 		EventManager.clear();
+
+		trianglesDone = 0;
+		wentInSelectedArea = true;
+		readyToFillArea = false;
 
 		mouseAngle = new Vector2(0, 0);
 
@@ -303,7 +364,7 @@ public class AssessmentScreen implements Screen {
 		setLabelTextAndPosition();
 
 		//		done = true;
-		upload.setVisible(true);
+		upload.setVisible(false);
 		//		mc.pause();
 	}
 
@@ -340,5 +401,15 @@ public class AssessmentScreen implements Screen {
 		label.setText(StringUtils.addEnters(localisation(_assessment_ + help), 20));
 		label.setY(GameConstants.DISPLAY_HEIGHT * 0.85f);
 		label.setX(GameConstants.DISPLAY_WIDTH * 0.5f - 20 * 6);
+	}
+
+	public void setWentInSelectedArea()
+	{
+		wentInSelectedArea = true;
+	}
+
+	public boolean getWentInSelectedArea()
+	{
+		return wentInSelectedArea;
 	}
 }

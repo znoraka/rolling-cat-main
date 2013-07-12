@@ -276,7 +276,7 @@ public class MouseCursorGame implements InputProcessor{
 		else if(item == Box.SCISSORS)
 			batch.draw(atlas.findRegion("scissors" + RollingCat.skin), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT * 1.5f, 1, 1, 0);
 		else
-			batch.draw(atlas.findRegion("hand"), x - GameConstants.BLOCK_WIDTH * 0.75f, y - GameConstants.BLOCK_HEIGHT * 0.75f, x, y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT * 1.5f, 1, 1, 0);
+			batch.draw(atlas.findRegion("hand"), x - GameConstants.BLOCK_WIDTH * 0.5f, y - GameConstants.BLOCK_HEIGHT * 0.5f, x, y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
 		batch.end();
 
 	}

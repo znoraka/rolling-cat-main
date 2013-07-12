@@ -96,7 +96,7 @@ public class GameScreen implements ScreenPausable{
 		elapsedTimeDuringPause = 0;
 		beginPause = 0;
 		this.listOfGems = listOfGems;
-//		Gdx.input.setCursorCatched(true);
+		Gdx.input.setCursorCatched(true);
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class GameScreen implements ScreenPausable{
 			mc.addTrackingPoint(delta, segment);
 			gem = Target.getInstance();
 			if(Cat.getInstance().isDone() && gem != null && gem.getActions().size == 0){
-//				Gdx.input.setCursorCatched(false);
+				Gdx.input.setCursorCatched(false);
 				SoundManager.gameMusicPlay(false);
 				SoundManager.winPlay();
 				gem.addAction(Actions.parallel(Actions.sequence(
@@ -289,7 +289,7 @@ public class GameScreen implements ScreenPausable{
 		resume.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				paused = false;
-//				Gdx.input.setCursorCatched(!paused);
+				Gdx.input.setCursorCatched(!paused);
 				handleElapsedTime();
 			}
 		});
@@ -364,11 +364,11 @@ public class GameScreen implements ScreenPausable{
 		table.setY(GameConstants.DISPLAY_HEIGHT * 0.04f);
 
 		table.add(goldLabel).padLeft(GameConstants.BLOCK_WIDTH * 0.25f);
-		table.add(goldImage).height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
+		table.add(goldImage).height(GameConstants.BLOCK_HEIGHT * 0.7f).width(GameConstants.BLOCK_WIDTH * 0.7f);
 		table.add(silverLabel).padLeft(GameConstants.BLOCK_WIDTH * 0.25f);;
-		table.add(silverImage).height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
+		table.add(silverImage).height(GameConstants.BLOCK_HEIGHT * 0.7f).width(GameConstants.BLOCK_WIDTH * 0.7f);
 		table.add(bronzeLabel).padLeft(GameConstants.BLOCK_WIDTH * 0.25f);;
-		table.add(bronzeImage).height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
+		table.add(bronzeImage).height(GameConstants.BLOCK_HEIGHT * 0.7f).width(GameConstants.BLOCK_WIDTH * 0.7f);
 
 		stage.addListener(new InputListener() {
 
@@ -382,7 +382,7 @@ public class GameScreen implements ScreenPausable{
 				if(keycode == Keys.ESCAPE){
 					paused = !paused;
 					handleElapsedTime();
-//					Gdx.input.setCursorCatched(!paused);
+					Gdx.input.setCursorCatched(!paused);
 				}
 				if(keycode == Keys.SPACE)
 					mc.fall();
