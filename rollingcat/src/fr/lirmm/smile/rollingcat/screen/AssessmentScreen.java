@@ -116,51 +116,6 @@ public class AssessmentScreen implements Screen {
 				resume.setVisible(false);
 				mc.pause();
 			}
-			//
-			//			if(canStart() & !mc.isStarted()){
-			//				mc.start();
-			//			}
-			//
-			//			if(mc.isInArea() & waitingToEnterInArea)
-			//			{
-			//				if(triangles.get((int)(mouseAngle.angle()) / angleBetweenTriangles).getProgression() < 1f)
-			//				{
-			//					selected = (int)(mouseAngle.angle()) / angleBetweenTriangles;
-			//				}
-			//			}
-			//
-			//			if(mc.isInArea() & mc.isStarted() & !waitingToEnterInArea & wentInSelectedArea)
-			//			{
-			//				if(timeout < GameConstants.HOVER_TIME )
-			//					timeout += delta;
-			//				else{
-			//					selected = -1;
-			//					wentInSelectedArea = false;
-			//					trianglesDone++;
-			//					if(help == 1)
-			//						help = 2;
-			//					if(help == 3)
-			//						help = 4;
-			//					timeout = 0;
-			//					waitingToEnterInArea = true;
-			//					mc.stop();
-			//				}
-			//			}
-			//			else{
-			//				timeout = 0;
-			//			}
-			//
-			//			if(!mc.isInArea()){
-			//				if(help == 2)
-			//					help = 3;
-			//
-			//				if(help == 4)
-			//					help = 5;
-			//
-			//				if(selected == triangles.size() - 1)
-			//					help = 6;
-			//				waitingToEnterInArea = false;
-			//			}
 
 			if(mc.isInArea())
 			{
@@ -171,7 +126,6 @@ public class AssessmentScreen implements Screen {
 					else
 					{
 						readyToFillArea = true;
-						//						mc.stop();
 						mc.start();
 						timeout = 0;
 						trianglesDone++;
@@ -183,6 +137,10 @@ public class AssessmentScreen implements Screen {
 
 
 					}
+				}
+				else
+				{
+					selected = -1;
 				}
 
 				if(readyToFillArea && triangles.get((int)(mouseAngle.angle()) / angleBetweenTriangles).getProgression() < 1f)
