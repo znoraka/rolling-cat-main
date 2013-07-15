@@ -59,7 +59,7 @@ feather2
   orig: 128, 134
   offset: 0, 0
   index: -1
-bone1
+arch
   rotate: false
   xy: 131, 13
   size: 128, 128
@@ -101,14 +101,14 @@ mouse
   orig: 256, 256
   offset: 0, 0
   index: 1
-bouee_blue
+bone1
   rotate: false
   xy: 261, 13
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-bouee_red
+bouee_blue
   rotate: false
   xy: 767, 13
   size: 128, 128
@@ -197,359 +197,387 @@ swatter2
   orig: 147, 147
   offset: 0, 0
   index: -1
-box
+bouee_red
   rotate: false
   xy: 383, 693
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-box_bone1
+box
   rotate: false
   xy: 585, 895
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-box_bone2
+box_bone1
   rotate: false
   xy: 715, 895
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-box_bone3
+box_bone2
   rotate: false
   xy: 845, 895
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-box_feather1
+box_bone3
   rotate: false
   xy: 259, 453
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-box_feather2
+box_feather1
   rotate: false
   xy: 259, 323
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-box_feather3
+box_feather2
   rotate: false
   xy: 513, 693
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
+box_feather3
+  rotate: false
+  xy: 193, 193
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 box_scissors1
-  rotate: false
-  xy: 193, 193
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-box_scissors2
-  rotate: false
-  xy: 193, 193
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-box_scissors3
-  rotate: false
-  xy: 193, 193
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-box_swatter1
   rotate: false
   xy: 323, 193
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-box_swatter2
+box_scissors2
+  rotate: false
+  xy: 323, 193
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+box_scissors3
+  rotate: false
+  xy: 323, 193
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+box_swatter1
   rotate: false
   xy: 643, 765
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-box_swatter3
+box_swatter2
   rotate: false
   xy: 773, 765
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
+box_swatter3
+  rotate: false
+  xy: 643, 635
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 cat
-  rotate: false
-  xy: 643, 635
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-skin0
-  rotate: false
-  xy: 643, 635
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-coinbronze
   rotate: false
   xy: 773, 635
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-coingold
+skin0
+  rotate: false
+  xy: 773, 635
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+coinbronze
   rotate: false
   xy: 150, 20
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-coinsilver
+coingold
   rotate: false
   xy: 280, 63
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-feather1
+coinsilver
   rotate: false
   xy: 410, 63
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-feather3
+door
   rotate: false
   xy: 389, 563
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-skin1
+door1
   rotate: false
   xy: 389, 433
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-skin2
+door2
   rotate: false
   xy: 519, 505
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-wasp
+feather1
   rotate: false
   xy: 649, 505
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-swatter3
+feather3
   rotate: false
-  xy: 779, 515
-  size: 128, 118
-  orig: 128, 118
+  xy: 779, 505
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+skin1
+  rotate: false
+  xy: 519, 375
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+skin2
+  rotate: false
+  xy: 649, 375
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+wasp
+  rotate: false
+  xy: 779, 375
+  size: 128, 128
+  orig: 128, 128
   offset: 0, 0
   index: -1
 dog
   rotate: false
-  xy: 389, 367
+  xy: 903, 829
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 2
 earthblock
   rotate: false
-  xy: 519, 439
+  xy: 389, 367
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 empty
   rotate: false
-  xy: 903, 829
+  xy: 903, 763
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 fan
   rotate: false
-  xy: 585, 439
+  xy: 903, 697
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
+swatter3
+  rotate: false
+  xy: 540, 255
+  size: 128, 118
+  orig: 128, 118
+  offset: 0, 0
+  index: -1
 fan
   rotate: false
-  xy: 903, 763
+  xy: 670, 309
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 2
 fan
   rotate: false
-  xy: 651, 439
+  xy: 736, 309
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 3
 green_gem
   rotate: false
-  xy: 903, 697
+  xy: 802, 309
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 green_highlight
   rotate: false
-  xy: 455, 367
+  xy: 670, 243
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 groundblock1
   rotate: false
-  xy: 717, 439
+  xy: 736, 243
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 groundblock2
   rotate: false
-  xy: 521, 373
+  xy: 802, 243
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 groundblock3
   rotate: false
-  xy: 587, 373
+  xy: 868, 309
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 ladder
   rotate: false
-  xy: 653, 373
+  xy: 868, 243
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 opened_door_l
   rotate: false
-  xy: 719, 373
+  xy: 540, 189
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 opened_door_r
   rotate: false
-  xy: 783, 449
+  xy: 540, 123
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 purple_gem
   rotate: false
-  xy: 849, 449
+  xy: 540, 57
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 red_gem
   rotate: false
-  xy: 785, 383
+  xy: 606, 177
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 red_highlight
   rotate: false
-  xy: 851, 383
+  xy: 606, 111
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 scissors1
   rotate: false
-  xy: 453, 301
+  xy: 672, 177
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 scissors2
   rotate: false
-  xy: 453, 301
+  xy: 672, 177
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 scissors3
   rotate: false
-  xy: 453, 301
+  xy: 672, 177
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 shit
   rotate: false
-  xy: 453, 235
+  xy: 672, 111
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 spring
   rotate: false
-  xy: 785, 317
+  xy: 738, 177
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 spring
   rotate: false
-  xy: 851, 317
+  xy: 738, 111
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 2
 spring
   rotate: false
-  xy: 521, 307
+  xy: 804, 177
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 3
 tree
   rotate: false
-  xy: 587, 307
+  xy: 804, 111
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tree_side
   rotate: false
-  xy: 653, 307
+  xy: 870, 177
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 yellow_gem
   rotate: false
-  xy: 719, 307
+  xy: 870, 111
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

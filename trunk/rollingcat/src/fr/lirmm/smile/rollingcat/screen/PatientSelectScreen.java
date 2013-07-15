@@ -109,6 +109,12 @@ public class PatientSelectScreen implements Screen{
 		evaporationPerDayLabel.setVisible(avanceCB.isChecked());
 		alpha.setVisible(avanceCB.isChecked());
 		alphaLabel.setVisible(avanceCB.isChecked());
+		workspaceHeight.setVisible(avanceCB.isChecked());
+		heightLabel.setVisible(avanceCB.isChecked());
+		workspaceWidth.setVisible(avanceCB.isChecked());
+		widthLabel.setVisible(avanceCB.isChecked());
+		
+		
 
 		avanceCB.setX(GameConstants.DISPLAY_WIDTH * 0.325f);
 		avanceCB.setY(GameConstants.DISPLAY_HEIGHT * 0.16f);
@@ -306,7 +312,6 @@ public class PatientSelectScreen implements Screen{
 			totalVolumeLabel = new Label(localisation(_total_volume)+" :", labelStyle);
 			timeoutLabel = new Label(localisation(_timeout)+" :", labelStyle);
 			reversedLevelLabel = new Label(localisation(_reversed)+ " :", labelStyle);
-
 			workspaceHeight = new TextField(""+GameConstants.workspaceHeight, textFieldStyle);
 			workspaceHeight.setRightAligned(false);
 			workspaceHeight.setOriginX(50);
@@ -386,12 +391,6 @@ public class PatientSelectScreen implements Screen{
 			style.font = font;
 			style.fontColor = Color.BLACK;
 
-			tableRightTop.add(heightLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
-			tableRightTop.add(workspaceHeight).right().padLeft(GameConstants.BLOCK_WIDTH * 3).height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
-			tableRightTop.row();
-			tableRightTop.add(widthLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
-			tableRightTop.add(workspaceWidth).right().height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
-			tableRightTop.row();
 			tableRightTop.add(nbSuccessLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 			tableRightTop.add(nbSuccess).right().height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
 			tableRightTop.row();
@@ -408,6 +407,12 @@ public class PatientSelectScreen implements Screen{
 
 			tableRightTop.add(rangeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 			tableRightTop.add(range).right().height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
+			tableRightTop.row();
+			tableRightTop.add(heightLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+			tableRightTop.add(workspaceHeight).right().padLeft(GameConstants.BLOCK_WIDTH * 3).height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
+			tableRightTop.row();
+			tableRightTop.add(widthLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+			tableRightTop.add(workspaceWidth).right().height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
 			tableRightTop.row();
 			tableRightTop.add(evaporationPerDayLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 			tableRightTop.add(evaporationPerDay).right().height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
@@ -442,7 +447,7 @@ public class PatientSelectScreen implements Screen{
 			zoneTable.setHeight(GameConstants.DISPLAY_HEIGHT * 0.3f);
 			zoneTable.setWidth(GameConstants.DISPLAY_WIDTH * 0.3f);
 			zoneTable.setX(GameConstants.DISPLAY_WIDTH * 0.662f);
-			zoneTable.setY(GameConstants.DISPLAY_HEIGHT * 0.16f);
+			zoneTable.setY(GameConstants.DISPLAY_HEIGHT * 0.3f);
 			zoneTable.invalidate();
 			
 			config.setColor(Color.MAGENTA);
@@ -457,6 +462,7 @@ public class PatientSelectScreen implements Screen{
 			labelPatients.setHeight(GameConstants.DISPLAY_HEIGHT * 0.08f);
 			
 			tableLeft.setColor(1, 1, 1, 1);
+			reversedLevel.setChecked(true);
 			
 		}
 

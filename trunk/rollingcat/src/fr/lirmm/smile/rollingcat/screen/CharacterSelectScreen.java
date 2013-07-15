@@ -1,6 +1,9 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.Localisation.*;
+import static fr.lirmm.smile.rollingcat.Localisation._back;
+import static fr.lirmm.smile.rollingcat.Localisation._no;
+import static fr.lirmm.smile.rollingcat.Localisation._win;
+import static fr.lirmm.smile.rollingcat.Localisation._yes;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getGameSkin;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getShapeRenderer;
@@ -11,6 +14,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.TextureData;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
@@ -19,9 +26,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
@@ -49,6 +56,10 @@ public class CharacterSelectScreen implements Screen {
 	private TextButton back, yes, no;
 	private Window win;
 	private Label windowText;
+	private SpriteBatch batch;
+	private Image arch, door;
+	private float d;
+	private Texture backgroundTexture;
 	
 	public CharacterSelectScreen(RollingCat game){
 		this.game = game;
@@ -63,6 +74,21 @@ public class CharacterSelectScreen implements Screen {
 		
 		loadingWidth = goBoss.getX() - temple.getX() - GameConstants.BLOCK_WIDTH * 4 - GameConstants.BLOCK_HEIGHT * 0.5f;
 
+		d += Gdx.graphics.getDeltaTime() * 10;
+
+		batch.begin();
+		batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+		batch.end();
+		
+		if(door.getY() > arch.getY() + arch.getHeight() * 0.2f)
+		{
+			door.setDrawable(GdxRessourcesGetter.getGameSkin().getDrawable("door1"));
+		}
+		if(door.getY() > arch.getY() + arch.getHeight() * 0.45f)
+		{
+			door.setDrawable(GdxRessourcesGetter.getGameSkin().getDrawable("door2"));
+		}
+		
 		if(cat.getActions().size == 0 && !catReachedHisGoal)
 		{
 			if(InternetManager.nblevels[0] == 20)
@@ -145,8 +171,14 @@ public class CharacterSelectScreen implements Screen {
 			{
 				sr.setColor(Color.GREEN);
 				sr.rect(originX + loadingWidth + GameConstants.DISPLAY_WIDTH * 0.015f, water.getY(), loadingHeight, -water.getY() + turtle.getY() + loadingHeight * 0.8f);
+				if(door.getActions().size == 0)
+				{
+					door.addAction(Actions.sequence(
+							Actions.delay(4),
+							Actions.moveTo(door.getX(), arch.getY() + door.getHeight() * 0.6f, 5, Interpolation.linear)
+							));
+				}
 			}
-			goBoss.setVisible(true);
 		}
 
 		sr.end();
@@ -166,7 +198,6 @@ public class CharacterSelectScreen implements Screen {
 		yes.setY(win.getHeight() * 0.1f);
 		no.setX(win.getWidth() * 0.9f - no.getWidth());
 		no.setY(win.getHeight() * 0.1f);
-		
 	}
 
 	@Override
@@ -177,6 +208,7 @@ public class CharacterSelectScreen implements Screen {
 	public void show() {
 		stage = getStage();
 		sr = getShapeRenderer();
+		batch = GdxRessourcesGetter.getSpriteBatch();
 		
 		WindowStyle ws = new WindowStyle();
 		ws.titleFont = GdxRessourcesGetter.getBigFont();
@@ -243,13 +275,7 @@ public class CharacterSelectScreen implements Screen {
 		goBoss = new Image(getGameSkin().getDrawable("shit"));
 		goBoss.setVisible(true);
 		
-		goBoss.addListener(new ClickListener() {
-			public void clicked (InputEvent event, float x, float y) {
-				Gdx.app.log(RollingCat.LOG, "no boss yet");
-				win.setVisible(true);
-				win.toFront();
-			}
-		});
+		
 
 		temple.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
@@ -334,8 +360,33 @@ public class CharacterSelectScreen implements Screen {
 		});
 		
 		stage.addActor(back);
+		
+		goBoss.setVisible(false);
+		
+		arch = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("arch"));
+		door = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("door"));
+		
+		arch.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				Gdx.app.log(RollingCat.LOG, "no boss yet");
+				win.setVisible(true);
+				win.toFront();
+			}
+		});
+		
+		stage.addActor(door);
+		stage.addActor(arch);
 
 		Gdx.input.setInputProcessor(stage);
+		
+		door.setX(goBoss.getX());
+		door.setY(goBoss.getY());
+		arch.setX(goBoss.getX());
+		arch.setY(goBoss.getY());
+		
+		backgroundTexture = new Texture("data/plaine.png");
+		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
 
 	}
 
