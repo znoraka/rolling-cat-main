@@ -1,4 +1,0 @@
-{
-	0:"Français",
-	1:"English"
-}
