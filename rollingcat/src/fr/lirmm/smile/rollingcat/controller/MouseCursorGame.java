@@ -75,6 +75,7 @@ public class MouseCursorGame implements InputProcessor{
 	 * @param stage le stage du jeu
 	 */
 	public void updateHoverTimer(){
+		
 		this.isTrigger = false;
 		bounds.x = x;
 		bounds.y = y;
@@ -334,6 +335,7 @@ public class MouseCursorGame implements InputProcessor{
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		
 		if(screenX > GameConstants.DISPLAY_WIDTH)
 			screenX = GameConstants.DISPLAY_WIDTH - 1;
 
@@ -348,6 +350,7 @@ public class MouseCursorGame implements InputProcessor{
 
 		x = (screenX + stage.getCamera().position.x - GameConstants.DISPLAY_WIDTH / 2);
 		y = Gdx.graphics.getHeight() - screenY + decalage;
+		
 		return true;
 	}
 

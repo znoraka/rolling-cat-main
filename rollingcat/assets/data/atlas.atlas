@@ -365,25 +365,53 @@ feather3
   orig: 128, 128
   offset: 0, 0
   index: -1
-skin1
+halfheart
   rotate: false
   xy: 519, 375
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-skin2
+halfheartflip
   rotate: false
   xy: 649, 375
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-wasp
+heart
   rotate: false
   xy: 779, 375
   size: 128, 128
   orig: 128, 128
+  offset: 0, 0
+  index: -1
+skin1
+  rotate: false
+  xy: 453, 245
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+skin2
+  rotate: false
+  xy: 583, 245
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+wasp
+  rotate: false
+  xy: 713, 245
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+swatter3
+  rotate: false
+  xy: 540, 125
+  size: 128, 118
+  orig: 128, 118
   offset: 0, 0
   index: -1
 dog
@@ -395,189 +423,182 @@ dog
   index: 2
 earthblock
   rotate: false
-  xy: 389, 367
+  xy: 843, 309
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 empty
   rotate: false
-  xy: 903, 763
+  xy: 670, 179
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+fan
+  rotate: false
+  xy: 903, 763
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+fan
+  rotate: false
+  xy: 736, 179
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 2
 fan
   rotate: false
   xy: 903, 697
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: 1
-swatter3
-  rotate: false
-  xy: 540, 255
-  size: 128, 118
-  orig: 128, 118
-  offset: 0, 0
-  index: -1
-fan
-  rotate: false
-  xy: 670, 309
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: 2
-fan
-  rotate: false
-  xy: 736, 309
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
   index: 3
 green_gem
   rotate: false
-  xy: 802, 309
+  xy: 843, 243
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 green_highlight
   rotate: false
-  xy: 670, 243
+  xy: 540, 59
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 groundblock1
   rotate: false
-  xy: 736, 243
+  xy: 606, 59
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 groundblock2
   rotate: false
-  xy: 802, 243
+  xy: 802, 177
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 groundblock3
   rotate: false
-  xy: 868, 309
+  xy: 868, 177
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 ladder
   rotate: false
-  xy: 868, 243
+  xy: 672, 113
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 opened_door_l
   rotate: false
-  xy: 540, 189
+  xy: 672, 47
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 opened_door_r
   rotate: false
-  xy: 540, 123
+  xy: 738, 111
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 purple_gem
   rotate: false
-  xy: 540, 57
+  xy: 804, 111
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 red_gem
   rotate: false
-  xy: 606, 177
+  xy: 738, 45
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 red_highlight
   rotate: false
-  xy: 606, 111
+  xy: 804, 45
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 scissors1
   rotate: false
-  xy: 672, 177
+  xy: 870, 111
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 scissors2
   rotate: false
-  xy: 672, 177
+  xy: 870, 111
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 scissors3
   rotate: false
-  xy: 672, 177
+  xy: 870, 111
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 shit
   rotate: false
-  xy: 672, 111
+  xy: 870, 45
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 spring
   rotate: false
-  xy: 738, 177
+  xy: 909, 631
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 1
 spring
   rotate: false
-  xy: 738, 111
+  xy: 909, 565
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 2
 spring
   rotate: false
-  xy: 804, 177
+  xy: 909, 499
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 3
 tree
   rotate: false
-  xy: 804, 111
+  xy: 909, 433
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 tree_side
   rotate: false
-  xy: 870, 177
+  xy: 909, 367
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 yellow_gem
   rotate: false
-  xy: 870, 111
+  xy: 909, 301
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

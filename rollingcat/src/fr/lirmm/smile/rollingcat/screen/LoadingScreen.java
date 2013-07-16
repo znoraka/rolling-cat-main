@@ -141,7 +141,7 @@ public class LoadingScreen implements Screen {
 		start = new TextButton(localisation(_ready), style);
 		start.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				game.setScreen(new GameScreen(game, stage, level, listOfGem));
+				game.setScreen(new GameScreen(game, stage, level));
 			}
 		});
 

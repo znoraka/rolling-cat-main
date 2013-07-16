@@ -5,6 +5,7 @@ package fr.lirmm.smile.rollingcat;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 
+import fr.lirmm.smile.rollingcat.screen.BossScreen;
 import fr.lirmm.smile.rollingcat.screen.LoginScreen;
 
 
@@ -23,6 +24,7 @@ public class RollingCat extends Game {
 	public void create() {	
 		Localisation.initLanguage();
 		this.setScreen(new LoginScreen(this));
+//		this.setScreen(new BossScreen(this));
 	}
 
 	@Override

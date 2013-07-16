@@ -82,10 +82,11 @@
 		<patients>Liste des patients</patients>
 		<yes>Oui</yes>
 		<no>Non</no>
-		<win>Bravo, vous avez gagné, 
+		<win>Bravo, vous avez gagn&eacute;, 
 		pour faire de nouveaux niveaux,
-		vous pouvez réinitialiser les mondes.
-		Réinitialiser les mondes ?</win>
+		vous pouvez r&eacute;initialiser les mondes.
+		R&eacute;initialiser les mondes ?</win>
+		<congrats>F&eacute;licitations, vous avez termin&eacute; le niveau !</congrats>
 	</language>
 	
 	<language name="English">
@@ -95,40 +96,40 @@
 		<settings>Settings</settings>
 		<back>Back</back>
 		<select>Select</select>
-		<play>play</play>
-		<assessment>assessment</assessment>
-		<upload>upload</upload>
+		<play>Play</play>
+		<assessment>Assessment</assessment>
+		<upload>Upload</upload>
 		<tracks>Tracks</tracks>
 		<name>name</name>
 		<dominant_member>dominant member</dominant_member>
 		<hemiplegia>hemiplegia</hemiplegia>
-		<previous>previous</previous>
-		<start>start</start>
-		<next>next</next>
+		<previous>Previous</previous>
+		<start>Start</start>
+		<next>Next</next>
 		<gems>gems</gems>
 		<gem>gem</gem>
 		<new_level>new level!</new_level>
-		<level>level</level>
-		<score>score</score>
-		<duration>duration</duration>
-		<locked>locked</locked>
-		<not_found>not found</not_found>
-		<found>found</found>
-		<resume>resume</resume>
-		<quit>quit</quit>
-		<range>range</range>
-		<path_delta_time>path delta time</path_delta_time>
-		<evaporation_per_day>evaporation per day</evaporation_per_day>
-		<alpha>alpha</alpha>
-		<workspace_height>workspace height</workspace_height>
-		<workspace_width>workspace width</workspace_width>
-		<number_of_lines>number of lines</number_of_lines>
-		<number_of_rows>number of rows</number_of_rows>
-		<total_volume>total volume</total_volume>
-		<volume_per_level>volume per level</volume_per_level>
-		<delete>delete</delete>
-		<save>save</save>
-		<discard>discard</discard>
+		<level>Level</level>
+		<score>Score</score>
+		<duration>Duration</duration>
+		<locked>Locked</locked>
+		<not_found>Not found</not_found>
+		<found>Found</found>
+		<resume>Resume</resume>
+		<quit>Quit</quit>
+		<range>Range</range>
+		<path_delta_time>Path delta time</path_delta_time>
+		<evaporation_per_day>Evaporation per day</evaporation_per_day>
+		<alpha>Alpha</alpha>
+		<workspace_height>Workspace height</workspace_height>
+		<workspace_width>Workspace width</workspace_width>
+		<number_of_lines>Number of lines</number_of_lines>
+		<number_of_rows>Number of rows</number_of_rows>
+		<total_volume>Total volume</total_volume>
+		<volume_per_level>Volume per level</volume_per_level>
+		<delete>Delete</delete>
+		<save>Save</save>
+		<discard>Discard</discard>
 		<tutorial>Tutorial</tutorial>
 		<welcome>Welcome to\n the Rolling Cat \ntutorial</welcome>
 		<box_point>Grab the item in the box</box_point>
@@ -173,6 +174,8 @@
 		to play new levels,
 		you can reset the worlds.
 		Reset the worlds?</win>
+		<congrats>Congratulations, you complete the level!</congrats>
+		
 	</language>
 	   
 	

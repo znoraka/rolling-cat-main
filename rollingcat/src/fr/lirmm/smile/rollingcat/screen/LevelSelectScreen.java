@@ -56,7 +56,7 @@ public class LevelSelectScreen implements Screen {
 	private Stage stage;
 	private Skin skin;
 	private TextButton start, back;
-	private ImageButton next, previous, score;
+	private ImageButton next, previous;
 	private ArrayList<Table> tables;
 	private int currentButton;
 	private Table table;
@@ -292,12 +292,12 @@ public class LevelSelectScreen implements Screen {
 				}
 			});
 
-			score = new ImageButton(getGameSkin().getDrawable("red_gem"));
-			score.addListener(new ClickListener() {
-				public void clicked (InputEvent event, float x, float y) {
-					game.setScreen(new GameProgressionScreen(game, world.getGems(), null, 0));
-				}
-			});
+//			score = new ImageButton(getGameSkin().getDrawable("red_gem"));
+//			score.addListener(new ClickListener() {
+//				public void clicked (InputEvent event, float x, float y) {
+//					game.setScreen(new GameProgressionScreen(game, world.getGems(), null, 0));
+//				}
+//			});
 
 			createLabels(labelStyle);
 
@@ -310,7 +310,7 @@ public class LevelSelectScreen implements Screen {
 			stage.addActor(next);
 			stage.addActor(start);
 			stage.addActor(back);
-			stage.addActor(score);
+//			stage.addActor(score);
 			stage.addActor(charImage);
 			
 			changeTablesSize();
@@ -320,8 +320,8 @@ public class LevelSelectScreen implements Screen {
 			previous.setY(GameConstants.DISPLAY_HEIGHT - next.getHeight()); 
 			next.setX(GameConstants.DISPLAY_WIDTH * 0.5f - previous.getWidth() * 0.5f);
 			next.setY(0); 
-			score.setX(0);
-			score.setY(GameConstants.DISPLAY_HEIGHT - score.getHeight());
+//			score.setX(0);
+//			score.setY(GameConstants.DISPLAY_HEIGHT - score.getHeight());
 			charImage.setX(GameConstants.DISPLAY_WIDTH - charImage.getWidth());
 			charImage.setY(GameConstants.DISPLAY_HEIGHT - charImage.getHeight());
 		}
