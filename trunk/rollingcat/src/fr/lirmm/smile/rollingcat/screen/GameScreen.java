@@ -1,6 +1,6 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.Localisation._quit;
+import static fr.lirmm.smile.rollingcat.Localisation.*;
 import static fr.lirmm.smile.rollingcat.Localisation._resume;
 import static fr.lirmm.smile.rollingcat.Localisation._upload;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
@@ -73,9 +73,9 @@ public class GameScreen implements ScreenPausable{
 	private boolean done, requestSending, displayAbilityZone;
 	private Target gem;
 	private Image goldImage, silverImage, bronzeImage;
-	private Label goldLabel, silverLabel, bronzeLabel;
+	private Label goldLabel, silverLabel, bronzeLabel, gg;
 	private Table table, pauseTable;
-	private List<String> listOfGems;
+//	private List<String> listOfGems;
 	private boolean paused;
 	private static long elapsedTimeDuringPause;
 	private TextButton resume, quit, upload;
@@ -89,13 +89,13 @@ public class GameScreen implements ScreenPausable{
 	public static Vector2 bronze = new Vector2(GameConstants.BLOCK_WIDTH * 5, GameConstants.DISPLAY_HEIGHT * 0.92f);
 
 
-	public GameScreen(RollingCat game, Stage stage, Level level, List<String> listOfGems){
+	public GameScreen(RollingCat game, Stage stage, Level level){
 		this.game = game;
 		this.stage = stage;
 		this.level = level;
 		elapsedTimeDuringPause = 0;
 		beginPause = 0;
-		this.listOfGems = listOfGems;
+//		this.listOfGems = listOfGems;
 		Gdx.input.setCursorCatched(true);
 	}
 
@@ -147,9 +147,12 @@ public class GameScreen implements ScreenPausable{
 							public boolean act(float delta) {
 								done = true;
 								upload.setVisible(true);
+								gg.setVisible(true);
 								paused = true;
 								resume.setVisible(false);
 								music.setVisible(false);
+								backgroundTexture = new Texture("data/plaine.png");
+								backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 								return true;
 							}
 						})));
@@ -168,8 +171,18 @@ public class GameScreen implements ScreenPausable{
 
 		if(paused)
 		{	
+			batch.begin();
+			batch.draw(backgroundTexture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+			font.setColor(Color.BLACK);
+			batch.end();
+			
 			pauseStage.draw();
 			pauseStage.act();
+			
+			gg.setX(GameConstants.DISPLAY_WIDTH * 0.5f - gg.getWidth() * 0.5f);
+			gg.setY(GameConstants.DISPLAY_HEIGHT * 0.7f);
+			gg.getStyle().fontColor = Color.BLACK;
+			
 		}
 
 		if(requestSending && track.getListOfEvents() != null){
@@ -277,8 +290,10 @@ public class GameScreen implements ScreenPausable{
 
 		goldLabel = new Label("", labelStyle);
 		silverLabel = new Label("", labelStyle);
-		bronzeLabel  = new Label("", labelStyle);
-
+		bronzeLabel = new Label("", labelStyle);
+		gg = new Label(localisation(_congrats), labelStyle);
+		gg.setVisible(false);
+		
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = getSkin().getDrawable("button_up");
 		style.down = getSkin().getDrawable("button_down");
@@ -306,7 +321,7 @@ public class GameScreen implements ScreenPausable{
 					Patient.getInstance().addTrack(track);
 					requestSending = true;
 					pauseStage.clear();
-					upload = InternetManager.getOkButton(new GameProgressionScreen(game, listOfGems, gem, level.getId()), game);
+					upload = InternetManager.getOkButton(new LevelSelectScreen(game), game);
 					pauseStage.addActor(upload);
 					upload.setX(GameConstants.DISPLAY_WIDTH * 0.5f - upload.getWidth() * 0.5f);
 					upload.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - upload.getHeight() * 0.5f);
@@ -410,6 +425,8 @@ public class GameScreen implements ScreenPausable{
 
 		SoundManager.gameMusicPlay(true);
 		music.setChecked(true);
+		
+		pauseStage.addActor(gg);
 	}
 
 	@Override

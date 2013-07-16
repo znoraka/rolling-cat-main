@@ -67,7 +67,7 @@ public class PatientSelectScreen implements Screen{
 	private ArrayList<Patient> patients;
 	private Patient p;
 	private Label labelPatients, config;
-	private LabelStyle labelStyle;
+	private LabelStyle labelStyle, labelStyle1;
 	private Doctor doctor;
 	private int selectedButton;
 	private TextField workspaceHeight, workspaceWidth, range, evaporationPerDay, alpha, nbSuccess, numberOfRows, totalVolume, volumePerLevel, timeout;
@@ -113,6 +113,8 @@ public class PatientSelectScreen implements Screen{
 		heightLabel.setVisible(avanceCB.isChecked());
 		workspaceWidth.setVisible(avanceCB.isChecked());
 		widthLabel.setVisible(avanceCB.isChecked());
+		totalVolume.setVisible(avanceCB.isChecked());
+		totalVolumeLabel.setVisible(avanceCB.isChecked());
 		
 		
 
@@ -227,8 +229,8 @@ public class PatientSelectScreen implements Screen{
 
 			createButtons(style);
 
-			labelStyle = new LabelStyle(font, Color.WHITE);
-			labelStyle.background = skin.getDrawable("button_up");
+			labelStyle1 = new LabelStyle(font, Color.WHITE);
+			labelStyle1.background = skin.getDrawable("background_base");
 
 
 //			nom = new Label(p.getLastName(), labelStyle);
@@ -236,11 +238,13 @@ public class PatientSelectScreen implements Screen{
 //			hemiplegia = new Label(p.getHemiplegia(), labelStyle);
 //			dominantMember = new Label(p.getDominantMember(), labelStyle);
 			
-			labelPatients = new Label(localisation(_patients), labelStyle);
-			config = new Label(localisation(_settings), labelStyle);
+			labelPatients = new Label(localisation(_patients), labelStyle1);
+			config = new Label(localisation(_settings), labelStyle1);
 			
 //			labelPatients.setColor(Color.MAGENTA);
 			
+			labelStyle = new LabelStyle(font, Color.WHITE);
+			labelStyle.background = skin.getDrawable("button_up");
 			
 			selectPatient = new TextButton(localisation(_select), style);
 
@@ -394,9 +398,6 @@ public class PatientSelectScreen implements Screen{
 			tableRightTop.add(nbSuccessLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 			tableRightTop.add(nbSuccess).right().height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
 			tableRightTop.row();
-			tableRightTop.add(totalVolumeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
-			tableRightTop.add(totalVolume).right().height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
-			tableRightTop.row();
 			tableRightTop.add(timeoutLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 			tableRightTop.add(timeout).right().height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
 			tableRightTop.row();
@@ -405,6 +406,9 @@ public class PatientSelectScreen implements Screen{
 			tableRightTop.add(reversedLevel).right().padRight(GameConstants.BLOCK_WIDTH * 0).height(GameConstants.BLOCK_HEIGHT);
 			tableRightTop.row();
 
+			tableRightTop.add(totalVolumeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
+			tableRightTop.add(totalVolume).right().height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
+			tableRightTop.row();
 			tableRightTop.add(rangeLabel).left().pad(GameConstants.BLOCK_WIDTH * 0.2f);
 			tableRightTop.add(range).right().height(GameConstants.BLOCK_HEIGHT).width(GameConstants.BLOCK_WIDTH);
 			tableRightTop.row();
@@ -449,9 +453,6 @@ public class PatientSelectScreen implements Screen{
 			zoneTable.setX(GameConstants.DISPLAY_WIDTH * 0.662f);
 			zoneTable.setY(GameConstants.DISPLAY_HEIGHT * 0.3f);
 			zoneTable.invalidate();
-			
-			config.setColor(Color.MAGENTA);
-			labelPatients.setColor(Color.MAGENTA);
 			
 			config.setX(GameConstants.DISPLAY_WIDTH * 0.55f);
 			config.setY(GameConstants.DISPLAY_HEIGHT * 0.94f);
@@ -513,7 +514,7 @@ public class PatientSelectScreen implements Screen{
 		GameConstants.area_2 = area_2.isChecked();
 		GameConstants.area_3 = area_3.isChecked();
 		GameConstants.area_4 = area_4.isChecked();
-		GameConstants.reversedLevel = reversedLevel.isChecked();
+		GameConstants.reversedLevel = !reversedLevel.isChecked();
 		GameConstants.TIMEOUT = Integer.valueOf(timeout.getText());
 	}
 }

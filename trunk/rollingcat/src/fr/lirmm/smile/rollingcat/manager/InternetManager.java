@@ -656,10 +656,10 @@ public class InternetManager{
 				for (int i = 0; i < s1.length; i++) {
 					nblevels[i] = Integer.valueOf(s1[i]);
 				}
-//				nblevels[0] = 20;
-//				nblevels[1] = 20;
-//				nblevels[2] = 20;
-//				
+				nblevels[0] = 20;
+				nblevels[1] = 20;
+				nblevels[2] = 20;
+				
 				Gdx.app.log(RollingCat.LOG, "game id : " + gameid);
 				Gdx.app.log(RollingCat.LOG, "retrieving complete");
 
@@ -693,6 +693,31 @@ public class InternetManager{
 			public void failed(Throwable t) {	
 				Gdx.app.log(RollingCat.LOG, t.toString());
 				Gdx.app.log(RollingCat.LOG, "something went wrong, could not clear worlds");
+			}});
+		
+	}
+
+	public static void getPointingTasks() {
+		Gdx.app.log(RollingCat.LOG, "preparing pointing tasks get request...");
+
+		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
+
+		httpGet.setUrl("http://" + hostName + ":" + port + "/");
+
+		httpGet.setHeader(key, value);
+		Gdx.app.log(RollingCat.LOG, "sending poining tasks get request...");
+
+		Gdx.net.sendHttpRequest (httpGet, new HttpResponseListener() {
+
+			@Override
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				
+			}
+
+			@Override
+			public void failed(Throwable t) {	
+				Gdx.app.log(RollingCat.LOG, t.toString());
+				Gdx.app.log(RollingCat.LOG, "something went wrong, could not get pointing tasks");
 			}});
 		
 	}
