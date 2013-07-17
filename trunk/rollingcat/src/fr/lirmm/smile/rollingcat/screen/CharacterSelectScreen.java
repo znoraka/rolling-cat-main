@@ -188,6 +188,16 @@ public class CharacterSelectScreen implements Screen {
 
 		if(Gdx.input.isKeyPressed(Keys.ENTER))
 			show();
+		
+		if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.A))
+			game.setScreen(new BossScreen(game));
+		
+		if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.F))
+		{
+			for (int i = 0; i < InternetManager.nblevels.length; i++) {
+				InternetManager.nblevels[i] = 20;
+			}
+		}
 
 		win.setX(GameConstants.DISPLAY_WIDTH * 0.25f);
 		win.setY(GameConstants.DISPLAY_HEIGHT * 0.25f);

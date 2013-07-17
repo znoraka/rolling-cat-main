@@ -58,9 +58,9 @@
 		<coin_get>Vous avez gagn&eacute; une piece.\n Ces pieces vous permettent \n d'augmenter votre scoore</coin_get>
 		<gg>Bien jou&eacute;</gg>
 		<fall>Oups ce n'est pas grave vous pourrez bientot recommencer</fall>
-		<assessment_1>Placez votre curseur dans la zone rouge jusqu'&agrave; ce qu'elle devienne ent&egrave;rement blanche</assessment_1>
+		<assessment_1>Placez votre curseur dans la zone rouge jusqu'&agrave; ce qu'elle devienne ent&egrave;rement grise</assessment_1>
 		<assessment_2>Vous venez de selectionner la premi&egrave;re zone la zone color&eacute;e en bleu. Essayez de la recouvrir avec un maximum de vert</assessment_2>
-		<assessment_3>Lorsque vous &ecirc;tes &agrave; votre maximum placez votre curseur dans la zone rouge jusqu'&agrave; ce qu'elle devienne enti&egrave;rement rose</assessment_3>
+		<assessment_3>Lorsque vous &ecirc;tes &agrave; votre maximum placez votre curseur dans la zone rouge jusqu'&agrave; ce qu'elle devienne enti&egrave;rement grise</assessment_3>
 		<assessment_4>Vous avez s&eacute;lectionn&eacute; la zone suivante essayez &agrave; nouveau de la recouvrir de vert</assessment_4>
 		<assessment_5>R&eacute;petez l'op&eacute;ration jusqu'&agrave; avoir recouvert toutes les zones</assessment_5>
 		<assessment_6>Une fois que vous avez compl&eacute;t&eacute; toutes les zones retournez dans la zone rouge</assessment_6>
@@ -95,7 +95,7 @@
 		<password>password</password>
 		<settings>Settings</settings>
 		<back>Back</back>
-		<select>Select</select>
+		<select>Start</select>
 		<play>Play</play>
 		<assessment>Assessment</assessment>
 		<upload>Upload</upload>
@@ -146,9 +146,9 @@
 		<coin_get>You picked up a coin\n These coins increase \n your score</coin_get>
 		<gg>Well played</gg>
 		<fall>Woops! But it's ok you will start over soon</fall>
-		<assessment_1>Place your cursor in the red area until it becomes complitely white</assessment_1>
+		<assessment_1>Place your cursor in the red area until it becomes complitely gray</assessment_1>
 		<assessment_2>You selected the first area the blue one. Try to fill it up with as much green as possible</assessment_2>
-		<assessment_3>Once you reached your maximum place your cursor in the red area until it becomes complitely white</assessment_3>
+		<assessment_3>Once you reached your maximum place your cursor in the red area until it becomes complitely gray</assessment_3>
 		<assessment_4>You selected the next area try to fill it up with as much green as possible</assessment_4>
 		<assessment_5>Repeat until you filled all the areas</assessment_5>
 		<assessment_6>Once you filled all the areas go back to the red area</assessment_6>
