@@ -71,7 +71,7 @@ public class GameConstants {
 	public static float alpha = 0.5f;
 	public static int numberOfLines = 20;
 	public static int numberOfRows = 20;
-	public static int totalVolume = 20;
+	public static int totalVolume = 30;
 	public static int volumePerLevel = 5;
 	public static boolean area_1 = false;
 	public static boolean area_2 = false;
