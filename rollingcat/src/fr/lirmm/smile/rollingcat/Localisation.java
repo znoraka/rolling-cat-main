@@ -102,6 +102,8 @@ public class Localisation {
 	public static final String _no	= "no";
 	public static final String _win = "win";
 	public static final String _congrats = "congrats";
+	public static final String _winboss = "winboss";
+	public static final String _loseboss = "loseboss";
 
 	public static void initLanguage()
 	{

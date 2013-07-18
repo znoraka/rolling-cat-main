@@ -188,10 +188,18 @@ public class CharacterSelectScreen implements Screen {
 
 		if(Gdx.input.isKeyPressed(Keys.ENTER))
 			show();
-		
+
 		if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.A))
-			game.setScreen(new BossScreen(game));
+		{
+			InternetManager.getPointingTasks();
+
+		}
 		
+		if(InternetManager.tasks != null)
+		{
+			game.setScreen(new BossScreen(game));
+		}
+
 		if(Gdx.input.isKeyPressed(Keys.CONTROL_LEFT) && Gdx.input.isKeyPressed(Keys.ALT_LEFT) && Gdx.input.isKeyPressed(Keys.F))
 		{
 			for (int i = 0; i < InternetManager.nblevels.length; i++) {
@@ -216,6 +224,7 @@ public class CharacterSelectScreen implements Screen {
 
 	@Override
 	public void show() {
+		InternetManager.tasks = null;
 		stage = getStage();
 		sr = getShapeRenderer();
 		batch = GdxRessourcesGetter.getSpriteBatch();
@@ -378,12 +387,14 @@ public class CharacterSelectScreen implements Screen {
 
 		arch.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-				if(InternetManager.nblevels[0] + InternetManager.nblevels[1] + InternetManager.nblevels[2] == 60)
-				{
-					Gdx.app.log(RollingCat.LOG, "no boss yet");
-					win.setVisible(true);
-					win.toFront();
-				}
+//				if(InternetManager.nblevels[0] + InternetManager.nblevels[1] + InternetManager.nblevels[2] == 60)
+//				{
+////					Gdx.app.log(RollingCat.LOG, "no boss yet");
+////					win.setVisible(true);
+////					win.toFront();
+//					InternetManager.getPointingTasks();
+//				}
+				InternetManager.getPointingTasks();
 			}
 		});
 
