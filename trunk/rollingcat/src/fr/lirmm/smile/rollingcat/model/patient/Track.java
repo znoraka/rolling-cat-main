@@ -19,6 +19,7 @@ public class Track {
 	
 	public static final String ASSESSEMENT = "assessment";
 	public static final String GAME = "game";
+	public static final String BOSS = "boss";
 	
 	private Map<Integer, float []> track;
 	private String date;

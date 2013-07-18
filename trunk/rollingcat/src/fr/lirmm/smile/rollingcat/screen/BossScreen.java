@@ -1,13 +1,19 @@
 package fr.lirmm.smile.rollingcat.screen;
 
+import static fr.lirmm.smile.rollingcat.Localisation._no;
+import static fr.lirmm.smile.rollingcat.Localisation._win;
+import static fr.lirmm.smile.rollingcat.Localisation.*;
+import static fr.lirmm.smile.rollingcat.Localisation.localisation;
+import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.x;
+import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.y;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 
 import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,19 +21,29 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.OrderedMap;
 
 import fr.lirmm.smile.rollingcat.GameConstants;
+import fr.lirmm.smile.rollingcat.RollingCat;
+import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
+import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
 public class BossScreen implements Screen {
@@ -48,17 +64,17 @@ public class BossScreen implements Screen {
 		ROCK
 	}
 
-	private Game game;
+	private RollingCat game;
 	private int bossLife, playerLife;
 	private Skill currentSkill;
 	private BossState currentBossState;
-	private Array<Vector2> tasks;
+	private Array<Vector3> tasks;
 	private Image cat, rabbit, turtle;
 	private TextureRegion heart, halfHeart, halfHeartFlip, player, boss, bossHead;
 	private Stage stage;
 	private SpriteBatch batch;
 	private Table table;
-	private float elapsedTime;
+	private float elapsedTime, keysDelay;
 	private Rectangle task, mouse, catRectangle, rabbitRectangle, turtleRectangle;
 	private float hoverTime, standTime;
 	private boolean holdingItem, canGrabItem;
@@ -67,8 +83,13 @@ public class BossScreen implements Screen {
 	private float chrono;
 	private int s, m;
 	private Label chronoLabel;
-	
-	public BossScreen(Game game)
+	private String tasksAsString;
+	private Window pauseWindow, endWindow;
+	private boolean paused, done;
+	private TextButton resume, quit;
+	private Label windowText;
+
+	public BossScreen(RollingCat game)
 	{
 		this.game = game;
 	}
@@ -77,10 +98,10 @@ public class BossScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		chrono += delta;
+
+		keysDelay += delta;
 		s = (int) chrono;
-		
+
 		if(s == 60)
 		{
 			chrono = 0;
@@ -88,13 +109,10 @@ public class BossScreen implements Screen {
 		}
 		
 		chronoLabel.setText(m+":"+ ((s < 10)?("0" + s):s));
-		
+
 		chronoLabel.setX(GameConstants.DISPLAY_WIDTH * 0.5f - chronoLabel.getWidth() * 0.5f);
 		chronoLabel.setY(GameConstants.DISPLAY_HEIGHT - GameConstants.BLOCK_HEIGHT * 0.5f);
 
-		if(bossHeadActor.getActions().size == 0)
-			standTime += delta;
-		elapsedTime += delta;
 
 		task.setX(bossHeadActor.getX());
 		task.setY(bossHeadActor.getY());
@@ -102,44 +120,95 @@ public class BossScreen implements Screen {
 		catRectangle.set(cat.getX() + table.getX(), cat.getY(), cat.getWidth(), cat.getHeight());
 		turtleRectangle.set(turtle.getX() + table.getX(), turtle.getY(), turtle.getWidth(), turtle.getHeight());
 		rabbitRectangle.set(rabbit.getX() + table.getX(), rabbit.getY(), rabbit.getWidth(), rabbit.getHeight());
+		
+		pauseWindow.setVisible(paused);
 
-		sendBossBack();
-
-		stage.act();
 		stage.draw();
+		
+		if(!paused & !done)
+		{
+			stage.act();
+			sendBossBack();
+			chrono += delta;
+			
+			if(bossHeadActor.getActions().size == 0)
+				standTime += delta;
+			
+			addTrackingPoint();
+			handleMouse();
+			drawHoverTime();
+		}		
 
 		batch.begin();
-		drawTask();
+		if(!paused & !done)
+			drawTask();
 		drawHearts();
 		batch.draw(player, 0, 0, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 		batch.draw(boss, GameConstants.DISPLAY_WIDTH - GameConstants.BLOCK_WIDTH, 0, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
-		drawHeldItem();
+		if(!paused & !done)
+			drawHeldItem();
 		batch.end();
-
-		handleMouse();
-		drawHoverTime();
-		handleKeysPressed();
 
 		table.setX(GameConstants.DISPLAY_WIDTH * 0.5f - table.getWidth() * 0.5f);
 		table.setY(0);
 		table.setWidth(GameConstants.BLOCK_WIDTH * 4.5f);
 		table.setHeight(GameConstants.BLOCK_WIDTH * 1.5f);
 		table.invalidate();
-	}
+		
+		if(Gdx.input.isKeyPressed(Keys.ESCAPE) & keysDelay > 0.3f)
+		{
+			paused = !paused;
+			keysDelay = 0;
+		}
+		
+		pauseWindow.setX(GameConstants.DISPLAY_WIDTH * 0.25f);
+		pauseWindow.setY(GameConstants.DISPLAY_HEIGHT * 0.25f);
+		pauseWindow.setWidth(GameConstants.DISPLAY_WIDTH * 0.5f);
+		pauseWindow.setHeight(GameConstants.DISPLAY_HEIGHT * 0.5f);
 
+		resume.setX(pauseWindow.getWidth() * 0.1f);
+		resume.setY(pauseWindow.getHeight() * 0.1f);
+		quit.setX(pauseWindow.getWidth() * 0.9f - quit.getWidth());
+		quit.setY(pauseWindow.getHeight() * 0.1f);
+		
+		endWindow.setX(GameConstants.DISPLAY_WIDTH * 0.25f);
+		endWindow.setY(GameConstants.DISPLAY_HEIGHT * 0.25f);
+		endWindow.setWidth(GameConstants.DISPLAY_WIDTH * 0.5f);
+		endWindow.setHeight(GameConstants.DISPLAY_HEIGHT * 0.5f);
+		
+		if(done)
+		{
+			endWindow.setVisible(true);
+			if(bossLife > playerLife)
+				endWindow.setTitle(localisation(_winboss));
+			else
+				endWindow.setTitle(localisation(_loseboss));
+		}
+		
+		if(Gdx.input.isKeyPressed(Keys.SPACE))
+			bossLife = 0;
+		
+		if(bossLife == 0 || playerLife == 0)
+		{
+			done = true;
+		}
+	}
+	
 	private void sendBossBack() {
 		if(standTime > GameConstants.TIMEOUT)
 		{
 			standTime = 0;
 			playerLife--;
+			addEvent(EventManager.pointing_task_end, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
+			addEvent(EventManager.task_fail, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
 			bossHeadActor.addAction(
 					Actions.sequence(
 							Actions.moveTo(bossHeadActor.getX(), GameConstants.DISPLAY_HEIGHT, 2, Interpolation.swingIn),
 							new Action() {
-								
+
 								@Override
 								public boolean act(float delta) {
-									Vector2 v = tasks.get(0);
+									Vector3 v = tasks.get(0);
 									tasks.removeIndex(0);
 									tasks.add(v);
 									bossHeadActor.setX(tasks.get(0).x * GameConstants.BLOCK_WIDTH);
@@ -148,7 +217,7 @@ public class BossScreen implements Screen {
 											Actions.sequence(
 													Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
 													new Action() {
-														
+
 														@Override
 														public boolean act(float delta) {
 															standTime = 0;
@@ -159,7 +228,7 @@ public class BossScreen implements Screen {
 								}
 							}));
 		}
-		
+
 	}
 
 	@Override
@@ -169,22 +238,74 @@ public class BossScreen implements Screen {
 
 	@Override
 	public void show() {
-		InternetManager.getPointingTasks();
+		EventManager.clear();
+
+		OrderedMap<String, String> parameters = new OrderedMap<String, String>();
+		parameters.put("game", RollingCat.getCurrentGameName());
+		parameters.put("version", RollingCat.VERSION);
+		parameters.put("timeout", ""+GameConstants.TIMEOUT);
+		parameters.put("success_window", ""+GameConstants.SUCCESS);
+		EventManager.create(EventManager.game_info_event_type, parameters);
+
+		parameters = new OrderedMap<String, String>();
+		parameters.put("session_type", Track.BOSS);
+		parameters.put("game_screen_width", ""+GameConstants.DISPLAY_WIDTH);
+		parameters.put("game_screen_height", ""+GameConstants.DISPLAY_HEIGHT);
+		EventManager.create(EventManager.start_game_event_type, parameters);
+
+		tasksAsString = InternetManager.tasks;
+		InternetManager.tasks = null;
+		parseTasks();
+
 		stage = GdxRessourcesGetter.getStage();
 		batch = GdxRessourcesGetter.getSpriteBatch();
+		
+		WindowStyle ws = new WindowStyle();
+		ws.titleFont = GdxRessourcesGetter.getBigFont();
+		ws.background = GdxRessourcesGetter.getSkin().getDrawable("background_base");
+
+		pauseWindow = new Window("", ws);
+		endWindow = new Window("", ws);
+
+		stage.addActor(pauseWindow);
+		stage.addActor(endWindow);
+		pauseWindow.setVisible(false);
+		endWindow.setVisible(false);
+		
+		TextButtonStyle style = new TextButtonStyle();
+		style.up = GdxRessourcesGetter.getSkin().getDrawable("button_up");
+		style.down = GdxRessourcesGetter.getSkin().getDrawable("button_down");
+		style.font = GdxRessourcesGetter.getBigFont();
+		style.fontColor = Color.BLACK;
+
+		resume = new TextButton(localisation(_resume), style);
+		resume.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				paused = false;
+			}
+		});
+
+		quit = new TextButton(localisation(_quit), style);
+		quit.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				game.setScreen(new CharacterSelectScreen(game));
+			}
+		});
+
+		pauseWindow.addActor(resume);
+		pauseWindow.addActor(quit);
+
+		LabelStyle labelStyle = new LabelStyle(GdxRessourcesGetter.getBigFont(), Color.WHITE);
+		labelStyle.background = GdxRessourcesGetter.getSkin().getDrawable("empty");
+
+		windowText = new Label(localisation(_win), labelStyle);
+		pauseWindow.add(windowText);
 
 		r = new Random();
 		
-		LabelStyle labelStyle = new LabelStyle(GdxRessourcesGetter.getBigFont(), Color.BLACK);
-		labelStyle.background = getSkin().getDrawable("empty");
-
-		chronoLabel = new Label("", labelStyle);
-
-		tasks = new Array<Vector2>();
-
-		for (int i = 0; i < 20; i++) {
-			tasks.add(new Vector2(1 + r.nextInt(GameConstants.COLS - 1), 3 + r.nextInt(GameConstants.ROWS - 5)));
-		}
+		LabelStyle labelStyle2 = new LabelStyle(labelStyle);
+		labelStyle2.fontColor = Color.BLACK;
+		chronoLabel = new Label("", labelStyle2);
 
 		playerLife = BASE_LIFE;
 		bossLife = BASE_LIFE;
@@ -223,19 +344,29 @@ public class BossScreen implements Screen {
 		bossHeadActor.setX(tasks.get(0).x * GameConstants.BLOCK_WIDTH);
 		bossHeadActor.setY(GameConstants.DISPLAY_HEIGHT);
 		bossHeadActor.addAction(Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 4, Interpolation.bounceOut));
-		
+
 		currentBossState = BossState.FIRE;
-		
+
 		stage.addActor(chronoLabel);
 
 		Gdx.input.setInputProcessor(stage);
 
 	}
 
+	private void parseTasks() {
+		tasks = new Array<Vector3>();
+		String [] tab = tasksAsString.split("/");
+
+		for (String s : tab) {
+			String [] coord = s.split(",");
+			tasks.add(new Vector3(Integer.valueOf(coord[0]), Integer.valueOf(coord[1]), tasks.size));
+		}
+
+	}
+
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		int [] n = {0, 0, 0};
 	}
 
 	@Override
@@ -314,6 +445,7 @@ public class BossScreen implements Screen {
 				currentSkill = Skill.FIRE;
 				holdingItem = true;
 				hoverTime = 0;
+				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(0).z);
 			}
 
 			else if(mouse.overlaps(rabbitRectangle))
@@ -321,6 +453,7 @@ public class BossScreen implements Screen {
 				currentSkill = Skill.PLANT;
 				holdingItem = true;
 				hoverTime = 0;
+				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(0).z);
 			}
 
 			else if(mouse.overlaps(turtleRectangle))
@@ -328,9 +461,13 @@ public class BossScreen implements Screen {
 				currentSkill = Skill.WATER;
 				holdingItem = true;
 				hoverTime = 0;
+				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(0).z);
 			}
 			else
 			{
+				addEvent(EventManager.pointing_task_end, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
+				addEvent(EventManager.task_success, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
+				
 				tasks.removeIndex(0);
 				hoverTime = 0;
 				standTime = 0;
@@ -340,7 +477,7 @@ public class BossScreen implements Screen {
 						Actions.sequence(
 								Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
 								new Action() {
-									
+
 									@Override
 									public boolean act(float delta) {
 										standTime = 0;
@@ -348,18 +485,18 @@ public class BossScreen implements Screen {
 									}
 								}));
 				holdingItem = false;
-				
+
 				setCurrentBossState();
-				
+
 				bossLife--;
-				
+
 			}
 		}
 	}
 
 	private void setCurrentBossState() {
 		int n = r.nextInt(3);
-		
+
 		switch (n) {
 		case 0:
 			currentBossState = BossState.FIRE;
@@ -395,7 +532,7 @@ public class BossScreen implements Screen {
 			GdxRessourcesGetter.getShapeRenderer().rect(mouse.x, mouse.y - GameConstants.BLOCK_HEIGHT, 70*hoverTime / GameConstants.HOVER_TIME, 20);
 
 		}
-		
+
 		if (standTime > 0)
 		{
 			GdxRessourcesGetter.getShapeRenderer().setColor(Color.ORANGE);
@@ -403,24 +540,24 @@ public class BossScreen implements Screen {
 			GdxRessourcesGetter.getShapeRenderer().setColor(Color.GREEN);
 			GdxRessourcesGetter.getShapeRenderer().rect(GameConstants.DISPLAY_WIDTH * 0.5f - 16, GameConstants.DISPLAY_HEIGHT - GameConstants.BLOCK_HEIGHT * 1.3f, 70 - 70 * standTime / GameConstants.TIMEOUT, 20);
 		}
-		
+
 		GdxRessourcesGetter.getShapeRenderer().end();
 	}
 
-	private void handleKeysPressed()
-	{
-		if(Gdx.input.isKeyPressed(Keys.LEFT) && elapsedTime > 0.3f)
-		{
-			playerLife--;
-			elapsedTime = 0;
-		}
-
-		if(Gdx.input.isKeyPressed(Keys.RIGHT) && elapsedTime > 0.3f)
-		{
-			bossLife--;
-			elapsedTime = 0;
-		}
-	}
+	//	private void handleKeysPressed()
+	//	{
+	//		if(Gdx.input.isKeyPressed(Keys.LEFT) && elapsedTime > 0.3f)
+	//		{
+	//			playerLife--;
+	//			elapsedTime = 0;
+	//		}
+	//
+	//		if(Gdx.input.isKeyPressed(Keys.RIGHT) && elapsedTime > 0.3f)
+	//		{
+	//			bossLife--;
+	//			elapsedTime = 0;
+	//		}
+	//	}
 
 	private void drawHeldItem()
 	{
@@ -430,17 +567,51 @@ public class BossScreen implements Screen {
 			case WATER:
 				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone2"), mouse.x - GameConstants.BLOCK_WIDTH * 0.75f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.75f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
 				break;
-			
+
 			case FIRE:
 				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone1"), mouse.x - GameConstants.BLOCK_WIDTH * 0.75f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.75f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
 				break;
-				
+
 			case PLANT:
 				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone3"), mouse.x - GameConstants.BLOCK_WIDTH * 0.75f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.75f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
 				break;
 
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void addTrackingPoint(){
+		elapsedTime += Gdx.graphics.getDeltaTime();
+
+		if(Gdx.input.getDeltaX() != 0 || Gdx.input.getDeltaY() != 0){
+			if(elapsedTime * 1000 > GameConstants.DELTATRACKINGMILLISEC){
+				OrderedMap<String, String> parameters = new OrderedMap<String, String>();
+				parameters.put("x", "" + Gdx.input.getX());
+				parameters.put("y", "" + (GameConstants.DISPLAY_HEIGHT - Gdx.input.getY()));
+				parameters.put("z", "" + 0);
+				parameters.put("id", ""+ (int) tasks.get(0).z);
+				EventManager.create(EventManager.player_cursor_event_type, parameters);
+				System.out.println(parameters);
+				elapsedTime = 0;
+			}
+		}
+	}
+	
+	/**
+	 * ajoute un event à la liste d'events
+	 * appelé lorsque le patient réussi une tache de pointage
+	 * @param pointingTaskEnd 
+	 */
+	private void addEvent(String eventType, float x, float y, int id){
+		Gdx.app.log(RollingCat.LOG, "x : " + x(x));
+		Gdx.app.log(RollingCat.LOG, "y : " + y(y));
+		OrderedMap<String, String>parameters = new OrderedMap<String, String>();
+		parameters.put("x", ""+ x(x));
+		parameters.put("y", ""+ y(y));
+		parameters.put("z", ""+0);
+		parameters.put("id", ""+id);
+		EventManager.create(eventType, parameters);
 	}
 
 }

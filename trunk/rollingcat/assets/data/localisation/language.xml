@@ -87,6 +87,9 @@
 		vous pouvez r&eacute;initialiser les mondes.
 		R&eacute;initialiser les mondes ?</win>
 		<congrats>F&eacute;licitations, vous avez termin&eacute; le niveau !</congrats>
+		<winboss>F&eacute;licitations, vous avez vaincu -trouver un nom- !</winboss>
+		<loseboss>Oh non ! Le boss vous a d&eacute;fait, 
+		mais vous pouvez retenter votre chance</loseboss>
 	</language>
 	
 	<language name="English">
@@ -175,6 +178,9 @@
 		you can reset the worlds.
 		Reset the worlds?</win>
 		<congrats>Congratulations, you complete the level!</congrats>
+		<winboss>F&eacute;licitations, vous avez vaincu -trouver un nom- !</winboss>
+		<loseboss>Oh non ! Le boss vous a d&eacute;fait,
+		mais vous pouvez retenter votre chance</loseboss>
 		
 	</language>
 	   

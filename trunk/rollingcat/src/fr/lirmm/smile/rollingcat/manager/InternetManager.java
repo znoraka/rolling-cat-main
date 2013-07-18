@@ -3,6 +3,8 @@ package fr.lirmm.smile.rollingcat.manager;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getBigFont;
 import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpMethods;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -43,6 +46,7 @@ public class InternetManager{
 	public static int sent = 0;
 	public static float [] ability;
 	public static int [] nblevels = new int[3];
+	public static String tasks;
 
 	/**
 	 * set l'adresse et le port du serveur
@@ -699,6 +703,7 @@ public class InternetManager{
 
 	public static void getPointingTasks() {
 		Gdx.app.log(RollingCat.LOG, "preparing get pointing tasks request...");
+		tasks = null;
 
 		final Json json = new Json();
 		json.setOutputType(JsonWriter.OutputType.json);
@@ -713,7 +718,7 @@ public class InternetManager{
 		map.put("numberOfRows", GameConstants.numberOfRows);
 		map.put("totalHeight", GameConstants.workspaceHeight);
 		map.put("totalWidth", GameConstants.workspaceWidth);
-		map.put("totalVolume", GameConstants.totalVolume);
+		map.put("totalVolume", 20);
 		map.put("volumePerLevel", GameConstants.volumePerLevel);
 
 		if(GameConstants.area_1 & GameConstants.area_2 & GameConstants.area_3 & GameConstants.area_4 || !GameConstants.area_1 & !GameConstants.area_2 & !GameConstants.area_3 & !GameConstants.area_4)
@@ -757,7 +762,11 @@ public class InternetManager{
 			@Override
 			public void handleHttpResponse(HttpResponse httpResponse) {
 				String string = httpResponse.getResultAsString();
-				System.out.println(string);
+				string = string.substring(1, string.length() - 1);
+				string = string.replace("],[", "/");
+				string =  string.replace("[", "");
+				tasks = string.replace("]", "");
+				System.out.println(tasks);
 			}
 
 			@Override
