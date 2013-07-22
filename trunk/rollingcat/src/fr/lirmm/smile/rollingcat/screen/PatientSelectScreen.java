@@ -73,6 +73,8 @@ public class PatientSelectScreen implements Screen{
 	private TextField workspaceHeight, workspaceWidth, range, evaporationPerDay, alpha, nbSuccess, numberOfRows, totalVolume, volumePerLevel, timeout;
 	private Label heightLabel, widthLabel, rangeLabel, reversedLevelLabel, evaporationPerDayLabel, alphaLabel, nbSuccessLabel, numberOfRowsLabel, totalVolumeLabel, volumePerLevelLabel, timeoutLabel;
 	private CheckBox area_1, area_2, area_3, area_4, avanceCB, reversedLevel;
+	
+	private static Color BUTTON_COLOR = new Color(1, 1, 1, 1);
 
 	public PatientSelectScreen(RollingCat game){
 		this.game = game;
@@ -86,8 +88,8 @@ public class PatientSelectScreen implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
-		buttons.get(selectedButton).setColor(Color.GREEN);
+		
+		buttons.get(selectedButton).setColor(BUTTON_COLOR);
 		Patient.setCurrentPatient(p, selectedButton);
 		
 		batch.begin();
@@ -148,7 +150,7 @@ public class PatientSelectScreen implements Screen{
 			b.addListener(new ClickListener() {
 				public void clicked (InputEvent event, float x, float y) {
 					for (TextButton button : buttons) {
-						button.setColor(1, 1, 1, 1);
+						button.setColor(1, 1, 1, 0.5f);
 					}
 					selectedButton = Integer.valueOf(event.getListenerActor().getName());
 					p = patients.get(selectedButton);
@@ -463,7 +465,7 @@ public class PatientSelectScreen implements Screen{
 			labelPatients.setHeight(GameConstants.DISPLAY_HEIGHT * 0.08f);
 			
 			tableLeft.setColor(1, 1, 1, 1);
-			reversedLevel.setChecked(true);
+			reversedLevel.setChecked(!GameConstants.reversedLevel);
 			
 		}
 

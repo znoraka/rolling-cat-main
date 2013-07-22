@@ -37,6 +37,7 @@ public class InternetManager{
 	private static String patients;
 	private static String hostName = "localhost";
 	private static int port = 9000;
+	private static String path = "";
 	private static String key = "PLAY_SESSION";
 	private static String gameid;
 	public static String value;
@@ -49,13 +50,14 @@ public class InternetManager{
 	public static String tasks;
 
 	/**
-	 * set l'adresse et le port du serveur
+	 * set l'adresse et le port + path du serveur
 	 * @param server
 	 * @param serverPort
 	 */
-	public static void config(String server, String serverPort) {
+	public static void config(String server, String serverPort, String serverPath) {
 		hostName = server;
 		port = Integer.valueOf(serverPort);
+		path = serverPath;
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class InternetManager{
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 		httpGet.setContent("email="+username+"&password="+password);
 		httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded");
-		httpGet.setUrl("http://" + hostName + ":" + port + "/login.json");
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/login.json");
 
 		Gdx.app.log(RollingCat.LOG, "sending login request...");
 
@@ -104,7 +106,7 @@ public class InternetManager{
 
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 
-		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/all");
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/patient/all");
 		httpGet.setHeader(key, value);
 		Gdx.app.log(RollingCat.LOG, "sending patient retrieve request...");
 
@@ -133,7 +135,7 @@ public class InternetManager{
 
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 
-		httpGet.setUrl("http://" + hostName + ":" + port + "/game/"+RollingCat.rollingCat+"/getid");
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/game/"+RollingCat.rollingCat+"/getid");
 
 		httpGet.setHeader(key, value);
 		Gdx.app.log(RollingCat.LOG, "sending game id retrieve request...");
@@ -190,7 +192,7 @@ public class InternetManager{
 	public static void newGameSession(String gameType, String patientid){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/gamesession/new");
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/gamesession/new");
 		OrderedMap<String, String> map = new OrderedMap<String, String>();
 		map.put("sessionType", gameType);
 		map.put("comment", "no comment");
@@ -226,7 +228,7 @@ public class InternetManager{
 	public static void endGameSession(){
 		Gdx.app.log(RollingCat.LOG, "preparing request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/gamesession/"+sessionid+"/end ");
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/gamesession/"+sessionid+"/end ");
 
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "text/plain");
@@ -260,7 +262,7 @@ public class InternetManager{
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
 
-		httpGet.setUrl("http://" + hostName + ":" + port + "/level/"+Patient.getInstance().getID()+"/"+gameid+"/"+sessionid+"/"+numLevel+"/"+(RollingCat.skin - 1));
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/level/"+Patient.getInstance().getID()+"/"+gameid+"/"+sessionid+"/"+numLevel+"/"+(RollingCat.skin - 1));
 
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
@@ -337,7 +339,7 @@ public class InternetManager{
 		json.setOutputType(JsonWriter.OutputType.json);
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/patient/"+Patient.getInstance().getID()+"/needsassessment");
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/patient/"+Patient.getInstance().getID()+"/needsassessment");
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
 		map.put("builderId",GameConstants.getDDAAlgo());
@@ -413,7 +415,7 @@ public class InternetManager{
 
 		for (String event : events) {
 			HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-			httpGet.setUrl("http://" + hostName + ":" + port + "/event/"+sessionid+"/newList");
+			httpGet.setUrl("http://" + hostName + ":" + port + path + "/event/"+sessionid+"/newList");
 			httpGet.setContent(event);
 			httpGet.setHeader(key, value);
 			httpGet.setHeader("Content-Type", "application/json");
@@ -489,7 +491,7 @@ public class InternetManager{
 	public static void updateLevelStats(String patientid, int levelID, int score, int duration,String color_gem, int worldid) {
 		Gdx.app.log(RollingCat.LOG, "preparing send score update request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid+"/"+levelID+"/"+score+"/"+duration+"/"+color_gem+"/"+worldid);
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/world/"+patientid+"/"+gameid+"/"+levelID+"/"+score+"/"+duration+"/"+color_gem+"/"+worldid);
 		httpGet.setHeader(key, value);	
 		httpGet.setHeader("Content-Type", "text/plain");
 
@@ -515,7 +517,7 @@ public class InternetManager{
 		world = null;
 		Gdx.app.log(RollingCat.LOG, "preparing get world request...");
 		HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid+"/"+skinid);
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/world/"+patientid+"/"+gameid+"/"+skinid);
 		httpGet.setHeader(key, value);
 		httpGet.setHeader("Content-Type", "text/plain");
 
@@ -546,7 +548,7 @@ public class InternetManager{
 		json.setOutputType(JsonWriter.OutputType.json);
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/abilityzone/"+Patient.getInstance().getID()+"/get");
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/abilityzone/"+Patient.getInstance().getID()+"/get");
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
 		map.put("builderId",GameConstants.getAlgo());
@@ -645,7 +647,7 @@ public class InternetManager{
 
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 
-		httpGet.setUrl("http://" + hostName + ":" + port + "/world/"+patientid+"/"+gameid);
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/world/"+patientid+"/"+gameid);
 		
 		httpGet.setHeader(key, value);
 		Gdx.app.log(RollingCat.LOG, "sending game id retrieve request...");
@@ -681,7 +683,7 @@ public class InternetManager{
 
 		final HttpRequest httpGet = new HttpRequest(HttpMethods.GET);
 
-		httpGet.setUrl("http://" + hostName + ":" + port + "/level/boss");
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/level/boss");
 
 		httpGet.setHeader(key, value);
 		Gdx.app.log(RollingCat.LOG, "sending world clear request...");
@@ -709,7 +711,7 @@ public class InternetManager{
 		json.setOutputType(JsonWriter.OutputType.json);
 
 		HttpRequest httpGet = new HttpRequest(HttpMethods.POST);
-		httpGet.setUrl("http://" + hostName + ":" + port + "/level/boss");
+		httpGet.setUrl("http://" + hostName + ":" + port + path + "/level/boss");
 		OrderedMap<String, Object> map = new OrderedMap<String, Object>();
 
 		map.put("builderId",GameConstants.getAlgo());
