@@ -96,7 +96,7 @@ public class GameScreen implements ScreenPausable{
 		elapsedTimeDuringPause = 0;
 		beginPause = 0;
 //		this.listOfGems = listOfGems;
-		Gdx.input.setCursorCatched(true);
+//		Gdx.input.setCursorCatched(true);
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class GameScreen implements ScreenPausable{
 			mc.addTrackingPoint(delta, segment);
 			gem = Target.getInstance();
 			if(Cat.getInstance().isDone() && gem != null && gem.getActions().size == 0){
-				Gdx.input.setCursorCatched(false);
+//				Gdx.input.setCursorCatched(false);
 				SoundManager.gameMusicPlay(false);
 				SoundManager.winPlay();
 				gem.addAction(Actions.parallel(Actions.sequence(
@@ -199,7 +199,7 @@ public class GameScreen implements ScreenPausable{
 		//		font.draw(batch, "etage : " + (cat.getEtage() + 1) + "/" + LevelBuilder.getNumberOfEtage(), GameConstants.BLOCK_WIDTH * 0.1f, GameConstants.BLOCK_HEIGHT * 0.7f);
 		//		font.draw(batch, "segment : " + segment + "/" + LevelBuilder.getNumberOfSegment(), GameConstants.BLOCK_WIDTH * 2.6f, GameConstants.BLOCK_HEIGHT * 0.7f);
 		//		font.draw(batch, "success : " + cat.getSuccessState(), GameConstants.BLOCK_WIDTH * 6.2f, GameConstants.BLOCK_HEIGHT * 0.7f);
-				font.draw(batch, "fps : " + Gdx.graphics.getFramesPerSecond(), GameConstants.DISPLAY_WIDTH - 100, GameConstants.DISPLAY_HEIGHT - 20);
+//				font.draw(batch, "fps : " + Gdx.graphics.getFramesPerSecond(), GameConstants.DISPLAY_WIDTH - 100, GameConstants.DISPLAY_HEIGHT - 20);
 				batch.end();
 
 
@@ -304,7 +304,7 @@ public class GameScreen implements ScreenPausable{
 		resume.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				paused = false;
-				Gdx.input.setCursorCatched(!paused);
+//				Gdx.input.setCursorCatched(!paused);
 				handleElapsedTime();
 			}
 		});
@@ -321,7 +321,7 @@ public class GameScreen implements ScreenPausable{
 					Patient.getInstance().addTrack(track);
 					requestSending = true;
 					pauseStage.clear();
-					upload = InternetManager.getOkButton(new LevelSelectScreen(game), game);
+					upload = InternetManager.getOkButton(new CharacterSelectScreen(game), game);
 					pauseStage.addActor(upload);
 					upload.setX(GameConstants.DISPLAY_WIDTH * 0.5f - upload.getWidth() * 0.5f);
 					upload.setY(GameConstants.DISPLAY_HEIGHT * 0.5f - upload.getHeight() * 0.5f);
@@ -335,7 +335,7 @@ public class GameScreen implements ScreenPausable{
 		quit.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				if(paused){
-					game.setScreen(new PatientSelectScreen(game));
+					game.setScreen(new CharacterSelectScreen(game));
 					SoundManager.gameMusicPlay(false);
 				}
 			}
@@ -397,7 +397,7 @@ public class GameScreen implements ScreenPausable{
 				if(keycode == Keys.ESCAPE){
 					paused = !paused;
 					handleElapsedTime();
-					Gdx.input.setCursorCatched(!paused);
+//					Gdx.input.setCursorCatched(!paused);
 				}
 				if(keycode == Keys.SPACE)
 					mc.fall();

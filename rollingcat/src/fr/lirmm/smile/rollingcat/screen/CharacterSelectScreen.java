@@ -38,6 +38,7 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
+import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.model.world.World;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
@@ -197,6 +198,7 @@ public class CharacterSelectScreen implements Screen {
 		
 		if(InternetManager.tasks != null)
 		{
+			InternetManager.newGameSession(Track.BOSS, Patient.getInstance().getID());
 			game.setScreen(new BossScreen(game));
 		}
 
@@ -387,14 +389,14 @@ public class CharacterSelectScreen implements Screen {
 
 		arch.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
-//				if(InternetManager.nblevels[0] + InternetManager.nblevels[1] + InternetManager.nblevels[2] == 60)
-//				{
+				if(InternetManager.nblevels[0] + InternetManager.nblevels[1] + InternetManager.nblevels[2] == 60)
+				{
 ////					Gdx.app.log(RollingCat.LOG, "no boss yet");
-////					win.setVisible(true);
-////					win.toFront();
-//					InternetManager.getPointingTasks();
-//				}
-				InternetManager.getPointingTasks();
+//					win.setVisible(true);
+//					win.toFront();
+					InternetManager.getPointingTasks();
+				}
+//				InternetManager.getPointingTasks();
 			}
 		});
 

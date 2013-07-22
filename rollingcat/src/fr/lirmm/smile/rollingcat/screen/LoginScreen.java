@@ -208,7 +208,7 @@ public class LoginScreen implements Screen, InputProcessor{
 		OrderedMap<String, String> config = (OrderedMap<String, String>) new JsonReader().parse(jsonData);
 		Gdx.app.log(RollingCat.LOG, json.prettyPrint(config));
 		
-		InternetManager.config(config.get("server"), config.get("port"));
+		InternetManager.config(config.get("server"), config.get("port"), config.get("path"));
 	}
 
 	@Override

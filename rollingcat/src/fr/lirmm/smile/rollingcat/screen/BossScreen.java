@@ -1,21 +1,23 @@
 package fr.lirmm.smile.rollingcat.screen;
 
-import static fr.lirmm.smile.rollingcat.Localisation._no;
-import static fr.lirmm.smile.rollingcat.Localisation._win;
-import static fr.lirmm.smile.rollingcat.Localisation.*;
+import static fr.lirmm.smile.rollingcat.Localisation._loseboss;
+import static fr.lirmm.smile.rollingcat.Localisation._quit;
+import static fr.lirmm.smile.rollingcat.Localisation._resume;
+import static fr.lirmm.smile.rollingcat.Localisation._upload;
+import static fr.lirmm.smile.rollingcat.Localisation._winboss;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.x;
 import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.y;
-import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getSkin;
 
+import java.util.HashMap;
 import java.util.Random;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -29,12 +31,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
@@ -43,6 +45,7 @@ import fr.lirmm.smile.rollingcat.GameConstants;
 import fr.lirmm.smile.rollingcat.RollingCat;
 import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
+import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
@@ -70,7 +73,7 @@ public class BossScreen implements Screen {
 	private BossState currentBossState;
 	private Array<Vector3> tasks;
 	private Image cat, rabbit, turtle;
-	private TextureRegion heart, halfHeart, halfHeartFlip, player, boss, bossHead;
+	private TextureRegion heart, halfHeart, player, boss, bossHead;
 	private Stage stage;
 	private SpriteBatch batch;
 	private Table table;
@@ -86,9 +89,12 @@ public class BossScreen implements Screen {
 	private String tasksAsString;
 	private Window pauseWindow, endWindow;
 	private boolean paused, done;
-	private TextButton resume, quit;
-	private Label windowText;
-
+	private TextButton resume, quit, upload, quit2;
+	private Label pauseText, endText;
+	private Track track;
+	private HashMap<Integer, float []> map;
+	private Texture gui;
+	
 	public BossScreen(RollingCat game)
 	{
 		this.game = game;
@@ -98,6 +104,10 @@ public class BossScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		batch.begin();
+		batch.draw(gui, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
+		batch.end();
 
 		keysDelay += delta;
 		s = (int) chrono;
@@ -110,8 +120,8 @@ public class BossScreen implements Screen {
 		
 		chronoLabel.setText(m+":"+ ((s < 10)?("0" + s):s));
 
-		chronoLabel.setX(GameConstants.DISPLAY_WIDTH * 0.5f - chronoLabel.getWidth() * 0.5f);
-		chronoLabel.setY(GameConstants.DISPLAY_HEIGHT - GameConstants.BLOCK_HEIGHT * 0.5f);
+		chronoLabel.setX(GameConstants.DISPLAY_WIDTH * 0.48f - chronoLabel.getWidth() * 0.5f);
+		chronoLabel.setY(GameConstants.DISPLAY_HEIGHT * 1.01f - GameConstants.BLOCK_HEIGHT * 0.5f);
 
 
 		task.setX(bossHeadActor.getX());
@@ -136,15 +146,14 @@ public class BossScreen implements Screen {
 			
 			addTrackingPoint();
 			handleMouse();
-			drawHoverTime();
 		}		
 
 		batch.begin();
 		if(!paused & !done)
 			drawTask();
 		drawHearts();
-		batch.draw(player, 0, 0, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
-		batch.draw(boss, GameConstants.DISPLAY_WIDTH - GameConstants.BLOCK_WIDTH, 0, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		batch.draw(player, GameConstants.BLOCK_WIDTH * 0.15f, GameConstants.BLOCK_HEIGHT * 0.4f, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		batch.draw(boss, GameConstants.DISPLAY_WIDTH - GameConstants.BLOCK_WIDTH * 1.15f, GameConstants.BLOCK_HEIGHT * 0.4f, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 		if(!paused & !done)
 			drawHeldItem();
 		batch.end();
@@ -160,6 +169,7 @@ public class BossScreen implements Screen {
 			paused = !paused;
 			keysDelay = 0;
 		}
+		drawHoverTime();
 		
 		pauseWindow.setX(GameConstants.DISPLAY_WIDTH * 0.25f);
 		pauseWindow.setY(GameConstants.DISPLAY_HEIGHT * 0.25f);
@@ -171,6 +181,12 @@ public class BossScreen implements Screen {
 		quit.setX(pauseWindow.getWidth() * 0.9f - quit.getWidth());
 		quit.setY(pauseWindow.getHeight() * 0.1f);
 		
+		upload.setX(pauseWindow.getWidth() * 0.1f);
+		upload.setY(pauseWindow.getHeight() * 0.1f);
+		
+		quit2.setX(pauseWindow.getWidth() * 0.9f - quit.getWidth());
+		quit2.setY(pauseWindow.getHeight() * 0.1f);
+		
 		endWindow.setX(GameConstants.DISPLAY_WIDTH * 0.25f);
 		endWindow.setY(GameConstants.DISPLAY_HEIGHT * 0.25f);
 		endWindow.setWidth(GameConstants.DISPLAY_WIDTH * 0.5f);
@@ -179,10 +195,10 @@ public class BossScreen implements Screen {
 		if(done)
 		{
 			endWindow.setVisible(true);
-			if(bossLife > playerLife)
-				endWindow.setTitle(localisation(_winboss));
+			if(bossLife < playerLife)
+				endText.setText(localisation(_winboss));
 			else
-				endWindow.setTitle(localisation(_loseboss));
+				endText.setText(localisation(_loseboss));
 		}
 		
 		if(Gdx.input.isKeyPressed(Keys.SPACE))
@@ -239,6 +255,9 @@ public class BossScreen implements Screen {
 	@Override
 	public void show() {
 		EventManager.clear();
+		gui = new Texture("data/gui.png");
+		
+		map = new HashMap<Integer, float[]>();
 
 		OrderedMap<String, String> parameters = new OrderedMap<String, String>();
 		parameters.put("game", RollingCat.getCurrentGameName());
@@ -291,21 +310,55 @@ public class BossScreen implements Screen {
 				game.setScreen(new CharacterSelectScreen(game));
 			}
 		});
+		
+		quit2 = new TextButton(localisation(_quit), style);
+		quit2.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				game.setScreen(new CharacterSelectScreen(game));
+			}
+		});
+		
+		upload = new TextButton(localisation(_upload), style);
+		upload.addListener(new ClickListener() {
+			public void clicked (InputEvent event, float x, float y) {
+				if(done){
+					OrderedMap<String, String> parameters = new OrderedMap<String, String>();
+					parameters.put("duration", ""+ m * 60 + s);
+					InternetManager.endGameSession();
+					EventManager.create(EventManager.end_game_event_type, parameters);
+					track = new Track(map, Track.GAME, m * 60 + s);
+					Patient.getInstance().addTrack(track);
+					TextButton b = InternetManager.getOkButton(new CharacterSelectScreen(game), game);
+					endWindow.clearChildren();
+					endWindow.addActor(b);
+					b.setX(pauseWindow.getWidth() * 0.5f- b.getWidth() * 0.5f);
+					b.setY(pauseWindow.getHeight() * 0.5f - b.getHeight() * 0.5f);
+					InternetManager.sendEvents(track.getListOfEvents());
+				}
+			}
+		});
+		
 
 		pauseWindow.addActor(resume);
 		pauseWindow.addActor(quit);
 
+		endWindow.addActor(upload);
+		endWindow.addActor(quit2);
+
 		LabelStyle labelStyle = new LabelStyle(GdxRessourcesGetter.getBigFont(), Color.WHITE);
 		labelStyle.background = GdxRessourcesGetter.getSkin().getDrawable("empty");
 
-		windowText = new Label(localisation(_win), labelStyle);
-		pauseWindow.add(windowText);
+		pauseText = new Label("Pause", labelStyle);
+		pauseWindow.add(pauseText);
+		
+		endText = new Label("", labelStyle);
+		endWindow.add(endText);
 
 		r = new Random();
 		
 		LabelStyle labelStyle2 = new LabelStyle(labelStyle);
 		labelStyle2.fontColor = Color.BLACK;
-		chronoLabel = new Label("", labelStyle2);
+		chronoLabel = new Label("", labelStyle);
 
 		playerLife = BASE_LIFE;
 		bossLife = BASE_LIFE;
@@ -316,7 +369,6 @@ public class BossScreen implements Screen {
 
 		heart = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("heart"));
 		halfHeart = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("halfheart"));
-		halfHeartFlip = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("halfheartflip"));
 		bossHead = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("shit"));
 
 		boss = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("shit"));
@@ -359,7 +411,10 @@ public class BossScreen implements Screen {
 
 		for (String s : tab) {
 			String [] coord = s.split(",");
-			tasks.add(new Vector3(Integer.valueOf(coord[0]), Integer.valueOf(coord[1]), tasks.size));
+			int y = Integer.valueOf(coord[1]);
+			if(y < 2)
+				y = y+2;
+			tasks.add(new Vector3(Integer.valueOf(coord[0]), y, tasks.size));
 		}
 
 	}
@@ -390,19 +445,19 @@ public class BossScreen implements Screen {
 	private void drawHearts()
 	{
 		for (int i = 0; i < playerLife / 2; i++) {
-			batch.draw(heart, GameConstants.BLOCK_WIDTH * 0.4f * i + GameConstants.BLOCK_HEIGHT * 1.5f, 0, GameConstants.BLOCK_WIDTH * 0.4f, GameConstants.BLOCK_HEIGHT * 0.4f);
+			batch.draw(heart, GameConstants.BLOCK_WIDTH * 0.4f * i + GameConstants.BLOCK_HEIGHT * 1.85f, GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 0.38f, GameConstants.BLOCK_HEIGHT * 0.38f);
 		}		
 		if(playerLife % 2 == 1)
 		{
-			batch.draw(halfHeart, GameConstants.BLOCK_WIDTH * 0.4f * (playerLife - 1) / 2  + GameConstants.BLOCK_HEIGHT * 1.5f, 0, GameConstants.BLOCK_WIDTH * 0.4f, GameConstants.BLOCK_HEIGHT * 0.4f);
+			batch.draw(halfHeart, GameConstants.BLOCK_WIDTH * 0.4f * (playerLife - 1) / 2  + GameConstants.BLOCK_HEIGHT * 1.85f, GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 0.38f, GameConstants.BLOCK_HEIGHT * 0.38f);
 		}
 
 		for (int i = bossLife / 2; i > 0; i--) {
-			batch.draw(heart, GameConstants.DISPLAY_WIDTH - GameConstants.BLOCK_WIDTH * 0.4f * i - GameConstants.BLOCK_HEIGHT * 1.5f, 0, GameConstants.BLOCK_WIDTH * 0.4f, GameConstants.BLOCK_HEIGHT * 0.4f);
+			batch.draw(heart, GameConstants.DISPLAY_WIDTH - GameConstants.BLOCK_WIDTH * 0.4f * i - GameConstants.BLOCK_HEIGHT * 1.85f, GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 0.4f, GameConstants.BLOCK_HEIGHT * 0.4f);
 		}
 		if(bossLife % 2 == 1)
 		{
-			batch.draw(halfHeartFlip, GameConstants.DISPLAY_WIDTH - GameConstants.BLOCK_WIDTH * 0.4f * (bossLife + 1) / 2- GameConstants.BLOCK_HEIGHT * 1.5f, 0, GameConstants.BLOCK_WIDTH * 0.4f, GameConstants.BLOCK_HEIGHT * 0.4f);
+			batch.draw(halfHeart, GameConstants.DISPLAY_WIDTH - GameConstants.BLOCK_WIDTH * 0.4f * (bossLife + 1) / 2- GameConstants.BLOCK_HEIGHT * 1.85f, GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 0.38f, GameConstants.BLOCK_HEIGHT * 0.38f);
 		}
 	}
 
@@ -463,7 +518,7 @@ public class BossScreen implements Screen {
 				hoverTime = 0;
 				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(0).z);
 			}
-			else
+			else if(tasks.size > 1)
 			{
 				addEvent(EventManager.pointing_task_end, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
 				addEvent(EventManager.task_success, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
@@ -490,6 +545,10 @@ public class BossScreen implements Screen {
 
 				bossLife--;
 
+			}
+			else
+			{
+				done = true;
 			}
 		}
 	}
@@ -533,12 +592,12 @@ public class BossScreen implements Screen {
 
 		}
 
-		if (standTime > 0)
+		if (standTime > -1)
 		{
 			GdxRessourcesGetter.getShapeRenderer().setColor(Color.ORANGE);
-			GdxRessourcesGetter.getShapeRenderer().rect(GameConstants.DISPLAY_WIDTH * 0.5f - 16, GameConstants.DISPLAY_HEIGHT - GameConstants.BLOCK_HEIGHT * 1.3f, 70, 20);
+			GdxRessourcesGetter.getShapeRenderer().rect(GameConstants.DISPLAY_WIDTH * 0.462f, GameConstants.DISPLAY_HEIGHT * 0.91f, 70, 20);
 			GdxRessourcesGetter.getShapeRenderer().setColor(Color.GREEN);
-			GdxRessourcesGetter.getShapeRenderer().rect(GameConstants.DISPLAY_WIDTH * 0.5f - 16, GameConstants.DISPLAY_HEIGHT - GameConstants.BLOCK_HEIGHT * 1.3f, 70 - 70 * standTime / GameConstants.TIMEOUT, 20);
+			GdxRessourcesGetter.getShapeRenderer().rect(GameConstants.DISPLAY_WIDTH * 0.462f, GameConstants.DISPLAY_HEIGHT * 0.91f, 70 - 70 * standTime / GameConstants.TIMEOUT, 20);
 		}
 
 		GdxRessourcesGetter.getShapeRenderer().end();
@@ -591,6 +650,7 @@ public class BossScreen implements Screen {
 				parameters.put("y", "" + (GameConstants.DISPLAY_HEIGHT - Gdx.input.getY()));
 				parameters.put("z", "" + 0);
 				parameters.put("id", ""+ (int) tasks.get(0).z);
+				map.put(map.size(), new float[] {Gdx.input.getX(), (GameConstants.DISPLAY_HEIGHT - Gdx.input.getY())});
 				EventManager.create(EventManager.player_cursor_event_type, parameters);
 				System.out.println(parameters);
 				elapsedTime = 0;
