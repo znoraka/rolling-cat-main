@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -55,14 +56,14 @@ public class BossScreen implements Screen {
 
 	private enum Skill
 	{
-		FIRE,
+		SLASH,
 		WATER,
 		PLANT
 	};
 
 	private enum BossState
 	{
-		WATER,
+		MEAT,
 		FIRE,
 		ROCK
 	}
@@ -94,7 +95,9 @@ public class BossScreen implements Screen {
 	private Track track;
 	private HashMap<Integer, float []> map;
 	private Texture gui;
-	
+	private Image slash, water, leaf, leaf2;
+	private Vector2[] lighting;
+
 	public BossScreen(RollingCat game)
 	{
 		this.game = game;
@@ -104,7 +107,7 @@ public class BossScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
+
 		batch.begin();
 		batch.draw(gui, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.end();
@@ -117,7 +120,7 @@ public class BossScreen implements Screen {
 			chrono = 0;
 			m++;
 		}
-		
+
 		chronoLabel.setText(m+":"+ ((s < 10)?("0" + s):s));
 
 		chronoLabel.setX(GameConstants.DISPLAY_WIDTH * 0.48f - chronoLabel.getWidth() * 0.5f);
@@ -130,20 +133,20 @@ public class BossScreen implements Screen {
 		catRectangle.set(cat.getX() + table.getX(), cat.getY(), cat.getWidth(), cat.getHeight());
 		turtleRectangle.set(turtle.getX() + table.getX(), turtle.getY(), turtle.getWidth(), turtle.getHeight());
 		rabbitRectangle.set(rabbit.getX() + table.getX(), rabbit.getY(), rabbit.getWidth(), rabbit.getHeight());
-		
+
 		pauseWindow.setVisible(paused);
 
 		stage.draw();
-		
+
 		if(!paused & !done)
 		{
 			stage.act();
 			sendBossBack();
 			chrono += delta;
-			
+
 			if(bossHeadActor.getActions().size == 0)
 				standTime += delta;
-			
+
 			addTrackingPoint();
 			handleMouse();
 		}		
@@ -163,14 +166,14 @@ public class BossScreen implements Screen {
 		table.setWidth(GameConstants.BLOCK_WIDTH * 4.5f);
 		table.setHeight(GameConstants.BLOCK_WIDTH * 1.5f);
 		table.invalidate();
-		
+
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE) & keysDelay > 0.3f)
 		{
 			paused = !paused;
 			keysDelay = 0;
 		}
 		drawHoverTime();
-		
+
 		pauseWindow.setX(GameConstants.DISPLAY_WIDTH * 0.25f);
 		pauseWindow.setY(GameConstants.DISPLAY_HEIGHT * 0.25f);
 		pauseWindow.setWidth(GameConstants.DISPLAY_WIDTH * 0.5f);
@@ -180,18 +183,18 @@ public class BossScreen implements Screen {
 		resume.setY(pauseWindow.getHeight() * 0.1f);
 		quit.setX(pauseWindow.getWidth() * 0.9f - quit.getWidth());
 		quit.setY(pauseWindow.getHeight() * 0.1f);
-		
+
 		upload.setX(pauseWindow.getWidth() * 0.1f);
 		upload.setY(pauseWindow.getHeight() * 0.1f);
-		
+
 		quit2.setX(pauseWindow.getWidth() * 0.9f - quit.getWidth());
 		quit2.setY(pauseWindow.getHeight() * 0.1f);
-		
+
 		endWindow.setX(GameConstants.DISPLAY_WIDTH * 0.25f);
 		endWindow.setY(GameConstants.DISPLAY_HEIGHT * 0.25f);
 		endWindow.setWidth(GameConstants.DISPLAY_WIDTH * 0.5f);
 		endWindow.setHeight(GameConstants.DISPLAY_HEIGHT * 0.5f);
-		
+
 		if(done)
 		{
 			endWindow.setVisible(true);
@@ -200,16 +203,31 @@ public class BossScreen implements Screen {
 			else
 				endText.setText(localisation(_loseboss));
 		}
-		
+
 		if(Gdx.input.isKeyPressed(Keys.SPACE))
 			bossLife = 0;
-		
+
 		if(bossLife == 0 || playerLife == 0)
 		{
 			done = true;
 		}
+		
+		slash.act(delta);
+		water.act(delta);
+		leaf.act(delta);
+		leaf2.act(delta);
+		batch.begin();
+		if(slash.isVisible())
+			slash.draw(batch, 1);
+		if(water.isVisible())
+			water.draw(batch, 1);
+		if(leaf.isVisible())
+			leaf.draw(batch, 1);
+		if(leaf2.isVisible())
+			leaf2.draw(batch, 1);
+		batch.end();
 	}
-	
+
 	private void sendBossBack() {
 		if(standTime > GameConstants.TIMEOUT)
 		{
@@ -256,8 +274,14 @@ public class BossScreen implements Screen {
 	public void show() {
 		EventManager.clear();
 		gui = new Texture("data/gui.png");
-		
+
 		map = new HashMap<Integer, float[]>();
+		
+		lighting = new Vector2 [20];
+		
+		for (int i = 0; i < lighting.length; i++) {
+			lighting[i] = new Vector2();
+		}
 
 		OrderedMap<String, String> parameters = new OrderedMap<String, String>();
 		parameters.put("game", RollingCat.getCurrentGameName());
@@ -278,7 +302,7 @@ public class BossScreen implements Screen {
 
 		stage = GdxRessourcesGetter.getStage();
 		batch = GdxRessourcesGetter.getSpriteBatch();
-		
+
 		WindowStyle ws = new WindowStyle();
 		ws.titleFont = GdxRessourcesGetter.getBigFont();
 		ws.background = GdxRessourcesGetter.getSkin().getDrawable("background_base");
@@ -290,7 +314,7 @@ public class BossScreen implements Screen {
 		stage.addActor(endWindow);
 		pauseWindow.setVisible(false);
 		endWindow.setVisible(false);
-		
+
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = GdxRessourcesGetter.getSkin().getDrawable("button_up");
 		style.down = GdxRessourcesGetter.getSkin().getDrawable("button_down");
@@ -310,14 +334,14 @@ public class BossScreen implements Screen {
 				game.setScreen(new CharacterSelectScreen(game));
 			}
 		});
-		
+
 		quit2 = new TextButton(localisation(_quit), style);
 		quit2.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
 				game.setScreen(new CharacterSelectScreen(game));
 			}
 		});
-		
+
 		upload = new TextButton(localisation(_upload), style);
 		upload.addListener(new ClickListener() {
 			public void clicked (InputEvent event, float x, float y) {
@@ -337,7 +361,7 @@ public class BossScreen implements Screen {
 				}
 			}
 		});
-		
+
 
 		pauseWindow.addActor(resume);
 		pauseWindow.addActor(quit);
@@ -350,12 +374,12 @@ public class BossScreen implements Screen {
 
 		pauseText = new Label("Pause", labelStyle);
 		pauseWindow.add(pauseText);
-		
+
 		endText = new Label("", labelStyle);
 		endWindow.add(endText);
 
 		r = new Random();
-		
+
 		LabelStyle labelStyle2 = new LabelStyle(labelStyle);
 		labelStyle2.fontColor = Color.BLACK;
 		chronoLabel = new Label("", labelStyle);
@@ -366,7 +390,12 @@ public class BossScreen implements Screen {
 		cat = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("skin0"));
 		rabbit = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("skin1"));
 		turtle = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("skin2"));
-
+		
+		slash = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("slash"));
+		water = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("water"));
+		leaf =  new Image(GdxRessourcesGetter.getGameSkin().getDrawable("leaf"));
+		leaf2 =  new Image(GdxRessourcesGetter.getGameSkin().getDrawable("leaf"));
+		
 		heart = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("heart"));
 		halfHeart = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("halfheart"));
 		bossHead = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("shit"));
@@ -383,6 +412,20 @@ public class BossScreen implements Screen {
 		canGrabItem = true;
 
 		stage.addActor(table);
+		slash.setVisible(false);
+		water.setVisible(false);
+		leaf.setVisible(false);
+		leaf2.setVisible(false);
+		water.setHeight(GameConstants.BLOCK_HEIGHT);
+		water.setWidth(GameConstants.BLOCK_WIDTH);
+		slash.setHeight(GameConstants.BLOCK_HEIGHT * 2f);
+		slash.setWidth(GameConstants.BLOCK_WIDTH * 2f);
+		leaf.setHeight(GameConstants.BLOCK_HEIGHT);
+		leaf.setWidth(GameConstants.BLOCK_WIDTH);
+		leaf.setOrigin(leaf.getWidth() * 0.5f, leaf.getHeight() * 0.5f);
+		leaf2.setHeight(GameConstants.BLOCK_HEIGHT);
+		leaf2.setWidth(GameConstants.BLOCK_WIDTH);
+		leaf2.setOrigin(leaf2.getWidth() * 0.5f, leaf2.getHeight() * 0.5f);
 
 		task = new Rectangle(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 		mouse = new Rectangle();
@@ -463,7 +506,7 @@ public class BossScreen implements Screen {
 
 	private void drawTask()
 	{
-		if(currentBossState.equals(BossState.WATER))
+		if(currentBossState.equals(BossState.MEAT))
 			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone1"), task.x, task.y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 		else if(currentBossState.equals(BossState.FIRE))
 			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone2"), task.x, task.y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
@@ -497,7 +540,7 @@ public class BossScreen implements Screen {
 
 			if(mouse.overlaps(catRectangle))
 			{
-				currentSkill = Skill.FIRE;
+				currentSkill = Skill.SLASH;
 				holdingItem = true;
 				hoverTime = 0;
 				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(0).z);
@@ -520,30 +563,49 @@ public class BossScreen implements Screen {
 			}
 			else if(tasks.size > 1)
 			{
+
+				switch (currentSkill) {
+				case SLASH: playSlashAnimation(); break;
+				case WATER: playWaterAnimation(); break;
+				case PLANT: playLeafAnimation(); break;
+
+				default:
+					break;
+				}
+
+
 				addEvent(EventManager.pointing_task_end, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
 				addEvent(EventManager.task_success, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
-				
+
 				tasks.removeIndex(0);
-				hoverTime = 0;
-				standTime = 0;
-				bossHeadActor.setX(tasks.get(0).x * GameConstants.BLOCK_WIDTH);
-				bossHeadActor.setY(GameConstants.DISPLAY_HEIGHT);
-				bossHeadActor.addAction(
-						Actions.sequence(
-								Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
-								new Action() {
+                hoverTime = 0;
+                standTime = 0;
+                bossHeadActor.addAction(
+                                Actions.sequence(
+                                				Actions.delay(0.5f),
+                                				Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT),
+                                				new Action() {
+													
+													@Override
+													public boolean act(float delta) {
+														setCurrentBossState();
+														return true;
+													}
+												},
+                                                Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
+                                                new Action() {
 
-									@Override
-									public boolean act(float delta) {
-										standTime = 0;
-										return true;
-									}
-								}));
-				holdingItem = false;
+                                                        @Override
+                                                        public boolean act(float delta) {
+                                                                standTime = 0;
+                                                                return true;
+                                                        }
+                                                }));
+                holdingItem = false;
 
-				setCurrentBossState();
 
-				bossLife--;
+                bossLife--;
+
 
 			}
 			else
@@ -561,7 +623,7 @@ public class BossScreen implements Screen {
 			currentBossState = BossState.FIRE;
 			break;
 		case 1:
-			currentBossState = BossState.WATER;
+			currentBossState = BossState.MEAT;
 			break;
 		case 2:
 			currentBossState = BossState.ROCK;
@@ -570,7 +632,7 @@ public class BossScreen implements Screen {
 	}
 
 	private boolean skillCorresponds() {
-		if(currentSkill.equals(Skill.FIRE) && currentBossState.equals(BossState.WATER))
+		if(currentSkill.equals(Skill.SLASH) && currentBossState.equals(BossState.MEAT))
 			return true;
 		else if(currentSkill.equals(Skill.WATER) && currentBossState.equals(BossState.FIRE))
 			return true;
@@ -627,7 +689,7 @@ public class BossScreen implements Screen {
 				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone2"), mouse.x - GameConstants.BLOCK_WIDTH * 0.75f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.75f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
 				break;
 
-			case FIRE:
+			case SLASH:
 				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone1"), mouse.x - GameConstants.BLOCK_WIDTH * 0.75f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.75f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
 				break;
 
@@ -639,7 +701,6 @@ public class BossScreen implements Screen {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void addTrackingPoint(){
 		elapsedTime += Gdx.graphics.getDeltaTime();
 
@@ -657,7 +718,7 @@ public class BossScreen implements Screen {
 			}
 		}
 	}
-	
+
 	/**
 	 * ajoute un event à la liste d'events
 	 * appelé lorsque le patient réussi une tache de pointage
@@ -672,6 +733,77 @@ public class BossScreen implements Screen {
 		parameters.put("z", ""+0);
 		parameters.put("id", ""+id);
 		EventManager.create(eventType, parameters);
+	}
+
+	private void playSlashAnimation()
+	{
+		slash.setX(table.getX() + cat.getX());
+		slash.setY(table.getY() + cat.getY());
+		slash.addAction(
+				Actions.sequence(
+						Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH - GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(0).y * GameConstants.BLOCK_HEIGHT - GameConstants.BLOCK_HEIGHT * 0.5f), 
+						new Action() {
+
+							@Override
+							public boolean act(float delta) {
+								slash.setVisible(true);
+								return true;
+							}
+						}, Actions.delay(0.5f), Actions.hide()));
+	}
+	
+	private void playWaterAnimation()
+	{
+		water.setX(table.getX() + turtle.getX());
+		water.setY(table.getY() + turtle.getY());
+		water.addAction(
+				Actions.sequence(
+						Actions.moveTo(tasks.get(0).x * (GameConstants.BLOCK_WIDTH), tasks.get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
+						new Action() {
+
+							@Override
+							public boolean act(float delta) {
+								water.setVisible(true);
+								return true;
+							}
+						}, Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.4f), Actions.delay(0.1f), Actions.hide()));
+	}
+	
+	private void playLeafAnimation()
+	{
+		leaf.setX(table.getX() + rabbit.getX());
+		leaf.setY(table.getY() + rabbit.getY());
+		leaf.setRotation(-120);
+		leaf.addAction(
+				Actions.sequence(
+						Actions.moveTo(tasks.get(0).x * (GameConstants.BLOCK_WIDTH) + GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
+						new Action() {
+
+							@Override
+							public boolean act(float delta) {
+								leaf.setVisible(true);
+								return true;
+							}
+						},Actions.parallel(Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out), Actions.rotateBy(-90, 0.3f), Actions.moveBy(-GameConstants.BLOCK_WIDTH * 0.5f, 0, 0.3f, Interpolation.pow2In)) 
+						, Actions.delay(0.2f), Actions.hide()));
+		
+		leaf2.setX(table.getX() + rabbit.getX());
+		leaf2.setY(table.getY() + rabbit.getY());
+		leaf2.setRotation(-120);
+		leaf2.addAction(
+				Actions.sequence(
+						Actions.delay(0.1f),
+						Actions.moveTo(tasks.get(0).x * (GameConstants.BLOCK_WIDTH) - GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
+						new Action() {
+
+							@Override
+							public boolean act(float delta) {
+								leaf2.setVisible(true);
+								return true;
+							}
+						},Actions.parallel(Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out), Actions.rotateBy(10, 0.3f), Actions.moveBy(GameConstants.BLOCK_WIDTH * 0.5f, 0, 0.3f, Interpolation.pow2In)) 
+						, Actions.delay(0.1f), Actions.hide()));
+		
 	}
 
 }
