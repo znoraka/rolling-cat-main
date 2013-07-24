@@ -18,6 +18,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -97,6 +98,11 @@ public class BossScreen implements Screen {
 	private Texture gui;
 	private Image slash, water, leaf, leaf2;
 	private Vector2[] lighting;
+	private float animationTimer, frame;
+	private int animationIndex;
+	private Animation deadStone, deadFire;
+	private boolean dead;
+	private Vector2 lastPosition;
 
 	public BossScreen(RollingCat game)
 	{
@@ -107,6 +113,18 @@ public class BossScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+		animationTimer += delta;
+		if(dead)
+			frame += delta;
+		else
+			frame = 0;
+
+		if(animationTimer > 0.1f)
+		{
+			animationTimer = 0;
+			animationIndex = (animationIndex + 1) % 3;
+		}
 
 		batch.begin();
 		batch.draw(gui, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
@@ -153,7 +171,9 @@ public class BossScreen implements Screen {
 
 		batch.begin();
 		if(!paused & !done)
+		{
 			drawTask();
+		}
 		drawHearts();
 		batch.draw(player, GameConstants.BLOCK_WIDTH * 0.15f, GameConstants.BLOCK_HEIGHT * 0.4f, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 		batch.draw(boss, GameConstants.DISPLAY_WIDTH - GameConstants.BLOCK_WIDTH * 1.15f, GameConstants.BLOCK_HEIGHT * 0.4f, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
@@ -211,7 +231,7 @@ public class BossScreen implements Screen {
 		{
 			done = true;
 		}
-		
+
 		slash.act(delta);
 		water.act(delta);
 		leaf.act(delta);
@@ -276,9 +296,15 @@ public class BossScreen implements Screen {
 		gui = new Texture("data/gui.png");
 
 		map = new HashMap<Integer, float[]>();
-		
+
+		lastPosition = new Vector2();
+
 		lighting = new Vector2 [20];
-		
+
+		deadStone = new Animation(0.08f, GdxRessourcesGetter.getRegions("snake_stone_broken"));
+		deadFire = new Animation(0.08f, GdxRessourcesGetter.getRegions("snake_fire_dead"));
+
+
 		for (int i = 0; i < lighting.length; i++) {
 			lighting[i] = new Vector2();
 		}
@@ -390,12 +416,12 @@ public class BossScreen implements Screen {
 		cat = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("skin0"));
 		rabbit = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("skin1"));
 		turtle = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("skin2"));
-		
+
 		slash = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("slash"));
 		water = new Image(GdxRessourcesGetter.getGameSkin().getDrawable("water"));
 		leaf =  new Image(GdxRessourcesGetter.getGameSkin().getDrawable("leaf"));
 		leaf2 =  new Image(GdxRessourcesGetter.getGameSkin().getDrawable("leaf"));
-		
+
 		heart = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("heart"));
 		halfHeart = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("halfheart"));
 		bossHead = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("shit"));
@@ -507,11 +533,22 @@ public class BossScreen implements Screen {
 	private void drawTask()
 	{
 		if(currentBossState.equals(BossState.MEAT))
-			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone1"), task.x, task.y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		{
+			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("snake"), task.x - GameConstants.BLOCK_WIDTH * 0.5f, task.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
+		}
 		else if(currentBossState.equals(BossState.FIRE))
-			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone2"), task.x, task.y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		{
+			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("snake_fire" + animationIndex), task.x - GameConstants.BLOCK_WIDTH * 0.5f, task.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
+			if(dead)
+				batch.draw(deadFire.getKeyFrame(frame, false), lastPosition.x - GameConstants.BLOCK_WIDTH * 0.5f, lastPosition.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
+	
+		}
 		else if(currentBossState.equals(BossState.ROCK))
-			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone3"), task.x, task.y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		{
+			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("snake_stone"), task.x - GameConstants.BLOCK_WIDTH * 0.5f, task.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
+			if(dead)
+				batch.draw(deadStone.getKeyFrame(frame, false), lastPosition.x - GameConstants.BLOCK_WIDTH * 0.5f, lastPosition.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
+		}
 	}
 
 	private void handleMouse()
@@ -563,7 +600,6 @@ public class BossScreen implements Screen {
 			}
 			else if(tasks.size > 1)
 			{
-
 				switch (currentSkill) {
 				case SLASH: playSlashAnimation(); break;
 				case WATER: playWaterAnimation(); break;
@@ -574,37 +610,41 @@ public class BossScreen implements Screen {
 				}
 
 
+				lastPosition.x = tasks.get(0).x * GameConstants.BLOCK_WIDTH;
+				lastPosition.y = tasks.get(0).y * GameConstants.BLOCK_HEIGHT;
+
 				addEvent(EventManager.pointing_task_end, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
 				addEvent(EventManager.task_success, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
 
 				tasks.removeIndex(0);
-                hoverTime = 0;
-                standTime = 0;
-                bossHeadActor.addAction(
-                                Actions.sequence(
-                                				Actions.delay(0.5f),
-                                				Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT),
-                                				new Action() {
-													
-													@Override
-													public boolean act(float delta) {
-														setCurrentBossState();
-														return true;
-													}
-												},
-                                                Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
-                                                new Action() {
+				hoverTime = 0;
+				standTime = 0;
+				bossHeadActor.addAction(
+						Actions.sequence(
+								Actions.delay(0.5f),
+								Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT),
+								new Action() {
 
-                                                        @Override
-                                                        public boolean act(float delta) {
-                                                                standTime = 0;
-                                                                return true;
-                                                        }
-                                                }));
-                holdingItem = false;
+									@Override
+									public boolean act(float delta) {
+										setCurrentBossState();
+										return true;
+									}
+								},
+								Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
+								new Action() {
+
+									@Override
+									public boolean act(float delta) {
+										standTime = 0;
+										dead = false;
+										return true;
+									}
+								}));
+				holdingItem = false;
 
 
-                bossLife--;
+				bossLife--;
 
 
 			}
@@ -749,9 +789,15 @@ public class BossScreen implements Screen {
 								slash.setVisible(true);
 								return true;
 							}
-						}, Actions.delay(0.5f), Actions.hide()));
+						}, Actions.delay(0.5f), Actions.hide(), new Action() {
+
+							@Override
+							public boolean act(float delta) {
+								dead = true;
+								return true;
+							}}));
 	}
-	
+
 	private void playWaterAnimation()
 	{
 		water.setX(table.getX() + turtle.getX());
@@ -766,9 +812,16 @@ public class BossScreen implements Screen {
 								water.setVisible(true);
 								return true;
 							}
-						}, Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.4f), Actions.delay(0.1f), Actions.hide()));
+						}, Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.4f), Actions.delay(0.1f), Actions.hide(), new Action() {
+
+							@Override
+							public boolean act(float delta) {
+								dead = true;
+								return true;
+							}
+						}));
 	}
-	
+
 	private void playLeafAnimation()
 	{
 		leaf.setX(table.getX() + rabbit.getX());
@@ -786,7 +839,7 @@ public class BossScreen implements Screen {
 							}
 						},Actions.parallel(Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out), Actions.rotateBy(-90, 0.3f), Actions.moveBy(-GameConstants.BLOCK_WIDTH * 0.5f, 0, 0.3f, Interpolation.pow2In)) 
 						, Actions.delay(0.2f), Actions.hide()));
-		
+
 		leaf2.setX(table.getX() + rabbit.getX());
 		leaf2.setY(table.getY() + rabbit.getY());
 		leaf2.setRotation(-120);
@@ -799,11 +852,19 @@ public class BossScreen implements Screen {
 							@Override
 							public boolean act(float delta) {
 								leaf2.setVisible(true);
+
 								return true;
 							}
 						},Actions.parallel(Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out), Actions.rotateBy(10, 0.3f), Actions.moveBy(GameConstants.BLOCK_WIDTH * 0.5f, 0, 0.3f, Interpolation.pow2In)) 
-						, Actions.delay(0.1f), Actions.hide()));
-		
+						, Actions.delay(0.1f), Actions.hide(), new Action() {
+
+							@Override
+							public boolean act(float delta) {
+								dead = true;
+								return true;
+							}
+						}));
+
 	}
 
 }
