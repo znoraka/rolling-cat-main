@@ -72,7 +72,7 @@ public class BossScreen implements Screen {
 	private RollingCat game;
 	private int bossLife, playerLife;
 	private Skill currentSkill;
-	private BossState currentBossState;
+	private BossState currentBossState, oldBossState;
 	private Array<Vector3> tasks;
 	private Image cat, rabbit, turtle;
 	private TextureRegion heart, halfHeart, player, boss, bossHead;
@@ -100,9 +100,10 @@ public class BossScreen implements Screen {
 	private Vector2[] lighting;
 	private float animationTimer, frame;
 	private int animationIndex;
-	private Animation deadStone, deadFire;
+	private Animation deadStone, deadFire, deadSnake;
 	private boolean dead;
 	private Vector2 lastPosition;
+	private Texture corps;
 
 	public BossScreen(RollingCat game)
 	{
@@ -170,6 +171,8 @@ public class BossScreen implements Screen {
 		}		
 
 		batch.begin();
+		
+		batch.draw(corps, bossHeadActor.getX(), bossHeadActor.getY() - GameConstants.BLOCK_HEIGHT * 0.6f, 50, 400);
 		if(!paused & !done)
 		{
 			drawTask();
@@ -300,10 +303,14 @@ public class BossScreen implements Screen {
 		lastPosition = new Vector2();
 
 		lighting = new Vector2 [20];
+		
+		oldBossState = BossState.FIRE;
 
 		deadStone = new Animation(0.08f, GdxRessourcesGetter.getRegions("snake_stone_broken"));
 		deadFire = new Animation(0.08f, GdxRessourcesGetter.getRegions("snake_fire_dead"));
-
+		deadSnake = new Animation(0.08f, GdxRessourcesGetter.getRegions("snake_dead"));
+		
+		corps = new Texture("data/serpent-anim.gif");
 
 		for (int i = 0; i < lighting.length; i++) {
 			lighting[i] = new Vector2();
@@ -376,7 +383,7 @@ public class BossScreen implements Screen {
 					parameters.put("duration", ""+ m * 60 + s);
 					InternetManager.endGameSession();
 					EventManager.create(EventManager.end_game_event_type, parameters);
-					track = new Track(map, Track.GAME, m * 60 + s);
+					track = new Track(map, Track.BOSS, m * 60 + s);
 					Patient.getInstance().addTrack(track);
 					TextButton b = InternetManager.getOkButton(new CharacterSelectScreen(game), game);
 					endWindow.clearChildren();
@@ -539,15 +546,23 @@ public class BossScreen implements Screen {
 		else if(currentBossState.equals(BossState.FIRE))
 		{
 			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("snake_fire" + animationIndex), task.x - GameConstants.BLOCK_WIDTH * 0.5f, task.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
-			if(dead)
-				batch.draw(deadFire.getKeyFrame(frame, false), lastPosition.x - GameConstants.BLOCK_WIDTH * 0.5f, lastPosition.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
-	
 		}
 		else if(currentBossState.equals(BossState.ROCK))
 		{
-			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("snake_stone"), task.x - GameConstants.BLOCK_WIDTH * 0.5f, task.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
-			if(dead)
-				batch.draw(deadStone.getKeyFrame(frame, false), lastPosition.x - GameConstants.BLOCK_WIDTH * 0.5f, lastPosition.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
+			 batch.draw(GdxRessourcesGetter.getAtlas().findRegion("snake_stone"), task.x - GameConstants.BLOCK_WIDTH * 0.5f, task.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);		}
+
+		if(oldBossState.equals(BossState.MEAT) && dead)
+		{
+			batch.draw(deadSnake.getKeyFrame(frame, false), lastPosition.x - GameConstants.BLOCK_WIDTH * 0.5f, lastPosition.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
+		}
+		else if(oldBossState.equals(BossState.FIRE) && dead)
+		{
+			batch.draw(deadFire.getKeyFrame(frame, false), lastPosition.x - GameConstants.BLOCK_WIDTH * 0.5f, lastPosition.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
+
+		}
+		else if(oldBossState.equals(BossState.ROCK) && dead)
+		{
+			batch.draw(deadStone.getKeyFrame(frame, false), lastPosition.x - GameConstants.BLOCK_WIDTH * 0.5f, lastPosition.y - GameConstants.BLOCK_HEIGHT * 0.5f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
 		}
 	}
 
@@ -656,6 +671,8 @@ public class BossScreen implements Screen {
 	}
 
 	private void setCurrentBossState() {
+		oldBossState = currentBossState;
+		
 		int n = r.nextInt(3);
 
 		switch (n) {

@@ -253,6 +253,13 @@ empty
   orig: 64, 64
   offset: 0, 0
   index: -1
+snake_dead
+  rotate: false
+  xy: 259, 387
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 8
 snake_fire_dead
   rotate: false
   xy: 259, 387
@@ -533,13 +540,13 @@ groundblock3
   orig: 64, 64
   offset: 0, 0
   index: -1
-snake_fire0
+snake_dead
   rotate: false
   xy: 802, 49
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: -1
+  index: 1
 halfheart
   rotate: false
   xy: 857, 179
@@ -671,142 +678,198 @@ atlas3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+snake_dead
+  rotate: false
+  xy: 1, 781
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 2
+snake_dead
+  rotate: false
+  xy: 1, 651
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 3
+snake_dead
+  rotate: false
+  xy: 131, 781
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 4
+snake_dead
+  rotate: false
+  xy: 1, 521
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 5
+snake_dead
+  rotate: false
+  xy: 131, 651
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 6
+snake_dead
+  rotate: false
+  xy: 261, 781
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 7
+snake_dead_bis
+  rotate: false
+  xy: 1, 391
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+snake_fire0
+  rotate: false
+  xy: 131, 521
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 snake_fire1
   rotate: false
-  xy: 1, 261
+  xy: 261, 651
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 snake_fire2
   rotate: false
-  xy: 1, 131
+  xy: 391, 781
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 snake_fire3
   rotate: false
-  xy: 131, 261
+  xy: 1, 261
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 snake_fire_dead
   rotate: false
-  xy: 1, 1
+  xy: 131, 391
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 1
 snake_fire_dead
   rotate: false
-  xy: 131, 131
+  xy: 261, 521
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 2
 snake_fire_dead
   rotate: false
-  xy: 261, 261
+  xy: 391, 651
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 3
 snake_fire_dead
   rotate: false
-  xy: 131, 1
+  xy: 521, 781
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 4
 snake_fire_dead
   rotate: false
-  xy: 261, 131
+  xy: 1, 131
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 5
 snake_fire_dead
   rotate: false
-  xy: 391, 261
+  xy: 131, 261
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 6
 snake_fire_dead
   rotate: false
-  xy: 261, 1
+  xy: 261, 391
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 7
 snake_stone
   rotate: false
-  xy: 391, 131
+  xy: 391, 521
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 snake_stone_broken
   rotate: false
-  xy: 521, 261
+  xy: 521, 651
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 1
 snake_stone_broken
   rotate: false
-  xy: 391, 1
+  xy: 651, 781
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 2
 snake_stone_broken
   rotate: false
-  xy: 521, 131
+  xy: 1, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 3
 snake_stone_broken
   rotate: false
-  xy: 651, 261
+  xy: 131, 131
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 4
 snake_stone_broken
   rotate: false
-  xy: 521, 1
+  xy: 261, 261
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 5
 snake_stone_broken
   rotate: false
-  xy: 651, 131
+  xy: 391, 391
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 6
 snake_stone_broken
   rotate: false
-  xy: 781, 261
+  xy: 521, 521
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 7
 wasp
   rotate: false
-  xy: 651, 1
+  xy: 651, 651
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 water
   rotate: false
-  xy: 781, 131
+  xy: 781, 781
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
