@@ -8,11 +8,13 @@ import static fr.lirmm.smile.rollingcat.Localisation._winboss;
 import static fr.lirmm.smile.rollingcat.Localisation.localisation;
 import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.x;
 import static fr.lirmm.smile.rollingcat.utils.CoordinateConverter.y;
+import static fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter.getDogAtlas;
 
 import java.util.HashMap;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -20,6 +22,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
@@ -49,6 +52,10 @@ import fr.lirmm.smile.rollingcat.manager.EventManager;
 import fr.lirmm.smile.rollingcat.manager.InternetManager;
 import fr.lirmm.smile.rollingcat.model.patient.Patient;
 import fr.lirmm.smile.rollingcat.model.patient.Track;
+import fr.lirmm.smile.rollingcat.spine.Bone;
+import fr.lirmm.smile.rollingcat.spine.Skeleton;
+import fr.lirmm.smile.rollingcat.spine.SkeletonBinary;
+import fr.lirmm.smile.rollingcat.spine.SkeletonData;
 import fr.lirmm.smile.rollingcat.utils.GdxRessourcesGetter;
 
 public class BossScreen implements Screen {
@@ -98,12 +105,16 @@ public class BossScreen implements Screen {
 	private Texture gui;
 	private Image slash, water, leaf, leaf2;
 	private Vector2[] lighting;
-	private float animationTimer, frame;
+	private float animationTimer, frame, bossAnimTimer;
 	private int animationIndex;
 	private Animation deadStone, deadFire, deadSnake;
 	private boolean dead;
-	private Vector2 lastPosition;
+	private Vector2 lastPosition, angle;
 	private Texture corps;
+//	private SkeletonData skeletonData;
+//	private Skeleton skeleton;
+//	private fr.lirmm.smile.rollingcat.spine.Animation bossAnim;
+//	private Bone root;
 
 	public BossScreen(RollingCat game)
 	{
@@ -114,7 +125,9 @@ public class BossScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		
+		water.setOrigin(water.getWidth() * 0.5f, water.getHeight() * 0.5f);
+		
 		animationTimer += delta;
 		if(dead)
 			frame += delta;
@@ -130,6 +143,7 @@ public class BossScreen implements Screen {
 		batch.begin();
 		batch.draw(gui, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.end();
+		drawStandTime();
 
 		keysDelay += delta;
 		s = (int) chrono;
@@ -171,6 +185,7 @@ public class BossScreen implements Screen {
 		}		
 
 		batch.begin();
+		drawBoss();
 		
 		batch.draw(corps, bossHeadActor.getX(), bossHeadActor.getY() - GameConstants.BLOCK_HEIGHT * 0.6f, 50, 400);
 		if(!paused & !done)
@@ -256,6 +271,7 @@ public class BossScreen implements Screen {
 		{
 			standTime = 0;
 			playerLife--;
+			holdingItem = false;
 			addEvent(EventManager.pointing_task_end, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
 			addEvent(EventManager.task_fail, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
 			bossHeadActor.addAction(
@@ -305,6 +321,19 @@ public class BossScreen implements Screen {
 		lighting = new Vector2 [20];
 		
 		oldBossState = BossState.FIRE;
+		angle = new Vector2();
+		
+//		TextureAtlas atlas = new TextureAtlas("data/boss/serpent.atlas");
+//
+//		SkeletonBinary binary = new SkeletonBinary(atlas);
+//		skeletonData = binary.readSkeletonData(Gdx.files.internal("data/boss/serpent.skel"));
+//		bossAnim = binary.readAnimation(Gdx.files.internal("data/boss/serpent.anim"), skeletonData);
+//		
+//		skeleton.setToBindPose();
+//		
+//		root = skeleton.getRootBone();
+//		root.setScaleX(0.35f * GameConstants.SCALE);
+//		root.setScaleY(0.35f * GameConstants.SCALE);
 
 		deadStone = new Animation(0.08f, GdxRessourcesGetter.getRegions("snake_stone_broken"));
 		deadFire = new Animation(0.08f, GdxRessourcesGetter.getRegions("snake_fire_dead"));
@@ -615,6 +644,9 @@ public class BossScreen implements Screen {
 			}
 			else if(tasks.size > 1)
 			{
+				lastPosition.x = tasks.get(0).x * GameConstants.BLOCK_WIDTH;
+				lastPosition.y = tasks.get(0).y * GameConstants.BLOCK_HEIGHT;
+
 				switch (currentSkill) {
 				case SLASH: playSlashAnimation(); break;
 				case WATER: playWaterAnimation(); break;
@@ -625,8 +657,6 @@ public class BossScreen implements Screen {
 				}
 
 
-				lastPosition.x = tasks.get(0).x * GameConstants.BLOCK_WIDTH;
-				lastPosition.y = tasks.get(0).y * GameConstants.BLOCK_HEIGHT;
 
 				addEvent(EventManager.pointing_task_end, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
 				addEvent(EventManager.task_success, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
@@ -636,7 +666,7 @@ public class BossScreen implements Screen {
 				standTime = 0;
 				bossHeadActor.addAction(
 						Actions.sequence(
-								Actions.delay(0.5f),
+								Actions.delay(0.8f),
 								Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT),
 								new Action() {
 
@@ -686,6 +716,7 @@ public class BossScreen implements Screen {
 			currentBossState = BossState.ROCK;
 			break;
 		}
+		
 	}
 
 	private boolean skillCorresponds() {
@@ -705,11 +736,18 @@ public class BossScreen implements Screen {
 		if(hoverTime > 0)
 		{	
 			GdxRessourcesGetter.getShapeRenderer().setColor(Color.RED);
-			GdxRessourcesGetter.getShapeRenderer().rect(mouse.x, mouse.y - GameConstants.BLOCK_HEIGHT, 70, 20);
+			GdxRessourcesGetter.getShapeRenderer().rect(mouse.x, Math.max(mouse.y - GameConstants.BLOCK_HEIGHT, 0) , 70, 20);
 			GdxRessourcesGetter.getShapeRenderer().setColor(Color.BLUE);
-			GdxRessourcesGetter.getShapeRenderer().rect(mouse.x, mouse.y - GameConstants.BLOCK_HEIGHT, 70*hoverTime / GameConstants.HOVER_TIME, 20);
+			GdxRessourcesGetter.getShapeRenderer().rect(mouse.x, Math.max(mouse.y - GameConstants.BLOCK_HEIGHT, 0), 70*hoverTime / GameConstants.HOVER_TIME, 20);
 
 		}
+
+		GdxRessourcesGetter.getShapeRenderer().end();
+	}
+	
+	private void drawStandTime()
+	{
+		GdxRessourcesGetter.getShapeRenderer().begin(ShapeType.Filled);
 
 		if (standTime > -1)
 		{
@@ -743,15 +781,15 @@ public class BossScreen implements Screen {
 		{
 			switch (currentSkill) {
 			case WATER:
-				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone2"), mouse.x - GameConstants.BLOCK_WIDTH * 0.75f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.75f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
+				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("water"), mouse.x - GameConstants.BLOCK_WIDTH * 0.5f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.5f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
 				break;
 
 			case SLASH:
-				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone1"), mouse.x - GameConstants.BLOCK_WIDTH * 0.75f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.75f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
+				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("paw"), mouse.x - GameConstants.BLOCK_WIDTH * 0.5f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.5f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
 				break;
 
 			case PLANT:
-				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("bone3"), mouse.x - GameConstants.BLOCK_WIDTH * 0.75f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.75f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH *1.5f, GameConstants.BLOCK_HEIGHT *1.5f, 1, 1, 0);
+				batch.draw(GdxRessourcesGetter.getAtlas().findRegion("leaf"), mouse.x - GameConstants.BLOCK_WIDTH * 0.5f, mouse.y - GameConstants.BLOCK_HEIGHT * 0.5f, mouse.x, mouse.y, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT, 1, 1, 0);
 				break;
 
 			}
@@ -770,7 +808,6 @@ public class BossScreen implements Screen {
 				parameters.put("id", ""+ (int) tasks.get(0).z);
 				map.put(map.size(), new float[] {Gdx.input.getX(), (GameConstants.DISPLAY_HEIGHT - Gdx.input.getY())});
 				EventManager.create(EventManager.player_cursor_event_type, parameters);
-				System.out.println(parameters);
 				elapsedTime = 0;
 			}
 		}
@@ -819,17 +856,20 @@ public class BossScreen implements Screen {
 	{
 		water.setX(table.getX() + turtle.getX());
 		water.setY(table.getY() + turtle.getY());
+		
+		float b = tasks.get(0).x * GameConstants.BLOCK_WIDTH * 1.5f - (table.getX() + turtle.getX() + turtle.getWidth() * 0.5f);
+		float a = tasks.get(0).y * GameConstants.BLOCK_HEIGHT + table.getHeight();
+
 		water.addAction(
 				Actions.sequence(
+						Actions.rotateTo((b > 0)?((float) Math.toDegrees(Math.atan(a/b) + 90)):((float) Math.toDegrees(Math.atan(-a/b) + 90))),
+						Actions.show(),
+						Actions.moveTo(lastPosition.x, lastPosition.y, 0.3f, Interpolation.pow2Out),
+						Actions.hide(),
+						Actions.rotateTo(0),
 						Actions.moveTo(tasks.get(0).x * (GameConstants.BLOCK_WIDTH), tasks.get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
-						new Action() {
-
-							@Override
-							public boolean act(float delta) {
-								water.setVisible(true);
-								return true;
-							}
-						}, Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.4f), Actions.delay(0.1f), Actions.hide(), new Action() {
+						Actions.show(),
+						Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.4f), Actions.delay(0.1f), Actions.hide(), new Action() {
 
 							@Override
 							public boolean act(float delta) {
@@ -843,37 +883,40 @@ public class BossScreen implements Screen {
 	{
 		leaf.setX(table.getX() + rabbit.getX());
 		leaf.setY(table.getY() + rabbit.getY());
-		leaf.setRotation(-120);
+		
+		float b = tasks.get(0).x * GameConstants.BLOCK_WIDTH * 1.5f - GameConstants.DISPLAY_WIDTH * 0.5f;
+		float a = tasks.get(0).y * GameConstants.BLOCK_HEIGHT + table.getHeight();
+
 		leaf.addAction(
 				Actions.sequence(
+						Actions.rotateTo((b > 0)?((float) Math.toDegrees(Math.atan(a/b)) - 90):((float) Math.toDegrees(Math.atan(a/b)) - 270)),
+						Actions.show(),
+						Actions.moveTo(lastPosition.x, lastPosition.y, 0.3f, Interpolation.pow2Out),
+						Actions.hide(),
+						Actions.rotateTo(-120),
 						Actions.moveTo(tasks.get(0).x * (GameConstants.BLOCK_WIDTH) + GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
-						new Action() {
-
-							@Override
-							public boolean act(float delta) {
-								leaf.setVisible(true);
-								return true;
-							}
-						},Actions.parallel(Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out), Actions.rotateBy(-90, 0.3f), Actions.moveBy(-GameConstants.BLOCK_WIDTH * 0.5f, 0, 0.3f, Interpolation.pow2In)) 
-						, Actions.delay(0.2f), Actions.hide()));
-
+						Actions.show(),
+						Actions.parallel(
+								Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out),
+								Actions.rotateBy(-90, 0.3f), Actions.moveBy(-GameConstants.BLOCK_WIDTH * 0.5f, 0, 0.3f, Interpolation.pow2In)) ,
+						Actions.delay(0.2f), Actions.hide()
+						));
+		
+		
 		leaf2.setX(table.getX() + rabbit.getX());
 		leaf2.setY(table.getY() + rabbit.getY());
 		leaf2.setRotation(-120);
 		leaf2.addAction(
 				Actions.sequence(
-						Actions.delay(0.1f),
+						Actions.delay(0.5f),
 						Actions.moveTo(tasks.get(0).x * (GameConstants.BLOCK_WIDTH) - GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
+						Actions.show(),
+						Actions.parallel(
+								Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out),
+								Actions.rotateBy(10, 0.3f), Actions.moveBy(GameConstants.BLOCK_WIDTH * 0.5f, 0, 0.3f, Interpolation.pow2In)),
+//						Actions.delay(0.1f),
+						Actions.hide(),
 						new Action() {
-
-							@Override
-							public boolean act(float delta) {
-								leaf2.setVisible(true);
-
-								return true;
-							}
-						},Actions.parallel(Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out), Actions.rotateBy(10, 0.3f), Actions.moveBy(GameConstants.BLOCK_WIDTH * 0.5f, 0, 0.3f, Interpolation.pow2In)) 
-						, Actions.delay(0.1f), Actions.hide(), new Action() {
 
 							@Override
 							public boolean act(float delta) {
@@ -883,5 +926,16 @@ public class BossScreen implements Screen {
 						}));
 
 	}
-
+	
+	private void drawBoss()
+	{
+//		root.setX(bossHeadActor.getX());
+//		root.setY(bossHeadActor.getY());
+//		
+//		bossAnimTimer += Gdx.graphics.getDeltaTime();
+//		bossAnim.apply(skeleton, bossAnimTimer, true);
+//		skeleton.updateWorldTransform();
+//		skeleton.update(Gdx.graphics.getDeltaTime());
+//		skeleton.draw(batch);
+	}
 }
