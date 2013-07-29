@@ -1,0 +1,192 @@
+<?xml version=1.0 encoding=UTF-8?>
+<languages>
+
+	<language name="Fran&ccedil;ais">
+		<wrong_info>Informations incorrectes</wrong_info>
+		<username>nom d'utilisateur</username>
+		<password>mot de passe</password>
+		<settings>Configuration</settings>
+		<back>Retour</back>
+		<select>D&eacute;but session</select>
+		<play>Jouer</play>
+		<assessment>&Eacute;valuation</assessment>
+		<upload>Envoyer</upload>
+		<tracks>Traces</tracks>
+		<name>Nom</name>
+		<dominant_member>Gaucher ou droitier</dominant_member>
+		<hemiplegia>H&eacute;mipl&eacute;gie</hemiplegia>
+		<previous>Pr&eacute;c&eacute;dent</previous>
+		<start>Start</start>
+		<next>Suivant</next>
+		<gems>Gemmes</gems>
+		<gem>Gemme</gem>
+		<new_level>Nouveau niveau !</new_level>
+		<level>niveau</level>
+		<score>Score</score>
+		<duration>Dur&eacute;e</duration>
+		<locked>Verrouill&eacute;</locked>
+		<not_found>inconnue</not_found>
+		<found>trouv&eacute;e</found>
+		<resume>Reprendre</resume>
+		<quit>Quitter</quit>
+		<range>Range</range>
+		<workspace_width>Largeur du plan de travail</workspace_width>
+		<workspace_height>Hauteur de plan de travail</workspace_height>
+		<path_delta_time>Path delta time</path_delta_time>
+		<evaporation_per_day>Evaporation par jour</evaporation_per_day>
+		<alpha>Alpha</alpha>
+		<number_of_lines>Nombre de lignes</number_of_lines>
+		<number_of_rows>Nombre de colonnes</number_of_rows>
+		<total_volume>Volume total</total_volume>
+		<volume_per_level>Volume par niveau</volume_per_level>
+		<delete>Supprimer</delete>
+		<save>Sauvegarder</save>
+		<discard>Annuler</discard>
+		<tutorial>Tutoriel</tutorial>
+		<welcome>Bienvenue dans\n le tutoriel \nRolling Cat</welcome>
+		<box_point>Attrapez l'objet dans la caisse</box_point>
+		<task_point_1>Utilisez</task_point_1>
+		<feather>la plume</feather>
+		<bone>l' os</bone>
+		<swatter>la tapette</swatter>
+		<scissors>les ciseaux</scissors>
+		<task_point_2>sur</task_point_2>
+		<dog>le chien</dog>
+		<wasp>la gu&ecirc;pe</wasp>
+		<cat>le chat</cat>
+		<carpet>le tapis</carpet>
+		<coin_get>Vous avez gagn&eacute; une piece.\n Ces pieces vous permettent \n d'augmenter votre scoore</coin_get>
+		<gg>Bien jou&eacute;</gg>
+		<fall>Oups ce n'est pas grave vous pourrez bientot recommencer</fall>
+		<assessment_1>Placez votre curseur dans la zone rouge jusqu'&agrave; ce qu'elle devienne ent&egrave;rement grise</assessment_1>
+		<assessment_2>Vous venez de selectionner la premi&egrave;re zone la zone color&eacute;e en bleu. Essayez de la recouvrir avec un maximum de vert</assessment_2>
+		<assessment_3>Lorsque vous &ecirc;tes &agrave; votre maximum placez votre curseur dans la zone rouge jusqu'&agrave; ce qu'elle devienne enti&egrave;rement grise</assessment_3>
+		<assessment_4>Vous avez s&eacute;lectionn&eacute; la zone suivante essayez &agrave; nouveau de la recouvrir de vert</assessment_4>
+		<assessment_5>R&eacute;petez l'op&eacute;ration jusqu'&agrave; avoir recouvert toutes les zones</assessment_5>
+		<assessment_6>Une fois que vous avez compl&eacute;t&eacute; toutes les zones retournez dans la zone rouge</assessment_6>
+		<needsAtLeastOneArea>Impossible de des&eacute;lectionner toutes les zones</needsAtLeastOneArea>
+		<right>Droite</right>
+		<left>Gauche</left>
+		<right_handed>Droitier</right_handed>
+		<left_handed>Gaucher</left_handed>
+		<high_score>Meilleur score</high_score>
+		<cadran>S&eacute;lectionnez les cadrans 
+		pr&eacute;f&eacute;rables de travail : </cadran>
+		<ready>Je suis pr&ecirc;t</ready>
+		<detail>D&eacute;tail </detail>
+		<skin>Apparence</skin>
+		<timeout>Temps avant &eacute;chec</timeout>
+		<nbsuccess>Fen&ecirc;tre succ&egrave;s</nbsuccess>
+		<reversed>De la gauche vers la droite</reversed>
+		<more>Plus</more>
+		<patients>Liste des patients</patients>
+		<yes>Oui</yes>
+		<no>Non</no>
+		<win>Bravo, vous avez gagn&eacute;, 
+		pour faire de nouveaux niveaux,
+		vous pouvez r&eacute;initialiser les mondes.
+		R&eacute;initialiser les mondes ?</win>
+		<congrats>F&eacute;licitations, vous avez termin&eacute; le niveau !</congrats>
+		<winboss>F&eacute;licitations, vous avez
+		vaincu -trouver un nom- !</winboss>
+		<loseboss>Oh non ! Le boss vous a d&eacute;fait, 
+		mais vous pouvez retenter votre chance</loseboss>
+	</language>
+	
+	<language name="English">
+		<wrong_info>wrong information</wrong_info>
+		<username>username</username>
+		<password>password</password>
+		<settings>Settings</settings>
+		<back>Back</back>
+		<select>Start</select>
+		<play>Play</play>
+		<assessment>Assessment</assessment>
+		<upload>Upload</upload>
+		<tracks>Tracks</tracks>
+		<name>name</name>
+		<dominant_member>dominant member</dominant_member>
+		<hemiplegia>hemiplegia</hemiplegia>
+		<previous>Previous</previous>
+		<start>Start</start>
+		<next>Next</next>
+		<gems>gems</gems>
+		<gem>gem</gem>
+		<new_level>new level!</new_level>
+		<level>Level</level>
+		<score>Score</score>
+		<duration>Duration</duration>
+		<locked>Locked</locked>
+		<not_found>Not found</not_found>
+		<found>Found</found>
+		<resume>Resume</resume>
+		<quit>Quit</quit>
+		<range>Range</range>
+		<path_delta_time>Path delta time</path_delta_time>
+		<evaporation_per_day>Evaporation per day</evaporation_per_day>
+		<alpha>Alpha</alpha>
+		<workspace_height>Workspace height</workspace_height>
+		<workspace_width>Workspace width</workspace_width>
+		<number_of_lines>Number of lines</number_of_lines>
+		<number_of_rows>Number of rows</number_of_rows>
+		<total_volume>Total volume</total_volume>
+		<volume_per_level>Volume per level</volume_per_level>
+		<delete>Delete</delete>
+		<save>Save</save>
+		<discard>Discard</discard>
+		<tutorial>Tutorial</tutorial>
+		<welcome>Welcome to\n the Rolling Cat \ntutorial</welcome>
+		<box_point>Grab the item in the box</box_point>
+		<task_point_1>Use</task_point_1>
+		<feather>the feather</feather>
+		<bone>the bone</bone>
+		<swatter>the swatter</swatter>
+		<scissors>the scissors</scissors>
+		<task_point_2>on</task_point_2>
+		<dog>the dog</dog>
+		<wasp>the wasp</wasp>
+		<cat>the cat</cat>
+		<carpet>the carpet</carpet>
+		<coin_get>You picked up a coin\n These coins increase \n your score</coin_get>
+		<gg>Well played</gg>
+		<fall>Woops! But it's ok you will start over soon</fall>
+		<assessment_1>Place your cursor in the red area until it becomes complitely gray</assessment_1>
+		<assessment_2>You selected the first area the blue one. Try to fill it up with as much green as possible</assessment_2>
+		<assessment_3>Once you reached your maximum place your cursor in the red area until it becomes complitely gray</assessment_3>
+		<assessment_4>You selected the next area try to fill it up with as much green as possible</assessment_4>
+		<assessment_5>Repeat until you filled all the areas</assessment_5>
+		<assessment_6>Once you filled all the areas go back to the red area</assessment_6>
+		<needsAtLeastOneArea>At least one area has to be checked</needsAtLeastOneArea>
+		<right>Right</right>
+		<left>Left</left>
+		<right_handed>Right handed</right_handed>
+		<left_handed>Left handed</left_handed>
+		<tracks>Tracks</tracks>
+		<high_score>Highest score</high_score>
+		<cadran>Select the work dials : </cadran>
+		<ready>I am ready</ready>
+		<detail>Details</detail>
+		<skin>Skin</skin>
+		<timeout>Timeout before failure</timeout>
+		<nbsuccess>Success window</nbsuccess>
+		<more>More</more>
+		<reversed>Reversed Level</reversed>
+		<patients>Patients list</patients>
+		<yes>Yes</yes>
+		<no>No</no>
+		<win>Congratulations, you win, 
+		to play new levels,
+		you can reset the worlds.
+		Reset the worlds?</win>
+		<congrats>Congratulations, you complete the level!</congrats>
+		<winboss>F&eacute;licitations, vous avez vaincu -trouver un nom- !</winboss>
+		<loseboss>Oh non ! Le boss vous a d&eacute;fait,
+		mais vous pouvez retenter votre chance</loseboss>
+		
+	</language>
+	   
+	
+   
+</languages>
+
+
