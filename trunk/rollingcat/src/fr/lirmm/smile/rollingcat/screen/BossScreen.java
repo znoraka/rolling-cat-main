@@ -105,8 +105,8 @@ public class BossScreen implements Screen {
 	private Texture gui;
 	private Image slash, water, leaf, leaf2;
 	private Vector2[] lighting;
-	private float animationTimer, frame, bossAnimTimer;
-	private int animationIndex;
+	private float animationTimer, frame;
+	private int animationIndex, bossFrameIndex, modifier;
 	private Animation deadStone, deadFire, deadSnake;
 	private boolean dead;
 	private Vector2 lastPosition, angle;
@@ -138,6 +138,7 @@ public class BossScreen implements Screen {
 		{
 			animationTimer = 0;
 			animationIndex = (animationIndex + 1) % 3;
+			bossFrameIndex += modifier;
 		}
 
 		batch.begin();
@@ -187,7 +188,16 @@ public class BossScreen implements Screen {
 		batch.begin();
 		drawBoss();
 		
-		batch.draw(corps, bossHeadActor.getX(), bossHeadActor.getY() - GameConstants.BLOCK_HEIGHT * 0.6f, 50, 400);
+		System.out.println("move" + bossFrameIndex);
+		
+		try {
+			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("move" + bossFrameIndex), bossHeadActor.getX(), bossHeadActor.getY() + GameConstants.BLOCK_HEIGHT * 0.6f, 50, 400);
+		} catch (Exception e) {
+			batch.draw(GdxRessourcesGetter.getAtlas().findRegion("move0"), bossHeadActor.getX(), bossHeadActor.getY() + GameConstants.BLOCK_HEIGHT * 0.6f, 50, 400);
+			modifier *= -1;
+			bossFrameIndex += modifier;
+		}
+		
 		if(!paused & !done)
 		{
 			drawTask();
@@ -321,7 +331,8 @@ public class BossScreen implements Screen {
 		lighting = new Vector2 [20];
 		
 		oldBossState = BossState.FIRE;
-		angle = new Vector2();
+		
+		modifier = 1;
 		
 //		TextureAtlas atlas = new TextureAtlas("data/boss/serpent.atlas");
 //
