@@ -36,7 +36,7 @@ public class LevelBuilder {
 	 * @param s la string du niveau
 	 */
 	public static Stage build(String s) {
-//		Stage stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT * 5, true);
+//		Stage stage = new Stage(GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT * 3, true);
 		Stage stage = getStage();
 		map = new OrderedMap<String, ArrayList<Integer>>();
 		items = new ArrayList<Integer>();
