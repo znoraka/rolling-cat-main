@@ -68,15 +68,15 @@ public class LoadingScreen implements Screen {
 		batch.draw(texture, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.end();
 
-		sr.setColor(Color.GREEN);
-		sr.begin(ShapeType.Filled);
-		sr.rect(GameConstants.DISPLAY_WIDTH * 0.1f, GameConstants.DISPLAY_HEIGHT * 0.03f, GameConstants.DISPLAY_WIDTH * 0.8f * elapsedTime / time - 2, GameConstants.BLOCK_HEIGHT);
-		sr.end();
-
-		sr.setColor(Color.BLACK);
-		sr.begin(ShapeType.Line);
-		sr.rect(GameConstants.DISPLAY_WIDTH * 0.1f, GameConstants.DISPLAY_HEIGHT * 0.03f, GameConstants.DISPLAY_WIDTH * 0.8f, GameConstants.BLOCK_HEIGHT);
-		sr.end();
+//		sr.setColor(Color.GREEN);
+//		sr.begin(ShapeType.Filled);
+//		sr.rect(GameConstants.DISPLAY_WIDTH * 0.1f, GameConstants.DISPLAY_HEIGHT * 0.03f, GameConstants.DISPLAY_WIDTH * 0.8f * elapsedTime / time - 2, GameConstants.BLOCK_HEIGHT);
+//		sr.end();
+//
+//		sr.setColor(Color.BLACK);
+//		sr.begin(ShapeType.Line);
+//		sr.rect(GameConstants.DISPLAY_WIDTH * 0.1f, GameConstants.DISPLAY_HEIGHT * 0.03f, GameConstants.DISPLAY_WIDTH * 0.8f, GameConstants.BLOCK_HEIGHT);
+//		sr.end();
 
 		if(!started & InternetManager.sessionid != null)
 		{
