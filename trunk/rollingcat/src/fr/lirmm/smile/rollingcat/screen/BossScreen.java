@@ -80,7 +80,7 @@ public class BossScreen implements Screen {
 	private int bossLife, playerLife;
 	private Skill currentSkill;
 	private BossState currentBossState, oldBossState;
-	private Array<Vector3> tasks;
+	private Array<Array<Vector3>> tasks;
 	private Image cat, rabbit, turtle;
 	private TextureRegion heart, halfHeart, player, boss, bossHead;
 	private Stage stage;
@@ -111,6 +111,7 @@ public class BossScreen implements Screen {
 	private boolean dead;
 	private Vector2 lastPosition, angle;
 	private Texture corps;
+	private int difficulty;
 	//	private SkeletonData skeletonData;
 	//	private Skeleton skeleton;
 	//	private fr.lirmm.smile.rollingcat.spine.Animation bossAnim;
@@ -237,7 +238,6 @@ public class BossScreen implements Screen {
 
 		if((bossLife == 0 || playerLife == 0) & bossHeadActor.getActions().size == 0)
 		{
-			System.out.println("i am here");
 			bossHeadActor.addAction(
 					Actions.sequence(
 							Actions.delay(2),
@@ -279,11 +279,15 @@ public class BossScreen implements Screen {
 	private void sendBossBack() {
 		if(standTime > GameConstants.TIMEOUT)
 		{
+			if(difficulty > 0)
+			{
+				difficulty--;
+			}
 			standTime = 0;
 			playerLife--;
 			holdingItem = false;
-			addEvent(EventManager.pointing_task_end, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
-			addEvent(EventManager.task_fail, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
+			addEvent(EventManager.pointing_task_end, tasks.get(difficulty).get(0).x, tasks.get(difficulty).get(0).y, (int) tasks.get(difficulty).get(0).z);
+			addEvent(EventManager.task_fail, tasks.get(difficulty).get(0).x, tasks.get(difficulty).get(0).y, (int) tasks.get(difficulty).get(0).z);
 			bossHeadActor.addAction(
 					Actions.sequence(
 							Actions.moveTo(bossHeadActor.getX(), GameConstants.DISPLAY_HEIGHT, 2, Interpolation.swingIn),
@@ -291,14 +295,14 @@ public class BossScreen implements Screen {
 
 								@Override
 								public boolean act(float delta) {
-									Vector3 v = tasks.get(0);
-									tasks.removeIndex(0);
-									tasks.add(v);
-									bossHeadActor.setX(tasks.get(0).x * GameConstants.BLOCK_WIDTH);
+									Vector3 v = tasks.get(difficulty).get(0);
+									tasks.get(difficulty).removeIndex(0);
+									tasks.get(difficulty).add(v);
+									bossHeadActor.setX(tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH);
 									setCurrentBossState();
 									bossHeadActor.addAction(
 											Actions.sequence(
-													Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
+													Actions.moveTo(tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
 													new Action() {
 
 														@Override
@@ -501,7 +505,7 @@ public class BossScreen implements Screen {
 		leaf2.setWidth(GameConstants.BLOCK_WIDTH);
 		leaf2.setOrigin(leaf2.getWidth() * 0.5f, leaf2.getHeight() * 0.5f);
 
-		task = new Rectangle(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		task = new Rectangle(tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
 		mouse = new Rectangle();
 		catRectangle = new Rectangle();
 		rabbitRectangle = new Rectangle();
@@ -510,9 +514,9 @@ public class BossScreen implements Screen {
 		bossHeadActor = new Actor();
 		stage.addActor(bossHeadActor);
 
-		bossHeadActor.setX(tasks.get(0).x * GameConstants.BLOCK_WIDTH);
+		bossHeadActor.setX(tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH);
 		bossHeadActor.setY(GameConstants.DISPLAY_HEIGHT);
-		bossHeadActor.addAction(Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 4, Interpolation.bounceOut));
+		bossHeadActor.addAction(Actions.moveTo(tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT, 4, Interpolation.bounceOut));
 
 		currentBossState = BossState.FIRE;
 
@@ -523,9 +527,14 @@ public class BossScreen implements Screen {
 	}
 
 	private void parseTasks() {
-		tasks = new Array<Vector3>();
+		tasks = new Array<Array<Vector3>>();
 		String [] tabOfTabs = tasksAsString.split("#");
 		String [] tab;
+		int difficulty = 0;
+		
+		for (int i = 0; i < 5; i++) {
+			tasks.add(new Array<Vector3>());
+		}
 
 		for (String string : tabOfTabs) {
 			tab = string.split("/");
@@ -534,11 +543,30 @@ public class BossScreen implements Screen {
 				int y = Integer.valueOf(coord[1]);
 				if(y < 2)
 					y = y+2;
-				tasks.add(new Vector3(Integer.valueOf(coord[0]), y, tasks.size));
+				tasks.get(difficulty).add(new Vector3(Integer.valueOf(coord[0]), y, tasks.get(difficulty).size));
 			}
+			difficulty++;
 		}
 
 	}
+	
+//	private void parseTasks() {
+//		tasks = new Array<Vector3>();
+//		String [] tabOfTabs = tasksAsString.split("#");
+//		String [] tab;
+//
+//		for (String string : tabOfTabs) {
+//			tab = string.split("/");
+//			for (String s : tab) {
+//				String [] coord = s.split(",");
+//				int y = Integer.valueOf(coord[1]);
+//				if(y < 2)
+//					y = y+2;
+//				tasks.add(new Vector3(Integer.valueOf(coord[0]), y, tasks.size));
+//			}
+//		}
+//
+//	}
 
 	@Override
 	public void hide() {
@@ -616,7 +644,6 @@ public class BossScreen implements Screen {
 		mouse.x = Gdx.input.getX();
 		mouse.y = GameConstants.DISPLAY_HEIGHT - Gdx.input.getY();
 
-
 		if((	mouse.overlaps(catRectangle) || 
 				mouse.overlaps(rabbitRectangle) || 
 				mouse.overlaps(turtleRectangle) || 
@@ -640,7 +667,7 @@ public class BossScreen implements Screen {
 				currentSkill = Skill.SLASH;
 				holdingItem = true;
 				hoverTime = 0;
-				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(0).z);
+				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(difficulty).get(0).z);
 			}
 
 			else if(mouse.overlaps(rabbitRectangle))
@@ -648,7 +675,7 @@ public class BossScreen implements Screen {
 				currentSkill = Skill.PLANT;
 				holdingItem = true;
 				hoverTime = 0;
-				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(0).z);
+				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(difficulty).get(0).z);
 			}
 
 			else if(mouse.overlaps(turtleRectangle))
@@ -656,12 +683,12 @@ public class BossScreen implements Screen {
 				currentSkill = Skill.WATER;
 				holdingItem = true;
 				hoverTime = 0;
-				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(0).z);
+				addEvent(EventManager.pointing_task_start, catRectangle.getX(), catRectangle.getY(), (int) tasks.get(difficulty).get(0).z);
 			}
-			else if(tasks.size > 1)
+			else if(tasks.get(difficulty).size > 1)
 			{
-				lastPosition.x = tasks.get(0).x * GameConstants.BLOCK_WIDTH;
-				lastPosition.y = tasks.get(0).y * GameConstants.BLOCK_HEIGHT;
+				lastPosition.x = tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH;
+				lastPosition.y = tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT;
 
 				switch (currentSkill) {
 				case SLASH: playSlashAnimation(); break;
@@ -672,14 +699,18 @@ public class BossScreen implements Screen {
 					break;
 				}
 
-
-
-				addEvent(EventManager.pointing_task_end, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
-				addEvent(EventManager.task_success, tasks.get(0).x, tasks.get(0).y, (int) tasks.get(0).z);
+				addEvent(EventManager.pointing_task_end, tasks.get(difficulty).get(0).x, tasks.get(difficulty).get(0).y, (int) tasks.get(difficulty).get(0).z);
+				addEvent(EventManager.task_success, tasks.get(difficulty).get(0).x, tasks.get(difficulty).get(0).y, (int) tasks.get(difficulty).get(0).z);
 
 				bossLife--;
 
-				tasks.removeIndex(0);
+				tasks.get(difficulty).removeIndex(0);
+				
+				if(difficulty < 4)
+				{
+					difficulty++;
+				}
+
 				hoverTime = 0;
 				standTime = 0;
 				if(!((bossLife == 0 || playerLife == 0)))
@@ -687,7 +718,7 @@ public class BossScreen implements Screen {
 					bossHeadActor.addAction(
 							Actions.sequence(
 									Actions.delay(0.8f),
-									Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT),
+									Actions.moveTo(tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT),
 									new Action() {
 
 										@Override
@@ -696,7 +727,7 @@ public class BossScreen implements Screen {
 											return true;
 										}
 									},
-									Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
+									Actions.moveTo(tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
 									new Action() {
 
 										@Override
@@ -712,7 +743,7 @@ public class BossScreen implements Screen {
 					bossHeadActor.addAction(
 							Actions.sequence(
 									Actions.delay(0.8f),
-									Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH * 2, GameConstants.DISPLAY_HEIGHT * 2)));
+									Actions.moveTo(tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH * 2, GameConstants.DISPLAY_HEIGHT * 2)));
 				}
 				holdingItem = false;
 			}
@@ -835,7 +866,7 @@ public class BossScreen implements Screen {
 				parameters.put("x", "" + Gdx.input.getX());
 				parameters.put("y", "" + (GameConstants.DISPLAY_HEIGHT - Gdx.input.getY()));
 				parameters.put("z", "" + 0);
-				parameters.put("id", ""+ (int) tasks.get(0).z);
+				parameters.put("id", ""+ (int) tasks.get(difficulty).get(0).z);
 				map.put(map.size(), new float[] {Gdx.input.getX(), (GameConstants.DISPLAY_HEIGHT - Gdx.input.getY())});
 				EventManager.create(EventManager.player_cursor_event_type, parameters);
 				elapsedTime = 0;
@@ -865,7 +896,7 @@ public class BossScreen implements Screen {
 		slash.setY(table.getY() + cat.getY());
 		slash.addAction(
 				Actions.sequence(
-						Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH - GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(0).y * GameConstants.BLOCK_HEIGHT - GameConstants.BLOCK_HEIGHT * 0.5f), 
+						Actions.moveTo(tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH - GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT - GameConstants.BLOCK_HEIGHT * 0.5f), 
 						Actions.show(),
 						Actions.delay(0.8f),
 						new Action() {
@@ -884,8 +915,8 @@ public class BossScreen implements Screen {
 		water.setX(table.getX() + turtle.getX());
 		water.setY(table.getY() + turtle.getY());
 
-		float b = tasks.get(0).x * GameConstants.BLOCK_WIDTH * 1.5f - (table.getX() + turtle.getX() + turtle.getWidth() * 0.5f);
-		float a = tasks.get(0).y * GameConstants.BLOCK_HEIGHT + table.getHeight();
+		float b = tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH * 1.5f - (table.getX() + turtle.getX() + turtle.getWidth() * 0.5f);
+		float a = tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT + table.getHeight();
 
 		water.addAction(
 				Actions.sequence(
@@ -894,7 +925,7 @@ public class BossScreen implements Screen {
 						Actions.moveTo(lastPosition.x, lastPosition.y, 0.3f, Interpolation.pow2Out),
 						Actions.hide(),
 						Actions.rotateTo(0),
-						Actions.moveTo(tasks.get(0).x * (GameConstants.BLOCK_WIDTH), tasks.get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
+						Actions.moveTo(tasks.get(difficulty).get(0).x * (GameConstants.BLOCK_WIDTH), tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
 						Actions.show(),
 						Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.4f),
 						Actions.delay(0.1f),
@@ -914,8 +945,8 @@ public class BossScreen implements Screen {
 		leaf.setX(table.getX() + rabbit.getX());
 		leaf.setY(table.getY() + rabbit.getY());
 
-		float b = tasks.get(0).x * GameConstants.BLOCK_WIDTH * 1.5f - GameConstants.DISPLAY_WIDTH * 0.5f;
-		float a = tasks.get(0).y * GameConstants.BLOCK_HEIGHT + table.getHeight();
+		float b = tasks.get(difficulty).get(0).x * GameConstants.BLOCK_WIDTH * 1.5f - GameConstants.DISPLAY_WIDTH * 0.5f;
+		float a = tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT + table.getHeight();
 
 		leaf.addAction(
 				Actions.sequence(
@@ -924,7 +955,7 @@ public class BossScreen implements Screen {
 						Actions.moveTo(lastPosition.x, lastPosition.y, 0.3f, Interpolation.pow2Out),
 						Actions.hide(),
 						Actions.rotateTo(-120),
-						Actions.moveTo(tasks.get(0).x * (GameConstants.BLOCK_WIDTH) + GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
+						Actions.moveTo(tasks.get(difficulty).get(0).x * (GameConstants.BLOCK_WIDTH) + GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
 						Actions.show(),
 						Actions.parallel(
 								Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out),
@@ -939,7 +970,7 @@ public class BossScreen implements Screen {
 		leaf2.addAction(
 				Actions.sequence(
 						Actions.delay(0.5f),
-						Actions.moveTo(tasks.get(0).x * (GameConstants.BLOCK_WIDTH) - GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
+						Actions.moveTo(tasks.get(difficulty).get(0).x * (GameConstants.BLOCK_WIDTH) - GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(difficulty).get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
 						Actions.show(),
 						Actions.parallel(
 								Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out),
