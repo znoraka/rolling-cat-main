@@ -102,7 +102,7 @@ public class BossScreen implements Screen {
 	private Label pauseText, endText;
 	private Track track;
 	private HashMap<Integer, float []> map;
-	private Texture gui;
+	private Texture gui, background;
 	private Image slash, water, leaf, leaf2;
 	private Vector2[] lighting;
 	private float animationTimer, frame;
@@ -142,6 +142,7 @@ public class BossScreen implements Screen {
 		}
 
 		batch.begin();
+		batch.draw(background, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.draw(gui, 0, 0, GameConstants.DISPLAY_WIDTH, GameConstants.DISPLAY_HEIGHT);
 		batch.end();
 		drawStandTime();
@@ -193,8 +194,8 @@ public class BossScreen implements Screen {
 			drawTask();
 		}
 		drawHearts();
-		batch.draw(player, GameConstants.BLOCK_WIDTH * 0.15f, GameConstants.BLOCK_HEIGHT * 0.4f, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
-		batch.draw(boss, GameConstants.DISPLAY_WIDTH - GameConstants.BLOCK_WIDTH * 1.15f, GameConstants.BLOCK_HEIGHT * 0.4f, GameConstants.BLOCK_WIDTH, GameConstants.BLOCK_HEIGHT);
+		batch.draw(player, GameConstants.BLOCK_WIDTH * 0.02f, GameConstants.BLOCK_HEIGHT * 0.08f, GameConstants.BLOCK_WIDTH * 1.3f, GameConstants.BLOCK_WIDTH * 1.3f);
+		batch.draw(boss, GameConstants.DISPLAY_WIDTH - GameConstants.BLOCK_WIDTH * 1.55f, GameConstants.BLOCK_HEIGHT * 0.0f, GameConstants.BLOCK_WIDTH * 2f, GameConstants.BLOCK_HEIGHT * 2f);
 		if(!paused & !done)
 			drawHeldItem();
 		batch.end();
@@ -234,25 +235,26 @@ public class BossScreen implements Screen {
 		endWindow.setWidth(GameConstants.DISPLAY_WIDTH * 0.5f);
 		endWindow.setHeight(GameConstants.DISPLAY_HEIGHT * 0.5f);
 
-		if((bossLife == 0 || playerLife == 0))
+		if((bossLife == 0 || playerLife == 0) & bossHeadActor.getActions().size == 0)
 		{
+			System.out.println("i am here");
 			bossHeadActor.addAction(
 					Actions.sequence(
 							Actions.delay(2),
-						new Action() {
-					
-					@Override
-					public boolean act(float delta) {
-						done = true;
-						endWindow.setVisible(true);
-						if(bossLife < playerLife)
-							endText.setText(localisation(_winboss));
-						else
-							endText.setText(localisation(_loseboss));
-						return true;
-					}
+							new Action() {
+
+								@Override
+								public boolean act(float delta) {
+									done = true;
+									endWindow.setVisible(true);
+									if(bossLife < playerLife)
+										endText.setText(localisation(_winboss));
+									else
+										endText.setText(localisation(_loseboss));
+									return true;
+								}
 							}));
-			
+
 		}
 
 		if(Gdx.input.isKeyPressed(Keys.SPACE))
@@ -321,6 +323,7 @@ public class BossScreen implements Screen {
 	public void show() {
 		EventManager.clear();
 		gui = new Texture("data/gui.png");
+		background = new Texture("data/backgroundboss.png");
 
 		map = new HashMap<Integer, float[]>();
 
@@ -471,8 +474,8 @@ public class BossScreen implements Screen {
 		halfHeart = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("halfheart"));
 		bossHead = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("shit"));
 
-		boss = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("shit"));
-		player = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("shit"));
+		boss = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("snake_fire0"));
+		player = new TextureRegion(GdxRessourcesGetter.getGameSkin().getRegion("turtlehead"));
 
 		table = new Table();
 		table.add(cat).pad(5);
@@ -521,14 +524,18 @@ public class BossScreen implements Screen {
 
 	private void parseTasks() {
 		tasks = new Array<Vector3>();
-		String [] tab = tasksAsString.split("/");
+		String [] tabOfTabs = tasksAsString.split("#");
+		String [] tab;
 
-		for (String s : tab) {
-			String [] coord = s.split(",");
-			int y = Integer.valueOf(coord[1]);
-			if(y < 2)
-				y = y+2;
-			tasks.add(new Vector3(Integer.valueOf(coord[0]), y, tasks.size));
+		for (String string : tabOfTabs) {
+			tab = string.split("/");
+			for (String s : tab) {
+				String [] coord = s.split(",");
+				int y = Integer.valueOf(coord[1]);
+				if(y < 2)
+					y = y+2;
+				tasks.add(new Vector3(Integer.valueOf(coord[0]), y, tasks.size));
+			}
 		}
 
 	}
@@ -678,27 +685,27 @@ public class BossScreen implements Screen {
 				if(!((bossLife == 0 || playerLife == 0)))
 				{
 					bossHeadActor.addAction(
-						Actions.sequence(
-								Actions.delay(0.8f),
-								Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT),
-								new Action() {
+							Actions.sequence(
+									Actions.delay(0.8f),
+									Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, GameConstants.DISPLAY_HEIGHT),
+									new Action() {
 
-									@Override
-									public boolean act(float delta) {
-										setCurrentBossState();
-										return true;
-									}
-								},
-								Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
-								new Action() {
+										@Override
+										public boolean act(float delta) {
+											setCurrentBossState();
+											return true;
+										}
+									},
+									Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH, tasks.get(0).y * GameConstants.BLOCK_HEIGHT, 2, Interpolation.bounceOut),
+									new Action() {
 
-									@Override
-									public boolean act(float delta) {
-										standTime = 0;
-										dead = false;
-										return true;
-									}
-								}));
+										@Override
+										public boolean act(float delta) {
+											standTime = 0;
+											dead = false;
+											return true;
+										}
+									}));
 				}
 				else
 				{
@@ -711,7 +718,7 @@ public class BossScreen implements Screen {
 			}
 			else
 			{
-				done = true;
+				bossLife = 0;
 			}
 		}
 	}
@@ -724,12 +731,18 @@ public class BossScreen implements Screen {
 		switch (n) {
 		case 0:
 			currentBossState = BossState.FIRE;
+			boss.setRegion(GdxRessourcesGetter.getGameSkin().getRegion("snake_fire0"));
+			player.setRegion(GdxRessourcesGetter.getGameSkin().getRegion("turtlehead"));
 			break;
 		case 1:
 			currentBossState = BossState.MEAT;
+			boss.setRegion(GdxRessourcesGetter.getGameSkin().getRegion("snake"));
+			player.setRegion(GdxRessourcesGetter.getGameSkin().getRegion("cathead"));
 			break;
 		case 2:
 			currentBossState = BossState.ROCK;
+			boss.setRegion(GdxRessourcesGetter.getGameSkin().getRegion("snake_stone"));
+			player.setRegion(GdxRessourcesGetter.getGameSkin().getRegion("rabbithead"));
 			break;
 		}
 
@@ -853,20 +866,17 @@ public class BossScreen implements Screen {
 		slash.addAction(
 				Actions.sequence(
 						Actions.moveTo(tasks.get(0).x * GameConstants.BLOCK_WIDTH - GameConstants.BLOCK_WIDTH * 0.5f, tasks.get(0).y * GameConstants.BLOCK_HEIGHT - GameConstants.BLOCK_HEIGHT * 0.5f), 
+						Actions.show(),
+						Actions.delay(0.8f),
 						new Action() {
-
-							@Override
-							public boolean act(float delta) {
-								slash.setVisible(true);
-								return true;
-							}
-						}, Actions.delay(0.5f), Actions.hide(), new Action() {
 
 							@Override
 							public boolean act(float delta) {
 								dead = true;
 								return true;
-							}}));
+							}},
+							Actions.hide()
+						));
 	}
 
 	private void playWaterAnimation()
@@ -886,14 +896,17 @@ public class BossScreen implements Screen {
 						Actions.rotateTo(0),
 						Actions.moveTo(tasks.get(0).x * (GameConstants.BLOCK_WIDTH), tasks.get(0).y * GameConstants.BLOCK_HEIGHT + GameConstants.BLOCK_HEIGHT * 2), 
 						Actions.show(),
-						Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.4f), Actions.delay(0.1f), Actions.hide(), new Action() {
+						Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.4f),
+						Actions.delay(0.1f),
+						new Action() {
 
 							@Override
 							public boolean act(float delta) {
 								dead = true;
 								return true;
-							}
-						}));
+							}},
+							Actions.hide()
+						));
 	}
 
 	private void playLeafAnimation()
@@ -932,7 +945,7 @@ public class BossScreen implements Screen {
 								Actions.moveBy(0, -GameConstants.BLOCK_HEIGHT * 2, 0.3f, Interpolation.pow2Out),
 								Actions.rotateBy(10, 0.3f), Actions.moveBy(GameConstants.BLOCK_WIDTH * 0.5f, 0, 0.3f, Interpolation.pow2In)),
 								Actions.hide(),
-														Actions.delay(0.1f),
+								Actions.delay(0.1f),
 								new Action() {
 
 							@Override
